@@ -1,0 +1,43 @@
+{
+    nome: "Franco"
+    categoria: "single" / "gruppi"
+    target: "6-12" / oppure non so
+    background: "taccuino"
+    font-style: 
+    font-size: 
+    "stato": 
+    "autore": 
+    //note: ""
+    scene:{
+        {
+            nome: scena0
+            descrizione: "C'era un pampino brutto che è stupido"
+            widget: text/number/leve/pulsanti/imgload/img/bar
+            tracciaAudio: null
+            valutatore = false/true
+            timemax: 30:00
+            risposte: {
+            {
+                valore : 15    
+                to: scena2
+                remainingTime: 0:15 / null / quello che vediamo serveve
+                points:5000
+            },
+            {
+                valore : 15
+                to: scena3
+                remainingTime: 0:30 / null / quello che vediamo serveve
+                points:500
+            },
+        },
+        {
+        
+        },
+        {
+        
+        },
+        {
+        
+        }
+    }
+}
