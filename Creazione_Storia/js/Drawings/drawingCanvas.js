@@ -55,19 +55,40 @@ var board={
 		// 	url:"/prova.json",
 		// 	success: (data)=>{
 				//storia = JSON.parse(data);
-				var n=0;
-				for(scena in storia.scene){
-					if(storia.scene[scena].x && storia.scene[scena].y){
-						for(risposta in scena.risposte){
-							for(var i=0; risposta.to.length; i++){
-								if(scena.risposta.to[i])
-									board.arrow.push(new freccia(scena, scena.risposta.to[i], i))
+				for(let i = 0; i < storia.scene.length; i++){
+					let scena = storia.scene[i];
+					if(scena.x && scena.y){
+						for(let j = 0; j < scena.risposte.length; j++){
+							let risposta = scena.risposte[i];
+							if(risposta.to){
+								for(let k = 0; k < risposta.to.length; k++){
+									let to = risposta.to!=null?storia.scene[risposta.to[k]]:null;
+									if(to){
+										board.arrows.push(new freccia(scena, to, k))
+									}
+								}
 							}
 						}
-						board.scenes.push(new graphicalScene(n,storia.scene[scena]));
-						n++;
+						board.scenes.push(new graphicalScene(i,scena));
 					}
 				}
+				// for(let i=0; i<board.arrows; i++){
+				// 	groups.push(new group());
+				// }
+
+
+				// for(scena in storia.scene){
+				// 	if(storia.scene[scena].x && storia.scene[scena].y){
+				// 		storia.scene[scena].risposte.forEach(risposta=>{
+				// 			for(var i=0; risposta.to.length; i++){
+				// 				if(risposta.to[i])
+				// 					board.arrows.push(new freccia(storia.scene[scena], risposta.to[i], i))
+				// 			}
+				// 		});
+				// 		board.scenes.push(new graphicalScene(n,storia.scene[scena]));
+				// 		n++;
+				// 	}
+				// }
 				board.context = $("#canvas")[0].getContext('2d');
 				board.AnimationFrame=window.requestAnimationFrame(board.DrawAll, board.context);
 		// 	}
@@ -111,14 +132,24 @@ class graphicalScene{
 		this.core = scena;
 	}
 	move(offsetx, offsety){
-		console.log("PRIMA x: ",this.core.x, "    y: ", this.core.y);
 		this.core.x+=offsetx*board.scale;
 		this.core.y+=offsety*board.scale;
-		console.log("DOPO x: ",this.core.x, "    y: ", this.core.y);
+		if(this.core.x<0)
+			this.core.x=0;
+		if(this.core.y<0)
+			this.core.y=0;
+		if(this.core.x+board.const.scene.width>board.width)
+			this.core.x=board.width-board.const.scene.width;
+		if(this.core.y+board.const.scene.heigth>board.height)
+			this.core.y=board.height-board.const.scene.height;
 	}
 	draw(){
 		board.context.fillStyle = "#FF0000";
-		board.context.fillRect(this.core.x*board.scale - board.startX, this.core.y*board.scale - board.startY, this.core.x*board.scale - board.startX + board.const.scene.width * board.scale, this.core.y*board.scale - board.startY + board.const.scene.height * board.scale);
+		let x = this.core.x * board.scale - board.startX;
+		let width = board.const.scene.width * board.scale;
+		let y = this.core.y * board.scale - board.startY;
+		let height =  board.const.scene.height * board.scale;
+		board.context.fillRect(x,y,width,height);
 	}
 }
 
@@ -131,9 +162,9 @@ class freccia{
 	draw(){
 		if(!board.activegroup || activegroup==this.ngroup){
 			board.context.beginPath();
-			board.context.moveTo(from.x - board.startX , from.y - board.startY);
-			board.context.lineTo(to.x - board.startX, to.y - board.startY);
-			board.context.strokeStyle = groups[this.ngroup].color;
+			board.context.moveTo(this.from.x - board.startX , this.from.y - board.startY);
+			board.context.lineTo(this.to.x - board.startX, this.to.y - board.startY);
+			board.context.strokeStyle = "#000000";
 			board.context.stroke();
 		}
 	}
