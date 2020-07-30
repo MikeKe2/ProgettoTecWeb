@@ -44,44 +44,32 @@ var board={
 
     },
     getScene: (x, y) =>{
-        for(scena in storia.scene){
-			if(x * board.scale > (scena.x - board.startX) && x * board.scale < (scena.x + (board.const.scene.width * board.scale) - board.startX) 
-			&& y * board.scale > (scena.y - board.startY) && y * board.scale < (scena.y + (board.const.scene.height * board.scale) - board.startY)){
-				console.log(scena);
-                return scena;
-            }
-        }
-    },
-	addtoboard: (scena)=>{
-		scena.x = mouse.x * scale + board.startX;
-		scena.y = mouse.y * scale + board.startY;
-    },
-	removefromboard: (scena)=>{
-
-    },
-    init: function(){
-		// $.ajax({
-        //     global: false,
-		// 	dataType: "json",
-		// 	crossDomain:true,
+        for(let i=0; i<storia.scene.length; i++){
+      		if(x * board.scale > (storia.scene[i].x*board.scale - board.startX) && x * board.scale < (storia.scene[i].x*board.scale + (board.const.scene.width * board.scale) - board.startX) 
+      	    && y * board.scale > (storia.scene[i].y*board.scale - board.startY) && y * board.scale < (storia.scene[i].y*board.scale + (board.const.scene.height * board.scale) - board.startY)){
+				return board.scenes[i];
+			}
+		}
+	},
+	init: function(){
 		// 	url:"/prova.json",
 		// 	success: (data)=>{
 				//storia = JSON.parse(data);
 				var n=0;
-				for(scena in storia.scenes){
-					if(scena.x && scena.y){
+				for(scena in storia.scene){
+					if(storia.scene[scena].x && storia.scene[scena].y){
 						for(risposta in scena.risposte){
 							for(var i=0; risposta.to.length; i++){
 								if(scena.risposta.to[i])
-									board.arrow.append(new freccia(scena, scena.risposta.to[i], i))
+									board.arrow.push(new freccia(scena, scena.risposta.to[i], i))
 							}
 						}
-						board.scenes.append(new graphicalScene(n,scena));
+						board.scenes.push(new graphicalScene(n,storia.scene[scena]));
 						n++;
 					}
 				}
-				$("#canvas")[0].getContext('2d');
-				this.AnimationFrame=window.requestAnimationFrame(board.DrawAll, board.context);
+				board.context = $("#canvas")[0].getContext('2d');
+				board.AnimationFrame=window.requestAnimationFrame(board.DrawAll, board.context);
 		// 	}
 		// });
 	},
@@ -92,12 +80,16 @@ var board={
 		}
 	},
 	DrawAll:function(){
+		board.context.fillStyle = "#FFFFFF";
+		board.context.fillRect(0,0,$("#canvas").width(),$("#canvas").height());
+	
 		for(var j = 0; j < board.scenes.length; j++){
-			board.scenes[j],draw();
+			board.scenes[j].draw();
 		}
 		for( var i = 0; i < board.arrows.length; i ++){
 			board.arrows[i].draw();
 		}
+		board.AnimationFrame=window.requestAnimationFrame(board.DrawAll, board.context);
 	}
 }
 
@@ -119,12 +111,14 @@ class graphicalScene{
 		this.core = scena;
 	}
 	move(offsetx, offsety){
+		console.log("PRIMA x: ",this.core.x, "    y: ", this.core.y);
 		this.core.x+=offsetx*board.scale;
 		this.core.y+=offsety*board.scale;
+		console.log("DOPO x: ",this.core.x, "    y: ", this.core.y);
 	}
 	draw(){
 		board.context.fillStyle = "#FF0000";
-		board.context.fillRect(this.core.x - board.startX, this.core.y - board.startY, this.core.x - board.startX + board.const.scene.width * board.scale, this.core.y - board.startY + board.const.scene.height * board.scale);
+		board.context.fillRect(this.core.x*board.scale - board.startX, this.core.y*board.scale - board.startY, this.core.x*board.scale - board.startX + board.const.scene.width * board.scale, this.core.y*board.scale - board.startY + board.const.scene.height * board.scale);
 	}
 }
 

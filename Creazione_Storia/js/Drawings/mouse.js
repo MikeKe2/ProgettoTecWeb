@@ -33,7 +33,9 @@ var mouse={
         board.removefromboard(board.getScene(mouse.x,mouse.y));
     },
 	rightclick: function(){
-        bard.getScene(mouse.x, mouse.y).linkmenu();
+        let scena = bard.getScene(mouse.x, mouse.y);
+        if (scena)
+            scena.linkmenu();
     },
 	zoomin: function(){
         board.scale /= 1.25;
@@ -48,24 +50,33 @@ var mouse={
         let newy = ev.pageY - offset.top;
 		
 		if (mouse.down) {
-            board.getScene().move(mouse.x-newx, mouse.y-newy);
+            let scena = board.getScene(mouse.x, mouse.y);
+            if(scena)
+                scena.move(newx - mouse.x, newy - mouse.y);
+            else{
+                //muovi board
+            }
         }
 
-        x = newx;
-        y = newy;
+        mouse.x = newx;
+        mouse.y = newy;
     },
 	clickhandler:function(){
-        board.getScene(mouse.x,mouse.y).open();
+        var scena = board.getScene(mouse.x,mouse.y);
+        if(scena){
+            //scena.open();
+            console.log(scena)
+        }
     },
     interprete: (ev)=>{
         switch(ev.button){
             case 0:
                 mouse.down = true;
                 break;
-            case 0:
+            case 1:
                 mouse.midclick();
                 break;
-            case 0:
+            case 2:
                 mouse.rightclick()
                 break;
         }
