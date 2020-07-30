@@ -1,0 +1,12 @@
+.scene {
+    position: absolute;
+    z-index: 9;
+    background-color: #f1f1f1;
+    background-color: green;
+    text-align: center;
+    border: 1px solid #d3d3d3;
+
+    display: inline-block;
+    width: 500px;
+    height: 500px;
+  }

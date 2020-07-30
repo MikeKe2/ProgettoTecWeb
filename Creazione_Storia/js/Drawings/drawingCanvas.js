@@ -23,6 +23,7 @@
 		clearTimeout(id);
 	};
 }());
+
 //var storia;
 
 $(window).on("load", function(){
@@ -35,13 +36,16 @@ var board={
 	activegroup: null,
     startX: 0,
     startY: 0,
-	width: 500,
-	height: 500,
 	scale: 1,
 	arrows: [],
 	scenes: [],
-	move:(newX, newY)=>{
-
+	move:(offsetX, offsetY)=>{
+		board.startX+=offsetX*board.scale;
+		board.startY+=offsetY*board.scale;
+		if(board.startX<0)
+			board.startX=0;
+		if(board.startY<0)
+			board.startY=0;
     },
     getScene: (x, y) =>{
         for(let i=0; i<storia.scene.length; i++){
@@ -72,23 +76,6 @@ var board={
 						board.scenes.push(new graphicalScene(i,scena));
 					}
 				}
-				// for(let i=0; i<board.arrows; i++){
-				// 	groups.push(new group());
-				// }
-
-
-				// for(scena in storia.scene){
-				// 	if(storia.scene[scena].x && storia.scene[scena].y){
-				// 		storia.scene[scena].risposte.forEach(risposta=>{
-				// 			for(var i=0; risposta.to.length; i++){
-				// 				if(risposta.to[i])
-				// 					board.arrows.push(new freccia(storia.scene[scena], risposta.to[i], i))
-				// 			}
-				// 		});
-				// 		board.scenes.push(new graphicalScene(n,storia.scene[scena]));
-				// 		n++;
-				// 	}
-				// }
 				board.context = $("#canvas")[0].getContext('2d');
 				board.AnimationFrame=window.requestAnimationFrame(board.DrawAll, board.context);
 		// 	}
@@ -113,69 +100,3 @@ var board={
 		board.AnimationFrame=window.requestAnimationFrame(board.DrawAll, board.context);
 	}
 }
-
-var groups=[]
-
-groups.newgroup=function(){
-	this.append(new group())
-}
-
-class group{
-	constructor(){
-		this.color=getRandomColor();
-	}
-}
-
-class graphicalScene{
-	constructor(id,scena){
-		this.id = id;
-		this.core = scena;
-	}
-	move(offsetx, offsety){
-		this.core.x+=offsetx*board.scale;
-		this.core.y+=offsety*board.scale;
-		if(this.core.x<0)
-			this.core.x=0;
-		if(this.core.y<0)
-			this.core.y=0;
-		if(this.core.x+board.const.scene.width>board.width)
-			this.core.x=board.width-board.const.scene.width;
-		if(this.core.y+board.const.scene.heigth>board.height)
-			this.core.y=board.height-board.const.scene.height;
-	}
-	draw(){
-		board.context.fillStyle = "#FF0000";
-		let x = this.core.x * board.scale - board.startX;
-		let width = board.const.scene.width * board.scale;
-		let y = this.core.y * board.scale - board.startY;
-		let height =  board.const.scene.height * board.scale;
-		board.context.fillRect(x,y,width,height);
-	}
-}
-
-class freccia{
-	constructor(from, to, ngroup=1){
-		this.from=from;
-		this.to=to;
-		this.ngroup;
-	}
-	draw(){
-		if(!board.activegroup || activegroup==this.ngroup){
-			board.context.beginPath();
-			board.context.moveTo(this.from.x - board.startX , this.from.y - board.startY);
-			board.context.lineTo(this.to.x - board.startX, this.to.y - board.startY);
-			board.context.strokeStyle = "#000000";
-			board.context.stroke();
-		}
-	}
-
-}
-
-function getRandomColor() {
-	var letters = '0123456789ABCDEF';
-	var color = '#';
-	for (var i = 0; i < 6; i++) {
-	  color += letters[Math.floor(Math.random() * 16)];
-	}
-	return color;
-  }

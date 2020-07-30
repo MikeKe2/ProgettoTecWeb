@@ -54,7 +54,7 @@ var mouse={
             if(scena)
                 scena.move(newx - mouse.x, newy - mouse.y);
             else{
-                //muovi board
+                board.move(newx - mouse.x, newy - mouse.y);
             }
         }
 
@@ -64,8 +64,7 @@ var mouse={
 	clickhandler:function(){
         var scena = board.getScene(mouse.x,mouse.y);
         if(scena){
-            //scena.open();
-            console.log(scena)
+            scena.open();
         }
     },
     interprete: (ev)=>{
