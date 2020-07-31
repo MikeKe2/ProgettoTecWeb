@@ -21,23 +21,42 @@
         <template id="scena">
             <div id="scena$ID" class="scene">
                 <form>
-                    <h2 id="title$ID" class="show">$NAME</h2> <input type="text" name="title" class="edit">
-                    <p id="description$ID" class="show">$DESCRIPTION</p> <textarea name="description" class="edit"></textarea>
-                    <p id="widget$ID" class="show">$WIDGET</p><select name="widget" class="edit"></select>
-                    <p id="audio$ID" class="show">$AUDIO</p><select name="widget" class="edit"></select>
-                    <p id="valutatore$ID" class="show">$VALUTATORE</p><input type="checkbox" name="valutatore" class="edit">
-                    <p id="time$ID" class="show">$TIME</p><input type="number" name="time">
-                    <ol id="risposte$ID" class="show"></ol>
-                    <button type="button">Modifica</button><button type="button">Cancella</button><input type="submit">
+                    <div class="header"><h3>muovi qua</h3></div>
+                    <p><h2 id="title$ID" class="show"><span class="label-bolt">Nome:</span> $NAME</h2>
+                        <input for="nome" type="text" name="title" class="edit"></p>
+
+                    <p><span id="description$ID" class="show"><span class="label-bolt">Descrizione:</span> $DESCRIPTION</span> 
+                        <textarea for="descrizione" name="description" class="edit"></textarea></p>
+
+                    <p><span id="widget$ID" class="show"><span class="label-bolt">Widget:</span>$WIDGET</span>
+                        <select name="widget" class="edit"></select></p>
+
+                    <p><span id="audio$ID" class="show"><span class="label-bolt">Audio: </span>$AUDIO</span>
+                        <select name="audio" class="edit"></select></p>
+
+                    <p><span id="valutatore$ID" class="show"><span class="label-bolt">Valutatore: </span>$VALUTATORE</span>
+                        <input for="valutatore" type="checkbox" name="valutatore" class="edit"></p>
+
+                    <p><span id="time$ID" class="show"><span class="label-bolt">Time: </span>$TIME</span>
+                        <input for="tempo massimo" type="number" name="time" class="edit"></p>
+                        
+                    <p><ol id="risposte$ID" class="show"></ol></p>
+
+                    <button name="canc" type="button">Chiudi</button>
+                    <button name="mod" type="button" class="show">Modifica</button>
+                    <button name="back" type="button" class="edit">Torna indietro</button>
+                    <input type="submit" value="Salva" class="edit">
                 </form>
             </div>
         </template>
         <template id="risposta">
             <li>
-                <p id="valore$ID$RISP" class="show"></p><input type="text" name="valore" class="edit">
-                <p id="to$ID$RISP" class="show">To $LINK</p>
-                <p id="remTime$ID$RISP" class="show"></p><input type="number" name="remTime" class="edit">
-                <p id="points$ID$RISP" class="show"></p><input type="number" name="points" class="edit">
+                <p id="valore$ID$RISP" class="show"><span class="label-bolt">Valore: </span>$VALORE</p>
+                <input type="text" name="valore" class="edit">
+                
+                <p id="to$ID$RISP" class="show"><span class="label-bolt">Prossimo: </span> $LINK</p>
+                <p id="remTime$ID$RISP" class="show"><span class="label-bolt">Tempo(?): </span>$TEMPO</p><input type="number" name="remTime" class="edit">
+                <p id="points$ID$RISP" class="show"><span class="label-bolt">Punti: </span>$POINTS</p><input type="number" name="points" class="edit">
             </li>
         </template>
         <template id="settings">

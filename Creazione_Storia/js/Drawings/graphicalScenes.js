@@ -33,12 +33,27 @@ class graphicalScene{
 			html = html.replace("$AUDIO", this.core.tracciaAudio);
 			html = html.replace("$VALUTATORE", this.core.valutatore);
 			html = html.replace("$TIME", this.core.timemax);
-        	$(".container").append(html);
+			
+			$(".container").append(html);
+
+			let rispID=0;
+			this.core.risposte.forEach(risposta => {
+				html = $("#risposta").html();
+				for(let i=0; i<4; i++){
+					html = html.replace("$RISP",rispID);
+					html=html.replace("$ID",this.id);
+				}
+				html = html.replace("$VALORE", risposta.valore);
+				html = html.replace("$LINK", risposta.to);
+				html = html.replace("$TEMPO", risposta.remainingTime);
+				html = html.replace("$POINT", risposta.points);
+				rispID++;
+				$(id+"ol").append(html);
+			});
+
 			let id = "#scena"+this.id;
-			console.log(id);
 			this.opened = true;
-			console.log($(id).html());
-			dragElement(id);
+			initScene(id);
 		}
 	}
 }
