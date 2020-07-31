@@ -62,9 +62,17 @@ function dragElement(elmnt) {
     pos2 = pos4 - e.clientY;
     pos3 = e.clientX;
     pos4 = e.clientY;
+    let offset=$(elmnt).last().offset();
+    console.log(offset);
     // set the element's new position:
-    $(elmnt).css("top",elmnt.offsetTop - pos2 + "px");
-    $(elmnt).css("left",elmnt.offsetLeft - pos1 + "px");
+    $(elmnt).last().offset({
+      top: offset.top - pos2,
+      left: offset.left - pos1
+    })
+    
+    
+    // ("margin-top",elmnt.offsetTop - pos2 + "px");
+    // $(elmnt).css("margin-left",elmnt.offsetLeft - pos1 + "px");
   }
 
   function closeDragElement() {

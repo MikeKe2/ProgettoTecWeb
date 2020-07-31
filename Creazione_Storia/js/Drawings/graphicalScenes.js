@@ -25,7 +25,7 @@ class graphicalScene{
 		if(!this.opened){
 			let html = $("#scena").html();
 			for(let i = 0; i<9; i++){
-				html.replace("$ID",this.id);
+				html = html.replace("$ID",this.id);
 			}
 			html = html.replace("$NAME", this.core.nome);
 			html = html.replace("$DESCRIPTION", this.core.descrizione);
@@ -34,9 +34,10 @@ class graphicalScene{
 			html = html.replace("$VALUTATORE", this.core.valutatore);
 			html = html.replace("$TIME", this.core.timemax);
         	$(".container").append(html);
-        	let id = "#scena"+this.id;
+			let id = "#scena"+this.id;
+			console.log(id);
 			this.opened = true;
-
+			console.log($(id).html());
 			dragElement(id);
 		}
 	}
