@@ -1,9 +1,9 @@
 var mouse={
 	x: 0,
 	y: 0,
-    down: false,
+    down: false,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+    time: 0,
     init:function(){
-		$('#canvas').click(mouse.clickhandler);
 		$('#canvas').mousemove(mouse.mousemovehandler);
 		$('#canvas').mousedown(mouse.mousedownhandler);
 		$('#canvas').mouseup(mouse.mouseuphandler);
@@ -22,12 +22,18 @@ var mouse={
         mouse.interprete(ev)
 		mouse.downX = mouse.x;
 		mouse.downY = mouse.y;
-		ev.originalEvent.preventDefault();
+        ev.originalEvent.preventDefault();
+        let d = new Date();
+        time = d.getTime();
 		
 	},
 	mouseuphandler:(ev)=>{
 		mouse.down = false;
-		mouse.dragging = false;
+        mouse.dragging = false;
+        let d=new Date();
+        if(d.getTime()-time<100){
+            mouse.clickhandler();
+        }
 	},
 	midclick: function(){
         board.removefromboard(board.getScene(mouse.x,mouse.y));

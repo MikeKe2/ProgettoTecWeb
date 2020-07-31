@@ -1,6 +1,7 @@
 class graphicalScene{
 	constructor(id,scena){
 		this.id = id;
+		this.opened = false;
 		this.core = scena;
 	}
 	move(offsetx, offsety){
@@ -20,19 +21,23 @@ class graphicalScene{
 		board.context.fillRect(x,y,width,height);
 	}
 	open(){
-		console.log("open");
-		let html = $("#scena").html();
-		for(let i = 0; i<9; i++){
-			html.replace("$ID",this.id);
+		
+		if(!this.opened){
+			let html = $("#scena").html();
+			for(let i = 0; i<9; i++){
+				html.replace("$ID",this.id);
+			}
+			html = html.replace("$NAME", this.core.nome);
+			html = html.replace("$DESCRIPTION", this.core.descrizione);
+			html = html.replace("$WIDGET", this.core.widget);
+			html = html.replace("$AUDIO", this.core.tracciaAudio);
+			html = html.replace("$VALUTATORE", this.core.valutatore);
+			html = html.replace("$TIME", this.core.timemax);
+        	$(".container").append(html);
+        	let id = "#scena"+this.id;
+			this.opened = true;
+
+			dragElement(id);
 		}
-		html.replace("$NAME", this.core.name);
-		html.replace("$DESCRIPTION", this.core.description);
-		html.replace("$WIDGET", this.core.widget);
-		html.replace("$AUDIO", this.core.tracciaAudio);
-		html.replace("$VALUTATORE", this.core.valutatore);
-		html.replace("$TIME", this.core.timemax);
-        $(".container").append(html);
-        let id = "#scena"+this.id;
-        dragElement($(id));
 	}
 }
