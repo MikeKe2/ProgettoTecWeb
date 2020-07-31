@@ -23,6 +23,7 @@ class graphicalScene{
 	open(){
 		
 		if(!this.opened){
+			let id = "#scena"+this.id;
 			let html = $("#scena").html();
 			for(let i = 0; i<9; i++){
 				html = html.replace("$ID",this.id);
@@ -48,10 +49,9 @@ class graphicalScene{
 				html = html.replace("$TEMPO", risposta.remainingTime);
 				html = html.replace("$POINT", risposta.points);
 				rispID++;
-				$(id+"ol").append(html);
+				$("#risposte"+this.id).append(html);
 			});
 
-			let id = "#scena"+this.id;
 			this.opened = true;
 			initScene(id);
 		}
