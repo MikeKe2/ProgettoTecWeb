@@ -2,7 +2,7 @@ var mouse={
 	x: 0,
 	y: 0,
     down: false,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
-    time: 0,
+    time: 0, 
     init:function(){
 		$('#canvas').mousemove(mouse.mousemovehandler);
 		$('#canvas').mousedown(mouse.mousedownhandler);
@@ -60,7 +60,7 @@ var mouse={
             if(scena)
                 scena.move(newx - mouse.x, newy - mouse.y);
             else{
-                board.move(newx - mouse.x, newy - mouse.y);
+                board.move(mouse.x - newx, mouse.y - newy);
             }
         }
 
