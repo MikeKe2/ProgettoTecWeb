@@ -20,6 +20,7 @@
 
 #canvas{
     width:70%;
+    height: 100%;
     display: inline-block;
     /* flex: 7; */
 }
@@ -29,4 +30,5 @@
     display: inline-block;
     /* flex: 3; */
     width:30%;
+    height: 100%;
 }

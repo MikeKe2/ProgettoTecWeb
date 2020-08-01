@@ -56,6 +56,18 @@ var board={
 		}
 	},
 	init: function(){
+
+		let canvas = $("#canvas")[0];
+
+		const width = canvas.clientWidth;
+   		const height = canvas.clientHeight;
+
+   		// If it's resolution does not match change it
+   		if (canvas.width !== width || canvas.height !== height) {
+     		canvas.width = width;
+     		canvas.height = height;
+   		}
+
 		// 	url:"/prova.json",
 		// 	success: (data)=>{
 				//storia = JSON.parse(data);
@@ -88,7 +100,7 @@ var board={
 		}
 	},
 	DrawAll:function(){
-		board.context.fillStyle = "#FFFFFF";
+		board.context.fillStyle = "#00FF00";
 		board.context.fillRect(0,0,$("#canvas").width(),$("#canvas").height());
 	
 		for(var j = 0; j < board.scenes.length; j++){
