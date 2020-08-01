@@ -21,7 +21,6 @@ class graphicalScene{
 		board.context.fillRect(x,y,width,height);
 	}
 	open(){
-		
 		if(!this.opened){
 			let id = "#scena"+this.id;
 			let html = $("#scena").html();

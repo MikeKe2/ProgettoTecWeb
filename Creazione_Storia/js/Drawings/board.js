@@ -38,7 +38,8 @@ var board={
     startY: 0,
 	scale: 1,
 	arrows: [],
-	scenes: [],
+	graphicalScenes: [],
+	scenes:[],
 	move:(offsetX, offsetY)=>{
 		board.startX+=offsetX*board.scale;
 		board.startY+=offsetY*board.scale;
@@ -51,7 +52,7 @@ var board={
         for(let i=0; i<storia.scene.length; i++){
       		if(x * board.scale > (storia.scene[i].x*board.scale - board.startX) && x * board.scale < (storia.scene[i].x*board.scale + (board.const.scene.width * board.scale) - board.startX) 
       	    && y * board.scale > (storia.scene[i].y*board.scale - board.startY) && y * board.scale < (storia.scene[i].y*board.scale + (board.const.scene.height * board.scale) - board.startY)){
-				return board.scenes[i];
+				return board.graphicalScenes[i];
 			}
 		}
 	},
@@ -85,26 +86,59 @@ var board={
 								}
 							}
 						}
+
+						board.graphicalScenes.push(new graphicalScene(i,scena));
+					}
+					else{
 						board.scenes.push(new graphicalScene(i,scena));
 					}
 				}
 				board.context = $("#canvas")[0].getContext('2d');
 				board.AnimationFrame=window.requestAnimationFrame(board.DrawAll, board.context);
+				this.PopulateMenu("all");
 		// 	}
 		// });
 	},
 	const:{
 		scene:{
-			width:50,
-			height:30
+			width:150,
+			height:80
 		}
+	},
+	PopulateMenu:(filter)=>{
+		let graph = false;
+		let scene = false;
+		switch(filter){
+			case "all":
+				graph=true;
+				scene=true;
+				break;
+			case "notLoaded":
+				scene=true;
+				break;
+			case "loaded":
+				graph=true;
+				break;
+		}
+		$("#menulist").html("");
+		if(scene){
+			board.scenes.forEach(scena=>{
+				$("#menulist").append($("#menuScena").html().replace("$ID", scena.id).replace("$NOME",scena.core.nome));
+			})
+		}
+		if(graph){
+			board.graphicalScenes.forEach(scena=>{
+				$("#menulist").append($("#menuScena").html().replace("$ID", scena.id).replace("$NOME",scena.core.nome));
+			})
+		}
+
 	},
 	DrawAll:function(){
 		board.context.fillStyle = "#00FF00";
 		board.context.fillRect(0,0,$("#canvas").width(),$("#canvas").height());
 	
-		for(var j = 0; j < board.scenes.length; j++){
-			board.scenes[j].draw();
+		for(var j = 0; j < board.graphicalScenes.length; j++){
+			board.graphicalScenes[j].draw();
 		}
 		for( var i = 0; i < board.arrows.length; i ++){
 			board.arrows[i].draw();

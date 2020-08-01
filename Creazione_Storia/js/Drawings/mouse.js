@@ -10,6 +10,7 @@ var mouse={
 		$('#canvas').mouseout(mouse.mouseuphandler);
         $('#canvas').scroll(mouse.scrollhandler);
         $('#canvas').bind('mousewheel', function(e){
+            console.log("weeeeeeeeeel");
             if(e.originalEvent.wheelDelta /120 > 0) {
                 zoomin();
             }
@@ -44,10 +45,12 @@ var mouse={
             scena.linkmenu();
     },
 	zoomin: function(){
-        board.scale /= 1.25;
+        //board.scale /= 1.25;
+        console.log("zoomin");
     },
 	zoomout: function(){
-        board.scale *= 1.25;
+        //board.scale *= 1.25;
+        console.log("zoomout");
     },
 	mousemovehandler:(ev)=>{
         var offset = $('#canvas').offset();
