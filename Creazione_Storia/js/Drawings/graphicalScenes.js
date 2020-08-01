@@ -40,7 +40,7 @@ class graphicalScene{
 			let rispID=0;
 			this.core.risposte.forEach(risposta => {
 				html = $("#risposta").html();
-				for(let i=0; i<4; i++){
+				for(let i=0; i < 4; i++){
 					html = html.replace("$RISP",rispID);
 					html=html.replace("$ID",this.id);
 				}

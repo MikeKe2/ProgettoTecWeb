@@ -10,3 +10,23 @@
     width: 500px;
     height: 500px;
 }
+
+.container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
+#canvas{
+    width:70%;
+    display: inline-block;
+    /* flex: 7; */
+}
+
+.scenesmenu{
+    background-color: pink;
+    display: inline-block;
+    /* flex: 3; */
+    width:30%;
+}
