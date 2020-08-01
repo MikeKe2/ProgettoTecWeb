@@ -37,6 +37,25 @@
     padding:0px;
 }
 
+.header{
+    cursor: move;
+}
+
+.menuDiv{
+    background-color: white;
+    margin: 5px;
+    border-radius: 5px;
+    border: 2px solid black;
+    text-align: center;
+    cursor: pointer;
+
+
+}
+
+#aggiungiScena{
+    margin-bottom: 10px;
+}
+
 html, body{
     overflow: hidden;
 }

@@ -41,8 +41,8 @@ function edit(id){
   $(id+" .show").hide();
 }
 function close(id){
-  $(id).remove();
   board.scenes[id.replace("#scena","")*1].opened=false;
+  $(id).remove();
   
 }
 

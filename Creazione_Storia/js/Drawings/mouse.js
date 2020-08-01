@@ -7,15 +7,13 @@ var mouse={
 		$('#canvas').mousemove(mouse.mousemovehandler);
 		$('#canvas').mousedown(mouse.mousedownhandler);
 		$('#canvas').mouseup(mouse.mouseuphandler);
-		$('#canvas').mouseout(mouse.mouseuphandler);
-        $('#canvas').scroll(mouse.scrollhandler);
-        $('#canvas').bind('mousewheel', function(e){
-            console.log("weeeeeeeeeel");
-            if(e.originalEvent.wheelDelta /120 > 0) {
-                zoomin();
+        $('#canvas').mouseout(mouse.mouseuphandler);
+        $('#canvas').mousewheel((turn, delta)=>{
+            if(delta==1) {
+                mouse.zoomout();
             }
             else{
-                zoomout();
+                mouse.zoomin();
             }
         });
 	},
@@ -25,14 +23,14 @@ var mouse={
 		mouse.downY = mouse.y;
         ev.originalEvent.preventDefault();
         let d = new Date();
-        time = d.getTime();
+        mouse.time = d.getTime();
 		
 	},
 	mouseuphandler:(ev)=>{
 		mouse.down = false;
         mouse.dragging = false;
         let d=new Date();
-        if(d.getTime()-time<100){
+        if(d.getTime()-mouse.time<100){
             mouse.clickhandler();
         }
 	},
@@ -45,12 +43,10 @@ var mouse={
             scena.linkmenu();
     },
 	zoomin: function(){
-        //board.scale /= 1.25;
-        console.log("zoomin");
+        board.scale /= 1.25;
     },
 	zoomout: function(){
-        //board.scale *= 1.25;
-        console.log("zoomout");
+        board.scale *= 1.25;
     },
 	mousemovehandler:(ev)=>{
         var offset = $('#canvas').offset();

@@ -27,6 +27,12 @@
 //var storia;
 
 $(window).on("load", function(){
+	Array.prototype.last=function(){
+		return this[this.length-1];
+	}
+
+	var element = $("#canvas")[0];
+	$(window).resize(board.resizeCanvas);
 	mouse.init();
 	board.init();
 });
@@ -38,11 +44,10 @@ var board={
     startY: 0,
 	scale: 1,
 	arrows: [],
-	graphicalScenes: [],
 	scenes:[],
 	move:(offsetX, offsetY)=>{
-		board.startX+=offsetX*board.scale;
-		board.startY+=offsetY*board.scale;
+		board.startX+=offsetX/board.scale;
+		board.startY+=offsetY/board.scale;
 		if(board.startX<0)
 			board.startX=0;
 		if(board.startY<0)
@@ -50,25 +55,26 @@ var board={
     },
     getScene: (x, y) =>{
         for(let i=0; i<storia.scene.length; i++){
-      		if(x * board.scale > (storia.scene[i].x*board.scale - board.startX) && x * board.scale < (storia.scene[i].x*board.scale + (board.const.scene.width * board.scale) - board.startX) 
-      	    && y * board.scale > (storia.scene[i].y*board.scale - board.startY) && y * board.scale < (storia.scene[i].y*board.scale + (board.const.scene.height * board.scale) - board.startY)){
-				return board.graphicalScenes[i];
+      		if(x  > (storia.scene[i].x * board.scale - board.startX) && x < (storia.scene[i].x * board.scale + (board.const.scene.width * board.scale) - board.startX) 
+      	    && y  > (storia.scene[i].y * board.scale - board.startY) && y < (storia.scene[i].y * board.scale + (board.const.scene.height * board.scale) - board.startY)){
+				return board.scenes[i];
 			}
+		}
+	},
+	resizeCanvas(){
+		let canvas = $("#canvas")[0];
+		
+		const width = canvas.clientWidth;
+		const height = canvas.clientHeight;
+   		if (canvas.width !== width || canvas.height !== height) {
+			canvas.width = width;
+			canvas.height = height;
 		}
 	},
 	init: function(){
 
-		let canvas = $("#canvas")[0];
-
-		const width = canvas.clientWidth;
-   		const height = canvas.clientHeight;
-
-   		// If it's resolution does not match change it
-   		if (canvas.width !== width || canvas.height !== height) {
-     		canvas.width = width;
-     		canvas.height = height;
-   		}
-
+		board.resizeCanvas();
+		
 		// 	url:"/prova.json",
 		// 	success: (data)=>{
 				//storia = JSON.parse(data);
@@ -86,15 +92,12 @@ var board={
 								}
 							}
 						}
-
-						board.graphicalScenes.push(new graphicalScene(i,scena));
 					}
-					else{
-						board.scenes.push(new graphicalScene(i,scena));
-					}
+					board.scenes.push(new graphicalScene(i,scena));
 				}
 				board.context = $("#canvas")[0].getContext('2d');
 				board.AnimationFrame=window.requestAnimationFrame(board.DrawAll, board.context);
+				$("#aggiungiScena").click(board.newscene);
 				this.PopulateMenu("all");
 		// 	}
 		// });
@@ -105,40 +108,53 @@ var board={
 			height:80
 		}
 	},
+	newscene:function(){
+		storia.scene.push({
+			nome: "scena"+ storia.scene.length,
+            descrizione: "Inserisci descrizione...",
+            widget: null,
+            tracciaAudio: null,
+            valutatore : false,
+            timemax: null,
+            x:null,
+            y:null,
+            risposte: []
+		});
+		let scena = new graphicalScene(storia.scene.length - 1, storia.scene.last());
+		board.scenes.push(scena);
+		scena.open();
+		board.PopulateMenu("all");
+		//todo popolare ultima selezione e non "all"
+	},
 	PopulateMenu:(filter)=>{
-		let graph = false;
-		let scene = false;
+		let all = false;
+		let loaded = false;
 		switch(filter){
 			case "all":
-				graph=true;
-				scene=true;
+				all=true;
 				break;
 			case "notLoaded":
-				scene=true;
+				loaded=true;
 				break;
 			case "loaded":
-				graph=true;
+				loaded=false;
 				break;
 		}
 		$("#menulist").html("");
-		if(scene){
-			board.scenes.forEach(scena=>{
+		let j=0;
+		board.scenes.forEach(scena=>{
+			if(all || (loaded && scena.x && scena.y) || (!loaded && (!scena.x || !scena.y))){
 				$("#menulist").append($("#menuScena").html().replace("$ID", scena.id).replace("$NOME",scena.core.nome));
-			})
-		}
-		if(graph){
-			board.graphicalScenes.forEach(scena=>{
-				$("#menulist").append($("#menuScena").html().replace("$ID", scena.id).replace("$NOME",scena.core.nome));
-			})
-		}
-
+				$("#menuScena"+scena.id).click(function(){scena.open()});
+			}
+		})
 	},
 	DrawAll:function(){
 		board.context.fillStyle = "#00FF00";
 		board.context.fillRect(0,0,$("#canvas").width(),$("#canvas").height());
 	
-		for(var j = 0; j < board.graphicalScenes.length; j++){
-			board.graphicalScenes[j].draw();
+		for(var j = 0; j < board.scenes.length; j++){
+			board.scenes[j].draw();
 		}
 		for( var i = 0; i < board.arrows.length; i ++){
 			board.arrows[i].draw();
