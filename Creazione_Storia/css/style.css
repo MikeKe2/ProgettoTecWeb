@@ -56,6 +56,31 @@
     margin-bottom: 10px;
 }
 
+.miniNav{
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 6px;
+    padding: 10px;
+    text-align: center;
+
+}
+
+.miniNav a{
+    background-color: white;
+    border: 2px solid red;
+    border-radius: 5px;
+    padding: 5px;
+    cursor: pointer;
+
+}
+
+.miniNav a:active{
+    border: 2px solid green;
+    border-radius: 3px;
+
+}
+
+
 html, body{
     overflow: hidden;
 }

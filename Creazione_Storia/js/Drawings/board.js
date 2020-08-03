@@ -99,6 +99,10 @@ var board={
 				board.AnimationFrame=window.requestAnimationFrame(board.DrawAll, board.context);
 				$("#aggiungiScena").click(board.newscene);
 				this.PopulateMenu("all");
+
+				$("#all").click(function(){board.PopulateMenu("all");});
+				$("#notLoaded").click(function(){board.PopulateMenu("notLoaded");});
+				$("#loaded").click(function(){board.PopulateMenu("loaded");});
 		// 	}
 		// });
 	},

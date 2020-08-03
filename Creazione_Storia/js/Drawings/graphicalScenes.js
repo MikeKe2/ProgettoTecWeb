@@ -13,7 +13,7 @@ class graphicalScene{
 			this.core.y=0;
 	}
 	draw(){
-		if(this.x && this.y){
+		if(this.core.x && this.core.y){
 			board.context.fillStyle = "#FF0000";
 			let x = this.core.x * board.scale - board.startX;
 			let width = board.const.scene.width * board.scale;
