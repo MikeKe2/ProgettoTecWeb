@@ -10,10 +10,10 @@ var mouse={
         $('#canvas').mouseout(mouse.mouseuphandler);
         $('#canvas').mousewheel((turn, delta)=>{
             if(delta==1) {
-                mouse.zoomout();
+                mouse.zoomin();
             }
             else{
-                mouse.zoomin();
+                mouse.zoomout();
             }
         });
 	},
@@ -38,15 +38,26 @@ var mouse={
         board.removefromboard(board.getScene(mouse.x,mouse.y));
     },
 	rightclick: function(){
-        let scena = bard.getScene(mouse.x, mouse.y);
+        let scena = board.getScene(mouse.x, mouse.y);
         if (scena)
             scena.linkmenu();
     },
-	zoomin: function(){
-        board.scale /= 1.25;
-    },
 	zoomout: function(){
-        board.scale *= 1.25;
+        if (board.scale > 0.14){
+            board.scale /= 1.15;
+            
+            board.startX = max(board.startX/1.15 - mouse.x * 0.15, 0);
+            board.startY = max(board.startY/1.15 - mouse.y * 0.15, 0);
+            
+        }
+    },
+	zoomin: function(){
+        if (board.scale < 18){
+            board.scale *= 1.15;
+            
+            board.startX = board.startX*1.15 + mouse.x * 0.15;
+            board.startY = board.startY*1.15 + mouse.y * 0.15;
+        }
     },
 	mousemovehandler:(ev)=>{
         var offset = $('#canvas').offset();

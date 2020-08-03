@@ -7,10 +7,10 @@ class graphicalScene{
 	move(offsetx, offsety){
 		this.core.x+=offsetx/board.scale;
 		this.core.y+=offsety/board.scale;
-		if(this.core.x<0)
-			this.core.x=0;
-		if(this.core.y<0)
-			this.core.y=0;
+		if(this.core.x<0.1)
+			this.core.x=0.1;
+		if(this.core.y<0.1)
+			this.core.y=0.1;
 	}
 	draw(){
 		if(this.core.x && this.core.y){

@@ -103,6 +103,7 @@ var board={
 				$("#all").click(function(){board.PopulateMenu("all");});
 				$("#notLoaded").click(function(){board.PopulateMenu("notLoaded");});
 				$("#loaded").click(function(){board.PopulateMenu("loaded");});
+				$(".miniNav a").click(function(){$(".miniNav a").not(this).removeClass("attivato"); $(this).addClass("attivato");})
 		// 	}
 		// });
 	},
