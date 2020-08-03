@@ -79,16 +79,19 @@ function initScene(id){
 }
 
 function allowDrop(ev) {
-	ev.preventDefault();
-  }
+  console.log("allowDrop");
+  ev.preventDefault();
+}
   
 function drag(ev) {
-  console.log("drag!");
-	ev.dataTransfer.setData("text", ev.target.id);
+  console.log("dragging "+ev.target.id.replace("menuScena",""));
+	ev.dataTransfer.setData("id", ev.target.id.replace("menuScena",""));
 }
   
 function drop(ev) {
-	ev.preventDefault();
-	var data = ev.dataTransfer.getData("text");
-	ev.target.appendChild(document.getElementById(data));
+  ev.preventDefault();
+  let index = ev.dataTransfer.getData("id")*1;
+  console.log("dropping "+index+" at "+mouse.x+",   "+mouse.y);
+  board.scenes[index].core.x=(board.startX + mouse.x)/board.scale;
+  board.scenes[index].core.y=(board.startY + mouse.y)/board.scale;
 }

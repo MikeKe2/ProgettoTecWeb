@@ -53,6 +53,30 @@ var storia = {
                     "points":500
                 }
             ]
+        },
+        {
+            "nome": "scena2",
+            "descrizione": "C'era un altro pampino brutto che è stupido e sono troppi ora",
+            "widget": "text",
+            "tracciaAudio": null,
+            "valutatore" : false,
+            "timemax": "30:00",
+            "x":null,
+            "y":null,
+            "risposte": [
+                {
+                    "valore" : "15", 
+                    "to":null,
+                    "remainingTime": "0:15",
+                    "points":5000
+                },
+                {
+                    "valore" : 15,
+                    "remainingTime": null,
+                    "to":null,
+                    "points":500
+                }
+            ]
         }
     ]
 }

@@ -4,7 +4,8 @@ var mouse={
     down: false,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
     time: 0, 
     init:function(){
-		$('#canvas').mousemove(mouse.mousemovehandler);
+        $('.container').mousemove(mouse.mousemovehandler);
+        $("#canvas").bind("dragover", this.mousemovehandler); 
 		$('#canvas').mousedown(mouse.mousedownhandler);
 		$('#canvas').mouseup(mouse.mouseuphandler);
         $('#canvas').mouseout(mouse.mouseuphandler);

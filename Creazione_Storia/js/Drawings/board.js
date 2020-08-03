@@ -40,6 +40,7 @@ $(window).on("load", function(){
 var board={
 	context: null,
 	activegroup: null,
+	dropping: false,
     startX: 0,
     startY: 0,
 	scale: 1,
@@ -164,6 +165,7 @@ var board={
 		for( var i = 0; i < board.arrows.length; i ++){
 			board.arrows[i].draw();
 		}
+		console.log("X "+mouse.x+"      Y "+mouse.y);
 		board.AnimationFrame=window.requestAnimationFrame(board.DrawAll, board.context);
 	}
 }
