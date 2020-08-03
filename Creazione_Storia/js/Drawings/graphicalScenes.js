@@ -60,18 +60,4 @@ class graphicalScene{
 			close("#scena"+this.id);
 	}
 	linkmenu(){
-		let context=$("#contextMenu").html().replace("$ID", this.id);
-		let risposta=$("#contextRisposta").html().replace("$ID", this.id);
-		$(".container").append(context);
-		for(let i = 0; i < this.core.risposte.length; i++){
-			let li = risposta.replace("$RISP", i);
-			if (this.core.risposte[i].to[board.activegroup]){
-				lili.replace("$TO", this.core.risposte[i].to[board.activegroup]);
-			}else{
-				li = li.replace("$TO", "non ancora inserito");
-			}
-			$("#contextMenu"+this.id+" .menuoption").append(li);
-		}
-		$("#contextMenu"+this.id).css({left: mouse.x, top: mouse.y});
-	}
-}
+		contextMenu.show(this.id);

@@ -20,20 +20,20 @@ var mouse={
         });
 	},
 	mousedownhandler:(ev)=>{
-        mouse.interprete(ev)
-		mouse.downX = mouse.x;
-		mouse.downY = mouse.y;
-        ev.originalEvent.preventDefault();
-        let d = new Date();
-        mouse.time = d.getTime();
-		
+        if(ev.button==0){
+            mouse.down = true;
+            mouse.downX = mouse.x;
+            mouse.downY = mouse.y;
+            ev.originalEvent.preventDefault();
+            let d = new Date();
+            mouse.time = d.getTime();
+        }
 	},
 	mouseuphandler:(ev)=>{
-        console.log(ev);
 		mouse.down = false;
         mouse.dragging = false;
         let d=new Date();
-        if(d.getTime()-mouse.time<100 && ev.button == 1){
+        if(d.getTime()-mouse.time<100){
             mouse.clickhandler();
         }
 	},
@@ -85,16 +85,6 @@ var mouse={
         var scena = board.getScene(mouse.x,mouse.y);
         if(scena){
             scena.open();
-        }
-    },
-    interprete: (ev)=>{
-        switch(ev.button){
-            case 0:
-                mouse.down = true;
-                break;
-            case 1:
-                    mouse.midclick();
-                break;
         }
     }
 }

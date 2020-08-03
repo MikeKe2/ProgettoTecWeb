@@ -42,14 +42,14 @@ var storia = {
             "risposte": [
                 {
                     "valore" : "15", 
-                    "to":null,
+                    "to":[],
                     "remainingTime": "0:15",
                     "points":5000
                 },
                 {
                     "valore" : 15,
                     "remainingTime": null,
-                    "to":null,
+                    "to":[],
                     "points":500
                 }
             ]
@@ -66,14 +66,14 @@ var storia = {
             "risposte": [
                 {
                     "valore" : "15", 
-                    "to":null,
+                    "to":[],
                     "remainingTime": "0:15",
                     "points":5000
                 },
                 {
                     "valore" : 15,
                     "remainingTime": null,
-                    "to":null,
+                    "to":[],
                     "points":500
                 }
             ]

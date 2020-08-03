@@ -81,11 +81,29 @@ html, body{
     overflow: hidden;
 }
 
-.menu{
+#contextMenu{
     position: absolute;   
+    background-color: #d3d3d3;
+    padding: 4px;
     border: 1px solid black;
+    border-radius: 5px;
+    transform:scale(0);
+    transform-origin:top left;
+    z-index: 1000;
 }
 
-.menu li{
+#contextMenu .richiamato{
+    transform:Scale(1);
+    transition: transform 200 ease-in-out;
+
+}
+
+#contextMenu li{
     border: 1px solid black;
+    border-radius: 5px;
+    padding: 2px;
+}
+#contextMenu li:hover{
+    background-color: blue;
+    color:white;
 }

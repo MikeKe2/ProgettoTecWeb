@@ -35,6 +35,7 @@ $(window).on("load", function(){
 	$(window).resize(board.resizeCanvas);
 	mouse.init();
 	board.init();
+	contextMenu.init();
 });
 
 var board={
