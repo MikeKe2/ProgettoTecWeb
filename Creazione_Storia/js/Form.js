@@ -43,7 +43,6 @@ function edit(id){
 function close(id){
   board.scenes[id.replace("#scena","")*1].opened=false;
   $(id).remove();
-  
 }
 
 function invia(id){
@@ -84,14 +83,13 @@ function allowDrop(ev) {
 }
   
 function drag(ev) {
-  console.log("dragging "+ev.target.id.replace("menuScena",""));
 	ev.dataTransfer.setData("id", ev.target.id.replace("menuScena",""));
 }
   
 function drop(ev) {
   ev.preventDefault();
   let index = ev.dataTransfer.getData("id")*1;
-  console.log("dropping "+index+" at "+mouse.x+",   "+mouse.y);
   board.scenes[index].core.x=(board.startX + mouse.x)/board.scale;
   board.scenes[index].core.y=(board.startY + mouse.y)/board.scale;
+  board.PopulateMenu($(".miniNav .attivato").attr("id"));
 }

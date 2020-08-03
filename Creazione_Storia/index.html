@@ -111,33 +111,35 @@
         </template>
 
         <template id="settings">
-            <div id="Settings">
-                <form>
-                    <h2 id="title" class="show">$NAME</h2> <input type="text" name="title" class="edit">
-                    <p id="categoria" class="show"></p>
-                    <select name="categoria" class="edit">
-                        <option value="singolo">Singolo</option>
-                        <option value="Gruppi">Gruppi</option>
-                        <option value="singoli">Singoli</option>
-                    </select>
-                    <p id="target" class="show"></p>
-                    <select name="target" class="edit">
-                        <option value="7-10">7-10</option>
-                        <option value="11-14">11-14</option>
-                        <option value="15-18">15-18</option>
-                    </select>
-                    <p id="bg" class="show"></p><input type="text" name="bg" class="edit">
-                    <p id="author" class="show"></p><input type="text" name="author" class="edit">
-                    <button type="button">Modifica</button><button type="button">Cancella</button><input type="submit">
-                </form>
-            </div>
+          <div id="Settings">
+            <form>
+                <h2 id="title" class="show">$NAME</h2> <input type="text" name="title" class="edit">
+                <p id="categoria" class="show"></p>
+                <select name="categoria" class="edit">
+                    <option value="singolo">Singolo</option>
+                    <option value="Gruppi">Gruppi</option>
+                    <option value="singoli">Singoli</option>
+                </select>
+                <p id="target" class="show"></p>
+                <select name="target" class="edit">
+                    <option value="7-10">7-10</option>
+                    <option value="11-14">11-14</option>
+                    <option value="15-18">15-18</option>
+                </select>
+                <p id="bg" class="show"></p><input type="text" name="bg" class="edit">
+                <p id="author" class="show"></p><input type="text" name="author" class="edit">
+                <button type="button">Modifica</button><button type="button">Cancella</button><input type="submit">
+            </form>
+          </div>
         </template>
 
         <template id="contextMenu">
-            <div class="menu">
-                <ul class="menu-options">
-                </ul>
-              </div>
+          <div id="contextMenu$ID" class="menu">
+            <ol class="menu-options"></ol>
+          </div>
+        </template>
+        <template id="contextRisposta">
+          <li id="Context$ID$RISP">$TO</li>
         </template>
 
 

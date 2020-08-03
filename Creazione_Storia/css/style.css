@@ -80,3 +80,12 @@
 html, body{
     overflow: hidden;
 }
+
+.menu{
+    position: absolute;   
+    border: 1px solid black;
+}
+
+.menu li{
+    border: 1px solid black;
+}

@@ -129,10 +129,11 @@ var board={
 		let scena = new graphicalScene(storia.scene.length - 1, storia.scene.last());
 		board.scenes.push(scena);
 		scena.open();
-		board.PopulateMenu("all");
-		//todo popolare ultima selezione e non "all"
+		edit("#scena"+scena.id);
+		board.PopulateMenu($(".miniNav .attivato").attr("id"));
 	},
 	PopulateMenu:(filter)=>{
+		console.log(filter);
 		let all = false;
 		let loaded = false;
 		switch(filter){
@@ -140,16 +141,16 @@ var board={
 				all=true;
 				break;
 			case "notLoaded":
-				loaded=true;
+				loaded=false;
 				break;
 			case "loaded":
-				loaded=false;
+				loaded=true;
 				break;
 		}
 		$("#menulist").html("");
 		let j=0;
 		board.scenes.forEach(scena=>{
-			if(all || (loaded && scena.x && scena.y) || (!loaded && (!scena.x || !scena.y))){
+			if(all || (loaded && scena.core.x && scena.core.y) || (!loaded && (!scena.core.x || !scena.core.y))){
 				$("#menulist").append($("#menuScena").html().replace("$ID", scena.id).replace("$NOME",scena.core.nome));
 				$("#menuScena"+scena.id).click(function(){scena.open()});
 			}
@@ -165,7 +166,6 @@ var board={
 		for( var i = 0; i < board.arrows.length; i ++){
 			board.arrows[i].draw();
 		}
-		console.log("X "+mouse.x+"      Y "+mouse.y);
 		board.AnimationFrame=window.requestAnimationFrame(board.DrawAll, board.context);
 	}
 }

@@ -6,7 +6,8 @@ var mouse={
     init:function(){
         $('.container').mousemove(mouse.mousemovehandler);
         $("#canvas").bind("dragover", this.mousemovehandler); 
-		$('#canvas').mousedown(mouse.mousedownhandler);
+		$('#canvas').mousedown(mouse.mousedownhandler); 
+		$('#canvas').contextmenu(mouse.rightclick);
 		$('#canvas').mouseup(mouse.mouseuphandler);
         $('#canvas').mouseout(mouse.mouseuphandler);
         $('#canvas').mousewheel((turn, delta)=>{
@@ -28,17 +29,19 @@ var mouse={
 		
 	},
 	mouseuphandler:(ev)=>{
+        console.log(ev);
 		mouse.down = false;
         mouse.dragging = false;
         let d=new Date();
-        if(d.getTime()-mouse.time<100){
+        if(d.getTime()-mouse.time<100 && ev.button == 1){
             mouse.clickhandler();
         }
 	},
 	midclick: function(){
         board.removefromboard(board.getScene(mouse.x,mouse.y));
     },
-	rightclick: function(){
+	rightclick: function(ev){
+        ev.preventDefault()
         let scena = board.getScene(mouse.x, mouse.y);
         if (scena)
             scena.linkmenu();
@@ -90,10 +93,7 @@ var mouse={
                 mouse.down = true;
                 break;
             case 1:
-                mouse.midclick();
-                break;
-            case 2:
-                mouse.rightclick()
+                    mouse.midclick();
                 break;
         }
     }
