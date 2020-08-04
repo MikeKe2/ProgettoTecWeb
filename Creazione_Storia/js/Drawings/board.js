@@ -40,13 +40,14 @@ $(window).on("load", function(){
 
 var board={
 	context: null,
-	activegroup: null,
+	activegroup: 0,
 	dropping: false,
     startX: 0,
     startY: 0,
 	scale: 1,
 	arrows: [],
 	scenes:[],
+	frecciaContext: null,
 	move:(offsetX, offsetY)=>{
 		board.startX+=offsetX/board.scale;
 		board.startY+=offsetY/board.scale;
@@ -134,7 +135,6 @@ var board={
 		board.PopulateMenu($(".miniNav .attivato").attr("id"));
 	},
 	PopulateMenu:(filter)=>{
-		console.log(filter);
 		let all = false;
 		let loaded = false;
 		switch(filter){
@@ -166,6 +166,9 @@ var board={
 		}
 		for( var i = 0; i < board.arrows.length; i ++){
 			board.arrows[i].draw();
+		}
+		if(board.frecciaContext){
+			board.frecciaContext.draw(mouse.x, mouse.y)
 		}
 		board.AnimationFrame=window.requestAnimationFrame(board.DrawAll, board.context);
 	}

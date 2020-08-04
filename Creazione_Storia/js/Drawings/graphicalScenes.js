@@ -61,3 +61,5 @@ class graphicalScene{
 	}
 	linkmenu(){
 		contextMenu.show(this.id);
+	}
+}

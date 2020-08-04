@@ -18,3 +18,7 @@ function getRandomColor() {
 	}
 	return color;
 }
+
+// functions initGroups(){
+
+// }

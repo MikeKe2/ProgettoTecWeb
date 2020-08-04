@@ -37,8 +37,8 @@ var storia = {
             "tracciaAudio": null,
             "valutatore" : false,
             "timemax": "30:00",
-            "x":30,
-            "y":30,
+            "x":150,
+            "y":100,
             "risposte": [
                 {
                     "valore" : "15", 

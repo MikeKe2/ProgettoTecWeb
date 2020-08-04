@@ -1,5 +1,5 @@
 var contextMenu = {
-    scenaID: null,
+    from: null,
     risposta: null,
     freccia: null,
 
@@ -10,26 +10,27 @@ var contextMenu = {
     },
     show(id){
 
-        this.scenaID = board.scenes[id];
-        this.risposta = null;
+        contextMenu.from = board.scenes[id];
+        contextMenu.risposta = null;
 
-        let risposta=$("#contextRisposta").html().replace("$ID", this.id);
+        let risposta=$("#contextRisposta").html().replace("$ID", contextMenu.id);
         $("#contextMenu ol").html("");
         for(let i = 0; i < board.scenes[id].core.risposte.length; i++){
 			let li = risposta.replace("$RISP", i);
-			if (this.scenaID.core.risposte[i].to[board.activegroup]){
-				li = li.replace("$TO", this.scenaID.core.risposte[i].to[board.activegroup]);
+			if (contextMenu.from.core.risposte[i].to[board.activegroup]!=null){
+				li = li.replace("$TO", contextMenu.from.core.risposte[i].to[board.activegroup]);
 			}else{
 				li = li.replace("$TO", "non ancora inserito");
 			}
             $("#contextMenu ol").append(li);
             $("#contextMenu ol li").last().click(function(){
-                //contextMenu.hide();
                 contextMenu.select(i);
             });
         }
         
-        $("#contextMenu").css({left: mouse.x, top: mouse.y});
+        var offset = $('#canvas').offset();
+
+        $("#contextMenu").css({left: mouse.x + offset.left, top: mouse.y + offset.top});
         $("#contextMenu").addClass("richiamato");
         
     },
@@ -37,9 +38,15 @@ var contextMenu = {
         $("#contextMenu").removeClass("richiamato");
     },
     select(n){
-        risposta=board.scenes[id].core.risposta[n];
+        contextMenu.risposta = n;
+        board.frecciaContext = new freccia(contextMenu.from.core, null);
     },
-    linkwith(id){
-        
+    linkwith(scena){
+        if(scena && scena.core!=contextMenu.from){
+            board.frecciaContext.to = scena.core;
+            board.arrows.push(board.frecciaContext);
+            contextMenu.from.core.risposte[contextMenu.risposta].to[board.activegroup] = scena.id;
+        }
+        board.frecciaContext = null;
     }
 }

@@ -70,7 +70,6 @@ function initScene(id){
   $(id+ " button[name='mod']").click(function(){edit(id)});
   $(id+ " button[name='back']").click(function(){back(id)});
   $(id+ " form").on("submit",function(e){
-    console.log($( this ).serialize());
     e.preventDefault();
     invia(id);
   });
@@ -78,7 +77,6 @@ function initScene(id){
 }
 
 function allowDrop(ev) {
-  console.log("allowDrop");
   ev.preventDefault();
 }
   
