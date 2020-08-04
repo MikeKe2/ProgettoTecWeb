@@ -87,7 +87,7 @@ var board={
 						for(let j = 0; j < scena.risposte.length; j++){
 							let risposta = scena.risposte[i];
 							if(risposta.to){
-								for(let k = 0; k < risposta.to.length; k++){
+								for(let k = 0; k < storia.ngruppi; k++){
 									let to = risposta.to!=null?storia.scene[risposta.to[k]]:null;
 									if(to){
 										board.arrows.push(new freccia(scena, to, k))
@@ -156,6 +156,13 @@ var board={
 				$("#menuScena"+scena.id).click(function(){scena.open()});
 			}
 		})
+	},
+	erase:function(from, to){
+		for(let i = 0; i < board.arrows.length; i++){
+			if(board.arrows[i].from == from && board.arrows[i].to == board.scenes[to].core && board.arrows[i].ngroup == board.activegroup){
+				board.arrows.splice(i, 1);
+			}
+		}
 	},
 	DrawAll:function(){
 		board.context.fillStyle = "#00FF00";

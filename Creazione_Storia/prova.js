@@ -2,6 +2,7 @@ var storia = {
     "nome": "Storia di prova",
     "categoria": "single",
     "target": "6-12",
+    "ngruppi": 1,
     "background": "taccuino",
     "css":"/myfile.css",
     "autore": "autore1",
@@ -12,7 +13,6 @@ var storia = {
             "widget": "text",
             "tracciaAudio": null,
             "valutatore" : false,
-            "timemax": "30:00",
             "x":15,
             "y":15,
             "risposte": [
@@ -36,7 +36,6 @@ var storia = {
             "widget": "text",
             "tracciaAudio": null,
             "valutatore" : false,
-            "timemax": "30:00",
             "x":150,
             "y":100,
             "risposte": [
@@ -60,7 +59,6 @@ var storia = {
             "widget": "text",
             "tracciaAudio": null,
             "valutatore" : false,
-            "timemax": "30:00",
             "x":null,
             "y":null,
             "risposte": [

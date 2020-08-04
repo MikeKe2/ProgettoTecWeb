@@ -1,8 +1,8 @@
 class freccia{
-	constructor(from, to, ngroup=1){
+	constructor(from, to, ngroup=0){
 		this.from=from;
 		this.to=to;
-		this.ngroup;
+		this.ngroup = ngroup;
 	}
 	draw(x = null, y = null){
 		if(!board.activegroup || activegroup==this.ngroup){

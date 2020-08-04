@@ -1,43 +1,80 @@
 {
-    nome: "Franco"
-    categoria: "single" / "gruppi"
-    target: "6-12" / oppure non so
-    background: "taccuino"
-    font-style: 
-    font-size: 
-    "stato": 
-    "autore": 
-    //note: ""
-    scene:{
+    "nome": "Storia di prova",
+    "categoria": "single"/"gruppi piccoli"/"gruppi grandi",
+    "target": "7-10"/"10-14"/"15-18",
+    "ngruppi": 4,
+    "background": "taccuino",
+    "css":"inserisci url",
+    "autore": "autore1",
+    "scene":[
         {
-            nome: scena0
-            descrizione: "C'era un pampino brutto che è stupido"
-            widget: text/number/leve/pulsanti/imgload/img/bar
-            tracciaAudio: null
-            valutatore = false/true
-            timemax: 30:00
-            risposte: {
-            {
-                valore : 15    
-                to: scena2
-                remainingTime: 0:15 / null / quello che vediamo serveve
-                points:5000
-            },
-            {
-                valore : 15
-                to: scena3
-                remainingTime: 0:30 / null / quello che vediamo serveve
-                points:500
-            },
+            "nome": "scena0",
+            "descrizione": "C'era un pampino brutto che è stupido",
+            "widget": "inserisci url",
+            "tracciaAudio": null,
+            "valutatore" : false,
+            "x":15,
+            "y":15,
+            "risposte": [
+                {
+                    "valore" : "15", 
+                    "to":[1,2,2,1],
+                    "remainingTime": "0:15",
+                    "points":5000
+                },
+                {
+                    "valore" : 15,
+                    "remainingTime": null,
+                    "to":[1,2,2,1],
+                    "points":500
+                }
+            ]
         },
         {
-        
+            "nome": "scena1",
+            "descrizione": "C'era un altro pampino brutto che è stupido",
+            "widget": "inserisci url",
+            "tracciaAudio": null,
+            "valutatore" : false,
+            "x":150,
+            "y":100,
+            "risposte": [
+                {
+                    "valore" : "15", 
+                    "to":[,,,],
+                    "remainingTime": "0:15",
+                    "points":5000
+                },
+                {
+                    "valore" : 15,
+                    "remainingTime": null,
+                    "to":[null,null,null,null],
+                    "points":500
+                }
+            ]
         },
         {
-        
-        },
-        {
-        
+            "nome": "scena2",
+            "descrizione": "C'era un altro pampino brutto che è stupido e sono troppi ora",
+            "widget": "text",
+            "tracciaAudio": null,
+            "valutatore" : false,
+            "x":null,
+            "y":null,
+            "risposte": [
+                {
+                    "valore" : "15", 
+                    "to":[null,null,null,null],
+                    "remainingTime": "0:15",
+                    "points":5000
+                },
+                {
+                    "valore" : 15,
+                    "remainingTime": null,
+                    "to":[null,null,null,null],
+                    "points":500
+                }
+            ]
         }
-    }
+    ]
 }

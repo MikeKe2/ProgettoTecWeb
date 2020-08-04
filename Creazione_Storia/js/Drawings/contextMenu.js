@@ -16,14 +16,19 @@ var contextMenu = {
         let risposta=$("#contextRisposta").html().replace("$ID", contextMenu.id);
         $("#contextMenu ol").html("");
         for(let i = 0; i < board.scenes[id].core.risposte.length; i++){
-			let li = risposta.replace("$RISP", i);
-			if (contextMenu.from.core.risposte[i].to[board.activegroup]!=null){
-				li = li.replace("$TO", contextMenu.from.core.risposte[i].to[board.activegroup]);
+            let li = risposta.replace("$RISP", i);
+            let to = contextMenu.from.core.risposte[i].to[board.activegroup];
+			if (to != null){
+				li = li.replace("$TO", to);
 			}else{
 				li = li.replace("$TO", "non ancora inserito");
 			}
             $("#contextMenu ol").append(li);
+            
             $("#contextMenu ol li").last().click(function(){
+                if(to != null){
+                    board.erase(contextMenu.from.core, to);
+                }
                 contextMenu.select(i);
             });
         }
