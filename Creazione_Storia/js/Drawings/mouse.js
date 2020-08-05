@@ -23,6 +23,7 @@ var mouse={
 	mousedownhandler:(ev)=>{
         if(ev.button==0){
             mouse.grabbing=board.getScene(mouse.x, mouse.y);
+            console.log(mouse.grabbing);
             mouse.down=true;
             mouse.downX = mouse.x;
             mouse.downY = mouse.y;

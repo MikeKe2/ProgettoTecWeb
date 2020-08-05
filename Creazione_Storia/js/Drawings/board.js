@@ -59,7 +59,8 @@ var board={
     },
     getScene: (x, y) =>{
         for(let i=0; i<storia.scene.length; i++){
-      		if(x  > (storia.scene[i].x * board.scale - board.startX) && x < (storia.scene[i].x * board.scale + (board.const.scene.width * board.scale) - board.startX) 
+      		if(storia.scene[i].x!=null&&storia.scene[i].y!=null &&
+			   x  > (storia.scene[i].x * board.scale - board.startX) && x < (storia.scene[i].x * board.scale + (board.const.scene.width * board.scale) - board.startX) 
       	    && y  > (storia.scene[i].y * board.scale - board.startY) && y < (storia.scene[i].y * board.scale + (board.const.scene.height * board.scale) - board.startY)){
 				return board.scenes[i];
 			}
