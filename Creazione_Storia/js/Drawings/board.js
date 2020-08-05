@@ -36,6 +36,7 @@ $(window).on("load", function(){
 	mouse.init();
 	board.init();
 	contextMenu.init();
+	initGroups();
 });
 
 var board={
@@ -88,7 +89,7 @@ var board={
 							let risposta = scena.risposte[i];
 							if(risposta.to){
 								for(let k = 0; k < storia.ngruppi; k++){
-									let to = risposta.to!=null?storia.scene[risposta.to[k]]:null;
+									let to = risposta.to!=-1?storia.scene[risposta.to[k]]:null;
 									if(to){
 										board.arrows.push(new freccia(scena, to, k))
 									}
@@ -102,11 +103,10 @@ var board={
 				board.AnimationFrame=window.requestAnimationFrame(board.DrawAll, board.context);
 				$("#aggiungiScena").click(board.newscene);
 				this.PopulateMenu("all");
-
 				$("#all").click(function(){board.PopulateMenu("all");});
 				$("#notLoaded").click(function(){board.PopulateMenu("notLoaded");});
 				$("#loaded").click(function(){board.PopulateMenu("loaded");});
-				$(".miniNav a").click(function(){$(".miniNav a").not(this).removeClass("attivato"); $(this).addClass("attivato");})
+				$(".miniNav .listItem").click(function(){$(".miniNav .listItem").not(this).removeClass("attivato"); $(this).addClass("attivato");})
 		// 	}
 		// });
 	},

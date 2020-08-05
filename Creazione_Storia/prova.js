@@ -1,8 +1,8 @@
 var storia = {
     "nome": "Storia di prova",
-    "categoria": "single",
+    "categoria": "gruppi",
     "target": "6-12",
-    "ngruppi": 1,
+    "ngruppi": 5,
     "background": "taccuino",
     "css":"/myfile.css",
     "autore": "autore1",
@@ -18,14 +18,14 @@ var storia = {
             "risposte": [
                 {
                     "valore" : "15", 
-                    "to":[1],
+                    "to":[1, -1, -1, -1, -1],
                     "remainingTime": "0:15",
                     "points":5000
                 },
                 {
                     "valore" : 15,
                     "remainingTime": null,
-                    "to":[1],
+                    "to":[1, -1, -1, -1, -1],
                     "points":500
                 }
             ]
@@ -41,14 +41,14 @@ var storia = {
             "risposte": [
                 {
                     "valore" : "15", 
-                    "to":[],
+                    "to":[-1, -1, -1, -1, -1],
                     "remainingTime": "0:15",
                     "points":5000
                 },
                 {
                     "valore" : 15,
                     "remainingTime": null,
-                    "to":[],
+                    "to":[-1, -1, -1, -1, -1],
                     "points":500
                 }
             ]
@@ -71,7 +71,7 @@ var storia = {
                 {
                     "valore" : 15,
                     "remainingTime": null,
-                    "to":[],
+                    "to":[-1, -1, -1, -1, -1],
                     "points":500
                 }
             ]

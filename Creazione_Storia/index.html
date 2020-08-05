@@ -10,7 +10,7 @@
         <!-- il resto è roba nostra yey -->
 
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script> 
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+        <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script> -->
         <link href="./css/style.css" rel="stylesheet" type="text/css">
         <script src="./prova.js"></script>
         <script src="./js/Drawings/mouse.js"></script>
@@ -22,7 +22,7 @@
         <script src="./js/Drawings/board.js"></script>
     </head>
     <body>
-
+      <!-- 
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="#">Navbar</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,44 +54,50 @@
           </nav>
 
 
-        <!-- navbar bootstrap -->
+        navbar bootstrap -->
         <div class="container col-md-12">
             <canvas id="canvas" class="col-md-10" ondrop="drop(event)" ondragover="allowDrop(event)"></canvas>
-            <div class="scenesmenu col-md-2">
-              <nav class="miniNav">
-                  <a id="all" class="attivato">tutte</a>
-                  <a id="notLoaded">non caricate</a>
-                  <a id="loaded">caricate</a>
-              </nav>
-              <div id="aggiungiScena" class="menuDiv">+</div>
-              <div id="menulist"></div>
+            <div class="rightcontainer col-md-2">
+              <div id="scenesmenu">
+                <nav class="miniNav">
+                    <div class="listItem attivato" id="all">tutte</div>
+                    <div class="listItem" id="notLoaded">non caricate</div>
+                    <div class="listItem" id="loaded">caricate</div>
+                </nav>
+                <div id="aggiungiScena" class="menuDiv">+</div>
+                <div id="menulist"></div>
+              </div>
+              <div id="listGruppi">
+                <div id='GruppoAdd' class='listItem'>+</div>
+                <div id='GruppoDel' class='listItem'>-</div>
+              </div>
             </div>
         </div>
         <div id="contextMenu">
           <ol class="menu-options"></ol>
         </div>
-
+        span
         <template id="scena">
             <div id="scena$ID" class="scene">
                 <form>
-                    <div class="header"><h3>muovi qua</h3></div>
-                    <p><h2 id="title$ID" class="show"><span class="label-bolt">Nome:</span> $NAME</h2>
-                        <input for="nome" type="text" name="title" class="edit"></p>
+                    <div class="header"></div>
+                    <p><h2 id="title$ID" class="show"><span class="label-bold">Nome:</span> $NAME</h2>
+                        <label class="edit" for="editName$ID">Nome</label><input id="editName$ID" type="text" name="title" class="edit"></p>
 
-                    <p><span id="description$ID" class="show"><span class="label-bolt">Descrizione:</span> $DESCRIPTION</span> 
-                        <textarea for="descrizione" name="description" class="edit"></textarea></p>
+                    <p><span id="description$ID" class="show"><span class="label-bold">Descrizione:</span> $DESCRIPTION</span> 
+                        <label class="edit" for="editDescrizione$ID">Descrizione</label><textarea id="editDescrizione$ID" name="description" class="edit"></textarea></p>
 
-                    <p><span id="widget$ID" class="show"><span class="label-bolt">Widget:</span>$WIDGET</span>
-                        <select name="widget" class="edit"></select></p>
+                    <p><span id="widget$ID" class="show"><span class="label-bold">Widget:</span>$WIDGET</span>
+                        <label class="edit" for="editWidget$ID">Widget</label><select id="editWidget$ID" name="widget" class="edit"></select></p>
 
-                    <p><span id="audio$ID" class="show"><span class="label-bolt">Audio: </span>$AUDIO</span>
-                        <select name="audio" class="edit"></select></p>
+                    <p><span id="audio$ID" class="show"><span class="label-bold">Audio: </span>$AUDIO</span>
+                        <label class="edit" for="editAudio$ID">Audio</label><select id="editAudio$ID" name="audio" class="edit"></select></p>
 
-                    <p><span id="valutatore$ID" class="show"><span class="label-bolt">Valutatore: </span>$VALUTATORE</span>
-                        <input for="valutatore" type="checkbox" name="valutatore" class="edit"></p>
+                    <p><span id="valutatore$ID" class="show"><span class="label-bold">Valutatore: </span>$VALUTATORE</span>
+                        <label class="edit" for="editValutatore$ID">Valutatore</label><input id="editValutatore$ID" type="checkbox" name="valutatore" class="edit"></p>
 
-                    <p><span id="time$ID" class="show"><span class="label-bolt">Time: </span>$TIME</span>
-                        <input for="tempo massimo" type="number" name="time" class="edit"></p>
+                    <p><span id="time$ID" class="show"><span class="label-bold">Time: </span>$TIME</span>
+                        <label class="edit" for="editTimeMax$ID">TIme</label><input id="editTimeMax$ID" type="number" name="time" class="edit"></p>
                         
                     <p><ol id="risposte$ID"></ol></p>
 
@@ -104,12 +110,14 @@
         </template>
         <template id="risposta">
             <li>
-                <p id="valore$ID$RISP" class="show"><span class="label-bolt">Valore: </span>$VALORE</p>
-                <input type="text" name="valore" value ="ciao" class="edit">
+                <p id="valore$ID_$RISP" class="show"><span class="label-bold">Valore: </span>$VALORE</p>
+                <label class="edit" for="editValore$ID_$RISP">Valore</label><input id="editValore$ID_$RISP" type="text" name="valore" value ="ciao" class="edit">
                 
-                <p id="to$ID$RISP" class="show"><span class="label-bolt">Prossimo: </span> $LINK</p>
-                <p id="remTime$ID$RISP" class="show"><span class="label-bolt">Tempo(?): </span>$TEMPO</p><input type="number" name="remTime" class="edit">
-                <p id="points$ID$RISP" class="show"><span class="label-bolt">Punti: </span>$POINTS</p><input type="number" name="points" class="edit">
+                <p id="to$ID$_RISP" class="show"><span class="label-bold">Prossimo: </span> $LINK</p>
+                <p id="remTime$ID_$RISP" class="show"><span class="label-bold">Tempo(?): </span>$TEMPO</span>
+                  <label class="edit" for="editTimeLimit$ID_$RISP">Tempo Limite</label><input id="editTimeLimit$ID_$RISP"type="number" name="remTime" class="edit"></p>
+                <p id="points$ID_$RISP" class="show"><span class="label-bold">Punti: </span>$POINTS</span>
+                  <label class="edit" for="editPoints$ID_$RISP">Punti</label><input id="editPoints$ID_$RISP" type="number" name="points" class="edit"></p>
             </li>
         </template>
 
@@ -143,7 +151,7 @@
         </template>
 
         <template id="contextRisposta">
-          <li id="Context$ID$RISP">$TO</li>
+          <li id="Context$ID_$RISP">$TO</li>
         </template>
 
 

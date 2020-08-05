@@ -26,7 +26,7 @@ class graphicalScene{
 		if(!this.opened){
 			let id = "#scena"+this.id;
 			let html = $("#scena").html();
-			for(let i = 0; i<9; i++){
+			for(let i = 0; i<20; i++){
 				html = html.replace("$ID",this.id);
 			}
 			html = html.replace("$NAME", this.core.nome);
@@ -41,9 +41,9 @@ class graphicalScene{
 			let rispID=0;
 			this.core.risposte.forEach(risposta => {
 				html = $("#risposta").html();
-				for(let i=0; i < 4; i++){
-					html = html.replace("$RISP",rispID);
-					html=html.replace("$ID",this.id);
+				for(let i=0; i < 10; i++){
+					html = html.replace("$RISP", rispID);
+					html=html.replace("$ID", this.id);
 				}
 				html = html.replace("$VALORE", risposta.valore);
 				html = html.replace("$LINK", risposta.to);
@@ -52,6 +52,7 @@ class graphicalScene{
 				rispID++;
 				$("#risposte"+this.id).append(html);
 			});
+			$(id+" .header").css({"background-color":storia.categoria=="singolo"?"purple":groups[board.activegroup]});
 
 			this.opened = true;
 			initScene(id);

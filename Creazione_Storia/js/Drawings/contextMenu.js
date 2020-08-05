@@ -18,21 +18,37 @@ var contextMenu = {
         for(let i = 0; i < board.scenes[id].core.risposte.length; i++){
             let li = risposta.replace("$RISP", i);
             let to = contextMenu.from.core.risposte[i].to[board.activegroup];
-			if (to != null){
-				li = li.replace("$TO", to);
+			if (to != -1){
+                li = li.replace("$TO", to);
 			}else{
-				li = li.replace("$TO", "non ancora inserito");
+                li = li.replace("$TO", "non ancora inserito");
 			}
             $("#contextMenu ol").append(li);
             
             $("#contextMenu ol li").last().click(function(){
-                if(to != null){
+                if(to != -1){
                     board.erase(contextMenu.from.core, to);
+                    contextMenu.from.core.risposte[i].to[board.activegroup]=-1;
                 }
                 contextMenu.select(i);
             });
         }
         
+        $("#contextMenu ol").append(risposta.replace("$RISP","Add").replace("$TO","+"));
+        $("#contextMenu ol li").last().click(function(){
+            let risp = {
+                valore : null, 
+                to:Array(storia.ngruppi).fill(-1),
+                remainingTime: null,
+                points:null
+            };
+            board.scenes[id].core.risposte.push(risp);
+
+            //TODO separare creazione risposta per essere richiamata anche da un bottone
+
+            contextMenu.select(contextMenu.from.core.risposte.length-1);
+        });
+
         var offset = $('#canvas').offset();
 
         $("#contextMenu").css({left: mouse.x + offset.left, top: mouse.y + offset.top});
@@ -44,7 +60,7 @@ var contextMenu = {
     },
     select(n){
         contextMenu.risposta = n;
-        board.frecciaContext = new freccia(contextMenu.from.core, null);
+        board.frecciaContext = new freccia(contextMenu.from.core, null, board.activegroup);
     },
     linkwith(scena){
         if(scena && scena.core!=contextMenu.from){
