@@ -2,7 +2,7 @@
     position: absolute;
     z-index: 9;
     padding: 5px;
-    background-color: rgba(200,200,200,0.8);
+    background-color: rgba(75,77,80,.8);
     text-align: center;
     border: 1px solid #d3d3d3;
 
@@ -33,7 +33,7 @@
 }
 
 .rightcontainer{
-    background-color: pink;
+    background-color: rgb(75,77,80);
     display: inline-block;
     margin: 0px;
     padding:0px;
@@ -45,7 +45,7 @@
     justify-self: end;
     height: 20%;
     margin-top: auto;
-    background-color: aqua;
+    background-color: rgb(190,227,219);
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -110,7 +110,7 @@
 
 .listItem{
     background-color: white;
-    border: 4px solid red;
+    border: 4px solid rgb(221,04,26);
     border-radius: 5px;
     padding: 5px;
     cursor: pointer;
@@ -148,4 +148,11 @@ html, body{
 
 #contextMenu li:hover{
     color:red;
+}
+
+.collapserButton{
+    border: 0px;
+    background-color: rgba(75,77,80, 0);
+    float: right;
+
 }

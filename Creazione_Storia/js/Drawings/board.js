@@ -166,7 +166,7 @@ var board={
 		}
 	},
 	DrawAll:function(){
-		board.context.fillStyle = "#00FF00";
+		board.context.fillStyle = "#bfc8d9";
 		board.context.fillRect(0,0,$("#canvas").width(),$("#canvas").height());
 	
 		for(var j = 0; j < board.scenes.length; j++){

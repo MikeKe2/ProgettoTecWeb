@@ -14,7 +14,7 @@ class graphicalScene{
 	}
 	draw(){
 		if(this.core.x && this.core.y){
-			board.context.fillStyle = "#FF0000";
+			board.context.fillStyle = "#FABC2A";
 			let x = this.core.x * board.scale - board.startX;
 			let width = board.const.scene.width * board.scale;
 			let y = this.core.y * board.scale - board.startY;
