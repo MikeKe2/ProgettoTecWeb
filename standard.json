@@ -19,12 +19,12 @@
                 {
                     "valore" : "15", 
                     "to":[1,2,2,1],
-                    "remainingTime": "0:15",
+                    "maxTime": "0:15",
                     "points":5000
                 },
                 {
                     "valore" : 15,
-                    "remainingTime": null,
+                    "maxTime": null,
                     "to":[1,2,2,1],
                     "points":500
                 }
@@ -42,12 +42,12 @@
                 {
                     "valore" : "15", 
                     "to":[,,,],
-                    "remainingTime": "0:15",
+                    "maxTime": "0:15",
                     "points":5000
                 },
                 {
                     "valore" : 15,
-                    "remainingTime": null,
+                    "maxTime": null,
                     "to":[null,null,null,null],
                     "points":500
                 }
@@ -65,12 +65,12 @@
                 {
                     "valore" : "15", 
                     "to":[null,null,null,null],
-                    "remainingTime": "0:15",
+                    "maxTime": "0:15",
                     "points":5000
                 },
                 {
                     "valore" : 15,
-                    "remainingTime": null,
+                    "maxTime": null,
                     "to":[null,null,null,null],
                     "points":500
                 }

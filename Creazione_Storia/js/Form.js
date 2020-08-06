@@ -46,16 +46,20 @@ function close(id){
 }
 
 function invia(id){
-  let scena = board.scenes[id.replace("#scena","")*1].core;
-  scena.nome = $(id+" input[name='title']").val();
-  scena.descrizione = $(id+ " input[name ='description'").val();
-  scena.widget = $(id+ " input[name ='widget'").val();
-  scena.tracciaAudio = $(id+ " input[name ='audio'").val();
-  scena.valutatore = $(id+ " input[name ='valutatore'").val();
-  scena.timemax = $(id+ " input[name ='time'").val();
-  //risposte
-  //console.log($(id+" form").serialize());
-
+  let ID = id.replace("#scena","")*1;
+  let scena = board.scenes[ID].core;
+  scena.nome = $("#editName" + ID).val();
+  scena.descrizione = $("#editDescrizione" + ID).val();
+  scena.widget = $("#editWidget" + ID).val();
+  scena.tracciaAudio = $("#editAudio" + ID).val();
+  scena.valutatore = $("#editValutatore" + ID).val();
+  scena.timemax = $("#editName" + ID).val();
+  for(let i = 0; i < $("#risposte" + ID + " li").length; i++){
+    scena.risposte[i].valore = $("#editValore" + ID + "_" + i).val();
+    scena.risposte[i].maxTime = $("#editMaxTime" + ID + "_" + i).val();
+    scena.risposte[i].points = $("#editPoints" + ID + "_" + i).val();
+  }
+  board.PopulateMenu($(".miniNav .attivato").attr('id'));
   close(id);
 }
 
@@ -66,9 +70,9 @@ function back(id){
 
 function initScene(id){
   dragElement(id);
-  $(id+ " button[name='canc']").click(function(){close(id)});
-  $(id+ " button[name='mod']").click(function(){edit(id)});
-  $(id+ " button[name='back']").click(function(){back(id)});
+  $(id+ " .canc").click(function(){close(id)});
+  $(id+ " .mod").click(function(){edit(id)});
+  $(id+ " .back").click(function(){back(id)});
   $(id+ " form").on("submit",function(e){
     e.preventDefault();
     invia(id);
@@ -90,4 +94,9 @@ function drop(ev) {
   board.scenes[index].core.x=(board.startX + mouse.x)/board.scale;
   board.scenes[index].core.y=(board.startY + mouse.y)/board.scale;
   board.PopulateMenu($(".miniNav .attivato").attr("id"));
+}
+
+function collapsehandler(){
+  this.value=this.value=="+"?"-":"+";
+  $(this).parent().next().toggle();
 }

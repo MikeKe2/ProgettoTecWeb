@@ -19,7 +19,7 @@ var contextMenu = {
             let li = risposta.replace("$RISP", i);
             let to = contextMenu.from.core.risposte[i].to[board.activegroup];
 			if (to != -1){
-                li = li.replace("$TO", to);
+                li = li.replace("$TO", storia.scene[to].nome);
 			}else{
                 li = li.replace("$TO", "non ancora inserito");
 			}

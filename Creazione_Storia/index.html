@@ -81,44 +81,49 @@
             <div id="scena$ID" class="scene">
                 <form>
                     <div class="header"></div>
-                    <p><h2 id="title$ID" class="show"><span class="label-bold">Nome:</span> $NAME</h2>
-                        <label class="edit" for="editName$ID">Nome</label><input id="editName$ID" type="text" name="title" class="edit"></p>
+                    <p><h2 class="show"><span class="label-bold">Nome:</span> $NAME</h2>
+                        <label class="edit" for="editName$ID">Nome</label><input id="editName$ID" type="text" value="$NAME" class="edit"></p>
 
-                    <p><span id="description$ID" class="show"><span class="label-bold">Descrizione:</span> $DESCRIPTION</span> 
-                        <label class="edit" for="editDescrizione$ID">Descrizione</label><textarea id="editDescrizione$ID" name="description" class="edit"></textarea></p>
+                    <p><span class="show"><span class="label-bold">Descrizione:</span> $DESCRIPTION</span> 
+                        <label class="edit" for="editDescrizione$ID">Descrizione</label><textarea id="editDescrizione$ID" value="$DESCRIZIONE" class="edit"></textarea></p>
 
-                    <p><span id="widget$ID" class="show"><span class="label-bold">Widget:</span>$WIDGET</span>
-                        <label class="edit" for="editWidget$ID">Widget</label><select id="editWidget$ID" name="widget" class="edit"></select></p>
+                    <p><span class="show"><span class="label-bold">Widget:</span>$WIDGET</span>
+                        <label class="edit" for="editWidget$ID">Widget</label><select id="editWidget$ID" class="edit"></select></p>
 
-                    <p><span id="audio$ID" class="show"><span class="label-bold">Audio: </span>$AUDIO</span>
-                        <label class="edit" for="editAudio$ID">Audio</label><select id="editAudio$ID" name="audio" class="edit"></select></p>
+                    <p><span class="show"><span class="label-bold">Audio: </span>$AUDIO</span>
+                        <label class="edit" for="editAudio$ID">Audio</label><select id="editAudio$ID" class="edit"></select></p>
 
-                    <p><span id="valutatore$ID" class="show"><span class="label-bold">Valutatore: </span>$VALUTATORE</span>
-                        <label class="edit" for="editValutatore$ID">Valutatore</label><input id="editValutatore$ID" type="checkbox" name="valutatore" class="edit"></p>
-
-                    <p><span id="time$ID" class="show"><span class="label-bold">Time: </span>$TIME</span>
-                        <label class="edit" for="editTimeMax$ID">TIme</label><input id="editTimeMax$ID" type="number" name="time" class="edit"></p>
-                        
+                    <p><span class="show"><span class="label-bold">Valutatore: </span>$VALUTATORE</span>
+                        <label class="edit" for="editValutatore$ID">Valutatore</label><input id="editValutatore$ID" type="checkbox" $VALUTATORE class="edit"></p>
+    
                     <p><ol id="risposte$ID"></ol></p>
 
-                    <button name="canc" type="button">Chiudi</button>
-                    <button name="mod" type="button" class="show">Modifica</button>
-                    <button name="back" type="button" class="edit">Torna indietro</button>
+                    <button class="canc" type="button">Chiudi</button>
+                    <button class="mod show" type="button">Modifica</button>
+                    <button class="back edit" type="button">Torna indietro</button>
                     <input type="submit" value="Salva" class="edit">
                 </form>
             </div>
         </template>
         <template id="risposta">
-            <li>
-                <p id="valore$ID_$RISP" class="show"><span class="label-bold">Valore: </span>$VALORE</p>
-                <label class="edit" for="editValore$ID_$RISP">Valore</label><input id="editValore$ID_$RISP" type="text" name="valore" value ="ciao" class="edit">
-                
-                <p id="to$ID$_RISP" class="show"><span class="label-bold">Prossimo: </span> $LINK</p>
-                <p id="remTime$ID_$RISP" class="show"><span class="label-bold">Tempo(?): </span>$TEMPO</span>
-                  <label class="edit" for="editTimeLimit$ID_$RISP">Tempo Limite</label><input id="editTimeLimit$ID_$RISP"type="number" name="remTime" class="edit"></p>
-                <p id="points$ID_$RISP" class="show"><span class="label-bold">Punti: </span>$POINTS</span>
-                  <label class="edit" for="editPoints$ID_$RISP">Punti</label><input id="editPoints$ID_$RISP" type="number" name="points" class="edit"></p>
-            </li>
+          <li>
+            <p> <span class="show"><span class="label-bold">Valore: </span>$VALORE</span>
+              <label class="edit" for="editValore$ID_$RISP">Valore</label><input id="editValore$ID_$RISP" type="text" value ="$VALORE" class="edit">
+              <input type="button" id="collapser$ID_$RISP" value="+">                
+            </p>
+
+            <div class="rispostaCollapse">
+              <p class="show"><span class="label-bold">Prossimo: </span> $LINK</p>
+              <p>
+                <span class="show"><span class="label-bold">Tempo Limite: </span>$TEMPO</span>
+                <label class="edit" for="editMaxTime$ID_$RISP">Tempo Limite</label><input id="editMaxTime$ID_$RISP" type="number" min="0" value="$TEMPO" class="edit">
+              </p>
+
+              <p><span class="show"><span class="label-bold">Punti: </span>$POINTS</span>
+                <label class="edit" for="editPoints$ID_$RISP">Punti</label><input id="editPoints$ID_$RISP" type="number" value="$POINTS" class="edit">
+              </p>
+            </div>
+          </li>
         </template>
 
         <template id="menuScena">

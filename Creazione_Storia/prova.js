@@ -19,12 +19,12 @@ var storia = {
                 {
                     "valore" : "15", 
                     "to":[1, -1, -1, -1, -1],
-                    "remainingTime": "0:15",
+                    "maxTime": 15,
                     "points":5000
                 },
                 {
-                    "valore" : 15,
-                    "remainingTime": null,
+                    "valore" : "15",
+                    "maxTime": 0,
                     "to":[1, -1, -1, -1, -1],
                     "points":500
                 }
@@ -42,12 +42,12 @@ var storia = {
                 {
                     "valore" : "15", 
                     "to":[-1, -1, -1, -1, -1],
-                    "remainingTime": "0:15",
+                    "maxTime": 15,
                     "points":5000
                 },
                 {
-                    "valore" : 15,
-                    "remainingTime": null,
+                    "valore" : "15",
+                    "maxTime": 0,
                     "to":[-1, -1, -1, -1, -1],
                     "points":500
                 }
@@ -64,13 +64,13 @@ var storia = {
             "risposte": [
                 {
                     "valore" : "15", 
-                    "to":[],
-                    "remainingTime": "0:15",
+                    "to":[-1, -1, -1, -1, -1],
+                    "maxTime": 15,
                     "points":5000
                 },
                 {
-                    "valore" : 15,
-                    "remainingTime": null,
+                    "valore" : "15",
+                    "maxTime": 0,
                     "to":[-1, -1, -1, -1, -1],
                     "points":500
                 }
