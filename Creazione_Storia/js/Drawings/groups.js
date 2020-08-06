@@ -1,4 +1,4 @@
-var groups=[]
+var groups=[];
 
 groups.newgroup=function(){
 	this.append(new group())
