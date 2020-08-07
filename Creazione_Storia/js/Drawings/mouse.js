@@ -4,9 +4,12 @@ var mouse={
     down: false,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
     time: 0, 
     grabbing:null,
+    onCanvas:false,
     init:function(){
         $('.container').mousemove(mouse.mousemovehandler);
-        $("#canvas").bind("dragover", this.mousemovehandler); 
+        $("#canvas").bind("dragover", mouse.dragover); 
+        $("#canvas").bind("dragleave", mouse.dragleave); 
+        $("#canvas").bind("drop", mouse.dragleave); 
 		$('#canvas').mousedown(mouse.mousedownhandler); 
 		$('#canvas').contextmenu(mouse.rightclick);
 		$('#canvas').mouseup(mouse.mouseuphandler);
@@ -93,6 +96,13 @@ var mouse={
             else
                 mouse.grabbing.open();
         }
+    },
+    dragover:function(ev){
+        board.dropping=true;
+        mouse.mousemovehandler(ev);
+    },
+	dragleave:function(ev){
+        board.dropping=false;
     }
 }
   

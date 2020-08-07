@@ -20,6 +20,11 @@ class graphicalScene{
 			let y = this.core.y * board.scale - board.startY;
 			let height =  board.const.scene.height * board.scale;
 			board.context.fillRect(x,y,width,height);
+			board.context.font = 20*board.scale+"px Arial";
+			board.context.fillStyle = "#000000";
+			board.context.fillText(this.core.nome, this.core.x*board.scale-board.startX, this.core.y*board.scale-board.startY+20*board.scale);
+			//board.context.fillText(this.core.nome, this.core.x*board.scale-board.startX, this.core.y*board.scale-board.startY);
+			//TODO decidere estetica
 		}
 	}
 	open(){

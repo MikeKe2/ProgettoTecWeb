@@ -179,5 +179,9 @@ var board={
 			board.frecciaContext.draw(mouse.x, mouse.y)
 		}
 		board.AnimationFrame=window.requestAnimationFrame(board.DrawAll, board.context);
+		if(board.dropping){
+			board.context.fillStyle = "rgba(0, 0, 255, 0.6)";
+			board.context.fillRect(0,0,$("#canvas").width(),$("#canvas").height());
+		}
 	}
 }
