@@ -35,7 +35,9 @@ function removeGroup(){
 				storia.scene[i].risposte[j].to.pop();
 			}
 		}
-		$("#listGruppi .listItem").last().remove();
+		$("#listGruppi .listItem").last().remove()
+		if(board.activegroup>=storia.ngruppi)
+			$("#listGruppi .listItem").last().click();
 		groups.pop();
 	}
 }
