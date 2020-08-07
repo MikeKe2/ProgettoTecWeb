@@ -44,10 +44,11 @@ var mouse={
         board.removefromboard(board.getScene(mouse.x,mouse.y));
     },
 	rightclick: function(ev){
-        ev.preventDefault()
         let scena = board.getScene(mouse.x, mouse.y);
-        if (scena)
+        if (scena){
+            ev.preventDefault();
             scena.linkmenu();
+        }
     },
 	zoomout: function(){
         if (board.scale > 0.14){
