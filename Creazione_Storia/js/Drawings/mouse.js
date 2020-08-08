@@ -6,6 +6,17 @@ var mouse={
     grabbing:null,
     onCanvas:false,
     init:function(){
+
+
+        //touch device
+        $("#canvas").on("touchstart", function(e){e.button=0;mouse.mousedownhandler(e);});
+        $("#canvas").on("touchmove", mouse.mousemovehandler);
+        $("#canvas").on("touchend", mouse.mouseuphandler);
+        //document.addEventListener("touchcancel", touchHandler, true);
+
+
+
+
         $('.container').mousemove(mouse.mousemovehandler);
         $("#canvas").bind("dragover", mouse.dragover); 
         $("#canvas").bind("dragleave", mouse.dragleave); 
@@ -26,7 +37,6 @@ var mouse={
 	mousedownhandler:(ev)=>{
         if(ev.button==0){
             mouse.grabbing=board.getScene(mouse.x, mouse.y);
-            console.log(mouse.grabbing);
             mouse.down=true;
             mouse.downX = mouse.x;
             mouse.downY = mouse.y;
@@ -72,6 +82,10 @@ var mouse={
     },
 	mousemovehandler:(ev)=>{
         var offset = $('#canvas').offset();
+        if(!ev.pageX)
+            ev.pageX=ev.touches[0].clientX;
+        if(!ev.pageX)
+            ev.pageY=ev.touches[0].clientY;
 
         let newx = ev.pageX - offset.left;
         let newy = ev.pageY - offset.top;

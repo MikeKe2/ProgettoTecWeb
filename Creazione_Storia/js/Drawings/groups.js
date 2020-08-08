@@ -61,6 +61,4 @@ function initGroups(){
 		$("#listGruppi").hide();
 }
 
-//mettere i bottoni + , - e visualizza tutti
-
 [1,null,5,null,null]
