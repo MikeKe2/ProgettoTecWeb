@@ -47,7 +47,7 @@ var board={
     startY: 0,
 	scale: 1,
 	arrows: [],
-	scenes:[],
+	scenes: [],
 	frecciaContext: null,
 	move:(offsetX, offsetY)=>{
 		board.startX+=offsetX/board.scale;
@@ -155,6 +155,8 @@ var board={
 			if(all || (loaded && scena.core.x && scena.core.y) || (!loaded && (!scena.core.x || !scena.core.y))){
 				$("#menulist").append($("#menuScena").html().replace("$ID", scena.id).replace("$NOME",scena.core.nome));
 				$("#menuScena"+scena.id).click(function(){scena.open()});
+				$("#menuScena"+scena.id).on("touchmove", dragTouch);
+				$("#menuScena"+scena.id).on("touchend", drop);
 			}
 		})
 	},

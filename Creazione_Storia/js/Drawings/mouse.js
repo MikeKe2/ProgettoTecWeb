@@ -5,13 +5,14 @@ var mouse={
     time: 0, 
     grabbing:null,
     onCanvas:false,
+    timer:null,
     init:function(){
 
 
         //touch device
-        $("#canvas").on("touchstart", function(e){e.button=0;mouse.mousedownhandler(e);});
-        $("#canvas").on("touchmove", mouse.mousemovehandler);
-        $("#canvas").on("touchend", mouse.mouseuphandler);
+        $("#canvas").on("touchstart", mouse.touchstart);
+        $("#canvas").on("touchmove", mouse.touchmove);
+        $("#canvas").on("touchend", mouse.touchend);
         //document.addEventListener("touchcancel", touchHandler, true);
 
 
@@ -38,11 +39,10 @@ var mouse={
         if(ev.button==0){
             mouse.grabbing=board.getScene(mouse.x, mouse.y);
             mouse.down=true;
-            mouse.downX = mouse.x;
-            mouse.downY = mouse.y;
-            ev.originalEvent.preventDefault();
             let d = new Date();
             mouse.time = d.getTime();
+
+            ev.originalEvent.preventDefault();
         }
 	},
 	mouseuphandler:(ev)=>{
@@ -82,13 +82,10 @@ var mouse={
     },
 	mousemovehandler:(ev)=>{
         var offset = $('#canvas').offset();
-        if(!ev.pageX)
-            ev.pageX=ev.touches[0].clientX;
-        if(!ev.pageX)
-            ev.pageY=ev.touches[0].clientY;
 
         let newx = ev.pageX - offset.left;
         let newy = ev.pageY - offset.top;
+
         if(newx<=0)
             newx=0.01;
         if(newy<=0)
@@ -117,6 +114,30 @@ var mouse={
     },
 	dragleave:function(ev){
         board.dropping=false;
+    },
+    touchstart:function(ev){
+        ev.pageX=ev.touches[0].clientX;
+        ev.pageY=ev.touches[0].clientY;
+        var offset = $('#canvas').offset();
+        mouse.x = ev.pageX - offset.left;
+        mouse.y = ev.pageY - offset.top;
+        ev.button=0;
+        mouse.mousedownhandler(ev);
+        mouse.timer=window.setTimeout(mouse.touchhold,1500)
+    },
+    touchmove:function(ev){
+        window.clearTimeout(mouse.timer);
+        ev.pageX=ev.touches[0].clientX;
+        ev.pageY=ev.touches[0].clientY;
+        mouse.mousemovehandler(ev);
+    },
+    touchend:function(ev){
+        window.clearTimeout(mouse.timer);
+        mouse.mouseuphandler(ev);
+    },
+    touchhold:function(ev){
+        if(mouse.grabbing)
+            mouse.grabbing.linkmenu();
     }
 }
   

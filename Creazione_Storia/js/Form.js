@@ -85,9 +85,16 @@ function allowDrop(ev) {
 }
   
 function drag(ev) {
+  console.log(ev);
 	ev.dataTransfer.setData("id", ev.target.id.replace("menuScena",""));
 }
-  
+
+
+function dragTouch(ev) {
+	ev.dataTransfer.setData("id", document.elementFromPoint(event.clientX, event.clientY).replace("menuScena",""));
+}
+
+
 function drop(ev) {
   ev.preventDefault();
   let index = ev.dataTransfer.getData("id")*1;

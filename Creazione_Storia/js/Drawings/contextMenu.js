@@ -4,9 +4,8 @@ var contextMenu = {
     freccia: null,
 
     init: function(){
-        $(window).click(function(){
-            contextMenu.hide();
-        });
+        $(window).click(contextMenu.hide);
+        //$(window).on("touchend", contextMenu.hide);
     },
     show(id){
 
@@ -25,7 +24,8 @@ var contextMenu = {
 			}
             $("#contextMenu ol").append(li);
             
-            $("#contextMenu ol li").last().click(function(){
+            console.log("cristo iddio");
+            $("#contextMenu ol li:last-child button").click(function(){
                 if(to != -1){
                     board.erase(contextMenu.from.core, to);
                     contextMenu.from.core.risposte[i].to[board.activegroup]=-1;
