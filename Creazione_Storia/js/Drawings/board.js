@@ -156,7 +156,7 @@ var board={
 				$("#menulist").append($("#menuScena").html().replace("$ID", scena.id).replace("$NOME",scena.core.nome));
 				$("#menuScena"+scena.id).click(function(){scena.open()});
 				$("#menuScena"+scena.id).on("touchmove", dragTouch);
-				$("#menuScena"+scena.id).on("touchend", drop);
+				$("#menuScena"+scena.id).on("touchend", dropTouch);
 			}
 		})
 	},

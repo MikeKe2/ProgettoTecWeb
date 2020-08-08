@@ -1,3 +1,5 @@
+var id; 
+
 function dragElement(elmnt) {
   var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
   $(elmnt+" .header").mousedown(dragMouseDown);
@@ -85,15 +87,24 @@ function allowDrop(ev) {
 }
   
 function drag(ev) {
-  console.log(ev);
 	ev.dataTransfer.setData("id", ev.target.id.replace("menuScena",""));
 }
 
 
 function dragTouch(ev) {
-	ev.dataTransfer.setData("id", document.elementFromPoint(event.clientX, event.clientY).replace("menuScena",""));
+  let div = ev.currentTarget.id.replace("menuScena","");
+  if(!id)
+	  id = div;
 }
 
+function dropTouch(ev) {
+  ev.preventDefault();
+  console.log(id);
+  board.scenes[id].core.x=(board.startX + ev.changedTouches[0].clientX)/board.scale;
+  board.scenes[id].core.y=(board.startY + ev.changedTouches[0].clientY)/board.scale;
+  board.PopulateMenu($(".miniNav .attivato").attr("id"));
+  id = null;
+}
 
 function drop(ev) {
   ev.preventDefault();
