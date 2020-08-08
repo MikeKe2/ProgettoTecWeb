@@ -1,6 +1,7 @@
 html, body{
     height: 100%;
     width: 100%;
+    overflow: hidden;
     padding: 0px;
     margin:0px;
     font-family: Arial, Helvetica, sans-serif;
@@ -174,6 +175,21 @@ html, body{
     color:red;
 }
 
+#contextMenu li button{
+    margin : 0px;
+    background-color: rgba(75,77,80, 0);
+    border: 0px;
+
+}
+
+#contextMenu ol{
+    padding: 0px 6px 0px 25px;
+}
+
+#contextMenu li button:hover{
+    color:red;
+
+}
 .collapserButton{
     border: 0px;
     background-color: rgba(75,77,80, 0);
@@ -185,4 +201,5 @@ html, body{
 .icona{
     height: 60%;
     margin: auto;
+    cursor: pointer;
 }

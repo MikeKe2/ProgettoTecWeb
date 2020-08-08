@@ -13,9 +13,6 @@ var mouse={
         $("#canvas").on("touchstart", mouse.touchstart);
         $("#canvas").on("touchmove", mouse.touchmove);
         $("#canvas").on("touchend", mouse.touchend);
-        //document.addEventListener("touchcancel", touchHandler, true);
-
-
 
 
         $('.container').mousemove(mouse.mousemovehandler);
@@ -129,7 +126,8 @@ var mouse={
         window.clearTimeout(mouse.timer);
         ev.pageX=ev.touches[0].clientX;
         ev.pageY=ev.touches[0].clientY;
-        mouse.mousemovehandler(ev);
+        if(!$("#contextMenu").hasClass("richiamato"))
+            mouse.mousemovehandler(ev);
     },
     touchend:function(ev){
         window.clearTimeout(mouse.timer);

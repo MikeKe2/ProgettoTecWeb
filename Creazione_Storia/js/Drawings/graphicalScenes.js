@@ -25,6 +25,30 @@ class graphicalScene{
 			board.context.fillText(this.core.nome, this.core.x*board.scale-board.startX, this.core.y*board.scale-board.startY+20*board.scale);
 			//board.context.fillText(this.core.nome, this.core.x*board.scale-board.startX, this.core.y*board.scale-board.startY);
 			//TODO decidere estetica
+
+			if(board.frecciaContext && board.frecciaContext.from!=this.core){
+				board.context.beginPath();
+				board.context.lineWidth=2;
+
+				board.context.moveTo((this.core.x + 20) * board.scale - board.startX , (this.core.y - 5) * board.scale - board.startY);
+				board.context.lineTo((this.core.x - 5) * board.scale - board.startX , (this.core.y - 5) * board.scale - board.startY);
+				board.context.lineTo((this.core.x - 5) * board.scale - board.startX , (this.core.y + 20) * board.scale - board.startY);
+				
+				board.context.moveTo((this.core.x - 5) * board.scale - board.startX , (this.core.y + board.const.scene.height - 20) * board.scale - board.startY);
+				board.context.lineTo((this.core.x - 5) * board.scale - board.startX , (this.core.y + board.const.scene.height + 5) * board.scale - board.startY);
+				board.context.lineTo((this.core.x + 20) * board.scale - board.startX , (this.core.y + board.const.scene.height + 5) * board.scale - board.startY);
+
+				board.context.moveTo((this.core.x + board.const.scene.width - 20) * board.scale - board.startX , (this.core.y + board.const.scene.height + 5) * board.scale - board.startY);
+				board.context.lineTo((this.core.x + board.const.scene.width + 5) * board.scale - board.startX , (this.core.y + board.const.scene.height + 5) * board.scale - board.startY);
+				board.context.lineTo((this.core.x + board.const.scene.width + 5) * board.scale - board.startX , (this.core.y + board.const.scene.height - 20) * board.scale - board.startY);
+
+				board.context.moveTo((this.core.x + board.const.scene.width + 5) * board.scale - board.startX , (this.core.y + 20) * board.scale - board.startY);
+				board.context.lineTo((this.core.x + board.const.scene.width + 5) * board.scale - board.startX , (this.core.y - 5) * board.scale - board.startY);
+				board.context.lineTo((this.core.x + board.const.scene.width - 20) * board.scale - board.startX , (this.core.y - 5) * board.scale - board.startY);
+				
+				board.context.strokeStyle = "#000000";
+				board.context.stroke();
+			}
 		}
 	}
 	open(){

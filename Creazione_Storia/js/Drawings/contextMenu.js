@@ -4,8 +4,8 @@ var contextMenu = {
     freccia: null,
 
     init: function(){
-        $(window).click(contextMenu.hide);
-        //$(window).on("touchend", contextMenu.hide);
+        $(".container").click(contextMenu.hide);
+        $(".container").on("touchstart", contextMenu.hide);
     },
     show(id){
 
@@ -20,11 +20,10 @@ var contextMenu = {
 			if (to != -1){
                 li = li.replace("$TO", storia.scene[to].nome);
 			}else{
-                li = li.replace("$TO", "non ancora inserito");
+                li = li.replace("$TO", "Non ancora inserito");
 			}
             $("#contextMenu ol").append(li);
             
-            console.log("cristo iddio");
             $("#contextMenu ol li:last-child button").click(function(){
                 if(to != -1){
                     board.erase(contextMenu.from.core, to);
@@ -61,6 +60,8 @@ var contextMenu = {
     select(n){
         contextMenu.risposta = n;
         board.frecciaContext = new freccia(contextMenu.from.core, null, board.activegroup);
+        contextMenu.hide();
+        //nascondere la freccia da mobile
     },
     linkwith(scena){
         if(scena && scena.core!=contextMenu.from){
