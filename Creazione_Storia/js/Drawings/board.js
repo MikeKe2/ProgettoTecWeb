@@ -47,19 +47,22 @@ $(window).on("load", function(){
 	$("#downloadImage").click(function(){
 
 	});
-	$("#settingsImage").click($("#settings").toggle);
-
 });
 
 var board={
+	canvas:null,
 	context: null,
 	activegroup: 0,
 	dropping: false,
     startX: 0,
     startY: 0,
 	scale: 1,
+	toDelete: function(){
+		return mouse.grabbing&& mouse.x>board.canvas.width-50 && mouse.y>board.canvas.height-50;
+	},
 	arrows: [],
 	scenes: [],
+	cestinoImg: null,
 	frecciaContext: null,
 	move:(offsetX, offsetY)=>{
 		board.startX+=offsetX/board.scale;
@@ -79,13 +82,12 @@ var board={
 		}
 	},
 	resizeCanvas(){
-		let canvas = $("#canvas")[0];
-		
-		const width = canvas.clientWidth;
-		const height = canvas.clientHeight;
-   		if (canvas.width !== width || canvas.height !== height) {
-			canvas.width = width;
-			canvas.height = height;
+		board.canvas = $("#canvas")[0];
+		const width = board.canvas.clientWidth;
+		const height = board.canvas.clientHeight;
+   		if (board.canvas.width !== width || board.canvas.height !== height) {
+			board.canvas.width = width;
+			board.canvas.height = height;
 		}
 	},
 	init: function(){
@@ -112,7 +114,8 @@ var board={
 					}
 					board.scenes.push(new graphicalScene(i,scena));
 				}
-				board.context = $("#canvas")[0].getContext('2d');
+				board.canvas = $("#canvas")[0];
+				board.context = board.canvas.getContext('2d');
 				board.AnimationFrame=window.requestAnimationFrame(board.DrawAll, board.context);
 				$("#aggiungiScena").click(board.newscene);
 				this.PopulateMenu("all");
@@ -120,6 +123,17 @@ var board={
 				$("#notLoaded").click(function(){board.PopulateMenu("notLoaded");});
 				$("#loaded").click(function(){board.PopulateMenu("loaded");});
 				$(".miniNav .listItem").click(function(){$(".miniNav .listItem").not(this).removeClass("attivato"); $(this).addClass("attivato");})
+
+				$("#downloadImage").click(download);
+				$("#settingsImage").click(settingsToggle);
+				
+				this.checkOrientation();
+
+				screen.orientation.onchange = function (){
+					board.checkOrientation();
+				};
+				board.cestinoImg = new Image();
+				board.cestinoImg.src = "./img/cestino.png";
 		// 	}
 		// });
 	},
@@ -127,6 +141,14 @@ var board={
 		scene:{
 			width:150,
 			height:80
+		},
+		canvas:{
+			width:function(){
+				return board.canvas.width;
+			},
+			height:function() {
+				return board.canvas.height;
+			}
 		}
 	},
 	newscene:function(){
@@ -182,7 +204,7 @@ var board={
 	},
 	DrawAll:function(){
 		board.context.fillStyle = "#bfc8d9";
-		board.context.fillRect(0,0,$("#canvas").width(),$("#canvas").height());
+		board.context.fillRect(0,0,board.canvas.width,board.canvas.height);
 	
 		for(var j = 0; j < board.scenes.length; j++){
 			board.scenes[j].draw();
@@ -196,7 +218,24 @@ var board={
 		board.AnimationFrame=window.requestAnimationFrame(board.DrawAll, board.context);
 		if(board.dropping){
 			board.context.fillStyle = "rgba(0, 0, 255, 0.6)";
-			board.context.fillRect(0,0,$("#canvas").width(),$("#canvas").height());
+			board.context.fillRect(0,0,board.canvas.width,board.canvas.height);
+		}
+
+		board.context.fillStyle = board.toDelete()?"rgb(0,200,0)":"rgb(200,0,0)";
+		board.context.fillRect(board.canvas.width-52, board.canvas.height-52, 52, 52);
+		board.context.fillStyle = "#bfc8d9";
+		board.context.fillRect(board.canvas.width-51, board.canvas.height-51, 50, 50);
+		board.context.drawImage(board.cestinoImg, board.canvas.width-51, board.canvas.height-51, 50, 50);
+	},
+
+	checkOrientation:function(){
+		if(screen.orientation.type.match(/\w+/)[0] == "portrait"){
+			$(".container").hide();
+			$("#turnAround").show();
+		}
+		else{
+			$(".container").show();
+			$("#turnAround").hide();
 		}
 	}
 }

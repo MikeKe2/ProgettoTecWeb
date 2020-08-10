@@ -49,7 +49,6 @@ function edit(id){
   $(id+" .show").hide();
 }
 function close(id){
-  board.scenes[id.replace("#scena","")*1].opened=false;
   $(id).remove();
 }
 
@@ -77,14 +76,28 @@ function back(id){
 }
 
 function initScene(id){
-  dragElement(id);
+  if(id!="#settings_div"){
+    dragElement(id);
+    $(id+ " form").on("submit",function(e){
+      e.preventDefault();
+      invia(id);
+    });
+  }
+  else{
+    $(id+ " form").on("submit",function(e){
+      e.preventDefault();
+      storia.nome = $("#settingsNome").val();
+      storia.categoria = $("#settingsCategoria").val();
+      storia.target = $("#settingsTarget").val();
+      storia.background = $("#settingsBg").val();
+      storia.css = $("#settingsCss").val();
+      storia.autore = $("#settingsAuthor").val();
+      $("#settings_div")[0].remove();
+    });
+  }
   $(id+ " .canc").click(function(){close(id)});
   $(id+ " .mod").click(function(){edit(id)});
   $(id+ " .back").click(function(){back(id)});
-  $(id+ " form").on("submit",function(e){
-    e.preventDefault();
-    invia(id);
-  });
   $(id+" .edit").hide();
 }
 
@@ -129,4 +142,42 @@ function drop(ev) {
 function collapsehandler(){
   this.value=this.value=="+"?"-":"+";
   $(this).parent().next().toggle();
+}
+
+function download() {
+
+  //TODO richiamare funzione "salva"
+
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(storia)));
+  element.setAttribute('download', storia.nome+".mms");
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}
+
+function settingsToggle(){
+  let div = $("#settings_div")[0];
+  console.log(div);
+  if(!div){
+    let settings = $("#settings").html();
+    settings = settings.replace("$NOME",storia.nome).replace("$NOME",storia.nome != null? storia.nome : "Non ancora inserito");
+    settings = settings.replace("$CATEGORIA",storia.categoria != null? storia.categoria.replace("_", " ") : "Non ancora inserito");
+    settings = settings.replace("$TARGET",storia.target != null? storia.target : "Non ancora inserito");
+    settings = settings.replace("$IMMAGINE",storia.background != null? storia.background : "Non ancora inserito");
+    settings = settings.replace("$AUTORE",storia.autore != null? storia.autore : "Non ancora inserito").replace("$AUTORE",storia.autore);
+    settings = settings.replace("$CSS",storia.css != null? storia.css : "Non ancora inserito");
+    $("body").append(settings);
+    $("#settingsCategoria").val(storia.categoria);
+    $("#settingsTarget").val(storia.target);
+    $("#settingsBg").val(storia.background);
+    initScene("#settings_div");
+  }
+  else{
+    div.remove();
+  }
 }

@@ -1,7 +1,6 @@
 class graphicalScene{
 	constructor(id,scena){
 		this.id = id;
-		this.opened = false;
 		this.core = scena;
 	}
 	move(offsetx, offsety){
@@ -14,11 +13,13 @@ class graphicalScene{
 	}
 	draw(){
 		if(this.core.x && this.core.y){
-			board.context.fillStyle = "#FABC2A";
 			let x = this.core.x * board.scale - board.startX;
 			let width = board.const.scene.width * board.scale;
 			let y = this.core.y * board.scale - board.startY;
 			let height =  board.const.scene.height * board.scale;
+			board.context.fillStyle = "#000000";
+			board.context.fillRect(x - 2,y - 2,width + 4,height + 4);
+			board.context.fillStyle = "#FABC2A";
 			board.context.fillRect(x,y,width,height);
 			board.context.font = 20*board.scale+"px Arial";
 			board.context.fillStyle = "#000000";
@@ -52,7 +53,7 @@ class graphicalScene{
 		}
 	}
 	open(){
-		if(!this.opened){
+		if(!$("#scena"+this.id)[0]){
 			let id = "#scena"+this.id;
 			let html = $("#scena").html();
 			for(let i = 0; i<12; i++){
@@ -87,7 +88,6 @@ class graphicalScene{
 			});
 			$(id+" .header").css({"background-color":storia.categoria=="singolo"?"purple":groups[board.activegroup]});
 
-			this.opened = true;
 			$(id+" .rispostaCollapse").hide();
 			initScene(id);
 		}

@@ -8,7 +8,6 @@ var mouse={
     timer:null,
     init:function(){
 
-
         //touch device
         $("#canvas").on("touchstart", mouse.touchstart);
         $("#canvas").on("touchmove", mouse.touchmove);
@@ -47,6 +46,10 @@ var mouse={
         if(d.getTime()-mouse.time<150){
             mouse.clickhandler();
         }
+        if(board.toDelete())
+            mouse.grabbing.graphicalDelete();
+            //TODO farlo funzionare
+        
         mouse.grabbing=null;
         mouse.down=false;
 	},

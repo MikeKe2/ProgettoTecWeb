@@ -61,10 +61,9 @@ var contextMenu = {
         contextMenu.risposta = n;
         board.frecciaContext = new freccia(contextMenu.from.core, null, board.activegroup);
         contextMenu.hide();
-        //nascondere la freccia da mobile
     },
     linkwith(scena){
-        if(scena && scena.core!=contextMenu.from){
+        if(scena && scena!=contextMenu.from){
             board.frecciaContext.to = scena.core;
             board.arrows.push(board.frecciaContext);
             contextMenu.from.core.risposte[contextMenu.risposta].to[board.activegroup] = scena.id;

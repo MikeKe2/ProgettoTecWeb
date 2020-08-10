@@ -1,7 +1,7 @@
 var storia = {
     "nome": "Storia di prova",
-    "categoria": "gruppi",
-    "target": "6-12",
+    "categoria": "Gruppi_Piccoli",
+    "target": "7-10",
     "ngruppi": 5,
     "background": "taccuino",
     "css":"/myfile.css",

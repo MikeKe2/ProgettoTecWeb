@@ -18,7 +18,7 @@
       <script src="./js/Drawings/board.js"></script>
   </head>
   <body> 
-      <div class="container col-md-12">
+      <div class="container">
           <canvas id="canvas" ondrop="drop(event)" ondragover="allowDrop(event)"></canvas>
           <div class="rightcontainer">
             <div id="settingsmenu">
@@ -42,9 +42,19 @@
             </div>
           </div>
       </div>
+      <div id="turnAround">
+        <div>
+          <img src="./img/GIRA_IL_TELEFONO.png">
+          <br>
+          Gira il disositivo di 90°
+        </div>
+      </div>
       <div id="contextMenu">
         <ol class="menu-options"></ol>
       </div>
+      <template id="bidone">
+        <img src="./img/trashCan.jpg">
+      </template>
       <template id="scena">
           <div id="scena$ID" class="scene">
               <form>
@@ -92,25 +102,49 @@
         </div>
       </template>
       <template id="settings">
-        <div id="Settings">
-          <form>
-              <h2 id="title" class="show">$NAME</h2> <input type="text" name="title" class="edit">
-              <p id="categoria" class="show"></p>
-              <select name="categoria" class="edit">
-                  <option value="singolo">Singolo</option>
-                  <option value="Gruppi">Gruppi</option>
-                  <option value="singoli">Singoli</option>
-              </select>
-              <p id="target" class="show"></p>
-              <select name="target" class="edit">
-                  <option value="7-10">7-10</option>
-                  <option value="11-14">11-14</option>
-                  <option value="15-18">15-18</option>
-              </select>
-              <p id="bg" class="show"></p><input type="text" name="bg" class="edit">
-              <p id="author" class="show"></p><input type="text" name="author" class="edit">
-              <button type="button">Modifica</button><button type="button">Cancella</button><input type="submit">
-          </form>
+        <div id="settings_div">
+          <div>
+            <form>
+                <p><h2 class="show" id="title">Nome: $NOME</h2>
+                  <label class="edit" for="settingsNome">Nome</label>
+                  <input type="text" value="$NOME" id="settingsNome" class="edit">
+                </p>
+                <p id="categoria"><span class="show">Categoria: $CATEGORIA</span>
+                  <label class="edit" for="settingsCategoia">Categoria</label>
+                  <select id="settingsCategoria" class="edit">
+                    <option value="Singolo">Singolo</option>
+                    <option value="Gruppi_Piccoli">Gruppi Piccoli</option>
+                    <option value="Gruppi_Grandi">Gruppi Singoli</option>
+                  </select>
+                </p>
+                <p id="target"><span class="show">Target: $TARGET</span>
+                  <label class="edit" for="settingsTarget">Target</label>
+                  <select id="settingsTarget" class="edit">
+                    <option value="7-10">7-10</option>
+                    <option value="11-14">11-14</option>
+                    <option value="15-18">15-18</option>
+                  </select>
+                </p>
+                <p id="css"> <span class="show">CSS: $CSS </span>
+                  <label class="edit" for="settingsCss">CSS</label>
+                  <select id="settingsCss" class="edit">
+                  </select>
+                </p>
+                <p id="bg"> <span class="show">Background: $IMMAGINE</span>
+                  <label for="settingsBg" class="edit">Background</label>
+                  <select id="settingsBg" class="edit">
+                  </select>
+                </p>
+                <p id="author"> <span class="show"> Autore: $AUTORE </span>
+                  <label class="edit" for="settingsAuthor">Autore</label>
+                  <input type="text" id="settingsAuthor" value="$AUTORE" class="edit">
+                </p>
+                <button class="canc" type="button">Chiudi</button>
+                <button class="mod show" type="button">Modifica</button>
+                <button class="back edit" type="button">Torna indietro</button>
+                <input type="submit" value="Salva" class="edit">
+            </form>
+          </div>
         </div>
       </template>
       <template id="contextRisposta">
