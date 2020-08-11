@@ -30,14 +30,14 @@ class freccia{
 				yF = this.from.y + board.const.scene.height / 2;
 				yT = this.to.y + board.const.scene.height / 2;
 			}
-			let dx = xT - xF;
-			let dy = yT - yF;
+			let dx = (xT - xF)* board.scale;
+			let dy = (yT - yF) * board.scale;
 			let angle = Math.atan2(dy, dx);
 			board.context.moveTo((xF) * board.scale - board.startX , (yF) * board.scale - board.startY);
-			board.context.lineTo(x?x:(xT) * board.scale - board.startX, y?y:yT * board.scale - board.startY);
-			board.context.lineTo((xT - 20 * Math.cos(angle - Math.PI / 6)) * board.scale, (yT - 20 * Math.sin(angle - Math.PI / 6)) * board.scale);
-			board.context.moveTo(xT, yT);
-			board.context.lineTo((xT - 20 * Math.cos(angle + Math.PI / 6)) * board.scale , (yT - 20 * Math.sin(angle + Math.PI / 6)) * board.scale);
+			board.context.lineTo(x?x: xT * board.scale - board.startX, y?y: yT * board.scale - board.startY);
+			board.context.lineTo((xT * board.scale - 20 * Math.cos(angle - Math.PI / 6)) - board.startX, (yT * board.scale - 20 * Math.sin(angle - Math.PI / 6)) - board.startY);
+			board.context.moveTo(xT * board.scale - board.startX, yT * board.scale - board.startY);
+			board.context.lineTo((xT * board.scale - 20 * Math.cos(angle + Math.PI / 6)) - board.startX, (yT * board.scale - 20 * Math.sin(angle + Math.PI / 6)) - board.startY);
 			board.context.strokeStyle = storia.categoria=="singolo"?"#000000":groups[this.ngroup];
 			board.context.stroke();
 		}
