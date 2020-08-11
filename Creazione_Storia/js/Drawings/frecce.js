@@ -8,25 +8,25 @@ class freccia{
 		if(board.activegroup === null ||  board.activegroup==this.ngroup){
 			board.context.beginPath();
 			board.context.lineWidth=4;
-			let xF, yF, xT, yT; 
-			if(this.from.x < this.to.x){
+			let xF = this.from.x, yF = this.from.y, xT, yT; 
+			if(this.to != null && this.from.x < this.to.x){
 				xF = this.from.x + board.const.scene.width;
 				xT = this.to.x
-			}else if(this.from.x > this.to.x){
+			}else if(this.to != null && this.from.x > this.to.x){
 				xF = this.from.x;
 				xT = this.to.x + board.const.scene.width;
-			}else{ 
+			}else if(this.to != null){ 
 				xF = this.from.x + board.const.scene.width / 2;
 				xT = this.to.x + board.const.scene.width / 2;
 			}
 
-			if(this.from.y < this.to.y){
+			if(this.to != null && this.from.y < this.to.y){
 				yF = this.from.y + board.const.scene.height;
 				yT = this.to.y
-			}else if(this.from.y > this.to.y){
+			}else if(this.to != null && this.from.y > this.to.y){
 				yF = this.from.y;
 				yT = this.to.y + board.const.scene.height;
-			}else{ 
+			}else if(this.to != null){ 
 				yF = this.from.y + board.const.scene.height / 2;
 				yT = this.to.y + board.const.scene.height / 2;
 			}
