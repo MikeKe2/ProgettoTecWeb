@@ -48,7 +48,6 @@ var mouse={
         }
         if(board.toDelete())
             mouse.grabbing.graphicalDelete();
-            //TODO farlo funzionare
         
         mouse.grabbing=null;
         mouse.down=false;

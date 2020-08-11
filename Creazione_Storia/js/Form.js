@@ -52,6 +52,11 @@ function close(id){
   $(id).remove();
 }
 
+function del(id){
+  $(".scene").remove();
+  board.rem(id.replace("#scena","")*1)
+}
+
 function invia(id){
   let ID = id.replace("#scena","")*1;
   let scena = board.scenes[ID].core;
@@ -97,6 +102,7 @@ function initScene(id){
   }
   $(id+ " .canc").click(function(){close(id)});
   $(id+ " .mod").click(function(){edit(id)});
+  $(id+ " .remove").click(function(){del(id)});
   $(id+ " .back").click(function(){back(id)});
   $(id+" .edit").hide();
 }
@@ -180,4 +186,18 @@ function settingsToggle(){
   else{
     div.remove();
   }
+}
+
+function delRisp(){
+  let id = this.id.replace("elimina","").split("_");
+  for(let i = 0; i < board.scenes[id[0]].core.risposte[id[1]].to.length; i++){
+    if(board.scenes[id[0]].core.risposte[id[1]].to[i] != -1){
+      board.eraseArrow(board.scenes[id[0]].core, board.scenes[id[0]].core.risposte[id[1]].to[i], i);
+    }
+  }
+  board.scenes[id[0]].core.risposte.splice(id[1],1);
+
+  board.scenes[id[0]].populateRisp();
+  
+  $("#scena"+id[0]+" .show").hide();
 }

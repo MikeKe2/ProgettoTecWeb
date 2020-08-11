@@ -17,8 +17,14 @@ html, body{
     border: 1px solid #d3d3d3;
     color:white;
     display: inline-block;
-    width: auto;
+    width: 25%;
+    min-width: 200px;
     height: auto;
+}
+
+.scene textarea{
+    overflow-y: auto;
+    resize:vertical;
 }
 
 .label-bold{
@@ -199,13 +205,18 @@ html, body{
     width: 25px;
 }
 
+
 .icona{
     height: 60%;
     margin: auto;
     cursor: pointer;
 }
 
-#settings_div{
+.show{
+    overflow-y:auto;
+}
+
+.utility{
     position: absolute;
     z-index: 2000;
     width: 80%;
@@ -255,4 +266,27 @@ html, body{
 
 #turnAround img{
     width:100%;
+}
+
+.utility{
+    position: absolute;
+    z-index: 2000;
+    width: 80%;
+    height: 80%;
+    background-color: rgb(75,77,80);
+    top: 10%;
+    left: 10%;
+    border: 10px solid grey;
+    border-radius: 10px;
+    color:white;
+    text-align: center;
+    font-size: 25px;
+    overflow: auto;
+}
+
+#Help{
+    display: none;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
