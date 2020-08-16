@@ -26,7 +26,7 @@ var contextMenu = {
             
             $("#contextMenu ol li:last-child button").click(function(){
                 if(to != -1){
-                    board.erase(contextMenu.from.core, to);
+                    board.eraseArrow(contextMenu.from.core, to);
                     contextMenu.from.core.risposte[i].to[board.activegroup]=-1;
                 }
                 contextMenu.select(i);
@@ -36,14 +36,12 @@ var contextMenu = {
         $("#contextMenu ol").append(risposta.replace("$RISP","Add").replace("$TO","+"));
         $("#contextMenu ol li").last().click(function(){
             let risp = {
-                valore : null, 
+                valore: 0, 
                 to:Array(storia.ngruppi).fill(-1),
-                remainingTime: null,
-                points:null
+                remainingTime: 0,
+                points: 0
             };
             board.scenes[id].core.risposte.push(risp);
-
-            //TODO separare creazione risposta per essere richiamata anche da un bottone
 
             contextMenu.select(contextMenu.from.core.risposte.length-1);
         });

@@ -64,37 +64,68 @@ class graphicalScene{
 			//selezionare widget giusto
 			html = html.replace("$WIDGET", this.core.widget);
 			//select con l'audio
-			html = html.replace("$AUDIO", this.core.tracciaAudio);
+			html = html.replace("$AUDIO", this.core.tracciaAudio!= null? this.core.tracciaAudio : "nessun audio inserito");
 
 			html = html.replace("$VALUTATORE", this.core.valutatore?"ON":"OFF");
 			$("#editValutatore"+this.id).prop( "checked", this.core.valutatore);
 			
 			$(".container").append(html);
 
-			let rispID=0;
-			this.core.risposte.forEach(risposta => {
-				html = $("#risposta").html();
-				for(let i=0; i < 7; i++){
-					html=html.replace("$ID", this.id);
-					html = html.replace("$RISP", rispID);
-				}
-				html = html.replace("$VALORE", risposta.valore).replace("$VALORE", risposta.valore);
-				html = html.replace("$LINK", risposta.to[board.activegroup] != -1 ? storia.scene[risposta.to[board.activegroup]].nome: "non ancora inserito");
-				html = html.replace("$TEMPO", risposta.maxTime ? risposta.maxTime : "illimitato").replace("$TEMPO", risposta.maxTime);
-				html = html.replace("$POINTS", risposta.points).replace("$POINTS", risposta.points);
-				$("#risposte"+this.id).append(html);
-				$("#collapser"+this.id+"_"+rispID).click(collapsehandler);
-				rispID++;
-			});
+			this.populateRisp();
+
 			$(id+" .header").css({"background-color":storia.categoria=="singolo"?"purple":groups[board.activegroup]});
 
-			$(id+" .rispostaCollapse").hide();
 			initScene(id);
 		}
 		else
 			close("#scena"+this.id);
 	}
+	populateRisp(){
+		$("#scena"+this.id+" ol").html("");
+		let html="";
+		let rispID=0;
+		this.core.risposte.forEach(risposta => {
+			html = $("#risposta").html();
+			for(let i=0; i < 8; i++){
+				html = html.replace("$ID", this.id);
+				html = html.replace("$RISP", rispID);
+			}
+			html = html.replace("$VALORE", risposta.valore).replace("$VALORE", risposta.valore);
+			html = html.replace("$LINK", risposta.to[board.activegroup] != -1 ? storia.scene[risposta.to[board.activegroup]].nome: "non ancora inserito");
+			html = html.replace("$TEMPO", risposta.maxTime ? risposta.maxTime : "illimitato").replace("$TEMPO", risposta.maxTime);
+			html = html.replace("$POINTS", risposta.points).replace("$POINTS", risposta.points);
+			$("#risposte"+this.id).append(html);
+			$("#collapser"+this.id+"_"+rispID).click(collapsehandler);
+
+			$("#elimina"+this.id+"_"+rispID).click(delRisp);
+			$("#editMaxTime"+this.id+"_"+rispID).prop("disabled", rispID == this.core.risposte.length-1);
+			if(rispID == this.core.risposte.length-1)
+				$("#editMaxTime"+this.id+"_"+rispID).val(0);
+			rispID++;
+		});
+		$("#scena"+this.id+" .rispostaCollapse").hide();
+
+	}
 	linkmenu(){
 		contextMenu.show(this.id);
+	}
+	graphicalDelete(){
+		this.core.x=null;
+		this.core.y=null;
+		for(let i = 0; i < board.arrows.length; i++){
+			if(board.arrows[i].to == this.core || board.arrows[i].from == this.core){
+				board.arrows.splice(i, 1);
+				i--;
+			}
+		}
+		storia.scene.forEach(scena=>{
+			scena.risposte.forEach(risposta=>{
+				for(let i=0; i<risposta.to.length; i++){
+					if(risposta.to[i]==this.id)
+						risposta.to[i]=-1;
+				}
+			})
+		});
+		storia.scene[this.id].to=Array(storia.ngruppi).fill(-1);
 	}
 }
