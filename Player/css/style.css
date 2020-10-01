@@ -11,7 +11,7 @@ html, body {
     }
 }
 
-#qr-wrapper {
+#qr-wrapper, #intro {
     text-align: center;
     justify-content: space-between;
     flex-direction: column;
