@@ -25,7 +25,7 @@ function checkResult(result){
 function nextScene(){
     scena_corr++;
     $("#testo").html(storia.scene[scena_corr].descrizione);
-    $("#widget").load("/widgets/number.html")
+    $("#widget").load("../widgets/number.html")
     if(scena_corr == storia.scene.length-1)
         $("#btn").hide();
 }
