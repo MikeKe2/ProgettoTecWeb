@@ -11,6 +11,12 @@ html, body {
     }
 }
 
+#qr-wrapper {
+    text-align: center;
+    justify-content: space-between;
+    flex-direction: column;
+    display: flex;
+}
 
 #btn-scan-qr {
     cursor: pointer;
