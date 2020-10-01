@@ -5,10 +5,8 @@
         <!--devo togliere le robe inutili-->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-        <script src="https://unpkg.com/vue-qrcode-reader/dist/VueQrcodeReader.umd.min.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="css/style.css" />
+        <link rel="stylesheet" href="src/css/style.css" />
         <script src="https://rawgit.com/sitepoint-editors/jsqrcode/master/src/qr_packed.js">
         </script>
     </head>
@@ -40,12 +38,12 @@
                 <canvas hidden="" id="qr-canvas"></canvas>
 
                 <p>... o inserisci qui il codice!</p>
-                <form method="get">
-                    <input type="text">
-                    <input type="submit">
-                </form>
+                
+                    <input type="text" name="code" id="code">
+                    <button type="submit" id="submit">
+                
             </div>
-            <script src="./js/qrCodeScanner.js"></script>
+            <script src="src/js/qrcodescanner.js"></script>
         </div>
         
     </body>

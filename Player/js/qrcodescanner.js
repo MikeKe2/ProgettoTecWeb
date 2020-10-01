@@ -8,7 +8,6 @@ const btnScanQR = document.getElementById("btn-scan-qr");
 
 let scanning = false;
 
-// TODO: callback di riconoscimento qr, genera link e ci va. 
 qrcode.callback = res => {
   if (res) {
     scanning = false;
@@ -19,7 +18,7 @@ qrcode.callback = res => {
 
     canvasElement.hidden = true;
     btnScanQR.hidden = false;
-    window.location.href = "..."; // aggiungere il percorso con parametro get del codice della storia
+    window.location.href = `avventura/${res}`; // non so se va
   }
 };
 
@@ -30,7 +29,7 @@ btnScanQR.onclick = () => {
       scanning = true;
       btnScanQR.hidden = true;
       canvasElement.hidden = false;
-      video.setAttribute("playsinline", true); // required to tell iOS safari we don't want fullscreen
+      video.setAttribute("playsinline", true);
       video.srcObject = stream;
       video.play();
       tick();
@@ -53,3 +52,10 @@ function scan() {
     setTimeout(scan, 300);
   }
 }
+
+const code = document.getElementById("code").value;
+const button = document.getElementById("submit");
+
+button.onclick = () => {
+    window.location.href = `avventura/${code}`;
+};

@@ -1,3 +1,17 @@
+html, body {
+    margin: 0;
+    overflow: hidden;
+}
+
+@media screen and (min-width: 299px) and (max-width: 1080px){
+    html, body {
+        height: 100%;
+        margin: 0;
+        overflow-y: scroll;
+    }
+}
+
+
 #btn-scan-qr {
     cursor: pointer;
 }
@@ -7,4 +21,29 @@
     padding: 15px;
     margin: 15px;
     background: white;
+}
+
+#scena {
+    border: 1px solid red;
+    text-align: center;
+}
+
+#scena {
+    justify-content: space-between;
+    flex-direction: column;
+    display: flex;
+}
+
+#scena #btn-holder {
+    justify-content: center;
+    display: flex;
+    padding: 1em;
+}
+
+#testo {
+    border: 1px solid blue;
+}
+
+#widget {
+    border: 1px solid darkgreen;
 }
