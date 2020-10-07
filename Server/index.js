@@ -70,7 +70,7 @@ app.post(
   "/login",
   passport.authenticate("local", { failureRedirect: "/login" }),
   function (req, res) {
-    res.redirect("index");
+    res.redirect("home");
   }
 );
 
@@ -92,6 +92,7 @@ app.get('/profile',
 diname = __dirname + "/admin/";
 var resDirprivate = diname + "/private/";
 var resDirpublic = diname + "/public/";
+var resDir = __dirname + "/";
 
 //server.js
 app.post("/", function (req, res) {
@@ -105,6 +106,7 @@ app.post("/", function (req, res) {
     res.end();
   });
 });
+
 
 app.use(express.static(resDir + "/"));
 
