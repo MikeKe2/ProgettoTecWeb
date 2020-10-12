@@ -2,6 +2,7 @@ const express = require("express");
 
 var path = require("path");
 var find = require("find");
+var fs = require("fs");
 
 var passport = require("passport");
 var Strategy = require("passport-local").Strategy;
@@ -70,7 +71,7 @@ app.post(
   "/login",
   passport.authenticate("local", { failureRedirect: "/login" }),
   function (req, res) {
-    res.redirect("home");
+    res.redirect("index");
   }
 );
 
@@ -79,9 +80,10 @@ app.get("/logout", function (req, res) {
   res.redirect("/");
 });
 
-app.get("/index", function (req, res) {
-  res.render("index");
-});
+app.get("/index", require('connect-ensure-login').ensureLoggedIn(), 
+  function (req, res) {
+    res.render("index");
+  });
 
 app.get('/profile',
   require('connect-ensure-login').ensureLoggedIn(),
@@ -95,18 +97,43 @@ var resDirpublic = diname + "/public/";
 var resDir = __dirname + "/";
 
 //server.js
-app.post("/", function (req, res) {
+app.post("/public",
+function (req, res) {
+  var filelist = [];
+  var resDir = __dirname + "/users/" + req.user.username + "/public/";
   find.file(resDir, function (files) {
     for (let i = 0; i < files.length; i++) {
       let fileRelative = path.relative(resDir, files[i]);
-      res.write(
-        '<li><a href="' + fileRelative + '">' + fileRelative + "</a></li>"
-      );
+      console.log(fileRelative);
+      res.write("<li class=\"ui-widget-content\">" + fileRelative + "</li>\n");
     }
     res.end();
   });
 });
 
+app.post("/private",
+function (req, res) {
+  var filelist = [];
+  var resDir = __dirname + "/users/" + req.user.username + "/private/";
+  find.file(resDir, function (files) {
+    for (let i = 0; i < files.length; i++) {
+      let fileRelative = path.relative(resDir, files[i]);
+      console.log(fileRelative);
+      res.write("<li class=\"ui-widget-content\">" + fileRelative + "</li>\n");
+    }
+    res.end();
+  });
+});
+
+app.post("/makeprivate", require('connect-ensure-login').ensureLoggedIn(), 
+  function(req, res){
+    var resDir = __dirname + "/users/" + req.user.username;
+    var files = res.json(req.body.filelist);
+    for(let i = 0; i<files.length; i++){
+      let file = files[i];
+      fs.rename(resDir + "/public/" + file, resDir + "/private/" + file);
+    }
+});
 
 app.use(express.static(resDir + "/"));
 

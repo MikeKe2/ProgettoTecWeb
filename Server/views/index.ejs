@@ -1,29 +1,100 @@
 <html>
   <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>
+      #feedback { font-size: 1.4em; }
+      #selectablepublic .ui-selecting { background: #FECA40; }
+      #selectablepublic .ui-selected { background: #F39814; color: white; }
+      #selectablepublic { list-style-type: none; margin: 0; padding: 0; width: auto; }
+      #selectablepublic li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; }
+
+      #selectableprivate .ui-selecting { background: #FECA40; }
+      #selectableprivate .ui-selected { background: #F39814; color: white; }
+      #selectableprivate { list-style-type: none; margin: 0; padding: 0; width: auto; }
+      #selectableprivate li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; }
+      </style>
+      <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+      <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+      <script>
+        var selectedFiles = [];
+        function publicSelected(event, ui){
+          selectedFiles.push(ui.selected.innerHTML);
+          $("#selectableprivate").selectable("destroy");
+          $("#selectableprivate").selectable({
+            selected: privateSelected
+          });
+        }
+        function privateSelected(event, ui){
+          selectedFiles.push(ui.selected.innerHTML);
+          $("#selectablepublic").selectable("destroy");
+          $("#selectablepublic").selectable({
+            selected: publicSelected
+          });
+        }
+      $( function() {
+      $( "#selectablepublic" ).selectable({
+        selected: publicSelected,
+      });
+        $("#selectableprivate").selectable({
+        selected: privateSelected
+      });
+      } );  
+      </script>
   </head>
+
   <body>
     <h1>Hello World</h1>
-    <a class="changepublic">List item 2</a>
-    <a class="changeprivate"> List Item 3</a>
+    <table style="width: 100%;">
+    <tr>
+      <td style="width: 45%;">
+        <ol class="changepublic" id="selectablepublic"></ol>
+      </td>
+      <td class="btns" style="text-align: center; vertical-align: middle;">
+        <ul style="list-style-type: none; margin: 0; padding: 0; width: auto;">
+          <li><button onclick=mkPrivate()> >> </button></li>
+          <li><button onclick=mkPublic()> << </button></li>
+        </ul>
+      </td>
+      <td style="width: 45%;">
+        <ol class="changeprivate" id="selectableprivate"></ol>
+      </td>    
+    </tr>
+    </table>
     <a href="/logout">Log out</a>
   </body>
   <script>
     
     if (window.localStorage.permanentData) {
-      $("a.change").replaceWith(window.localStorage.permanentData);
+      $("ol.change").replaceWith(window.localStorage.permanentData);
     }
 
     $(document).ready(function () {
       $.ajax({
         //change me for server (http://site181993.tw.cs.unibo.it) or localhost (http://localhost:8000)
-        url: "http://localhost:8000",
+        url: "http://localhost:8000/public",
         method: "POST",
       })
         .done(function (data) {
           /*localStorage.setItem("permanentData", data);
           var savedText = localStorage.getItem("permanentData");*/
-          $("a.changepublic").replaceWith(data);
+          $("ol.changepublic").append(data);
+          return;
+        })
+        .fail(function () {
+          console.log("failed...");
+          return;
+        });      
+      
+      $.ajax({
+        //change me for server (http://site181993.tw.cs.unibo.it) or localhost (http://localhost:8000)
+        url: "http://localhost:8000/private",
+        method: "POST",
+      })
+        .done(function (data) {
+          /*localStorage.setItem("permanentData", data);
+          var savedText = localStorage.getItem("permanentData");*/
+          $("ol.changeprivate").append(data);
           return;
         })
         .fail(function () {
@@ -31,5 +102,15 @@
           return;
         });
     });
+
+    function mkPrivate(){
+      $.ajax({
+        url: "/makeprivate",
+        method: "POST",
+        filelist: selectedFiles
+      })
+    }
+
+    function mkPublic(){}
   </script>
 </html>
