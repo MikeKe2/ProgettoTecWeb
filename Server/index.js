@@ -10,6 +10,9 @@ var Strategy = require("passport-local").Strategy;
 var db = require("./db");
 var app = express();
 
+var multer  = require('multer'); //upload package 
+var upload = multer({ dest: 'uploads/' }); // upload destination
+
 passport.use(
   new Strategy(function (username, password, cb) {
     db.users.findByUsername(username, function (err, user) {
@@ -58,11 +61,16 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-//Create the Server
+// app.use(fileUpload({
+//   createParentPath: true
+// }));
+
+//HOME
 app.get("/", function (req, res) {
   res.render("home", { user: req.user });
 });
 
+//LOGIN
 app.get("/login", function (req, res) {
   res.render("login");
 });
@@ -75,16 +83,22 @@ app.post(
   }
 );
 
+//LOGOUT
 app.get("/logout", function (req, res) {
   req.logout();
   res.redirect("/");
 });
 
+
+//INDEX
 app.get("/index", require('connect-ensure-login').ensureLoggedIn(), 
   function (req, res) {
     res.render("index");
-  });
+  }
+);
 
+
+//PROFILE
 app.get('/profile',
   require('connect-ensure-login').ensureLoggedIn(),
   function(req, res){
@@ -134,6 +148,113 @@ app.post("/makeprivate", require('connect-ensure-login').ensureLoggedIn(),
       fs.rename(resDir + "/public/" + file, resDir + "/private/" + file);
     }
 });
+
+// app.post('/upload-image', async (req, res) => {
+//   try {
+//       if(!req.files) {
+//           res.send({
+//               status: false,
+//               message: 'No file uploaded'
+//           });
+//       } else {
+//           //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
+//           let avatar = req.files.avatar;
+          
+//           //Use the mv() method to place the file in upload directory (i.e. "uploads")
+//           avatar.mv('./uploads/' + avatar.name);
+
+//           //send response
+//           res.send({
+//               status: true,
+//               message: 'File is uploaded',
+//               data: {
+//                   name: avatar.name,
+//                   mimetype: avatar.mimetype,
+//                   size: avatar.size
+//               }
+//           });
+//       }
+//   } catch (err) {
+//       res.status(500).send(err);
+//   }
+// });
+
+
+
+app.post('/upload', (req, res) => { // da adattare per le varie sezioni ed utenti
+  upload(req, res, (err) => {
+    if(err){
+      res.render('index', {
+        msg: err
+      });
+    } else {
+      if(req.file == undefined){ //non credo serva, può essere fatto localmente client-side
+        res.render('index', {
+          msg: 'Error: No File Selected!'
+        });
+      } else {
+        res.render('index', {
+          msg: 'File Uploaded!',
+          file: `uploads/${req.file.filename}`
+        });
+      }
+    }
+  });
+});
+
+
+
+
+const storage = multer.diskStorage({ //costante che dice dove caricare la roba e come. Io farei una variabile che perchè altrimenti non si puù cambiare per ogni utente
+  destination: './public/uploads/',
+  filename: function(req, file, cb){
+    cb(null,file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+  }
+});
+
+// Init Upload
+const upload = multer({ //carica la roba, le varie righe sono abbastanza ovvie 
+  storage: storage,
+  limits:{fileSize: 1000000}, 
+  fileFilter: function(req, file, cb){
+    checkFileType(file, cb); // eviterei di averla: se carichi merda sei scemo tu
+  }
+}).single('myImage');
+
+// Check File Type
+function checkFileType(file, cb){ //la funzione per controllare se i file sono corretti ma mi sembra inutile. la tengo che non si sa mai 
+  // Allowed ext
+  const filetypes = /jpeg|jpg|png|gif/;
+  // Check ext
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+  // Check mime
+  const mimetype = filetypes.test(file.mimetype);
+
+  if(mimetype && extname){
+    return cb(null,true);
+  } else {
+    cb('Error: Images Only!');
+  }
+}
+
+/*
+
+la roba clientside per fare l'upload: nulla di speciale ma comunque meglio averla che no
+
+<form action="/upload" method="POST" enctype="multipart/form-data">
+      <div class="file-field input-field">
+        <div class="btn grey">
+          <span>File</span>
+          <input name="myImage" type="file">
+        </div>
+        <div class="file-path-wrapper">
+          <input class="file-path validate" type="text">
+        </div>
+      </div>
+      <button type="submit" class="btn">Submit</button>
+    </form>
+*/
+
 
 app.use(express.static(resDir + "/"));
 
