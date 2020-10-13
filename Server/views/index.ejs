@@ -63,20 +63,21 @@
     </table>
     <a href="/logout">Log out</a>
 
-    <form action="/upload" method="POST" enctype="multipart/form-data">
-      <div class="file-field input-field">
-        <div class="btn grey">
+    <form action="/images" method="POST" enctype="multipart/form-data">
+      <div>
+        <div>
           <span>File</span>
           <input name="myImage" type="file">
         </div>
-        <div class="file-path-wrapper">
-          <input class="file-path validate" type="text">
+        <div>
+          <input type="text">
         </div>
       </div>
-      <button type="submit" class="btn">Submit</button>
+      <button type="submit">Submit</button>
     </form>
   </body>
-  <script>
+  <!-- TODO fixare questo, rompe tutto-->
+  <!-- <script>
     
     if (window.localStorage.permanentData) {
       $("ol.change").replaceWith(window.localStorage.permanentData);
@@ -125,5 +126,5 @@
     }
 
     function mkPublic(){}
-  </script>
+  </script> -->
 </html>

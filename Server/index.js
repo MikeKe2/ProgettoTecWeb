@@ -149,38 +149,6 @@ app.post("/makeprivate", require('connect-ensure-login').ensureLoggedIn(),
     }
 });
 
-// app.post('/upload-image', async (req, res) => {
-//   try {
-//       if(!req.files) {
-//           res.send({
-//               status: false,
-//               message: 'No file uploaded'
-//           });
-//       } else {
-//           //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
-//           let avatar = req.files.avatar;
-          
-//           //Use the mv() method to place the file in upload directory (i.e. "uploads")
-//           avatar.mv('./uploads/' + avatar.name);
-
-//           //send response
-//           res.send({
-//               status: true,
-//               message: 'File is uploaded',
-//               data: {
-//                   name: avatar.name,
-//                   mimetype: avatar.mimetype,
-//                   size: avatar.size
-//               }
-//           });
-//       }
-//   } catch (err) {
-//       res.status(500).send(err);
-//   }
-// });
-
-
-
 
 // Check File Type
 function checkFileType(file, cb){ //la funzione per controllare se i file sono corretti ma mi sembra inutile. la tengo che non si sa mai 
@@ -199,14 +167,39 @@ function checkFileType(file, cb){ //la funzione per controllare se i file sono c
 }
 
 
-app.post('/upload', (req, res) => {
+app.get('/images', (req, res)=>{
+  //passsing directoryPath and callback function
+  const directoryPath = path.join(__dirname + "/users/" + req.user.username, 'images');
+  fs.readdir(directoryPath, function (err, files) {
+    //handling error
+    if (err) {
+        return console.log('Unable to scan directory: ' + err);
+    } 
+    //listing all files using forEach
+    let filelist = [];
+    files.forEach(function (file) {
+        // Do whatever you want to do with the file
+        console.log(file); 
+        filelist.push(file);
+    });
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify(filelist));
+    res.end();
+  });
+})
 
+app.post('/images', (req, res) => {
   let upload = multer({ //carica la roba, le varie righe sono abbastanza ovvie 
     storage: multer.diskStorage({ //costante che dice dove caricare la roba e come. Io farei una variabile che perchè altrimenti non si puù cambiare per ogni utente
-      destination: './users/'+req.user.username+'/uploads/',
+      destination: './users/'+req.user.username+'/images/',
       filename: function(req, file, cb){
-        cb(null,file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+        if (fs.existsSync(path.join(docfolder,file.originalname))) {
+          cb(null, file.originalname+"_new");
+        }else{
+          cb(null, file.originalname);
+        }
       }
+      
     }),
     fileFilter: function(req, file, cb){
       checkFileType(file, cb); // eviterei di averla: se carichi merda sei scemo tu
