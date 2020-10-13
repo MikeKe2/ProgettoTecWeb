@@ -11,7 +11,7 @@ var db = require("./db");
 var app = express();
 
 var multer  = require('multer'); //upload package 
-var upload = multer({ dest: 'uploads/' }); // upload destination
+var uploader = multer({ dest: 'uploads/' }); // upload destination
 
 passport.use(
   new Strategy(function (username, password, cb) {
@@ -181,45 +181,6 @@ app.post("/makeprivate", require('connect-ensure-login').ensureLoggedIn(),
 
 
 
-app.post('/upload', (req, res) => { // da adattare per le varie sezioni ed utenti
-  upload(req, res, (err) => {
-    if(err){
-      res.render('index', {
-        msg: err
-      });
-    } else {
-      if(req.file == undefined){ //non credo serva, può essere fatto localmente client-side
-        res.render('index', {
-          msg: 'Error: No File Selected!'
-        });
-      } else {
-        res.render('index', {
-          msg: 'File Uploaded!',
-          file: `uploads/${req.file.filename}`
-        });
-      }
-    }
-  });
-});
-
-
-
-
-const storage = multer.diskStorage({ //costante che dice dove caricare la roba e come. Io farei una variabile che perchè altrimenti non si puù cambiare per ogni utente
-  destination: './public/uploads/',
-  filename: function(req, file, cb){
-    cb(null,file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-  }
-});
-
-// Init Upload
-const upload = multer({ //carica la roba, le varie righe sono abbastanza ovvie 
-  storage: storage,
-  limits:{fileSize: 1000000}, 
-  fileFilter: function(req, file, cb){
-    checkFileType(file, cb); // eviterei di averla: se carichi merda sei scemo tu
-  }
-}).single('myImage');
 
 // Check File Type
 function checkFileType(file, cb){ //la funzione per controllare se i file sono corretti ma mi sembra inutile. la tengo che non si sa mai 
@@ -237,23 +198,43 @@ function checkFileType(file, cb){ //la funzione per controllare se i file sono c
   }
 }
 
-/*
 
-la roba clientside per fare l'upload: nulla di speciale ma comunque meglio averla che no
+app.post('/upload', (req, res) => {
 
-<form action="/upload" method="POST" enctype="multipart/form-data">
-      <div class="file-field input-field">
-        <div class="btn grey">
-          <span>File</span>
-          <input name="myImage" type="file">
-        </div>
-        <div class="file-path-wrapper">
-          <input class="file-path validate" type="text">
-        </div>
-      </div>
-      <button type="submit" class="btn">Submit</button>
-    </form>
-*/
+  let upload = multer({ //carica la roba, le varie righe sono abbastanza ovvie 
+    storage: multer.diskStorage({ //costante che dice dove caricare la roba e come. Io farei una variabile che perchè altrimenti non si puù cambiare per ogni utente
+      destination: './users/'+req.user.username+'/uploads/',
+      filename: function(req, file, cb){
+        cb(null,file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+      }
+    }),
+    fileFilter: function(req, file, cb){
+      checkFileType(file, cb); // eviterei di averla: se carichi merda sei scemo tu
+    }
+  }).single('myImage');
+
+  upload(req, res, (err) => {
+    if(err){
+      console.log(err)
+      res.render('index', {
+        msg: err
+      });
+    } else {
+      if(req.file == undefined){ //non credo serva, può essere fatto localmente client-side
+        res.render('index', {
+          msg: 'Error: No File Selected!'
+        });
+      } else {
+        console.log(req.file.filename)
+        res.render('index', {
+          msg: 'File Uploaded!',
+          file: `uploads/${req.file.filename}`
+        });
+      }
+    }
+  });
+});
+
 
 
 app.use(express.static(resDir + "/"));
