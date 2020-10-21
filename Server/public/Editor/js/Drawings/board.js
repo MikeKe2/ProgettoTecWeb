@@ -24,7 +24,7 @@
 	};
 }());
 
-//var storia;
+var storia;
 
 $(window).on("load", function(){
 	$("#Help").hide()
@@ -96,10 +96,11 @@ var board={
 	init: function(){
 
 		board.resizeCanvas();
-		
-		// 	url:"/prova.json",
-		// 	success: (data)=>{
-				//storia = JSON.parse(data);
+		$.ajax({
+		 	url:"/stories/"+document.title,
+		 	success: (data)=>{
+				console.log(data);
+				storia = data;
 				for(let i = 0; i < storia.scene.length; i++){
 					let scena = storia.scene[i];
 					if(scena.x && scena.y){
@@ -137,9 +138,9 @@ var board={
 					board.checkOrientation();
 				};
 				board.cestinoImg = new Image();
-				board.cestinoImg.src = "./img/cestino.png";
-		// 	}
-		// });
+				board.cestinoImg.src = "/Editor/img/cestino.png";
+		 	}
+		});
 	},
 	const:{
 		scene:{

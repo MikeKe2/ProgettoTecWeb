@@ -32,14 +32,14 @@
             selected: publicSelected
           });
         }
-      $( function() {
-      $( "#selectablepublic" ).selectable({
-        selected: publicSelected,
-      });
-        $("#selectableprivate").selectable({
-        selected: privateSelected
-      });
-      } );  
+        $( function() {
+          $( "#selectablepublic" ).selectable({
+            selected: publicSelected,
+          });
+          $("#selectableprivate").selectable({
+            selected: privateSelected
+          });
+        });  
       </script>
   </head>
 
@@ -66,8 +66,34 @@
     <form action="/images" method="POST" enctype="multipart/form-data">
       <div>
         <div>
-          <span>File</span>
-          <input name="myImage" type="file">
+          <span>Image file</span>
+          <input name="my_images" type="file">
+        </div>
+        <div>
+          <input type="text">
+        </div>
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+
+    <form action="/audios" method="POST" enctype="multipart/form-data">
+      <div>
+        <div>
+          <span>Audio file</span>
+          <input name="my_audios" type="file">
+        </div>
+        <div>
+          <input type="text">
+        </div>
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+
+    <form action="/widgets" method="POST" enctype="multipart/form-data">
+      <div>
+        <div>
+          <span>Widget file</span>
+          <input name="my_widgets" type="file">
         </div>
         <div>
           <input type="text">
