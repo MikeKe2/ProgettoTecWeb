@@ -82,6 +82,45 @@
       </tr>
     </table>
     <a href="/logout">Log out</a>
+
+    <form action="/images" method="POST" enctype="multipart/form-data">
+      <div>
+        <div>
+          <span>Image file</span>
+          <input name="my_images" type="file">
+        </div>
+        <div>
+          <input type="text">
+        </div>
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+
+    <form action="/audios" method="POST" enctype="multipart/form-data">
+      <div>
+        <div>
+          <span>Audio file</span>
+          <input name="my_audios" type="file">
+        </div>
+        <div>
+          <input type="text">
+        </div>
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+
+    <form action="/widgets" method="POST" enctype="multipart/form-data">
+      <div>
+        <div>
+          <span>Widget file</span>
+          <input name="my_widgets" type="file">
+        </div>
+        <div>
+          <input type="text">
+        </div>
+      </div>
+      <button type="submit">Submit</button>
+    </form>
   </body>
   <script>
     
