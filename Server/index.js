@@ -8,6 +8,7 @@ var passport = require("passport");
 var Strategy = require("passport-local").Strategy;
 
 var db = require("./db");
+const { json } = require("body-parser");
 var app = express();
 
 passport.use(
@@ -128,10 +129,24 @@ function (req, res) {
 app.post("/makeprivate", require('connect-ensure-login').ensureLoggedIn(), 
   function(req, res){
     var resDir = __dirname + "/users/" + req.user.username;
-    var files = res.json(req.body.filelist);
-    for(let i = 0; i<files.length; i++){
-      let file = files[i];
-      fs.rename(resDir + "/public/" + file, resDir + "/private/" + file);
+    var filelist = req.body.files;
+    console.log(filelist);
+    for(let i = 0; i<filelist.length; i++){
+      let file = filelist[i];
+      console.log(file);
+      fs.renameSync(resDir + "/public/" + file, resDir + "/private/" + file);
+    }
+});
+
+app.post("/makepublic", require('connect-ensure-login').ensureLoggedIn(), 
+  function(req, res){
+    var resDir = __dirname + "/users/" + req.user.username;
+    var filelist = req.body.files;
+    console.log(filelist);
+    for(let i = 0; i<filelist.length; i++){
+      let file = filelist[i];
+      console.log(file);
+      fs.renameSync(resDir + "/private/" + file, resDir + "/public/" + file);
     }
 });
 

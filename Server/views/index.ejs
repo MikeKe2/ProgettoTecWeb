@@ -17,49 +17,69 @@
       <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
       <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
       <script>
-        var selectedFiles = [];
+        var selectedFiles = {files : []};
+        var checkSel = undefined;
+        function unselectFile(event, ui){
+          let i = selectedFiles.files.indexOf(ui.unselected.innerHTML);
+          selectedFiles.files.splice(i, 1);
+        }
         function publicSelected(event, ui){
-          selectedFiles.push(ui.selected.innerHTML);
+          if (checkSel == 0) selectedFiles.files = [];
+          checkSel = 1;
+          if(selectedFiles.files.indexOf(ui.selected.innerHTML) == -1)
+            selectedFiles.files.push(ui.selected.innerHTML);
           $("#selectableprivate").selectable("destroy");
           $("#selectableprivate").selectable({
-            selected: privateSelected
+            selected: privateSelected,
+            unselected: unselectFile
           });
         }
         function privateSelected(event, ui){
-          selectedFiles.push(ui.selected.innerHTML);
+          if (checkSel == 1) selectedFiles.files = [];
+          checkSel = 0;
+          if(selectedFiles.files.indexOf(ui.selected.innerHTML) == -1)
+            selectedFiles.files.push(ui.selected.innerHTML);
           $("#selectablepublic").selectable("destroy");
           $("#selectablepublic").selectable({
-            selected: publicSelected
+            selected: publicSelected,
+            unselected: unselectFile
           });
         }
-      $( function() {
-      $( "#selectablepublic" ).selectable({
-        selected: publicSelected,
-      });
-        $("#selectableprivate").selectable({
-        selected: privateSelected
-      });
-      } );  
+        $( function() {
+          $( "#selectablepublic" ).selectable({
+            selected: publicSelected,
+            unselected: unselectFile
+          });
+            $("#selectableprivate").selectable({
+            selected: privateSelected,
+            unselected: unselectFile
+          });
+        } );  
       </script>
   </head>
 
   <body>
     <h1>Hello World</h1>
     <table style="width: 100%;">
-    <tr>
-      <td style="width: 45%;">
-        <ol class="changepublic" id="selectablepublic"></ol>
-      </td>
-      <td class="btns" style="text-align: center; vertical-align: middle;">
-        <ul style="list-style-type: none; margin: 0; padding: 0; width: auto;">
-          <li><button onclick=mkPrivate()> >> </button></li>
-          <li><button onclick=mkPublic()> << </button></li>
-        </ul>
-      </td>
-      <td style="width: 45%;">
-        <ol class="changeprivate" id="selectableprivate"></ol>
-      </td>    
-    </tr>
+      <tr>
+        <th>Public</th>
+        <th></th>
+        <th>Private</th>
+      </tr>
+      <tr>
+        <td style="width: 45%;">
+          <ol class="changepublic" id="selectablepublic"></ol>
+        </td>
+        <td class="btns" style="text-align: center; vertical-align: middle;">
+          <ul style="list-style-type: none; margin: 0; padding: 0; width: auto;">
+            <li><button onclick=mkPrivate()> >> </button></li>
+            <li><button onclick=mkPublic()> << </button></li>
+          </ul>
+        </td>
+        <td style="width: 45%;">
+          <ol class="changeprivate" id="selectableprivate"></ol>
+        </td>    
+      </tr>
     </table>
     <a href="/logout">Log out</a>
   </body>
@@ -107,10 +127,22 @@
       $.ajax({
         url: "/makeprivate",
         method: "POST",
-        filelist: selectedFiles
+        async: false,
+        data: selectedFiles,
+        success: function(response) {document.location.href = document.location.href;}
       })
+      selectedFiles.files = [];
     }
 
-    function mkPublic(){}
+    function mkPublic(){
+      $.ajax({
+        url: "/makepublic",
+        method: "POST",
+        async: false,
+        data: selectedFiles,
+        success: function(response) {document.location.href = document.location.href;}
+      })
+      selectedFiles.files = [];
+    }
   </script>
 </html>
