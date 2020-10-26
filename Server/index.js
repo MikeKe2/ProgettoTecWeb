@@ -329,6 +329,175 @@ app.get('/editor/:nomeStoria', (req, res)=>{
 });
 
 
+
+// Check File Type
+function checkFileType(file, cb){ //la funzione per controllare se i file sono corretti ma mi sembra inutile. la tengo che non si sa mai 
+  // Allowed ext
+  let filetypes;
+  switch(type){
+    case "images": filetypes=/jpeg|jpg|png|gif/; break;
+    case "audios": filetypes=/mp3|wav|ogg/; break;
+    case "widgets": filetypes=/html/; break;
+    case "stories":  filetypes=/mms/; break;
+  }
+  // Check ext
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+  // Check mime
+  const mimetype = filetypes.test(file.mimetype);
+
+  if(mimetype && extname){
+    return cb(null,true);
+  } else {
+    cb('Error: '+type+' Only!');
+  }
+}
+
+
+
+function getMedia(req, res, type){
+  //passing directoryPath and callback function
+  const directoryPath = path.join(__dirname + "/users/" + req.user.username, type);
+  fs.readdir(directoryPath, function (err, files) {
+    //handling error
+    if (err) {
+        return console.log('Unable to scan directory: ' + err);
+    } 
+    //listing all files using forEach
+    let filelist = [];
+    files.forEach(function (file) {
+        // Do whatever you want to do with the file
+        console.log(file); 
+        filelist.push(file);
+    });
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify(filelist));
+    res.end();
+  });
+}
+
+function postMedia(req, res, type){
+  let upload = multer({ 
+    storage: multer.diskStorage({ 
+      destination: './users/'+req.user.username+'/'+type+'/',
+      filename: function(req, file, cb){
+        while(!fs.existsSync(path.join(docfolder,file.originalname))) {
+          file.originalname+="_new";
+        }
+        cb(null, file.originalname);
+      }
+      
+    }),
+    fileFilter: function(req, file, cb){
+      checkFileType(file, cb, type);
+    }
+  }).single("my_"+type);
+
+  upload(req, res, (err) => {
+    if(err){
+      console.log(err)
+      res.render('index', {
+        msg: err
+      });
+    } else {
+      if(req.file == undefined){
+        res.render('index', {
+          msg: 'Error: No File Selected!'
+        });
+      } else {
+        console.log(req.file.filename)
+        res.render('index', {
+          msg: 'File Uploaded!',
+          file: `uploads/${req.file.filename}`
+        });
+      }
+    }
+  });
+}
+
+function postStories(req, res){
+
+  //TODO UPDATE STORIE
+  let upload = multer({ 
+    storage: multer.diskStorage({ 
+      destination: './users/'+req.user.username+'/private/',
+      filename: function(req, file, cb){
+        while(!fs.existsSync(path.join(docfolder,file.originalname))) {
+          file.originalname+="_new";
+        }
+        cb(null, file.originalname);
+      }
+      
+    }),
+    fileFilter: function(req, file, cb){
+      checkFileType(file, cb, "stories");
+    }
+  }).single("my_"+"stories");
+
+  upload(req, res, (err) => {
+    if(err){
+      console.log(err)
+      res.render('index', {
+        msg: err
+      });
+    } else {
+      if(req.file == undefined){
+        res.render('index', {
+          msg: 'Error: No File Selected!'
+        });
+      } else {
+        console.log(req.file.filename)
+        res.render('index', {
+          msg: 'File Uploaded!',
+          file: `uploads/${req.file.filename}`
+        });
+      }
+    }
+  });
+}
+
+app.get('/images', (req, res)=>{
+  getMedia(req, res, 'images');
+});
+app.post('/images', (req, res) => {
+  postMedia(req, res, 'images')
+});
+
+app.get('/audios', (req, res)=>{
+  getMedia(req, res, 'audios');
+});
+app.post('/audios', (req, res) => {
+  postMedia(req, res, 'audios')
+});
+
+app.get('/widgets', (req, res)=>{
+  getMedia(req, res, 'widgets');
+});
+app.post('/widgets', (req, res) => {
+  postMedia(req, res, 'widgets')
+});
+
+app.get('/stories', (req, res)=>{
+  postStories(req, res);
+});
+app.post('/stories', (req, res) => {
+  postStories(req, res);
+});
+
+app.get('/stories/:nomeStoria', (req, res)=>{
+  //const directoryPath = path.join(__dirname + "/users/" + req.user.username, 'stories');
+  const directoryPath = path.join(__dirname + "/users/admin/", 'stories');
+  let data = fs.readFileSync(directoryPath+"/"+req.params.nomeStoria+'.json');
+  res.setHeader('Content-Type', 'application/json');
+  res.send(data);
+  res.end();
+
+});
+
+app.get('/editor/:nomeStoria', (req, res)=>{
+  res.render("index_Editor", {data:req.params.nomeStoria});
+});
+
+
 app.use(express.static(resDir + "/"));
 app.use(express.static("public"));
 

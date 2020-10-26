@@ -48,6 +48,7 @@
         $( function() {
           $( "#selectablepublic" ).selectable({
             selected: publicSelected,
+<<<<<<< HEAD
             unselected: unselectFile
           });
             $("#selectableprivate").selectable({
@@ -55,6 +56,13 @@
             unselected: unselectFile
           });
         } );  
+=======
+          });
+          $("#selectableprivate").selectable({
+            selected: privateSelected
+          });
+        });  
+>>>>>>> 27d8db6c27db3e7f7ad2ab38a9bb7864636ef89d
       </script>
   </head>
 
@@ -122,7 +130,8 @@
       <button type="submit">Submit</button>
     </form>
   </body>
-  <script>
+  <!-- TODO fixare questo, rompe tutto-->
+  <!-- <script>
     
     if (window.localStorage.permanentData) {
       $("ol.change").replaceWith(window.localStorage.permanentData);
@@ -173,6 +182,7 @@
       selectedFiles.files = [];
     }
 
+<<<<<<< HEAD
     function mkPublic(){
       $.ajax({
         url: "/makepublic",
@@ -184,4 +194,8 @@
       selectedFiles.files = [];
     }
   </script>
+=======
+    function mkPublic(){}
+  </script> -->
+>>>>>>> 27d8db6c27db3e7f7ad2ab38a9bb7864636ef89d
 </html>
