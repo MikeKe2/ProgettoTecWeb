@@ -97,7 +97,7 @@ var board={
 
 		board.resizeCanvas();
 		$.ajax({
-		 	url:"localhost:8000/stories/"+"/"+$("#visibility").html()+"/"+$("#user").html()+"/"+$("#name").html()+":8000",
+			url:"/stories"+"/"+$("#user").html()+"/"+$("#name").html(),
 		 	success: (data)=>{
 				console.log(data);
 				storia = data;

@@ -335,7 +335,7 @@ app.get('/stories/private/:user/:nomeStoria', (req, res)=>{
   res.end();
 });
 
-app.get('/editor/:visibility/:nomeStoria', (req, res)=>{
+app.get('/editorStoria/:visibility/:nomeStoria/', (req, res)=>{
   res.render("index_Editor", {data:req.params.nomeStoria, visibility:req.params.visibility, user:req.user.username});
 });
 
