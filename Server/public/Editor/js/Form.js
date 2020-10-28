@@ -1,4 +1,3 @@
-//TODO mettere id in un cazzo di oggetto
 var id; 
 
 function dragElement(elmnt) {
