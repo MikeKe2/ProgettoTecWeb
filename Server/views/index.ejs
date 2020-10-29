@@ -13,6 +13,8 @@
       #selectableprivate .ui-selected { background: #F39814; color: white; }
       #selectableprivate { list-style-type: none; margin: 0; padding: 0; width: auto; }
       #selectableprivate li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; }
+
+      .btn {height: 2em;width:80%;}
       </style>
       <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
       <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -20,14 +22,14 @@
         var selectedFiles = {files : []};
         var checkSel = undefined;
         function unselectFile(event, ui){
-          let i = selectedFiles.files.indexOf(ui.unselected.innerHTML);
+          let i = selectedFiles.files.indexOf(ui.selected.getAttribute("name"));
           selectedFiles.files.splice(i, 1);
         }
         function publicSelected(event, ui){
           if (checkSel == 0) selectedFiles.files = [];
           checkSel = 1;
-          if(selectedFiles.files.indexOf(ui.selected.innerHTML) == -1)
-            selectedFiles.files.push(ui.selected.innerHTML);
+          if(selectedFiles.files.indexOf(ui.selected.getAttribute("name")) == -1)
+            selectedFiles.files.push(ui.selected.getAttribute("name"));
           $("#selectableprivate").selectable("destroy");
           $("#selectableprivate").selectable({
             selected: privateSelected,
@@ -37,8 +39,8 @@
         function privateSelected(event, ui){
           if (checkSel == 1) selectedFiles.files = [];
           checkSel = 0;
-          if(selectedFiles.files.indexOf(ui.selected.innerHTML) == -1)
-            selectedFiles.files.push(ui.selected.innerHTML);
+          if(selectedFiles.files.indexOf(ui.selected.getAttribute("name")) == -1)
+            selectedFiles.files.push(ui.selected.getAttribute("name"));
           $("#selectablepublic").selectable("destroy");
           $("#selectablepublic").selectable({
             selected: publicSelected,
@@ -58,6 +60,7 @@
       </script>
   </head>
 
+
   <body>
     <h1>Hello World</h1>
     <table style="width: 100%;">
@@ -72,8 +75,8 @@
         </td>
         <td class="btns" style="text-align: center; vertical-align: middle;">
           <ul style="list-style-type: none; margin: 0; padding: 0; width: auto;">
-            <li><button onclick=mkPrivate()> >> </button></li>
-            <li><button onclick=mkPublic()> << </button></li>
+            <li><button class="ui-button ui-widget ui-corner-all ui-button-icon-only btn" onclick=mkPrivate()><span class="ui-icon ui-icon-arrowthick-1-e"></span></button></li>
+            <li><button class="ui-button ui-widget ui-corner-all ui-button-icon-only btn" onclick=mkPublic()><span class="ui-icon ui-icon-arrowthick-1-w"></span></button></li>
           </ul>
         </td>
         <td style="width: 45%;">
@@ -168,7 +171,7 @@
         method: "POST",
         async: false,
         data: selectedFiles,
-        success: function(response) {document.location.href = document.location.href;}
+        success: function(response) {window.location.href = window.location.href;}
       })
       selectedFiles.files = [];
     }
@@ -179,9 +182,13 @@
         method: "POST",
         async: false,
         data: selectedFiles,
-        success: function(response) {document.location.href = document.location.href;}
+        success: function(response) {window.location.href = window.location.href;}
       })
       selectedFiles.files = [];
+    }
+    
+    function gotoEditor(fileName, type){
+      window.location.href = "/editor/" + type + "/" + fileName;
     }
   </script>
 

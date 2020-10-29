@@ -116,7 +116,9 @@ function (req, res) {
     for (let i = 0; i < files.length; i++) {
       let fileRelative = path.relative(resDir, files[i]);
       console.log(fileRelative);
-      res.write("<li class=\"ui-widget-content\">" + fileRelative + "</li>\n");
+      res.write("<li class=\"ui-widget-content\" style=\"overflow: hidden;\" name=\"" + fileRelative + "\">" + fileRelative + 
+      "<button class=\"ui-button ui-widget ui-corner-all ui-button-icon-only\" style=\"float: right;\" onclick=\"gotoEditor('" + 
+      fileRelative + "', 'public')\"><span class=\"ui-icon ui-icon-pencil\"></span></button></li>\n");
     }
     res.end();
   });
@@ -130,7 +132,9 @@ function (req, res) {
     for (let i = 0; i < files.length; i++) {
       let fileRelative = path.relative(resDir, files[i]);
       console.log(fileRelative);
-      res.write("<li class=\"ui-widget-content\">" + fileRelative + "</li>\n");
+      res.write("<li class=\"ui-widget-content\" style=\"overflow: hidden;\" name=\"" + fileRelative + "\">" + fileRelative + 
+      "<button class=\"ui-button ui-widget ui-corner-all ui-button-icon-only\" style=\"float: right;\" onclick=\"gotoEditor('" + 
+      fileRelative + "', 'private')\"><span class=\"ui-icon ui-icon-pencil\"></span></button></li>\n");
     }
     res.end();
   });
