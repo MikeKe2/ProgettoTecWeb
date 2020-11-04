@@ -2,13 +2,10 @@ const express = require("express");
 
 var app = express();
 
-var http = require("http").createServer(app);
-
-var io = require("socket.io")(http);
-
 var path = require("path");
 var find = require("find");
 var fs = require("fs");
+var https = require("https");
 
 var passport = require("passport");
 var Strategy = require("passport-local").Strategy;
@@ -23,6 +20,12 @@ var multer = require('multer');
 var uploader = multer({
   dest: 'uploads/'
 });
+
+const server = require('https').createServer({
+  key: fs.readFileSync(__dirname + '/https/server.key'),
+  cert: fs.readFileSync(__dirname + '/https/server.cert')
+}, app);
+const io = require('socket.io')(server);
 
 passport.use(
   new Strategy(function (username, password, cb) {
@@ -119,6 +122,14 @@ app.get('/profile',
       user: req.user
     });
   });
+
+//PLAYER INTERFACE
+app.use(express.static(path.join(__dirname, 'public/Player')))
+app.get('/start', function(req, res){
+  res.sendFile(__dirname + "/public/Player/index.html");
+});
+
+
 
 diname = __dirname + "/admin/";
 var resDirprivate = diname + "/private/";
@@ -466,6 +477,6 @@ app.use(express.static(resDir + "/"));
 app.use(express.static(resDir + "public/Editor"));
 app.use(express.static("public"));
 
-http.listen(8000, () => {
-  console.log(`Example app listening at http://localhost:8000`);
-});
+server.listen(8000, () => {
+  console.log('Listening on: https://localhost:8000/')
+})

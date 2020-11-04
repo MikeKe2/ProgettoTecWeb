@@ -65,7 +65,7 @@ $(function () {
     var lastTypingTime;
     var $currentInput = $usernameInput.focus();
 
-    var socket = io("http://localhost:8000");
+    var socket = io("https://localhost:8000");
 
     // Sets the client's username
     const setUsername = () => {

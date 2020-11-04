@@ -78,7 +78,7 @@ $(
     var participants = [];
     var ArrayofMessages = new Messages();
 
-    var socket = io("http://localhost:8000");
+    var socket = io("https://localhost:8000");
 
     //#region Toastr
 
