@@ -3,6 +3,7 @@ const express = require("express");
 var path = require("path");
 var find = require("find");
 var fs = require("fs");
+var https = require("https");
 
 var passport = require("passport");
 var Strategy = require("passport-local").Strategy;
@@ -101,6 +102,14 @@ app.get('/profile',
   function(req, res){
     res.render('profile', { user: req.user });
   });
+
+//PLAYER INTERFACE
+app.use(express.static(path.join(__dirname, 'public/Player')))
+app.get('/start', function(req, res){
+  res.sendFile(__dirname + "/public/Player/index.html");
+});
+
+
 
 diname = __dirname + "/admin/";
 var resDirprivate = diname + "/private/";
@@ -347,6 +356,9 @@ app.use(express.static(resDir + "/"));
 app.use(express.static(resDir + "public/Editor"));
 app.use(express.static("public"));
 
-app.listen(8000, () => {
-  console.log(`Example app listening at http://localhost:8000`);
-});
+https.createServer({
+  key: fs.readFileSync(__dirname + '/https/server.key'),
+  cert: fs.readFileSync(__dirname + '/https/server.cert')
+}, app).listen(8001, () => {
+  console.log('Listening...')
+})
