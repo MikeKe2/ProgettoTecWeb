@@ -359,6 +359,6 @@ app.use(express.static("public"));
 https.createServer({
   key: fs.readFileSync(__dirname + '/https/server.key'),
   cert: fs.readFileSync(__dirname + '/https/server.cert')
-}, app).listen(8001, () => {
-  console.log('Listening...')
+}, app).listen(8000, () => {
+  console.log('Listening on ://localhost:8000/')
 })
