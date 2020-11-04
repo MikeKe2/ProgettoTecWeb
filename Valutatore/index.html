@@ -1,19 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="./js/code.js"></script>
-    <link href="./style.css" rel="stylesheet" type="text/css">
-    <title>Intro</title>
+  <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>Evaluator Chat</title>
+
+  <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
-    <h2 class="h2">Inserisci il nick della tua squadra!</h2>
-    <div class="content" >
-        <input style="margin-bottom: 1%;" required></input><br>
-        <input class="button" type="button" value="Player"></input><br>
-        <input class="button" type="button" value="Valutatore" onclick="Valutatore()"></input>
-    </div>
+  <ul class="pages">
+    <li class="chat page">
+      <button id="UsrPgBtn" class="btn btn-primary">X</button>
+      <div class="chatArea">
+        <ul class="messages"></ul>
+      </div>
+      <input class="inputMessage" placeholder="Scriva qui..." />
+    </li>
+    <li class="users page">
+    </li>
+  </ul>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+  <script src="./main.js"></script>
+
 </body>
+
 </html>
