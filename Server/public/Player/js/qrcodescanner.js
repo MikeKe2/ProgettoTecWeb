@@ -57,5 +57,5 @@ const code = document.getElementById("code").value;
 const button = document.getElementById("submit");
 
 button.onclick = () => {
-    window.location.href = `avventura/${code}`;
+    window.location.href = `/public/Player/avventura.html`;
 };

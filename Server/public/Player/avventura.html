@@ -1,101 +1,102 @@
 <html>
 
-<head>
-    <title>Avventura</title>
-    <meta charset="UTF-8" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="css/style.css" />
-</head>
+    <head>
+        <title>Avventura</title>
+        <meta charset="UTF-8" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+            integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <!--<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" />-->
+        <link rel="stylesheet" href="css/style.css" />
+    </head>
 
-<body>
-    <ul class="pages">
-        <!-- CHAT PAGE-->
-        <li class="chat page">
-            <div class="chatArea">
-                <ul class="messages"></ul>
-            </div>
-            <input class="inputMessage" placeholder="Scrivi qui..." />
-        </li>
-        <!-- LOGIN PAGE-->
-        <li class="login page">
-            <div class="form">
-                <h3 class="title">What's your nickname?</h3>
-                <input class="usernameInput" type="text" maxlength="14" />
-                <h5 class="valutatore">Sei il valutatore?</h5>
-            </div>
-        </li>
-        <!-- ADVENTURE PAGE-->
-        <li class="adventure page">
-            <nav class="navbar navbar-default">
-                <div class="container-fluid">
-                    <div class="navbar-header">
-                        <a class="navbar-brand" href="index.html">M&Ms</a>
+    <body>
+        <ul class="pages">
+            <!-- CHAT PAGE-->
+            <li class="chat page">
+                <div class="chatArea">
+                    <ul class="messages"></ul>
+                </div>
+                <input class="inputMessage" placeholder="Scrivi qui..." />
+            </li>
+            <!-- LOGIN PAGE-->
+            <li class="login page">
+                <div class="form">
+                    <h3 class="title">What's your nickname?</h3>
+                    <input class="usernameInput" type="text" maxlength="14" />
+                    <h5 class="valutatore">Sei il valutatore?</h5>
+                </div>
+            </li>
+            <!-- ADVENTURE PAGE-->
+            <li class="adventure page">
+                <nav class="navbar navbar-default">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <a class="navbar-brand" href="/start">M&Ms</a>
+                        </div>
+                        <p class="navbar-text navbar-left" id='titolo'>Gamification project</p>
+                        <a class="navbar-right" href="#">About</a>
                     </div>
-                    <p class="navbar-text navbar-left" id='titolo'>Gamification project</p>
-                    <a class="navbar-right" href="#">About</a>
-                </div>
-            </nav>
-            <div id="avventura" class="row h-75">
-                <div id="musica">
+                </nav>
+                <div id="avventura" class="row h-75">
+                    <div id="musica">
 
-                </div>
-                <div id="scena" class="col-lg-8 col-lg-offset-2 h-100">
-                    <div class="row h-100">
-                        <div id="testo" class="col-lg-6 col-lg-offset-3 my-3">
+                    </div>
+                    <div id="scena" class="col-lg-8 col-lg-offset-2 h-100">
+                        <div class="row h-100">
+                            <div id="testo" class="col-lg-6 col-lg-offset-3 my-3">
 
+                            </div>
+                        </div>
+
+                        <div class="row h-100">
+                            <div id="widget" class="col-lg-6 col-lg-offset-3 my-3">
+
+                            </div>
+                        </div>
+
+                        <div id="btn-holder">
+                            <button id="btn">next</button>
                         </div>
                     </div>
-
-                    <div class="row h-100">
-                        <div id="widget" class="col-lg-6 col-lg-offset-3 my-3">
-
-                        </div>
-                    </div>
-
-                    <div id="btn-holder">
-                        <button id="btn">next</button>
-                    </div>
                 </div>
-            </div>
-        </li>
-    </ul>
-    <!-- ASKING IF THEY ARE THE EVALUATOR-->
-    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="loginModalLabel">Login to Forms</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form id="loginForm">
-                    <!-- form with an ID so we can identify it, now includes both the textbox and the button within it -->
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="modalpass" class="col-form-label">Password:</label>
-                            <input type="password" name="modalpass" class="form-control" id="modalpass" />
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                            Cancel
+            </li>
+        </ul>
+        <!-- ASKING IF THEY ARE THE EVALUATOR-->
+        <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="loginModalLabel">Login to Forms</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
                         </button>
-                        <button type="submit" class="btn btn-primary">Login</button>
                     </div>
-                </form>
+                    <form id="loginForm">
+                        <!-- form with an ID so we can identify it, now includes both the textbox and the button within it -->
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="modalpass" class="col-form-label">Password:</label>
+                                <input type="password" name="modalpass" class="form-control" id="modalpass" />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                Cancel
+                            </button>
+                            <button type="submit" class="btn btn-primary">Login</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-    <!--SCRIPTS-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-    <script src="js/avventura.js"></script>
-</body>
+        <!--SCRIPTS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        <script src="js/avventura.js"></script>
+    </body>
 <!--
     <head>
         <title>Avventura</title>
