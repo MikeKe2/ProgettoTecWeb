@@ -5,7 +5,6 @@ var app = express();
 var path = require("path");
 var find = require("find");
 var fs = require("fs");
-var https = require("https");
 
 var passport = require("passport");
 var Strategy = require("passport-local").Strategy;
@@ -389,6 +388,8 @@ var numUsers = 0;
 var evaluator = "valutatore";
 var evalID = 0;
 
+var currScene = 0;
+
 // TODO: fix this broken mess 
 /*
 app.get("/passwordevaluator", function(req, res){
@@ -399,6 +400,12 @@ app.get("/passwordevaluator", function(req, res){
 */
 io.on("connection", (socket) => {
   var addedUser = false;
+
+  socket.on("scene", (num) => {
+    if(num > 0)
+      currScene = num;
+  });
+  
   // when the client emits 'new message', this listens and executes
   socket.on("new user message", (data) => {
     // we tell the client to execute 'new message'
