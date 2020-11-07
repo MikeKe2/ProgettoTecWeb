@@ -3,15 +3,15 @@
     "categoria": "single",
     "target": "7-10",
     "ngruppi": 4,
-    "background": "taccuino",
+    "background": "taccuino.jpg",
     "css":"inserisci url",
     "autore": "autore1",
     "scene":[
         {
             "nome": "scena0",
             "descrizione": "C'era un pampino brutto che è stupido",
-            "widget": "inserisci url",
-            "tracciaAudio": 0,
+            "widget": "lever.html",
+            "tracciaAudio": "memi.ogg",
             "valutatore" : 0,
             "x":15,
             "y":15,
@@ -23,7 +23,7 @@
                     "points":5000
                 },
                 {
-                    "valore" : 15,
+                    "valore" : "15",
                     "maxTime": null,
                     "to":[1,2,2,1],
                     "points":500
@@ -33,8 +33,8 @@
         {
             "nome": "scena1",
             "descrizione": "C'era un altro pampino brutto che è stupido",
-            "widget": "inserisci url",
-            "tracciaAudio": 0,
+            "widget": null,
+            "tracciaAudio": "memi.ogg",
             "valutatore" : 0,
             "x":150,
             "y":100,
@@ -56,8 +56,8 @@
         {
             "nome": "scena2",
             "descrizione": "C'era un altro pampino brutto che è stupido e sono troppi ora",
-            "widget": "text",
-            "tracciaAudio": 0,
+            "widget": "text.html",
+            "tracciaAudio": "memi.ogg",
             "valutatore" : 0,
             "x":null,
             "y":null,

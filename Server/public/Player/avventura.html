@@ -8,6 +8,8 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <!--<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" />-->
         <link rel="stylesheet" href="css/style.css" />
+        <meta content='maximum-scale=1.0, initial-scale=1.0, width=device-width height=device-height' name='viewport'>
+
     </head>
 
     <body>
@@ -40,18 +42,21 @@
                 </nav>
                 <div id="avventura" class="row h-75">
                     <div id="musica">
-
+                        <audio id="player" loop="true">
+                          <!--  <embed id="track" loop="true" hidden="true" autostart="true">-->
+                            <source id="track" src="" type="audio/ogg">
+                        </audio>
                     </div>
-                    <div id="scena" class="col-lg-8 col-lg-offset-2 h-100">
+                    <div id="scena" class="col-lg-8 col-lg-offset-2 col-xs-10 col-xs-offset-1 h-100">
                         <div class="row h-100">
-                            <div id="testo" class="col-lg-6 col-lg-offset-3 my-3">
-
+                            <div class="col-lg-6 col-lg-offset-3 col-xs-10 col-xs-offset-1 my-auto">
+                                <div id= "testo"></div>
                             </div>
                         </div>
 
-                        <div class="row h-100">
-                            <div id="widget" class="col-lg-6 col-lg-offset-3 my-3">
-
+                        <div id="widget-holder" class="row h-100">
+                            <div class="col-lg-6 col-lg-offset-3 col-xs-10 col-xs-offset-1  my-auto">
+                                <div id="widget"></div>
                             </div>
                         </div>
 
@@ -95,7 +100,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-        <script src="js/avventura.js"></script>
+        <script src="/public/Player/js/avventura.js"></script>
     </body>
 <!--
     <head>

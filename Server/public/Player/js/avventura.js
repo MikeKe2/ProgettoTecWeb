@@ -1,9 +1,6 @@
-/*var storia;
+var storia;
 var scena_corr = -1;
-
-$.getJSON("../js/test.json", function (data) {
-    storiaCallback(data);
-});
+var socket = io("https://localhost:8000");
 
 function storiaCallback(data) {
     storia = data;
@@ -16,19 +13,37 @@ function initialize() {
     $("#btn").click(function () {
         checkResult(0);
     })
+    $(".adventure").css({
+        'background-image' : 'url( "/backgrounds/' + storia.background + '")', 
+        'background-repeat' : 'no-repeat', 
+        'background-size' : '100% 100%'});
 }
 
 function checkResult(result) {
     nextScene();
+    socket.emit("scene", (scena_corr));
 }
 
 function nextScene() {
     scena_corr++;
+    track = $("#track");
+    track.attr("src", "/music/" + storia.scene[scena_corr].tracciaAudio);
+    player = $("#player");
+    player[0].pause();
+    player[0].load();
+    console.log(player[0])
+    player[0].oncanplaythrough = player[0].play();
     $("#testo").html(storia.scene[scena_corr].descrizione);
-    $("#widget").load("../widgets/number.html")
+    console.log(storia.scene[scena_corr].widget);
+    if(storia.scene[scena_corr].widget != null){
+        $("#widget-holder").show();
+        $("#widget").load("/public/Player/widgets/" + storia.scene[scena_corr].widget);
+    }
+    else
+        $("#widget-holder").hide();
     if (scena_corr == storia.scene.length - 1)
         $("#btn").hide();
-}*/
+}
 
 $(function () {
     var FADE_TIME = 150; // ms
@@ -64,8 +79,6 @@ $(function () {
     var typing = false;
     var lastTypingTime;
     var $currentInput = $usernameInput.focus();
-
-    var socket = io("https://localhost:8000");
 
     // Sets the client's username
     const setUsername = () => {
@@ -333,4 +346,10 @@ $(function () {
     socket.on("reconnect_error", () => {
         log("attempt to reconnect has failed");
     });
+
+    //init
+    $.getJSON("/public/Player/js/test.json", function (data) {
+        storiaCallback(data);
+    });
+    
 });

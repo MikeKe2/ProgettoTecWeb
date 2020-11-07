@@ -2,11 +2,13 @@
   box-sizing: border-box;
 }
 
-
 html, body {
-    margin: 0;
-    overflow: hidden;
+  overflow-x: hidden;
 }
+body {
+  position: relative
+}
+
 
 html, input {
   font-family:
@@ -23,7 +25,7 @@ html, input {
     html, body {
         height: 100%;
         margin: 0;
-        overflow-y: scroll;
+        overflow-y: hidden;
     }
 }
 
