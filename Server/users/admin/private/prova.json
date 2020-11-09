@@ -1,15 +1,19 @@
 {
     "nome": "Storia di prova",
     "categoria": "Gruppi_Piccoli",
+    "accessibile": false,
     "target": "7-10",
     "ngruppi": 5,
     "background": "taccuino",
     "css":"/myfile.css",
     "autore": "autore1",
+    "inizio": [0,5,2,3,6],
     "scene":[
         {
             "nome": "scena0",
             "descrizione": "C'era un pampino brutto che è stupido",
+            "img": "",
+            "imgdescription": "",
             "widget": "text",
             "tracciaAudio": null,
             "valutatore" : false,
@@ -33,6 +37,8 @@
         {
             "nome": "scena1",
             "descrizione": "C'era un altro pampino brutto che è stupido",
+            "img": "",
+            "imgdescription": "",
             "widget": "text",
             "tracciaAudio": null,
             "valutatore" : false,
@@ -56,6 +62,8 @@
         {
             "nome": "scena2",
             "descrizione": "C'era un altro pampino brutto che è stupido e sono troppi ora",
+            "img":"",
+            "imgdescription": "",
             "widget": "text",
             "tracciaAudio": null,
             "valutatore" : false,

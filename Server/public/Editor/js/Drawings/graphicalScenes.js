@@ -61,6 +61,8 @@ class graphicalScene{
 			}
 			html = html.replace("$NAME", this.core.nome).replace("$NAME", this.core.nome);
 			html = html.replace("$DESCRIPTION", this.core.descrizione).replace("$DESCRIPTION", this.core.descrizione);
+			html = html.replace("$IMMAGINE", this.core.img).replace("$IMMAGINE", this.core.img);
+			html = html.replace("$DESCIMM", this.core.imgdescription).replace("$DESCIMM", this.core.imgdescription);
 			//selezionare widget giusto
 			html = html.replace("$WIDGET", this.core.widget);
 			//select con l'audio

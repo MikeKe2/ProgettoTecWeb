@@ -173,6 +173,7 @@ function settingsToggle(){
     settings = settings.replace("$NOME",storia.nome).replace("$NOME",storia.nome != null? storia.nome : "Non ancora inserito");
     settings = settings.replace("$CATEGORIA",storia.categoria != null? storia.categoria.replace("_", " ") : "Non ancora inserito");
     settings = settings.replace("$TARGET",storia.target != null? storia.target : "Non ancora inserito");
+    settings = settings.replace("$ACCESSIBILITA",storia.accessibile).replace("$ACCESSIBILITA",storia.accessibile);
     settings = settings.replace("$IMMAGINE",storia.background != null? storia.background : "Non ancora inserito");
     settings = settings.replace("$AUTORE",storia.autore != null? storia.autore : "Non ancora inserito").replace("$AUTORE",storia.autore);
     settings = settings.replace("$CSS",storia.css != null? storia.css : "Non ancora inserito");
