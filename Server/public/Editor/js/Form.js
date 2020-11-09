@@ -61,6 +61,8 @@ function invia(id){
   let scena = board.scenes[ID].core;
   scena.nome = $("#editName" + ID).val();
   scena.descrizione = $("#editDescrizione" + ID).val();
+  scena.img = $("#editImmagine" + ID).val();
+  scena.imgdescription = $("#editDescImm" + ID).val();
   scena.widget = $("#editWidget" + ID).val();
   scena.tracciaAudio = $("#editAudio" + ID).val();
   scena.valutatore = $("#editValutatore" + ID).val();
@@ -95,6 +97,7 @@ function initScene(id){
       storia.target = $("#settingsTarget").val();
       storia.background = $("#settingsBg").val();
       storia.css = $("#settingsCss").val();
+      storia.accessibile = $("#settingsAccessibilita").prop("checked")
       storia.autore = $("#settingsAuthor").val();
       $("#settings_div")[0].remove();
     });
@@ -173,11 +176,12 @@ function settingsToggle(){
     settings = settings.replace("$NOME",storia.nome).replace("$NOME",storia.nome != null? storia.nome : "Non ancora inserito");
     settings = settings.replace("$CATEGORIA",storia.categoria != null? storia.categoria.replace("_", " ") : "Non ancora inserito");
     settings = settings.replace("$TARGET",storia.target != null? storia.target : "Non ancora inserito");
-    settings = settings.replace("$ACCESSIBILITA",storia.accessibile).replace("$ACCESSIBILITA",storia.accessibile);
+    settings = settings.replace("$ACCESSIBILITA",storia.accessibile);
     settings = settings.replace("$IMMAGINE",storia.background != null? storia.background : "Non ancora inserito");
     settings = settings.replace("$AUTORE",storia.autore != null? storia.autore : "Non ancora inserito").replace("$AUTORE",storia.autore);
     settings = settings.replace("$CSS",storia.css != null? storia.css : "Non ancora inserito");
     $("body").append(settings);
+    $("#settingsAccessibilita").prop( "checked", storia.accessibile);
     $("#settingsCategoria").val(storia.categoria);
     $("#settingsTarget").val(storia.target);
     $("#settingsBg").val(storia.background);
