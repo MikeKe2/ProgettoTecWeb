@@ -2,6 +2,7 @@ class graphicalScene{
 	constructor(id,scena){
 		this.id = id;
 		this.core = scena;
+		this.color = "#FABC2A";
 	}
 	move(offsetx, offsety){
 		this.core.x+=offsetx/board.scale;
@@ -19,7 +20,7 @@ class graphicalScene{
 			let height =  board.const.scene.height * board.scale;
 			board.context.fillStyle = "#000000";
 			board.context.fillRect(x - 2,y - 2,width + 4,height + 4);
-			board.context.fillStyle = "#FABC2A";
+			board.context.fillStyle = this.color;
 			board.context.fillRect(x,y,width,height);
 			board.context.font = 20*board.scale+"px Arial";
 			board.context.fillStyle = "#000000";
@@ -129,5 +130,66 @@ class graphicalScene{
 			})
 		});
 		storia.scene[this.id].to=Array(storia.ngruppi).fill(-1);
+	}
+}
+class SpecialScene extends graphicalScene{
+
+	constructor(id,scena){
+		super(id,scena);
+		this.color = "#e85fd4";
+	}
+
+	draw(){
+		if(this.core.x && this.core.y){
+			let x = this.core.x * board.scale - board.startX;
+			let width = board.const.scene.width * board.scale;
+			let y = this.core.y * board.scale - board.startY;
+			let height =  board.const.scene.height * board.scale;
+			board.context.fillStyle = "#000000";
+			board.context.fillRect(x - 2,y - 2,width + 4,height + 4);
+			board.context.fillStyle = this.color;
+			board.context.fillRect(x,y,width,height);
+			board.context.font = 20*board.scale+"px Arial";
+			board.context.fillStyle = "#000000";
+			board.context.fillText(this.core.nome, this.core.x*board.scale-board.startX, this.core.y*board.scale-board.startY+20*board.scale);
+			//board.context.fillText(this.core.nome, this.core.x*board.scale-board.startX, this.core.y*board.scale-board.startY);
+			//TODO decidere estetica
+
+			if(board.frecciaContext && board.frecciaContext.from!=this.core && this.core.nome != "inizio"){
+				board.context.beginPath();
+				board.context.lineWidth=2;
+
+				board.context.moveTo((this.core.x + 20) * board.scale - board.startX , (this.core.y - 5) * board.scale - board.startY);
+				board.context.lineTo((this.core.x - 5) * board.scale - board.startX , (this.core.y - 5) * board.scale - board.startY);
+				board.context.lineTo((this.core.x - 5) * board.scale - board.startX , (this.core.y + 20) * board.scale - board.startY);
+				
+				board.context.moveTo((this.core.x - 5) * board.scale - board.startX , (this.core.y + board.const.scene.height - 20) * board.scale - board.startY);
+				board.context.lineTo((this.core.x - 5) * board.scale - board.startX , (this.core.y + board.const.scene.height + 5) * board.scale - board.startY);
+				board.context.lineTo((this.core.x + 20) * board.scale - board.startX , (this.core.y + board.const.scene.height + 5) * board.scale - board.startY);
+
+				board.context.moveTo((this.core.x + board.const.scene.width - 20) * board.scale - board.startX , (this.core.y + board.const.scene.height + 5) * board.scale - board.startY);
+				board.context.lineTo((this.core.x + board.const.scene.width + 5) * board.scale - board.startX , (this.core.y + board.const.scene.height + 5) * board.scale - board.startY);
+				board.context.lineTo((this.core.x + board.const.scene.width + 5) * board.scale - board.startX , (this.core.y + board.const.scene.height - 20) * board.scale - board.startY);
+
+				board.context.moveTo((this.core.x + board.const.scene.width + 5) * board.scale - board.startX , (this.core.y + 20) * board.scale - board.startY);
+				board.context.lineTo((this.core.x + board.const.scene.width + 5) * board.scale - board.startX , (this.core.y - 5) * board.scale - board.startY);
+				board.context.lineTo((this.core.x + board.const.scene.width - 20) * board.scale - board.startX , (this.core.y - 5) * board.scale - board.startY);
+				
+				board.context.strokeStyle = "#000000";
+				board.context.stroke();
+			}
+		}
+	}
+
+	open(){
+		return;
+	}
+
+	graphicalDelete(){
+		return;
+	}
+
+	populateRisp(){
+		return;
 	}
 }

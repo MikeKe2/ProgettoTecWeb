@@ -32,25 +32,25 @@ var contextMenu = {
                 contextMenu.select(i);
             });
         }
-        
-        $("#contextMenu ol").append(risposta.replace("$RISP","Add").replace("$TO","+"));
-        $("#contextMenu ol li").last().click(function(){
-            let risp = {
-                valore: 0, 
-                to:Array(storia.ngruppi).fill(-1),
-                remainingTime: 0,
-                points: 0
-            };
-            board.scenes[id].core.risposte.push(risp);
+        if(id && id!=0){
+            $("#contextMenu ol").append(risposta.replace("$RISP","Add").replace("$TO","+"));
+            $("#contextMenu ol li").last().click(function(){
+                let risp = {
+                    valore: 0, 
+                    to:Array(storia.ngruppi).fill(-1),
+                    remainingTime: 0,
+                    points: 0
+                };
+                board.scenes[id].core.risposte.push(risp);
 
-            contextMenu.select(contextMenu.from.core.risposte.length-1);
-        });
+                contextMenu.select(contextMenu.from.core.risposte.length-1);
+            });
 
+        }
         var offset = $('#canvas').offset();
 
         $("#contextMenu").css({left: mouse.x + offset.left, top: mouse.y + offset.top});
         $("#contextMenu").addClass("richiamato");
-        
     },
     hide(){
         $("#contextMenu").removeClass("richiamato");
@@ -61,7 +61,7 @@ var contextMenu = {
         contextMenu.hide();
     },
     linkwith(scena){
-        if(scena && scena!=contextMenu.from){
+        if(scena && scena!=contextMenu.from && scena.id != 0){
             board.frecciaContext.to = scena.core;
             board.arrows.push(board.frecciaContext);
             contextMenu.from.core.risposte[contextMenu.risposta].to[board.activegroup] = scena.id;

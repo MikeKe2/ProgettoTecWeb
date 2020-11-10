@@ -10,6 +10,21 @@
     "inizio": [0,5,2,3,6],
     "scene":[
         {
+            "nome": "inizio",
+            "x":15,
+            "y":15,
+            "risposte": [
+                {
+                    "to":[3, -1, -1, -1, -1]
+                }
+            ]
+        },
+        {
+            "nome": "fine",
+            "x":500,
+            "y":500
+        },
+        {
             "nome": "scena0",
             "descrizione": "C'era un pampino brutto che è stupido",
             "img": "",
@@ -17,19 +32,19 @@
             "widget": "text",
             "tracciaAudio": null,
             "valutatore" : false,
-            "x":15,
-            "y":15,
+            "x":200,
+            "y":200,
             "risposte": [
                 {
                     "valore" : "15", 
-                    "to":[1, -1, -1, -1, -1],
+                    "to":[3, -1, -1, -1, -1],
                     "maxTime": 15,
                     "points":5000
                 },
                 {
                     "valore" : "15",
                     "maxTime": 0,
-                    "to":[1, -1, -1, -1, -1],
+                    "to":[3, -1, -1, -1, -1],
                     "points":500
                 }
             ]
@@ -47,7 +62,7 @@
             "risposte": [
                 {
                     "valore" : "15", 
-                    "to":[-1, -1, -1, -1, -1],
+                    "to":[1, -1, -1, -1, -1],
                     "maxTime": 15,
                     "points":5000
                 },

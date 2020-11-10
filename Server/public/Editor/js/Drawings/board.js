@@ -98,13 +98,12 @@ var board={
 		$.ajax({
 			url:"/stories"+"/"+$("#user").html()+"/"+$("#name").html(),
 		 	success: (data)=>{
-				console.log(data);
 				storia = data;
 				for(let i = 0; i < storia.scene.length; i++){
 					let scena = storia.scene[i];
-					if(scena.x && scena.y){
+					if(scena.x && scena.y && scena.risposte && scena.risposte.length>0){
 						for(let j = 0; j < scena.risposte.length; j++){
-							let risposta = scena.risposte[i];
+							let risposta = scena.risposte[j];
 							if(risposta.to){
 								for(let k = 0; k < storia.ngruppi; k++){
 									let to = risposta.to!=-1?storia.scene[risposta.to[k]]:null;
@@ -115,7 +114,7 @@ var board={
 							}
 						}
 					}
-					board.scenes.push(new graphicalScene(i,scena));
+					board.scenes.push((i==0 || i==1) ? new SpecialScene(i, scena) : new graphicalScene(i,scena));
 				}
 				initGroups();
 				board.canvas = $("#canvas")[0];
@@ -127,13 +126,13 @@ var board={
 				$("#notLoaded").click(function(){board.PopulateMenu("notLoaded");});
 				$("#loaded").click(function(){board.PopulateMenu("loaded");});
 				$(".miniNav .listItem").click(function(){$(".miniNav .listItem").not(this).removeClass("attivato"); $(this).addClass("attivato");})
-
+				
 				$("#downloadImage").click(download);
 				$("#settingsImage").click(settingsToggle);
 				$("#canvas").on("touchstart", board.startPinch);
 				
 				this.checkOrientation();
-
+				
 				screen.orientation.onchange = function (){
 					board.checkOrientation();
 				};
@@ -158,7 +157,7 @@ var board={
 	},
 	newscene:function(){
 		storia.scene.push({
-			nome: "scena"+ storia.scene.length,
+			nome: "scena"+ (storia.scene.length-2),
             descrizione: "Inserisci descrizione...",
             widget: null,
             tracciaAudio: null,
@@ -190,15 +189,18 @@ var board={
 		}
 		$("#menulist").html("");
 		let j=0;
-		board.scenes.forEach(scena=>{
-			if(all || (loaded && scena.core.x && scena.core.y) || (!loaded && (!scena.core.x || !scena.core.y))){
-				$("#menulist").append($("#menuScena").html().replace("$ID", scena.id).replace("$NOME",scena.core.nome));
-				$("#menuScena"+scena.id).click(function(){scena.open()});
-				$("#menuScena"+scena.id).on("touchstart", dragTouch);
-				$("#menuScena"+scena.id).on("touchmove", dropMove);
-				$("#menuScena"+scena.id).on("touchend", dropTouch);
+		if(board.scenes.length>2){
+			for(let i=2; i<board.scenes.length; i++){
+				let scena = board.scenes[i]; 
+				if(all || (loaded && scena.core.x && scena.core.y) || (!loaded && (!scena.core.x || !scena.core.y))){
+					$("#menulist").append($("#menuScena").html().replace("$ID", scena.id).replace("$NOME",scena.core.nome));
+					$("#menuScena"+scena.id).click(function(){scena.open()});
+					$("#menuScena"+scena.id).on("touchstart", dragTouch);
+					$("#menuScena"+scena.id).on("touchmove", dropMove);
+					$("#menuScena"+scena.id).on("touchend", dropTouch);
+				}
 			}
-		})
+		}
 	},
 	eraseArrow:function(from, to){
 		for(let i = 0; i < board.arrows.length; i++){
@@ -210,7 +212,7 @@ var board={
 	DrawAll:function(){
 		board.context.fillStyle = "#bfc8d9";
 		board.context.fillRect(0,0,board.canvas.width,board.canvas.height);
-	
+		
 		for(var j = 0; j < board.scenes.length; j++){
 			board.scenes[j].draw();
 		}
