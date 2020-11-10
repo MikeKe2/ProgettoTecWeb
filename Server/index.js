@@ -354,23 +354,24 @@ app.post('/stories', (req, res) => {
   postStories(req, res);
 });
 
-app.get('/stories/:user/:nomeStoria', (req, res) => {
-  //TODO chiedere a micky come funziona l'accesso
-  const directoryPath = path.join(__dirname + "/users/" + req.params.user, 'public');
-  let data = fs.readFileSync(directoryPath + "/" + req.params.nomeStoria + '.json');
-  res.setHeader('Content-Type', 'application/json');
-  res.send(data);
-  res.end();
-});
-app.get('/stories/private/:user/:nomeStoria', (req, res) => {
-  //TODO chiedere a micky come funziona l'accesso
-  //se non riusciamo a bloccare l'accesso alle directory, compilare ramo else
+app.get('/stories/:user/:visibility/:nomeStoria', (req, res) => {
   let data;
-  if (req.user.username && req.params.user == req.user.username) {
-    const directoryPath = path.join(__dirname + "/users/" + req.params.user, 'private');
+  if (req.params.visibility=="public" || (req.params.visibility=="private" && (req.user.username && req.params.user == req.user.username))) {
+    const directoryPath = path.join(__dirname + "/users/" + req.params.user, req.params.visibility);
     data = fs.readFileSync(directoryPath + "/" + req.params.nomeStoria + '.json');
     res.setHeader('Content-Type', 'application/json');
     res.send(data);
+  }
+  res.end();
+});
+
+app.post('/stories/:user/:visibility/:nomeStoria', (req, res) => {
+  if (req.user.username && req.params.user == req.user.username){
+    const directoryPath = path.join(__dirname + "/users/" + req.params.user, req.params.visibility);
+    console.log(JSON.stringify(req.body.data));
+    data = fs.writeFileSync(directoryPath + "/" + req.params.nomeStoria + '.json', JSON.stringify(req.body.data));
+    console.log(req.body);
+    res.sendStatus(200);
   }
   res.end();
 });
@@ -481,8 +482,7 @@ io.on("connection", (socket) => {
 });
 
 app.use(express.static(resDir + "/"));
-app.use(express.static(resDir + "public/Editor"));
-app.use(express.static("public"));
+app.use(express.static(resDir + "public"));
 
 server.listen(8000, () => {
   console.log('Listening on: https://localhost:8000/')
