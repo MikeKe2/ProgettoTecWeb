@@ -1,12 +1,11 @@
-//alessio
 
 class graphicalScene{
-	constructor(id,scena){
+	constructor(id,scena){ //costruttore, per la scena serve un id (non usato nel json) ed un core (identico a quello del json), il colore è diverso per scene standard e speciali
 		this.id = id;
 		this.core = scena;
 		this.color = "#FABC2A";
 	}
-	move(offsetx, offsety){
+	move(offsetx, offsety){ //sposta la scena seguendo il mouse controllando di non andare in una zona della board non raggiungibile 
 		this.core.x+=offsetx/board.scale;
 		this.core.y+=offsety/board.scale;
 		if(this.core.x<0.1)
@@ -14,9 +13,9 @@ class graphicalScene{
 		if(this.core.y<0.1)
 			this.core.y=0.1;
 	}
-	draw(){
-		if(this.core.x && this.core.y){
-			let x = this.core.x * board.scale - board.startX;
+	draw(){ //fuzione che disegna la scena
+		if(this.core.x && this.core.y){ //la scena è nella board solo se ha i campi x ed y settati, altrimenti vuol dire che è solo nel menù laterale e non deve essere disegnata 
+			let x = this.core.x * board.scale - board.startX; //vengono disegnati due rettangoli (uno esterno per bordo ed uno interno) partendo dall'angolo in altro a sinistra 
 			let width = board.const.scene.width * board.scale;
 			let y = this.core.y * board.scale - board.startY;
 			let height =  board.const.scene.height * board.scale;
@@ -27,10 +26,8 @@ class graphicalScene{
 			board.context.font = 20*board.scale+"px Arial";
 			board.context.fillStyle = "#000000";
 			board.context.fillText(this.core.nome, this.core.x*board.scale-board.startX, this.core.y*board.scale-board.startY+20*board.scale);
-			//board.context.fillText(this.core.nome, this.core.x*board.scale-board.startX, this.core.y*board.scale-board.startY);
-			//TODO decidere estetica
 
-			if(board.frecciaContext && board.frecciaContext.from!=this.core){
+			if(board.frecciaContext && board.frecciaContext.from!=this.core){ //se si sta cercando di creare un nuovo collegamento da un'altra scena si evidenziano le scene a cui è possibile collegare la scena di partenza tramite la creazione di bordi tratteggiati extra 
 				board.context.beginPath();
 				board.context.lineWidth=2;
 
@@ -55,7 +52,7 @@ class graphicalScene{
 			}
 		}
 	}
-	open(){
+	open(){ //funzione per aprire la scena, si cerca il template nell'html e lo si compila con i campi specifici (la funzione controlla che la scena non sia già aperta, se lo è la chiude)
 		if(!$("#scena"+this.id)[0]){
 			let id = "#scena"+this.id;
 			let html = $("#scena").html();
@@ -78,14 +75,14 @@ class graphicalScene{
 
 			this.populateRisp();
 
-			$(id+" .header").css({"background-color":storia.categoria=="singolo"?"purple":groups[board.activegroup]});
+			$(id+" .header").css({"background-color":storia.categoria=="singolo"?"purple":groups[board.activegroup]}); //la barra superiore è del colore del gruppo attivo o viola se la storia è singola 
 
-			initScene(id);
+			initScene(id); //vengono aggiunti gli handler alle funzioni e si rende possibile lo spostamento della finestra 
 		}
 		else
 			close("#scena"+this.id);
 	}
-	populateRisp(){
+	populateRisp(){ //popola i campi delle risposte prendendo il template e sostituendo i campi corretti
 		$("#scena"+this.id+" ol").html("");
 		let html="";
 		let rispID=0;
@@ -111,10 +108,10 @@ class graphicalScene{
 		$("#scena"+this.id+" .rispostaCollapse").hide();
 
 	}
-	linkmenu(){
+	linkmenu(){ //apre il context menu sull'id di questa scena 
 		contextMenu.show(this.id);
 	}
-	graphicalDelete(){
+	graphicalDelete(){ //cancella le coordinate ed elimina tutte le freccie da e verso questa scena 
 		this.core.x=null;
 		this.core.y=null;
 		for(let i = 0; i < board.arrows.length; i++){
@@ -134,7 +131,7 @@ class graphicalScene{
 		storia.scene[this.id].to=Array(storia.ngruppi).fill(-1);
 	}
 }
-class SpecialScene extends graphicalScene{
+class SpecialScene extends graphicalScene{ //la special scene è pressochè identica ad una scena normale tranne per alcune funzioni non presenti ed una draw leggermente diversa così come il context menu
 
 	constructor(id,scena){
 		super(id,scena);
@@ -149,15 +146,13 @@ class SpecialScene extends graphicalScene{
 			let height =  board.const.scene.height * board.scale;
 			board.context.fillStyle = "#000000";
 			board.context.fillRect(x - 2,y - 2,width + 4,height + 4);
-			board.context.fillStyle = this.color;
+			board.context.fillStyle = this.color; //il colore è diverso
 			board.context.fillRect(x,y,width,height);
 			board.context.font = 20*board.scale+"px Arial";
 			board.context.fillStyle = "#000000";
 			board.context.fillText(this.core.nome, this.core.x*board.scale-board.startX, this.core.y*board.scale-board.startY+20*board.scale);
-			//board.context.fillText(this.core.nome, this.core.x*board.scale-board.startX, this.core.y*board.scale-board.startY);
-			//TODO decidere estetica
 
-			if(board.frecciaContext && board.frecciaContext.from!=this.core && this.core.nome != "inizio"){
+			if(board.frecciaContext && board.frecciaContext.from!=this.core && this.core.nome != "inizio"){ // in questo caso si evidenzia solo la fine e non l'inizio
 				board.context.beginPath();
 				board.context.lineWidth=2;
 
@@ -183,7 +178,7 @@ class SpecialScene extends graphicalScene{
 		}
 	}
 
-	linkmenu(){
+	linkmenu(){ //si controlla che la fine non abbia contextmenu
 		if(this.id==1)
 			contextMenu.hide();
 		else
