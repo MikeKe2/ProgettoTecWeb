@@ -1,10 +1,11 @@
 function checkStory(){
+    //ritornare true perr confermare il salvataggio
     return confirm("Cliccando ok sovrascriverai i dati sul server, sei sicuro?") && checkTime() && checkAnswer() && checkPath();
 }
 
-//controlla almeno una risposta maxTime=null
+//controlla almeno una risposta maxTime=0
 function checkTime(){
-    return true;
+    //controlla ogni scena, ogni risposta
     if(storia.scene.length>2){
         for(let i=2; i<storia.scene.length; i++){
             let scena = storia.scene[i];
@@ -15,6 +16,7 @@ function checkTime(){
                         if(scena.risposte[j].maxTime=="0")
                             right=true;
                     }
+                    //nessuna ha maxTime=0, segnalato, è possibile comunque salvare
                     if(!right && !confirm("La scena: \""+scena.nome+"\" deve avere almeno una risposta con tempo uguale a \"0\", vuoi continuare?")){return false;}
                 }
                 else
@@ -26,9 +28,9 @@ function checkTime(){
     return true;
 }
 
-//controlla no to=-1
+//controlla non ci siano to = -1
 function checkAnswer(){
-    return true;
+    //controlla ogni scena, ogni risposta, ogni gruppo
     for(let i = 0; i < storia.scene.length; i++){
         if(storia.scene[i].risposte){
             for(let j = 0; j < storia.scene[i].risposte.length; j++){
@@ -40,7 +42,7 @@ function checkAnswer(){
             }
         }
         if(i == 0)
-            i++;
+            i++; //skippa la scena "fine"
     }
     return true;
 }
@@ -55,23 +57,27 @@ function checkPath(){
         }
         nodes[1]=true;
         changes = 1;
+        //finché vengono contrassegnati dei nodi
         while(changes > 0){
-            console.log(nodes);
             changes=0;
             for(let j = 0; j < storia.scene.length; j++){
                 let any = false;
+                //imposta a true un nodo se collegato alla fine o ad una scena che porta alla fine
                 if(!nodes[j] && storia.scene[j].risposte){
                     for(let k = 0; k < storia.scene[j].risposte.length; k++){
-                        any = any || nodes[storia.scene[j].risposte[k].to[i]*1];   
+                        //controlla il valore che dovrebbe avere il nodo
+                        any = any || nodes[storia.scene[j].risposte[k].to[i]*1];
                     }
+                    //se any = nodo allora non è cambiato
                     if(any != nodes[j]){
-                        nodes[j] = any;
+                        nodes[j] = true;
                         changes++;
                     }
                 }
             }
         }
         
+        //se una scena è contrassegnata come false può raggiungere la fine
         if(!nodes.reduce((and, value)=> and&&value)){
             if(!confirm("Il gruppo numero "+(i+1)+" ha un percorso che non raggiunge la fine, vuoi continuare?")){return false;}
         };

@@ -1,3 +1,4 @@
+//array di colore, un gruppo = un colore, identificato dall'indice
 var groups=[];
 
 groups.newgroup=function(){
@@ -14,6 +15,7 @@ function getRandomColor() {
 }
 function addNewGroup(){
 	storia.ngruppi++;
+	//aggiorna la lungezza di "to" nelle risposte
 	for(let i = 0; i < storia.scene.length; i++){
 		for(let j = 0; j < storia.scene[i].risposte.length; j ++){
 			storia.scene[i].risposte[j].to.push(-1);
@@ -30,6 +32,7 @@ function addGroup(){
 function removeGroup(){
 	if(storia.ngruppi > 1){
 		storia.ngruppi--;
+		//rimuove l'ultimo gruppo da tutte le risposte
 		for(let i = 0; i < storia.scene.length; i++){
 			if(storia.scene[i].risposte){
 				for(let j = 0; j < storia.scene[i].risposte.length; j++){
@@ -45,6 +48,7 @@ function removeGroup(){
 }
 
 function addGroupButton(){
+	//aggiunge l'interfaccia dei gruppi
 	$("#listGruppi").append("<div id='Gruppo"+groups.length+"' class='listItem'>"+groups.length+"<div>");
 	$("#listGruppi .listItem").last().css({color: groups.last()});
 	let toCall = groups.length-1;
@@ -52,7 +56,7 @@ function addGroupButton(){
 }
 
 function initGroups(){
-
+	//inizializza i colori e i bottoni dei gruppi
 	for(let i = 0; i < storia.ngruppi; i++){
 		addGroup();
 	}	
@@ -62,5 +66,3 @@ function initGroups(){
 	if(storia.categoria=="singolo")
 		$("#listGruppi").hide();
 }
-
-[1,null,5,null,null]
