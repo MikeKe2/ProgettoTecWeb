@@ -1,3 +1,5 @@
+//alessio
+
 class graphicalScene{
 	constructor(id,scena){
 		this.id = id;
@@ -179,6 +181,13 @@ class SpecialScene extends graphicalScene{
 				board.context.stroke();
 			}
 		}
+	}
+
+	linkmenu(){
+		if(this.id==1)
+			contextMenu.hide();
+		else
+			super.linkmenu();
 	}
 
 	open(){

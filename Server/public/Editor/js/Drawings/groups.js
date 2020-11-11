@@ -31,8 +31,10 @@ function removeGroup(){
 	if(storia.ngruppi > 1){
 		storia.ngruppi--;
 		for(let i = 0; i < storia.scene.length; i++){
-			for(let j = 0; j < storia.scene[i].risposte.length; j ++){
-				storia.scene[i].risposte[j].to.pop();
+			if(storia.scene[i].risposte){
+				for(let j = 0; j < storia.scene[i].risposte.length; j++){
+					storia.scene[i].risposte[j].to.pop();
+				}
 			}
 		}
 		$("#listGruppi .listItem").last().remove()

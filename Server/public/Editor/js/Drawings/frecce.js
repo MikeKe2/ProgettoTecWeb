@@ -1,3 +1,5 @@
+//alessio
+
 class freccia{
 	constructor(from, to, ngroup=0){
 		this.from=from;

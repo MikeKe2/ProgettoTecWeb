@@ -1,4 +1,5 @@
 // Setup requestAnimationFrame and cancelAnimationFrame for use in the game code
+//alessio
 (function() {
 	var lastTime = 0;
 	var vendors = ['ms', 'moz', 'webkit', 'o'];
@@ -107,12 +108,14 @@ var board={
 				storia = data;
 				for(let i = 0; i < storia.scene.length; i++){
 					let scena = storia.scene[i];
+					scena.x=scena.x*1;
+					scena.y=scena.y*1;
 					if(scena.x && scena.y && scena.risposte && scena.risposte.length>0){
 						for(let j = 0; j < scena.risposte.length; j++){
 							let risposta = scena.risposte[j];
 							if(risposta.to){
 								for(let k = 0; k < storia.ngruppi; k++){
-									let to = risposta.to!=-1?storia.scene[risposta.to[k]]:null;
+									let to = risposta.to*1!=-1?storia.scene[risposta.to[k]]:null;
 									if(to){
 										board.arrows.push(new freccia(scena, to, k))
 									}
@@ -212,6 +215,7 @@ var board={
 		for(let i = 0; i < board.arrows.length; i++){
 			if(board.arrows[i].from == from && board.arrows[i].to == board.scenes[to].core && board.arrows[i].ngroup == board.activegroup){
 				board.arrows.splice(i, 1);
+				return;
 			}
 		}
 	},
