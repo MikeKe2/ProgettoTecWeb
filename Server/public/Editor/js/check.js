@@ -1,5 +1,5 @@
 function checkStory(){
-    //ritornare true perr confermare il salvataggio
+    //ritornare true per confermare il salvataggio
     return confirm("Cliccando ok sovrascriverai i dati sul server, sei sicuro?") && checkTime() && checkAnswer() && checkPath();
 }
 
@@ -33,7 +33,8 @@ function checkAnswer(){
     //controlla ogni scena, ogni risposta, ogni gruppo
     for(let i = 0; i < storia.scene.length; i++){
         if(storia.scene[i].risposte){
-            for(let j = 0; j < storia.scene[i].risposte.length; j++){
+            let gruppi = storia.categoria == "singolo" ? 1: ngruppi;
+            for(let j = 0; j < gruppi; j++){
                 for(let k = 0; k < storia.scene[i].risposte[j].to.length; k++){
                     console.log(storia.scene[i].risposte[j].to[k]);
                     if(storia.scene[i].risposte[j].to[k] *1 == -1 && storia.scene[i].x && storia.scene[i].y)
@@ -76,7 +77,6 @@ function checkPath(){
                 }
             }
         }
-        
         //se una scena è contrassegnata come false può raggiungere la fine
         if(!nodes.reduce((and, value)=> and&&value)){
             if(!confirm("Il gruppo numero "+(i+1)+" ha un percorso che non raggiunge la fine, vuoi continuare?")){return false;}
