@@ -54,9 +54,9 @@ class graphicalScene{
 	}
 	open(){ //funzione per aprire la scena, si cerca il template nell'html e lo si compila con i campi specifici (la funzione controlla che la scena non sia già aperta, se lo è la chiude)
 		if(!$("#scena"+this.id)[0]){
-			let id = "#scena"+this.id;
+			let s_id = "#scena"+this.id;
 			let html = $("#scena").html();
-			for(let i = 0; i<12; i++){
+			for(let i = 0; i<15; i++){
 				html = html.replace("$ID",this.id);
 			}
 			html = html.replace("$NAME", this.core.nome).replace("$NAME", this.core.nome);
@@ -73,11 +73,14 @@ class graphicalScene{
 			
 			$(".container").append(html);
 
+			getMedia("images","#editImmagine"+this.id);
+			getMedia("widgets", "#editWidget"+this.id);
+			getMedia("audios", "#editAudio"+this.id);
+
 			this.populateRisp();
 
-			$(id+" .header").css({"background-color":storia.categoria=="singolo"?"purple":groups[board.activegroup]}); //la barra superiore è del colore del gruppo attivo o viola se la storia è singola 
-
-			initScene(id); //vengono aggiunti gli handler alle funzioni e si rende possibile lo spostamento della finestra 
+			$(s_id+" .header").css({"background-color":storia.categoria=="Singolo"?"purple":groups[board.activegroup]}); //la barra superiore è del colore del gruppo attivo o viola se la storia è singola 
+			initScene(s_id); //vengono aggiunti gli handler alle funzioni e si rende possibile lo spostamento della finestra 
 		}
 		else
 			close("#scena"+this.id);
@@ -96,11 +99,11 @@ class graphicalScene{
 			html = html.replace("$LINK", risposta.to[board.activegroup] != -1 ? storia.scene[risposta.to[board.activegroup]].nome: "non ancora inserito");
 			html = html.replace("$TEMPO", risposta.maxTime ? risposta.maxTime : "illimitato").replace("$TEMPO", risposta.maxTime);
 			html = html.replace("$POINTS", risposta.points).replace("$POINTS", risposta.points);
-			$("#risposte"+this.id).append(html);
+
+			$("#scena"+this.id+" ol").append(html);
 			$("#collapser"+this.id+"_"+rispID).click(collapsehandler);
 
 			$("#elimina"+this.id+"_"+rispID).click(delRisp);
-			$("#editMaxTime"+this.id+"_"+rispID).prop("disabled", rispID == this.core.risposte.length-1);
 			if(rispID == this.core.risposte.length-1)
 				$("#editMaxTime"+this.id+"_"+rispID).val(0);
 			rispID++;
@@ -129,6 +132,11 @@ class graphicalScene{
 			})
 		});
 		storia.scene[this.id].to=Array(storia.ngruppi).fill(-1);
+	}
+	graphicalSelect(){
+		selectByValue("#editAudio"+this.id, this.core.tracciaAudio);
+		selectByValue("#editWidget"+this.id, this.core.widget);
+		selectByValue("#editImmagine"+this.id, this.core.img)
 	}
 }
 class SpecialScene extends graphicalScene{ //la special scene è pressochè identica ad una scena normale tranne per alcune funzioni non presenti ed una draw leggermente diversa così come il context menu
@@ -196,4 +204,8 @@ class SpecialScene extends graphicalScene{ //la special scene è pressochè iden
 	populateRisp(){
 		return;
 	}
+}
+
+function selectByValue(id,val){
+	$(id+' option[value="'+val+'"]').prop('selected', true);
 }

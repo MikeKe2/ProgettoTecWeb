@@ -88,12 +88,17 @@ function initScene(id){
       e.preventDefault();
       invia(id);
     });
+    $(id+ " .mod").click(function(){
+      board.scenes[id.replace("#scena","")*1].graphicalSelect();
+      edit(id);
+    });
   }
   else{
     $(id+ " form").on("submit",function(e){
       e.preventDefault();
       storia.nome = $("#settingsNome").val();
       storia.categoria = $("#settingsCategoria").val();
+      groupCategories();
       storia.target = $("#settingsTarget").val();
       storia.background = $("#settingsBg").val();
       storia.css = $("#settingsCss").val();
@@ -101,9 +106,13 @@ function initScene(id){
       storia.autore = $("#settingsAuthor").val();
       $("#settings_div")[0].remove();
     });
+    $(id+ " .mod").click(function(){
+      selectByValue("#settingsBg", storia.background);
+      selectByValue("#settingsCss", storia.css);
+      edit(id);
+    });
   }
   $(id+ " .canc").click(function(){close(id)});
-  $(id+ " .mod").click(function(){edit(id)});
   $(id+ " .remove").click(function(){del(id)});
   $(id+ " .back").click(function(){back(id)});
   $(id+" .edit").hide();
@@ -170,22 +179,23 @@ function download() {
 
 function settingsToggle(){
   let div = $("#settings_div")[0];
-  console.log(div);
   if(!div){
     let settings = $("#settings").html();
     settings = settings.replace("$NOME",storia.nome).replace("$NOME",storia.nome != null? storia.nome : "Non ancora inserito");
-    settings = settings.replace("$CATEGORIA",storia.categoria != null? storia.categoria.replace("_", " ") : "Non ancora inserito");
-    settings = settings.replace("$TARGET",storia.target != null? storia.target : "Non ancora inserito");
+    settings = settings.replace("$CATEGORIA",storia.categoria != ""? storia.categoria.replace("_", " ") : "Non ancora inserito");
+    settings = settings.replace("$TARGET",storia.target != ""? storia.target : "Non ancora inserito");
     settings = settings.replace("$ACCESSIBILITA",storia.accessibile);
-    settings = settings.replace("$IMMAGINE",storia.background != null? storia.background : "Non ancora inserito");
-    settings = settings.replace("$AUTORE",storia.autore != null? storia.autore : "Non ancora inserito").replace("$AUTORE",storia.autore);
-    settings = settings.replace("$CSS",storia.css != null? storia.css : "Non ancora inserito");
+    settings = settings.replace("$IMMAGINE",storia.background != ""? storia.background : "Non ancora inserito");
+    settings = settings.replace("$AUTORE",storia.autore != ""? storia.autore : "Non ancora inserito").replace("$AUTORE",storia.autore);
+    settings = settings.replace("$CSS",storia.css != ""? storia.css : "Non ancora inserito").replace("$CSSCONTENT", getMedia("mycss"));
     $("body").append(settings);
     $("#settingsAccessibilita").prop( "checked", storia.accessibile);
     $("#settingsCategoria").val(storia.categoria);
     $("#settingsTarget").val(storia.target);
     $("#settingsBg").val(storia.background);
     initScene("#settings_div");
+    getMedia("mycss", "#settingsCss");
+    getMedia("images", "#settingsBg");
   }
   else{
     div.remove();
@@ -204,4 +214,18 @@ function delRisp(){
   board.scenes[id[0]].populateRisp();
   
   $("#scena"+id[0]+" .show").hide();
+}
+
+function getMedia(media, id){ 
+  $.ajax({
+    url:"/"+media,
+    success: (data)=>{
+      let str ="<option value=''>...</options>";
+      for(let i = 0; i < data.length; i++){
+        str +="<option value='"+data[i]+"'>"+data[i]+"</options>";
+      }
+      $(id).html(str); 
+    }
+  });
+
 }

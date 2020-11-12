@@ -39,7 +39,7 @@ class freccia{
 			board.context.lineTo((xT * board.scale - 20 * Math.cos(angle - Math.PI / 6)) - board.startX, (yT * board.scale - 20 * Math.sin(angle - Math.PI / 6)) - board.startY);
 			board.context.moveTo(xT * board.scale - board.startX, yT * board.scale - board.startY);
 			board.context.lineTo((xT * board.scale - 20 * Math.cos(angle + Math.PI / 6)) - board.startX, (yT * board.scale - 20 * Math.sin(angle + Math.PI / 6)) - board.startY);
-			board.context.strokeStyle = storia.categoria=="singolo"?"#000000":groups[this.ngroup]; //il colore è quello del gruppo o nero se singolo 
+			board.context.strokeStyle = storia.categoria=="Singolo"?"#000000":groups[this.ngroup]; //il colore è quello del gruppo o nero se singolo 
 			board.context.stroke();
 		}
 	}

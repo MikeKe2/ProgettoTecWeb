@@ -17,9 +17,13 @@ function addNewGroup(){
 	storia.ngruppi++;
 	//aggiorna la lungezza di "to" nelle risposte
 	for(let i = 0; i < storia.scene.length; i++){
-		for(let j = 0; j < storia.scene[i].risposte.length; j ++){
-			storia.scene[i].risposte[j].to.push(-1);
+		if(storia.scene[i].risposte){
+			for(let j = 0; j < storia.scene[i].risposte.length; j ++){
+				storia.scene[i].risposte[j].to.push(-1);
+			}
 		}
+		if(i==0)
+			i++;
 	}
 	addGroup();
 }
@@ -63,6 +67,16 @@ function initGroups(){
 	$("#Gruppo1").addClass("attivato");
 	$("#GruppoAdd").click(addNewGroup);
 	$("#GruppoDel").click(removeGroup);
-	if(storia.categoria=="singolo")
-		$("#listGruppi").hide();
+	groupCategories();
+}
+
+function groupCategories(){
+	if(storia.categoria=="Singolo"){
+		$("#listGruppi .listItem").removeClass("attivato");
+		$("#listGruppi .listItem").hide();
+		$("#listGruppi .listItem:nth-child(3)").addClass("attivato").show();
+		board.activegroup = 0;
+	}else{
+		$("#listGruppi .listItem").show();
+	}
 }

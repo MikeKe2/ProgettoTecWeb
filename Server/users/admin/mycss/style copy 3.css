@@ -1,0 +1,292 @@
+html, body{
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    padding: 0px;
+    margin:0px;
+    font-family: Arial, Helvetica, sans-serif;
+    touch-action: manipulation;
+}
+
+.scene{
+    position: absolute;
+    z-index: 9;
+    padding: 5px;
+    background-color: rgba(75,77,80,.8);
+    text-align: center;
+    border: 1px solid #d3d3d3;
+    color:white;
+    display: inline-block;
+    width: 25%;
+    min-width: 200px;
+    height: auto;
+}
+
+.scene textarea{
+    overflow-y: auto;
+    resize:vertical;
+}
+
+.label-bold{
+    font-weight: bold;
+}
+
+.container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    height: 100%;
+    width:100%;
+    margin: 0px;
+    padding:0px;
+}
+
+#canvas{
+    height: 100%;
+    width: 83.3%;
+    display: inline-block;
+    margin: 0px;
+    padding:0px;
+}
+
+.rightcontainer{
+    display: inline-bplock;
+    justify-content: space-between;
+    margin: 0px;
+    padding: 3px;
+    width: 16.7%;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(191, 200, 217);
+
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none;
+}
+
+.rightcontainer>div{
+    border: 3px solid black;
+    border-radius: 5px;
+}
+
+#settingsmenu{
+    height: 7%;
+    background-color: rgb(75,77,80);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+#listGruppi{
+    height: 15%;
+    background-color: rgb(190,227,219);
+    justify-self: end;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    overflow-y: auto;
+    padding: 2px;
+}
+
+#scenesmenu{
+    justify-self: start;
+    overflow-y: auto;
+    height: 75%;
+    background-color: rgb(151, 157, 166);
+}
+
+.header{
+    cursor: move;
+    display: inline-block;
+    border-radius: 10px;
+    width:100%;
+    height: 10px;
+}
+
+.menuDiv{
+    background-color: white;
+    margin: 5px;
+    border-radius: 5px;
+    border: 2px solid black;
+    text-align: center;
+    cursor: pointer;
+}
+
+#aggiungiScena{
+    margin-bottom: 10px;
+}
+
+.miniNav{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly; 
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 6px;
+    padding: 10px;
+    text-align: center;
+}
+
+
+#listGruppi .listItem{
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    margin: 1px;
+}
+
+.listItem{
+    background-color: white;
+    border: 4px solid rgb(221,04,26);
+    border-radius: 5px;
+    padding: 5px;
+    cursor: pointer;
+    text-align: center;
+    padding: auto;
+
+}
+
+.attivato{
+    border: 4px solid green;
+}
+
+
+html, body{
+    overflow: hidden;
+}
+
+#contextMenu{
+    position: absolute;   
+    background-color: #d3d3d3;
+    border: 1px solid black;
+    border-radius: 5px;
+    width:auto;
+    transform:scale(0);
+    transform-origin:top left;
+    z-index: 1000;
+}
+
+#contextMenu.richiamato{
+    transform:scale(1);
+    transition: 200 ease-in-out;
+
+}
+
+
+#contextMenu li:hover{
+    color:red;
+}
+
+#contextMenu li button{
+    margin : 0px;
+    background-color: rgba(75,77,80, 0);
+    border: 0px;
+
+}
+
+#contextMenu ol{
+    padding: 0px 6px 0px 25px;
+}
+
+#contextMenu li button:hover{
+    color:red;
+
+}
+.collapserButton{
+    border: 0px;
+    background-color: rgba(75,77,80, 0);
+    float: right;
+    height: 25px;
+    width: 25px;
+}
+
+
+.icona{
+    height: 60%;
+    margin: auto;
+    cursor: pointer;
+}
+
+.show{
+    overflow-y:auto;
+}
+
+.utility{
+    position: absolute;
+    z-index: 2000;
+    width: 80%;
+    height: 80%;
+    background-color: rgb(75,77,80);
+    top: 10%;
+    left: 10%;
+    border: 10px solid grey;
+    border-radius: 10px;
+    color:white;
+    text-align: center;
+    font-size: 25px;
+    overflow: auto;
+}
+
+#settings_div>div{
+    padding: 5%;
+    width: auto;
+    height: auto;
+}
+
+#settings_div button, #settings_div input[type="submit"]{
+    border-radius: 2px;
+    border: 5px solid white;
+    background-color: black;
+    color: white;
+    font-size: 20px;
+}
+
+#turnAround{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: orange;
+    z-index: 9001;
+}
+
+#turnAround div{
+    position: absolute;
+    width: 50%;
+    height: 30%;
+    margin-left: 25%;
+    margin-top: 45%;
+    text-align:center;
+    font-size: 4em;
+}
+
+#turnAround img{
+    width:100%;
+}
+
+.utility{
+    position: absolute;
+    z-index: 2000;
+    width: 80%;
+    height: 80%;
+    background-color: rgb(75,77,80);
+    top: 10%;
+    left: 10%;
+    border: 10px solid grey;
+    border-radius: 10px;
+    color:white;
+    text-align: center;
+    font-size: 25px;
+    overflow: auto;
+}
+
+#Help{
+    display: none;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
