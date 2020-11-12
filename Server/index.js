@@ -225,8 +225,6 @@ function checkFileType(file, cb) { //la funzione per controllare se i file sono 
   }
 }
 
-
-
 function getMedia(req, res, type) {
   //passing directoryPath and callback function
   const directoryPath = path.join(__dirname + "/users/" + req.user.username, type);
@@ -287,75 +285,27 @@ function postMedia(req, res, type) {
   });
 }
 
-// function funzionedellestorieprovvisorie(req, res) {
-
-//   //TODO UPDATE STORIE
-//   let upload = multer({
-//     storage: multer.diskStorage({
-//       destination: './users/' + req.user.username + '/private/',
-//       filename: function (req, file, cb) {
-//         while (!fs.existsSync(path.join(docfolder, file.originalname))) {
-//           file.originalname += "_new";
-//         }
-//         cb(null, file.originalname);
-//       }
-
-//     }),
-//     fileFilter: function (req, file, cb) {
-//       checkFileType(file, cb, "stories");
-//     }
-//   }).single("my_" + "stories");
-
-//   upload(req, res, (err) => {
-//     if (err) {
-//       console.log(err)
-//       res.render('index', {
-//         msg: err
-//       });
-//     } else {
-//       if (req.file == undefined) {
-//         res.render('index', {
-//           msg: 'Error: No File Selected!'
-//         });
-//       } else {
-//         console.log(req.file.filename)
-//         res.render('index', {
-//           msg: 'File Uploaded!',
-//           file: `uploads/${req.file.filename}`
-//         });
-//       }
-//     }
-//   });
-// }
-
-app.get('/images', (req, res) => {
-  getMedia(req, res, 'images');
-});
-app.post('/images', (req, res) => {
-  postMedia(req, res, 'images')
+app.get('/media/:type', (req, res) =>{
+  let type = req.params.type;
+  if(type=="widgets"||type=="images"||type=="audios"||type=="mycss")
+    getMedia(req, res, type);
 });
 
-app.get('/audios', (req, res) => {
-  getMedia(req, res, 'audios');
-});
-app.post('/audios', (req, res) => {
-  postMedia(req, res, 'audios')
-});
-
-app.get('/widgets', (req, res) => {
-  getMedia(req, res, 'widgets');
-});
-app.post('/widgets', (req, res) => {
-  postMedia(req, res, 'widgets')
+app.post('/media/:type', (req, res) =>{
+  let type = req.params.type;
+  if(type=="widgets"||type=="images"||type=="audios"||type=="mycss")
+    postMedia(req, res, type);
 });
 
-app.get('/mycss', (req, res) => {
-  getMedia(req, res, 'mycss');
+//usare questo per richiedere un file della storia
+app.get('/media/:user/:type/:name', (req, res) =>{
+  let type = req.params.type;
+  if(type=="widgets"||type=="images"||type=="audios"||type=="mycss"){
+    const file = path.join(__dirname + "/users/"+req.params.user+"/"+req.params.type, req.params.name)
+    res.sendFile(file);
+  }
 });
-app.post('/mycss', (req, res) => {
-  postMedia(req, res, 'mycss')
-});
-
+  
 app.post('/stories', (req, res) => {
   //funzionedellestorieprovvisorie(req, res);
   if (req.user.username && req.params.user == req.user.username){
