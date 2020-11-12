@@ -210,6 +210,8 @@ function checkFileType(file, cb) { //la funzione per controllare se i file sono 
     case "stories":
       filetypes = /mms/;
       break;
+    case "css":
+      filetypes = /css/;
   }
   // Check ext
   const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
@@ -285,46 +287,46 @@ function postMedia(req, res, type) {
   });
 }
 
-function postStories(req, res) {
+// function funzionedellestorieprovvisorie(req, res) {
 
-  //TODO UPDATE STORIE
-  let upload = multer({
-    storage: multer.diskStorage({
-      destination: './users/' + req.user.username + '/private/',
-      filename: function (req, file, cb) {
-        while (!fs.existsSync(path.join(docfolder, file.originalname))) {
-          file.originalname += "_new";
-        }
-        cb(null, file.originalname);
-      }
+//   //TODO UPDATE STORIE
+//   let upload = multer({
+//     storage: multer.diskStorage({
+//       destination: './users/' + req.user.username + '/private/',
+//       filename: function (req, file, cb) {
+//         while (!fs.existsSync(path.join(docfolder, file.originalname))) {
+//           file.originalname += "_new";
+//         }
+//         cb(null, file.originalname);
+//       }
 
-    }),
-    fileFilter: function (req, file, cb) {
-      checkFileType(file, cb, "stories");
-    }
-  }).single("my_" + "stories");
+//     }),
+//     fileFilter: function (req, file, cb) {
+//       checkFileType(file, cb, "stories");
+//     }
+//   }).single("my_" + "stories");
 
-  upload(req, res, (err) => {
-    if (err) {
-      console.log(err)
-      res.render('index', {
-        msg: err
-      });
-    } else {
-      if (req.file == undefined) {
-        res.render('index', {
-          msg: 'Error: No File Selected!'
-        });
-      } else {
-        console.log(req.file.filename)
-        res.render('index', {
-          msg: 'File Uploaded!',
-          file: `uploads/${req.file.filename}`
-        });
-      }
-    }
-  });
-}
+//   upload(req, res, (err) => {
+//     if (err) {
+//       console.log(err)
+//       res.render('index', {
+//         msg: err
+//       });
+//     } else {
+//       if (req.file == undefined) {
+//         res.render('index', {
+//           msg: 'Error: No File Selected!'
+//         });
+//       } else {
+//         console.log(req.file.filename)
+//         res.render('index', {
+//           msg: 'File Uploaded!',
+//           file: `uploads/${req.file.filename}`
+//         });
+//       }
+//     }
+//   });
+// }
 
 app.get('/images', (req, res) => {
   getMedia(req, res, 'images');
@@ -347,11 +349,53 @@ app.post('/widgets', (req, res) => {
   postMedia(req, res, 'widgets')
 });
 
-app.get('/stories', (req, res) => {
-  postStories(req, res);
+app.get('/mycss', (req, res) => {
+  getMedia(req, res, 'mycss');
 });
+app.post('/mycss', (req, res) => {
+  postMedia(req, res, 'mycss')
+});
+
 app.post('/stories', (req, res) => {
-  postStories(req, res);
+  //funzionedellestorieprovvisorie(req, res);
+  if (req.user.username && req.params.user == req.user.username){
+    const directoryPath = path.join(__dirname + "/users/" + req.params.user, "private");
+    let name = "new_story"
+    while (!fs.existsSync(path.join(directoryPath, name+".json"))) {
+      name += "_new";
+    }
+    data = fs.writeFileSync(directoryPath + "/" + name + '.json', JSON.stringify(
+      {
+        
+        nome: "Nuova Storia",
+        categoria: "Singolo",
+        accessibile: false,
+        target: "7-10",
+        ngruppi: 1,
+        background: "", 
+        css:"", 
+        autore: req.user.username,
+        scene:[
+          {
+            nome: "Inizio",
+            "x":15,
+            "y":15,
+            "risposte":[
+            {
+              "to":[-1]
+            }]
+          },
+          {
+            nome: "Fine",
+            x:150,
+            y:100
+          }
+        ]
+      }
+    ));
+    res.sendStatus(200);
+  }
+  res.end();
 });
 
 app.get('/stories/:user/:visibility/:nomeStoria', (req, res) => {

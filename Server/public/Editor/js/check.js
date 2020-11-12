@@ -31,15 +31,12 @@ function checkTime(){
 //controlla non ci siano to = -1
 function checkAnswer(){
     //controlla ogni scena, ogni risposta, ogni gruppo
+    let gruppi = storia.categoria == "Singolo" ? 1: storia.ngruppi;
     for(let i = 0; i < storia.scene.length; i++){
-        if(storia.scene[i].risposte){
-            let gruppi = storia.categoria == "singolo" ? 1: ngruppi;
-            for(let j = 0; j < gruppi; j++){
-                for(let k = 0; k < storia.scene[i].risposte[j].to.length; k++){
-                    console.log(storia.scene[i].risposte[j].to[k]);
-                    if(storia.scene[i].risposte[j].to[k] *1 == -1 && storia.scene[i].x && storia.scene[i].y)
-                        if(!confirm("Attenzione, la scena " + storia.scene[i].nome + " nel gruppo " + (k+1) + " alla risposta " + j + " non è stata compilata, continuare?")){return false;}
-                }
+        for(let j = 0; j < storia.scene[i].risposte.length; j++){
+            for(let k = 0; k < gruppi; k++){
+                if(storia.scene[i].risposte[j].to[k] *1 == -1 && storia.scene[i].x && storia.scene[i].y)
+                    if(!confirm("Attenzione, la scena " + storia.scene[i].nome + " nel gruppo " + (k+1) + " alla risposta " + j + " non è stata compilata, continuare?")){return false;}
             }
         }
         if(i == 0)
@@ -52,7 +49,8 @@ function checkAnswer(){
 function checkPath(){
     let nodes = Array(storia.scene.length);
     let changes;
-    for(let i=0; i<storia.ngruppi; i++){
+    let gruppi = storia.categoria == "Singolo" ? 1: storia.ngruppi;
+    for(let i=0; i < gruppi; i++){
         for(let j = 0; j < nodes.length; j++){
             nodes[j] = !(storia.scene[j].x && storia.scene[j].y);
         }
@@ -71,13 +69,13 @@ function checkPath(){
                     }
                     //se any = nodo allora non è cambiato
                     if(any != nodes[j]){
-                        nodes[j] = true;
+                        nodes[j] = any;
                         changes++;
                     }
                 }
             }
         }
-        //se una scena è contrassegnata come false può raggiungere la fine
+        //se una scena è contrassegnata come false non può raggiungere la fine
         if(!nodes.reduce((and, value)=> and&&value)){
             if(!confirm("Il gruppo numero "+(i+1)+" ha un percorso che non raggiunge la fine, vuoi continuare?")){return false;}
         };

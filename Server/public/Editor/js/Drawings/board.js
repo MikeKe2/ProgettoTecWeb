@@ -122,6 +122,9 @@ var board={
 							}
 						}
 					}
+					else if(!scena.risposte){
+						scena.risposte=[];
+					}
 					board.scenes.push((i==0 || i==1) ? new SpecialScene(i, scena) : new graphicalScene(i,scena));
 				}
 				initGroups();
@@ -174,6 +177,9 @@ var board={
 		let scena = new graphicalScene(storia.scene.length - 1, storia.scene.last());
 		board.scenes.push(scena);
 		scena.open(); //apre la finestra per la modifica
+
+
+		schena.graphicalSelect(id);
 		edit("#scena"+scena.id);
 		board.PopulateMenu($(".miniNav .attivato").attr("id")); //e ricarica le scene caricate nel menù laterale delle scene
 	},
