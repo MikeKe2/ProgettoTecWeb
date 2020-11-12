@@ -124,7 +124,7 @@ app.get('/profile',
 
 //PLAYER INTERFACE
 app.use(express.static(path.join(__dirname, 'public/Player')))
-app.get('/start', function(req, res){
+app.get('/start', function (req, res) {
   res.sendFile(__dirname + "/public/Player/index.html");
 });
 
@@ -356,7 +356,7 @@ app.post('/stories', (req, res) => {
 
 app.get('/stories/:user/:visibility/:nomeStoria', (req, res) => {
   let data;
-  if (req.params.visibility=="public" || (req.params.visibility=="private" && (req.user.username && req.params.user == req.user.username))) {
+  if (req.params.visibility == "public" || (req.params.visibility == "private" && (req.user.username && req.params.user == req.user.username))) {
     const directoryPath = path.join(__dirname + "/users/" + req.params.user, req.params.visibility);
     data = fs.readFileSync(directoryPath + "/" + req.params.nomeStoria + '.json');
     res.setHeader('Content-Type', 'application/json');
@@ -366,7 +366,7 @@ app.get('/stories/:user/:visibility/:nomeStoria', (req, res) => {
 });
 
 app.post('/stories/:user/:visibility/:nomeStoria', (req, res) => {
-  if (req.user.username && req.params.user == req.user.username){
+  if (req.user.username && req.params.user == req.user.username) {
     const directoryPath = path.join(__dirname + "/users/" + req.params.user, req.params.visibility);
     console.log(JSON.stringify(req.body.data));
     data = fs.writeFileSync(directoryPath + "/" + req.params.nomeStoria + '.json', JSON.stringify(req.body.data));
@@ -384,29 +384,27 @@ app.get('/editorStoria/:visibility/:nomeStoria/', (req, res) => {
   });
 });
 
-
 var numUsers = 0;
 var evaluator = "valutatore";
 var evalID = 0;
-
 var currScene = 0;
 
-// TODO: fix this broken mess 
-/*
-app.get("/passwordevaluator", function(req, res){
-  console.log("entrato nel controllo password");
-  res.setHeader('Content-Type', 'application/json');
-  res.end('admin');
-});
-*/
 io.on("connection", (socket) => {
   var addedUser = false;
 
-  socket.on("scene", (num) => {
-    if(num > 0)
+  socket.on("scene", (username, num) => {
+    if (num > 0)
       currScene = num;
+    socket.to(evalID).emit('scene', {
+      username: username,
+      room: num,
+    });
   });
-  
+
+  socket.on('password', (name, fn) => {
+    fn('admin');
+  });
+
   // when the client emits 'new message', this listens and executes
   socket.on("new user message", (data) => {
     // we tell the client to execute 'new message'
@@ -435,7 +433,7 @@ io.on("connection", (socket) => {
   });
 
   // when the client emits 'add user', this listens and executes
-  socket.on("add user", (username) => {
+  socket.on("add user", (username, data) => {
     if (addedUser) return;
     // we store the username in the socket session for this client
     socket.username = username;
@@ -446,8 +444,9 @@ io.on("connection", (socket) => {
     });
     // echo to the Evaluator that a person has connected
     socket.to(evalID).emit("user joined", {
-      username: socket.username,
+      username: username,
       id: socket.id,
+      storia: data,
       numUsers: numUsers,
     });
 

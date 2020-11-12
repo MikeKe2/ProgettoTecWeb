@@ -29,6 +29,40 @@ $(
       }
     };
 
+    class Storia {
+      constructor(userId, userUsername, userStoria, userRoom) {
+        this.userId = userId;
+        this.userUsername = userUsername;
+        this.userStoria = userStoria;
+        this.userRoom = userRoom;
+      }
+    }
+
+    class Storie {
+      constructor() {
+        this.storie = [];
+      }
+      newStoria(userId, userUsername, userStoria, userRoom) {
+        let m = new Storia(userId, userUsername, userStoria, userRoom);
+        this.storie.push(m);
+        return m;
+      }
+
+      findElement(userUsername) {
+        //console.log(this.storie[0].userUsername);
+        for (var i = 0; i < this.storie.length; i++) {
+          if (this.storie[i].userUsername == userUsername)
+            return i;
+          return -1;
+        }
+      }
+
+      get numberOfStorie() {
+        return this.storie.length;
+      }
+
+    }
+
     function Toast(type, msg) {
       this.type = type;
       this.msg = msg;
@@ -64,10 +98,11 @@ $(
     // Initialize variables
     var $window = $(window);
     var $messages = $(".messages"); // Messages area
-    var $inputMessage = $(".inputMessage"); // Input message input box
+    var $inputMessage = $("#inputMessage"); // Input message input box
 
     var $usersPage = $(".users.page");
     var $chatPage = $(".chat.page");
+    var $dataPage = $('.data.page');
 
     // Prompt for setting a username
     var username = "valutatore";
@@ -76,6 +111,7 @@ $(
     var typing = false;
     var lastTypingTime;
     var participants = [];
+    var ArrayofUsers = new Storie();
     var ArrayofMessages = new Messages();
 
     var socket = io("https://localhost:8000");
@@ -137,7 +173,9 @@ $(
     // Sends a chat message
     const sendMessage = () => {
       var message = $inputMessage.val();
+
       ArrayofMessages.newMessage("valutatore", "0", currentTargetUser, message);
+
       // Prevent markup from being injected into the message
       message = cleanInput(message);
       // if there is a non-empty message and a socket connection
@@ -168,21 +206,17 @@ $(
         $typingMessages.remove();
       }
 
-      var $usernameDiv = $('<span class="username"/>')
-        .text(data.username)
-        .css("color", getUsernameColor(data.username));
       var $messageBodyDiv = $('<span class="messageBody">').text(data.message);
-
       var typingClass = data.typing ? "typing" : "";
       var $messageDiv = $('<li class="message"/>')
         .data("username", data.username)
         .addClass(typingClass)
-        .append($usernameDiv, $messageBodyDiv);
+        .append($messageBodyDiv);
 
       addMessageElement($messageDiv, options);
 
-      if (data.username == username) {
-        $("#" + currentTargetUser + ".message:last-child").addClass("evaluator");
+      if (data.username == 'valutatore') {
+        $(".message:last-child").addClass("evaluator");
       }
     };
 
@@ -263,16 +297,11 @@ $(
       });
     };
 
-    // Gets the color of a username through our hash function
-    const getUsernameColor = (username) => {
-      // Compute hash code
-      var hash = 7;
-      for (var i = 0; i < username.length; i++) {
-        hash = username.charCodeAt(i) + (hash << 5) - hash;
-      }
-      // Calculate color
-      var index = Math.abs(hash % COLORS.length);
-      return COLORS[index];
+    const changeScene = (input, output) => {
+      output.fadeOut(200);
+      input.show(800);
+      output.prop("disabled", true);
+      input.prop("disabled", false);
     };
 
     //#endregion
@@ -292,31 +321,49 @@ $(
 
     // Click event
 
+    $inputMessage.on("input", () => {
+      updateTyping();
+    });
+
     // Focus input when clicking on the message input's border
     $inputMessage.click(() => {
       $inputMessage.focus();
     });
+    //FROM LIST PAGE TO DATA PAGE
+    $(".list-group").on("click", '.list-group-item', function (event) {
 
-    $(".users").on("click", 'div.user', function (event) {
       currentTargetUser = event.currentTarget.id;
       currentTargetId = document.getElementById(currentTargetUser).getAttribute('value');
-      $usersPage.fadeOut(200);
-      $chatPage.show(800);
-      $chatPage.prop("disabled", false);
-      $usersPage.prop("disabled", true);
+
+      changeScene($dataPage, $usersPage);
+
+      document.getElementById('currentUser').innerHTML = currentTargetUser;
+      let i = ArrayofUsers.findElement(currentTargetUser);
+      if (i >= 0) {
+        console.log(ArrayofUsers.storie[i].userStoria.scene[ArrayofUsers.storie[i].userRoom]);
+        document.getElementById("userStatus").innerHTML = "Si trova nella stanza: " + ArrayofUsers.storie[i].userRoom;
+
+      }
+    });
+
+    //FROM CHAT PAGE TO LIST PAGE
+    $("#userPageButton").click(() => {
+      currentTargetUser = 0;
+      currentTargetId = 0;
+
+      changeScene($usersPage, $chatPage);
+
+      $(".messages").html("");
+    });
+
+    //FROM DATA PAGE TO CHAT PAGE
+    $("#chatButton").click(() => {
+      changeScene($chatPage, $dataPage);
+
       for (var i = 0; i < ArrayofMessages.numberOfMessages; i++) {
         if (currentTargetUser == ArrayofMessages.messages[i].username || currentTargetUser == ArrayofMessages.messages[i].dstUsername)
           addChatMessage(ArrayofMessages.messages[i]);
       }
-    });
-
-    $("#UsrPgBtn").click(() => {
-      currentTargetUser = 0;
-      $chatPage.fadeOut(100);
-      $usersPage.show(800);
-      $chatPage.prop("disabled", true);
-      $usersPage.prop("disabled", false);
-      $(".messages").html("");
     });
 
     //#endregion
@@ -325,6 +372,16 @@ $(
 
     $(document).ready(function () {
       socket.emit("add eval", username);
+    });
+
+    //Whenever the server emits 'scene', log the change
+    socket.on("scene", (data) => {
+      let i = ArrayofUsers.findElement(data.username);
+      if (i >= 0) {
+        ArrayofUsers.storie[i].userRoom = data.room;
+        let statusProgressbar = (100 * (data.room++)) / ArrayofUsers.storie[i].userStoria.scene.length;
+        $(".progress-bar").css({'width':statusProgressbar + '%'});
+      }
     });
 
     // Whenever the server emits 'login', log the login message
@@ -344,20 +401,20 @@ $(
 
     // Whenever the server emits 'user joined', log it in the chat body
     socket.on("user joined", (data) => {
-      if (!participants.includes(data.username)) {
-        participants.push(data.username);
-        var $navbar = $('<div id="' + data.username + '" value="' + data.id + '" class="user"> <nav class="navbar-light bg-light"> <a class="navbar-brand" href="#"> <img src="" width="30" height="30" alt="" loading="lazy">  </a> Player: ' + data.username + '</span> </nav></div>');
-        $usersPage.append($navbar);
+      if (!ArrayofUsers.findElement(data.userUsername)) {
+        ArrayofUsers.newStoria(data.id, data.username, data.storia, 0);
+        var $newUser = $('<li class="list-group-item" id="' + data.username.replace(/[^a-zA-Z]/g, "") + '">' + data.username + '</li>');
+        $('.list-group').append($newUser);
       }
       showToast(0, data);
     });
 
     // Whenever the server emits 'user left', log it in the chat body
     socket.on("user left", (data) => {
-      if (participants.includes(data.username)) {
+      if (ArrayofUsers.findElement(data.username) >= 0) {
         showToast(1, data);
-        participants.pop(data.username);
-        $("#" + data.username).remove();
+        ArrayofUsers.storie.pop(data.username);
+        $("#" + data.username.replace(/[^a-zA-Z]/g, "")).remove();
         removeChatTyping(data);
       }
     });

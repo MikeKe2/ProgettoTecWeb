@@ -1,6 +1,7 @@
 var storia;
 var scena_corr = -1;
 var socket = io("https://localhost:8000");
+var username;
 
 function storiaCallback(data) {
     storia = data;
@@ -14,14 +15,15 @@ function initialize() {
         checkResult(0);
     })
     $(".adventure").css({
-        'background-image' : 'url( "/backgrounds/' + storia.background + '")', 
-        'background-repeat' : 'no-repeat', 
-        'background-size' : '100% 100%'});
+        'background-image': 'url( "/backgrounds/' + storia.background + '")',
+        'background-repeat': 'no-repeat',
+        'background-size': '100% 100%'
+    });
 }
 
 function checkResult(result) {
     nextScene();
-    socket.emit("scene", (scena_corr));
+    socket.emit("scene", username, (scena_corr));
 }
 
 function nextScene() {
@@ -35,17 +37,45 @@ function nextScene() {
     player[0].oncanplaythrough = player[0].play();
     $("#testo").html(storia.scene[scena_corr].descrizione);
     console.log(storia.scene[scena_corr].widget);
-    if(storia.scene[scena_corr].widget != null){
+    if (storia.scene[scena_corr].widget != null) {
         $("#widget-holder").show();
         $("#widget").load("/public/Player/widgets/" + storia.scene[scena_corr].widget);
-    }
-    else
+    } else
         $("#widget-holder").hide();
     if (scena_corr == storia.scene.length - 1)
         $("#btn").hide();
 }
 
 $(function () {
+
+    class Message {
+        constructor(srcUsername, srcId, dstUsername, data) {
+            this.username = srcUsername;
+            this.srcId = srcId;
+            this.dstUsername = dstUsername;
+            this.message = data;
+        }
+    };
+
+    class Messages {
+        constructor() {
+            this.messages = [];
+        }
+        // create a new player and save it in the collection
+        newMessage(srcUsername, srcId, dstUsername, data) {
+            let m = new Message(srcUsername, srcId, dstUsername, data);
+            this.messages.push(m);
+            return m;
+        }
+        get allMessages() {
+            return this.messages;
+        }
+        // this could include summary stats like average score, etc. For simplicy, just the count for now
+        get numberOfMessages() {
+            return this.messages.length;
+        }
+    };
+
     var FADE_TIME = 150; // ms
     var TYPING_TIMER_LENGTH = 400; // ms
     var COLORS = [
@@ -67,18 +97,18 @@ $(function () {
     var $window = $(window);
     var $usernameInput = $(".usernameInput"); // Input for username
     var $messages = $(".messages"); // Messages area
-    var $inputMessage = $(".inputMessage"); // Input message input box
+    var $inputMessage = $("#inputMessage"); // Input message input box
 
     var $loginPage = $(".login.page"); // The login page
     var $chatPage = $(".chat.page"); // The chatroom page
     var $adventurePage = $(".adventure.page"); // The adventure page
 
     // Prompt for setting a username
-    var username;
     var connected = false;
     var typing = false;
     var lastTypingTime;
     var $currentInput = $usernameInput.focus();
+    var ArrayofMessages = new Messages();
 
     // Sets the client's username
     const setUsername = () => {
@@ -92,13 +122,14 @@ $(function () {
             $loginPage.off("click");
             //$currentInput = $inputMessage.focus();
             // Tell the server your username
-            socket.emit("add user", username);
+            socket.emit("add user", username, (storia));
         }
     };
 
     // Sends a chat message
     const sendMessage = () => {
         var message = $inputMessage.val();
+        ArrayofMessages.newMessage(username, "0", 'valutatore', message);
         // Prevent markup from being injected into the message
         message = cleanInput(message);
         // if there is a non-empty message and a socket connection
@@ -129,21 +160,17 @@ $(function () {
             $typingMessages.remove();
         }
 
-        var $usernameDiv = $('<span class="username"/>')
-            .text(data.username)
-            .css("color", getUsernameColor(data.username));
         var $messageBodyDiv = $('<span class="messageBody">').text(data.message);
-
         var typingClass = data.typing ? "typing" : "";
         var $messageDiv = $('<li class="message"/>')
             .data("username", data.username)
             .addClass(typingClass)
-            .append($usernameDiv, $messageBodyDiv);
+            .append($messageBodyDiv);
 
         addMessageElement($messageDiv, options);
 
-        if (data.username == 'valutatore') {
-            $('.message:last-child').addClass('evaluator');
+        if (data.username != 'valutatore') {
+            $('.message:last-child').addClass('player');
         };
     };
 
@@ -224,18 +251,6 @@ $(function () {
         });
     };
 
-    // Gets the color of a username through our hash function
-    const getUsernameColor = (username) => {
-        // Compute hash code
-        var hash = 7;
-        for (var i = 0; i < username.length; i++) {
-            hash = username.charCodeAt(i) + (hash << 5) - hash;
-        }
-        // Calculate color
-        var index = Math.abs(hash % COLORS.length);
-        return COLORS[index];
-    };
-
     // Keyboard events
 
     $window.keydown((event) => {
@@ -257,24 +272,12 @@ $(function () {
 
     // Click events
 
-    $(".valutatore").click(function () {
-        //Getting current evalutator password
-        /*
-        $.ajax({
-            type: "POST",
-            url: "http://localhost:8000/passwordevaluator"
-          })
-          .done(function (data) {
-            var pass1 = data;
-            return;
-          })
-          .fail(function () {
-            console.log("failed...");
-            return;
-          });
-          */
+    $(".valutatore").click(() => {
+        var pass1;
+        socket.emit('password', ';)', (data) => {
+            pass1 = data;
+        });
 
-        var pass1 = 'admin';
         $("#loginModal").modal("show");
         $("#form-control").focus();
 
@@ -291,6 +294,27 @@ $(function () {
             } else alert("Password is incorrect.");
         });
     });
+
+    $('#chatWithEvaluator').click(() => {
+        $adventurePage.fadeOut(100);
+        $chatPage.show(800);
+        $adventurePage.prop("disabled", true);
+        $chatPage.prop("disabled", false);
+
+        for (var i = 0; i < ArrayofMessages.numberOfMessages; i++) {
+            addChatMessage(ArrayofMessages.messages[i]);
+        }
+    });
+
+    $('#exitChatPage').click(() => {
+        $chatPage.fadeOut(100);
+        $adventurePage.show(800);
+        $chatPage.prop("disabled", true);
+        $adventurePage.prop("disabled", false);
+
+        $(".messages").html("");
+    })
+
 
     // Focus input when clicking anywhere on login page
     $loginPage.click(() => {
@@ -317,8 +341,10 @@ $(function () {
 
     // Whenever the server emits 'new message', update the chat body
     socket.on("new message", (data) => {
-        if (data.username == 'valutatore')
+        ArrayofMessages.newMessage(data.username, data.id, username, data.message);
+        if($chatPage.is(":visible")){
             addChatMessage(data);
+        }
     });
 
     // Whenever the server emits 'typing', show the typing message
@@ -351,5 +377,5 @@ $(function () {
     $.getJSON("/public/Player/js/test.json", function (data) {
         storiaCallback(data);
     });
-    
+
 });

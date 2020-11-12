@@ -5,21 +5,48 @@
   <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <title>Evaluator Chat</title>
 
-  <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+  integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
   <ul class="pages">
+    <!--Chat Page, page where the selected user and the evaluator can chat-->
     <li class="chat page">
-      <button id="UsrPgBtn" class="btn btn-primary">X</button>
-      <div class="chatArea">
-        <ul class="messages"></ul>
+      <div class="container-lg">
+        <nav class="navbar navbar-light bg-light">
+          <button id="userPageButton" class="btn btn-outline-secondary">Esci</button>
+          <a class="navbar-brand mb-0 h1" id="chatUser"></a>
+        </nav>
+        <div class="chatArea">
+          <ul class="messages"></ul>
+        </div>
+        <input id="inputMessage" type="text" class="form-control fixed-bottom" placeholder="Scriva qui..." />
       </div>
-      <input class="inputMessage" placeholder="Scriva qui..." />
     </li>
+    <!--Data Page, with all information regarding the status of a selected user-->
+    <li class="data page">
+      <div class="container-fluid">
+        <div>
+          <nav class="navbar navbar-light bg-light">
+            <a class="navbar-text" id="currentUser"></a>
+            <a class="navbar-text" id="userStatus"></a>
+            <button id="chatButton" class="btn btn-default">CHAT</button>
+          </nav>
+        </div>
+        <div class="progress">
+          <div class="progress-bar progress-bar-animated progress-bar-striped" role="progressbar">
+          </div>
+        </div>
+      </div>
+    </li>
+    <!--User Page, containing the list with all the user active-->
     <li class="users page">
+      <div class="container-md" id="users">
+        <ul class="list-group"></ul>
+      </div>
     </li>
   </ul>
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver"></script>
