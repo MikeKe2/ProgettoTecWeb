@@ -5,8 +5,7 @@
         <meta charset="UTF-8" />
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
             integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-        <!--<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" />-->
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" />
         <link rel="stylesheet" href="css/style.css" />
         <meta content='maximum-scale=1.0, initial-scale=1.0, width=device-width height=device-height' name='viewport'>
 
@@ -40,22 +39,23 @@
                         <a class="navbar-right" href="#">About</a>
                     </div>
                 </nav>
-                <div id="avventura" class="row h-75">
+                <div class="container-fluid">
+                <div id="avventura" class="row justify-content-center h-75">
                     <div id="musica">
                         <audio id="player" loop="true">
                           <!--  <embed id="track" loop="true" hidden="true" autostart="true">-->
                             <source id="track" src="" type="audio/ogg">
                         </audio>
                     </div>
-                    <div id="scena" class="col-lg-8 col-lg-offset-2 col-xs-10 col-xs-offset-1 h-100">
-                        <div class="row h-100">
-                            <div class="col-lg-6 col-lg-offset-3 col-xs-10 col-xs-offset-1 my-auto">
+                    <div id="scena" class="col-10 col-md-8 h-100">
+                        <div class="row justify-content-center h-100">
+                            <div class="col-10 col-md-8 my-auto">
                                 <div id= "testo"></div>
                             </div>
                         </div>
 
-                        <div id="widget-holder" class="row h-100">
-                            <div class="col-lg-6 col-lg-offset-3 col-xs-10 col-xs-offset-1  my-auto">
+                        <div id="widget-holder" class="row justify-content-center h-100">
+                            <div class="col-10 col-md-8 my-auto">
                                 <div id="widget"></div>
                             </div>
                         </div>
@@ -64,6 +64,7 @@
                             <button id="btn">next</button>
                         </div>
                     </div>
+                </div>
                 </div>
             </li>
         </ul>
