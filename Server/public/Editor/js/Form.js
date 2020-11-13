@@ -1,10 +1,12 @@
 var id; 
 
+//funzioni per spostare le finestre delle scene
 function dragElement(elmnt) {
   var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
   $(elmnt+" .header").mousedown(dragMouseDown);
   $(elmnt+" .header").on("touchstart",dragMouseDown);
 
+  //handler per quando viene trascinato l'oggetto
   function dragMouseDown(e) {
     e = e || window.event;
     e.preventDefault();
@@ -18,6 +20,7 @@ function dragElement(elmnt) {
     $(elmnt+" .header").on("touchmove",elementDrag);
   }
 
+  //handler per spostare la finestra
   function elementDrag(e) {
     e = e || window.event;
     e.preventDefault();
@@ -36,6 +39,7 @@ function dragElement(elmnt) {
     })
   }
 
+  //handler per terminare lo spostamento
   function closeDragElement() {
     // stop moving when mouse button is released:
     document.onmouseup = null;
@@ -43,19 +47,24 @@ function dragElement(elmnt) {
   }
 }
 
+//nasconde le label e mostra il form da compilare
 function edit(id){
   $(id+" .edit").show();
   $(id+" .show").hide();
 }
+
+//chiude la finestra
 function close(id){
   $(id).remove();
 }
 
+//rimuove la scena e aggiorna la barra laterale
 function del(id){
   $(".scene").remove();
   board.rem(id.replace("#scena","")*1)
 }
 
+//aggiorna le variabili dell'oggetto con il contenuto del form
 function invia(id){
   let ID = id.replace("#scena","")*1;
   let scena = board.scenes[ID].core;
@@ -76,13 +85,15 @@ function invia(id){
   close(id);
 }
 
+//mostra le label e nasconde il form
 function back(id){
   $(id+" .show").show();
   $(id+" .edit").hide();
 }
 
+//inizializza gli handler delle finestre
 function initScene(id){
-  if(id!="#settings_div"){
+  if(id!="#settings_div"){  //finestra delle scene
     dragElement(id);
     $(id+ " form").on("submit",function(e){
       e.preventDefault();
@@ -93,7 +104,7 @@ function initScene(id){
       edit(id);
     });
   }
-  else{
+  else{ //finestra delle impostazioni
     $(id+ " form").on("submit",function(e){
       e.preventDefault();
       storia.nome = $("#settingsNome").val();
@@ -118,6 +129,7 @@ function initScene(id){
   $(id+" .edit").hide();
 }
 
+//handler per il drag and drop delle scene nella canvas
 function allowDrop(ev) {
   ev.preventDefault();
 }
@@ -131,7 +143,7 @@ function dropMove(ev){
 
 }
 
-
+//handler per la gestione mobile del drag and drop
 function dragTouch(ev) {
   id = ev.currentTarget.id.replace("menuScena","");
 }
@@ -156,15 +168,14 @@ function drop(ev) {
   id=null;
 }
 
-function collapsehandler(){
-  this.value=this.value=="+"?"-":"+";
-  $(this).parent().next().toggle();
-}
 
+// function collapsehandler(){
+//   this.value=this.value=="+"?"-":"+";
+//   $(this).parent().next().toggle();
+// }
+
+//download della storia
 function download() {
-
-  //TODO richiamare funzione "salva"
-
   var element = document.createElement('a');
   element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(storia)));
   element.setAttribute('download', storia.nome+".mms");
@@ -177,10 +188,13 @@ function download() {
   document.body.removeChild(element);
 }
 
+//mostra/nascondi impostazioni
 function settingsToggle(){
   let div = $("#settings_div")[0];
-  if(!div){
+  if(!div){ //mostra
     let settings = $("#settings").html();
+
+    //compila
     settings = settings.replace("$NOME",storia.nome).replace("$NOME",storia.nome != null? storia.nome : "Non ancora inserito");
     settings = settings.replace("$CATEGORIA",storia.categoria != ""? storia.categoria.replace("_", " ") : "Non ancora inserito");
     settings = settings.replace("$TARGET",storia.target != ""? storia.target : "Non ancora inserito");
@@ -193,15 +207,20 @@ function settingsToggle(){
     $("#settingsCategoria").val(storia.categoria);
     $("#settingsTarget").val(storia.target);
     $("#settingsBg").val(storia.background);
+
+    //inizializza handlers
     initScene("#settings_div");
+
+    //compila le opzioni con i file sul server
     getMedia("mycss", "#settingsCss");
     getMedia("images", "#settingsBg");
   }
-  else{
+  else{ //nascondi
     div.remove();
   }
 }
 
+//elmina definitivamente una scena
 function delRisp(){
   let id = this.id.replace("elimina","").split("_");
   for(let i = 0; i < board.scenes[id[0]].core.risposte[id[1]].to.length; i++){
@@ -216,6 +235,7 @@ function delRisp(){
   $("#scena"+id[0]+" .show").hide();
 }
 
+//crea le opzioni per il select con i nomi dei file a seconda del tipo scelto
 function getMedia(media, id){ 
   $.ajax({
     url:"/"+media,
