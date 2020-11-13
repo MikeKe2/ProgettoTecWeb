@@ -238,7 +238,7 @@ function delRisp(){
 //crea le opzioni per il select con i nomi dei file a seconda del tipo scelto
 function getMedia(media, id){ 
   $.ajax({
-    url:"/"+media,
+    url:"/media/"+media,
     success: (data)=>{
       let str ="<option value=''>...</options>";
       for(let i = 0; i < data.length; i++){
