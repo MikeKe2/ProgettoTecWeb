@@ -295,6 +295,10 @@ $(function () {
         });
     });
 
+    $('#helpRequested').click(() => {
+        socket.emit('help', (username));
+    })
+
     $('#chatWithEvaluator').click(() => {
         $adventurePage.fadeOut(100);
         $chatPage.show(800);

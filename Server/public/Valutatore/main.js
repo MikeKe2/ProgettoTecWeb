@@ -29,39 +29,48 @@ $(
       }
     };
 
-    class Storia {
-      constructor(userId, userUsername, userStoria, userRoom) {
+
+    class Utente {
+      constructor(userId, userUsername, userStoria, userRoom, userTimer) {
         this.userId = userId;
         this.userUsername = userUsername;
         this.userStoria = userStoria;
         this.userRoom = userRoom;
+        this.userTimer = userTimer;
       }
-    }
+    };
 
-    class Storie {
+    class Utenti {
       constructor() {
-        this.storie = [];
+        this.users = [];
       }
-      newStoria(userId, userUsername, userStoria, userRoom) {
-        let m = new Storia(userId, userUsername, userStoria, userRoom);
-        this.storie.push(m);
+      newStoria(userId, userUsername, userStoria, userRoom, userTimer) {
+        let m = new Utente(userId, userUsername, userStoria, userRoom, userTimer);
+        this.users.push(m);
         return m;
       }
 
       findElement(userUsername) {
-        //console.log(this.storie[0].userUsername);
-        for (var i = 0; i < this.storie.length; i++) {
-          if (this.storie[i].userUsername == userUsername)
+        //console.log(this.users[0].userUsername);
+        for (var i = 0; i < this.users.length; i++)
+          if (this.users[i].userUsername == userUsername)
             return i;
-          return -1;
-        }
+        return -1;
+      }
+
+      countIdConnectedToUser(userUsername) {
+        var conta = 0;
+        for (var i = 0; i < this.users.length; i++)
+          if (this.users[i].userUsername == userUsername)
+            conta++;
+        return conta;
       }
 
       get numberOfStorie() {
-        return this.storie.length;
+        return this.users.length;
       }
 
-    }
+    };
 
     function Toast(type, msg) {
       this.type = type;
@@ -92,7 +101,9 @@ $(
       new Toast('error', 'Connessione al server terminata'),
       new Toast('info', 'Tentativo di riconessione in corso....'),
       new Toast('success', 'Sei stato riconnesso'),
-      new Toast('info', 'Collegamento avvenuto con successo!')
+      new Toast('info', 'Collegamento avvenuto con successo!'),
+      new Toast('info', "Ulteriore dispositivo collegato all'account: "),
+      new Toast('error', "L'utente "),
     ];
 
     // Initialize variables
@@ -110,8 +121,7 @@ $(
     var currentTargetId = "";
     var typing = false;
     var lastTypingTime;
-    var participants = [];
-    var ArrayofUsers = new Storie();
+    var ArrayofUsers = new Utenti();
     var ArrayofMessages = new Messages();
 
     var socket = io("https://localhost:8000");
@@ -147,6 +157,12 @@ $(
         case 5:
           toastr[t.type](t.msg);
           break;
+        case 7:
+          toastr[t.type](t.msg + data.username);
+          break;
+        case 8:
+          toastr[t.type](t.msg + data.username + " richiede il suo aiuto");
+          break;
         default:
           toastr[t.type](t.msg);
           break;
@@ -158,7 +174,7 @@ $(
     //#region Functions
 
     //Greets the Evaluator with the numbers of partecipants
-    const addParticipantsMessage = (data) => {
+    /*const addParticipantsMessage = (data) => {
       var message = "";
       if (data.numUsers <= 0) {
         message += "there aren't any participants";
@@ -168,7 +184,7 @@ $(
         message += "there are " + data.numUsers + " participants";
       }
       log(message);
-    };
+    };*/
 
     // Sends a chat message
     const sendMessage = () => {
@@ -191,10 +207,10 @@ $(
     };
 
     // Log a message
-    const log = (message, options) => {
+    /*const log = (message, options) => {
       var $el = $("<li>").addClass("log").text(message);
       addMessageElement($el, options);
-    };
+    };*/
 
     // Adds the visual chat message to the message list
     const addChatMessage = (data, options) => {
@@ -304,6 +320,15 @@ $(
       input.prop("disabled", false);
     };
 
+    function myTimer() {
+      var d = new Date();
+      document.getElementById("timePassed").innerHTML = d.toLocaleTimeString();
+     /* ArrayofUsers.users[i].userTimer ++;
+      document.getElementById("timePassed").innerHTML = ArrayofUsers.users[i].userTimer;*/
+    }
+
+
+
     //#endregion
 
     //#region Events
@@ -330,8 +355,9 @@ $(
       $inputMessage.focus();
     });
     //FROM LIST PAGE TO DATA PAGE
-    $(".list-group").on("click", '.list-group-item', function (event) {
+    $("#userList").on("click", '.list-group-item', function (event) {
 
+      //var Mj = setInterval(myTimer(), 1000);
       currentTargetUser = event.currentTarget.id;
       currentTargetId = document.getElementById(currentTargetUser).getAttribute('value');
 
@@ -340,9 +366,20 @@ $(
       document.getElementById('currentUser').innerHTML = currentTargetUser;
       let i = ArrayofUsers.findElement(currentTargetUser);
       if (i >= 0) {
-        console.log(ArrayofUsers.storie[i].userStoria.scene[ArrayofUsers.storie[i].userRoom]);
-        document.getElementById("userStatus").innerHTML = "Si trova nella stanza: " + ArrayofUsers.storie[i].userRoom;
 
+        document.getElementById("userStatus").innerHTML = "Si trova nella stanza: " + ArrayofUsers.users[i].userRoom;
+        document.getElementById("SceneName").innerHTML = ArrayofUsers.users[i].userStoria.scene[ArrayofUsers.users[i].userRoom].nome;
+        document.getElementById("SceneDescrizione").innerHTML = ArrayofUsers.users[i].userStoria.scene[ArrayofUsers.users[i].userRoom].descrizione;
+
+        for (y in ArrayofUsers.users[i].userStoria.scene[ArrayofUsers.users[i].userRoom].risposte) {
+          var answer = '<li class = "list-group-item"><ul class = "list-group">';
+          var test = Object.values(ArrayofUsers.users[i].userStoria.scene[ArrayofUsers.users[i].userRoom].risposte[y]);
+          for (k in test)
+            answer = answer.concat('<li class = "list group-item">' + test[k] + '</li>');
+
+          answer = answer.concat('</ul></li>')
+          $('#SceneAnswers').append(answer);
+        }
       }
     });
 
@@ -354,13 +391,14 @@ $(
       changeScene($usersPage, $chatPage);
 
       $(".messages").html("");
+      $('#SceneAnswers').html("");
     });
 
     //FROM DATA PAGE TO CHAT PAGE
     $("#chatButton").click(() => {
       changeScene($chatPage, $dataPage);
 
-      for (var i = 0; i < ArrayofMessages.numberOfMessages; i++) {
+      for (i in ArrayofMessages.messages) {
         if (currentTargetUser == ArrayofMessages.messages[i].username || currentTargetUser == ArrayofMessages.messages[i].dstUsername)
           addChatMessage(ArrayofMessages.messages[i]);
       }
@@ -374,13 +412,20 @@ $(
       socket.emit("add eval", username);
     });
 
+    socket.on('help', (data) => {
+      $('#' + data.username).css('color: red');
+      setTimeout(showToast(8, data), 2000);
+    });
+
     //Whenever the server emits 'scene', log the change
     socket.on("scene", (data) => {
       let i = ArrayofUsers.findElement(data.username);
       if (i >= 0) {
-        ArrayofUsers.storie[i].userRoom = data.room;
-        let statusProgressbar = (100 * (data.room++)) / ArrayofUsers.storie[i].userStoria.scene.length;
-        $(".progress-bar").css({'width':statusProgressbar + '%'});
+        ArrayofUsers.users[i].userRoom = data.room;
+        let statusProgressbar = (100 * (data.room++)) / ArrayofUsers.users[i].userStoria.scene.length;
+        $(".progress-bar").css({
+          'width': statusProgressbar + '%'
+        });
       }
     });
 
@@ -401,20 +446,24 @@ $(
 
     // Whenever the server emits 'user joined', log it in the chat body
     socket.on("user joined", (data) => {
-      if (!ArrayofUsers.findElement(data.userUsername)) {
-        ArrayofUsers.newStoria(data.id, data.username, data.storia, 0);
+      if (ArrayofUsers.findElement(data.username) == -1) {
+        ArrayofUsers.newStoria(data.id, data.username, data.storia, 0, 0);
         var $newUser = $('<li class="list-group-item" id="' + data.username.replace(/[^a-zA-Z]/g, "") + '">' + data.username + '</li>');
-        $('.list-group').append($newUser);
+        $('#userList').append($newUser);
+        showToast(0, data);
+      } else {
+        ArrayofUsers.newStoria(data.id, data.username, data.storia, 0, 0);
+        showToast(7, data);
       }
-      showToast(0, data);
     });
 
     // Whenever the server emits 'user left', log it in the chat body
     socket.on("user left", (data) => {
       if (ArrayofUsers.findElement(data.username) >= 0) {
         showToast(1, data);
-        ArrayofUsers.storie.pop(data.username);
-        $("#" + data.username.replace(/[^a-zA-Z]/g, "")).remove();
+        ArrayofUsers.users.pop(data.username);
+        if (ArrayofUsers.countIdConnectedToUser(data.username) == 0)
+          $("#" + data.username.replace(/[^a-zA-Z]/g, "")).remove();
         removeChatTyping(data);
       }
     });

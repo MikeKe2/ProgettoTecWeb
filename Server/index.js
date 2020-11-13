@@ -399,6 +399,13 @@ io.on("connection", (socket) => {
     fn('admin');
   });
 
+  socket.on('help', (data) => {
+    socket.to(evalID).emit('help', {
+      username: socket.username,
+      message: data
+    });
+  });
+
   // when the client emits 'new message', this listens and executes
   socket.on("new user message", (data) => {
     // we tell the client to execute 'new message'

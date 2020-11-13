@@ -15,7 +15,7 @@
   <ul class="pages">
     <!--Chat Page, page where the selected user and the evaluator can chat-->
     <li class="chat page">
-      <div class="container-lg">
+      <div class="container">
         <nav class="navbar navbar-light bg-light">
           <button id="userPageButton" class="btn btn-outline-secondary">Esci</button>
           <a class="navbar-brand mb-0 h1" id="chatUser"></a>
@@ -29,25 +29,52 @@
     <!--Data Page, with all information regarding the status of a selected user-->
     <li class="data page">
       <div class="container">
-        <div>
-          <nav class="navbar navbar-light bg-light">
-            <a class="navbar-text" id="currentUser"></a>
-            <a class="navbar-text" id="userStatus"></a>
-            <button id="chatButton" class="btn btn-default">CHAT</button>
-          </nav>
-        </div>
-        <div class="row">
-          <div class="progress">
-            <div class="progress-bar progress-bar-animated progress-bar-striped" role="progressbar">
-            </div>
+        <!-- Navbar -->
+        <nav class="navbar navbar-light bg-light">
+          <span id="currentUser" class="navbar-brand mb-0 h1"></span>
+          <a class="navbar-text" id="userStatus"></a>
+          <span class="navbar-text" id="timePassed"></span>
+          <button id="chatButton" class="btn btn-default">CHAT</button>
+        </nav>
+        <!-- Progress Bar -->
+        <div class="progress">
+          <div class="progress-bar progress-bar-animated progress-bar-striped" role="progressbar">
           </div>
         </div>
+      </div>
+      <!--  Showing current status, possibile answers, etc etc-->
+      <div class="container">
+        <div class="row justify-content-center">
+          <div id="userStats" class="col-md-6">
+            <ul id="SceneAnswers" class="list-group list-group-flush">
+            </ul>
+          </div>
+          <div class="col-md-6">
+            <ul id="SceneDescription" class="list-group list-group-flush">
+              <li id="SceneName" class="list-group-item">Name</li>
+              <li id="SceneDescrizione" class="list-group-item">Description</li>
+            </ul>
+          </div>
+        </div>
+        <form>
+          <div class="form-group row">
+            <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
+            <div class="col-sm-10">
+              <input type="text" readonly class="form-control-plaintext" disabled>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="formControlRange">Example Range input</label>
+            <input type="range" class="form-control-range" id="formControlRange">
+            <button class="btn btn-secondary btn-sm">Confirm vote</button>
+          </div>
       </div>
     </li>
     <!--User Page, containing the list with all the user active-->
     <li class="users page">
       <div class="container-md" id="users">
-        <ul class="list-group"></ul>
+        <ul id="userList" class="list-group">
+        </ul>
       </div>
     </li>
   </ul>
