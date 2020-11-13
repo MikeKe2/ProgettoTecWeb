@@ -105,6 +105,8 @@ var board={
 			url:"/stories/"+$("#user").html()+"/"+$("#visibility").html()+"/"+$("#name").html(),
 		 	success: (data)=>{
 				storia = data;
+				if(storia.creatore || storia.creatore != $("#user").html())
+					storia.creatore = $("#user").html();
 				for(let i = 0; i < storia.scene.length; i++){ //aggiunta di tutte le scene, freccie e scene speciali (inizio e fine sono speciali)
 					let scena = storia.scene[i];
 					scena.x=scena.x*1;

@@ -325,6 +325,7 @@ app.post('/stories', (req, res) => {
         background: "", 
         css:"", 
         autore: req.user.username,
+        creatore: req.user.username,
         scene:[
           {
             nome: "Inizio",
