@@ -12,7 +12,7 @@ function storiaCallback(data) {
 function initialize() {
     $("#titolo").html(storia.nome);
     $("#btn").click(function () {
-        checkResult(scena_corr == -1? "":document.getElementById("result").value);
+        checkResult(scena_corr == -1? null:document.getElementById("result").value);
     })
     $(".adventure").css({
         'background-image': 'url( "/backgrounds/' + storia.background + '")',
@@ -21,8 +21,8 @@ function initialize() {
     });
 }
 
-function checkResult(result, time) {
-    storia.scene[scena_corr].risposte.forEach(risposta => {
+function checkResult(result) {
+    /*storia.scene[scena_corr].risposte.forEach(risposta => {
         if(result == risposta.valore && risposta.maxTime != null && time <= risposta.maxTime){
             //TODO: add ppppppppppppppppppscore;
             nextScene();
@@ -32,7 +32,8 @@ function checkResult(result, time) {
             nextScene();
             socket.emit("scene", username, (scena_corr));
         }
-    });
+    });*/
+    nextScene();
 }
 
 function nextScene() {
