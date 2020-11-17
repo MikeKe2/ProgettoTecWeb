@@ -135,6 +135,8 @@ var resDirprivate = diname + "/private/";
 var resDirpublic = diname + "/public/";
 var resDir = __dirname + "/";
 
+app.use(express.static(__dirname + '/views'));
+
 //server.js
 app.post("/public",
   function (req, res) {
@@ -396,6 +398,20 @@ io.on("connection", (socket) => {
     fn('admin');
   });
 
+  socket.on('answerToEvaluator', (username, data ) => {
+    socket.to(evalID).emit('answerToEvaluator', {
+      username: username,
+      message: data,
+    });
+  });
+
+  socket.on('answerFromEvaluator', (username, data ) => {
+    socket.to(evalID).emit('answerFromEvaluator', {
+      username: username,
+      message: data,
+    });
+  });
+
   socket.on('help', (data) => {
     socket.to(evalID).emit('help', {
       username: socket.username,
@@ -440,6 +456,7 @@ io.on("connection", (socket) => {
   // when the client emits 'add user', this listens and executes
   socket.on("add user", (username, data) => {
     if (addedUser) return;
+
     // we store the username in the socket session for this client
     socket.username = username;
     ++numUsers;

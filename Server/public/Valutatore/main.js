@@ -1,3 +1,4 @@
+
 $(
   function () {
 
@@ -346,6 +347,10 @@ $(
 
     // Click event
 
+    $('#formControlRange').on('input change', () => {
+      $('.valueSpan').html($('#formControlRange').val());
+    });
+
     $inputMessage.on("input", () => {
       updateTyping();
     });
@@ -422,7 +427,11 @@ $(
       socket.emit('helpIncoming', currentTargetId, (helpingComment));
       var element = document.getElementById(currentTargetUser);
       element.className = element.className.replace(/\blist-group-item-danger\b/g, "");
-      document.getElementById("helpButton").disabled = true;
+      //document.getElementById("helpButton").disabled = true;
+    });
+
+    $('#rangeValue').click(() => {
+      console.log($('#formControlRange').val());
     });
 
     //#endregion
@@ -435,7 +444,7 @@ $(
 
     socket.on('help', (data) => {
       $('#' + data.username).addClass('list-group-item-danger');
-      document.getElementById("helpButton").disabled = false;
+      //document.getElementById("helpButton").disabled = false;
       setTimeout(showToast(8, data), 2000);
     });
 
@@ -451,6 +460,11 @@ $(
         document.getElementById("SceneName").innerHTML = ArrayofUsers.users[i].userStoria.scene[ArrayofUsers.users[i].userRoom].nome;
         document.getElementById("SceneDescrizione").innerHTML = ArrayofUsers.users[i].userStoria.scene[ArrayofUsers.users[i].userRoom].descrizione;
       }
+    });
+
+    socket.on("answerFromEvaluator", (data) => {
+      $(".form-group").show();
+      
     });
 
     // Whenever the server emits 'login', log the login message
@@ -472,7 +486,7 @@ $(
     socket.on("user joined", (data) => {
       if (ArrayofUsers.findElement(data.username) == -1) {
         ArrayofUsers.newStoria(data.id, data.username, data.storia, 0, 0);
-        var $newUser = $('<li class="list-group-item" id="' + data.username.replace(/[^a-zA-Z]/g, "") + '">' + data.username + '</li>');
+        var $newUser = $('<li class="list-group-item" id="' + data.username.replace(/[^a-zA-Z0-9]/g, "") + '">' + data.username + '</li>');
         $('#userList').append($newUser);
         showToast(0, data);
       } else {
@@ -487,10 +501,11 @@ $(
         showToast(1, data);
         ArrayofUsers.users.pop(data.username);
         if (ArrayofUsers.countIdConnectedToUser(data.username) == 0)
-          $("#" + data.username.replace(/[^a-zA-Z]/g, "")).remove();
+          $("#" + data.username.replace(/[^a-zA-Z0-9]/g, "")).remove();
         removeChatTyping(data);
       }
     });
+
 
     // Whenever the server emits 'typing', show the typing message
     socket.on("typing", (data) => {
