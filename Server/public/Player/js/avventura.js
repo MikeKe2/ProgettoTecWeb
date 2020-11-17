@@ -297,6 +297,7 @@ $(function () {
 
     $('#helpRequested').click(() => {
         socket.emit('help', (username));
+        document.getElementById('helpRequested').disabled = true;
     })
 
     $('#chatWithEvaluator').click(() => {
@@ -331,6 +332,11 @@ $(function () {
     });
 
     // Socket events
+
+    socket.on('helpIncoming', (data) => {
+        window.alert("Il valutatore dice: " + data.message);
+        document.getElementById('helpRequested').disabled = false;
+    });
 
     // Whenever the server emits 'login', log the login message
     socket.on("login", (data) => {

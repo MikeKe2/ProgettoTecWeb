@@ -285,65 +285,61 @@ function postMedia(req, res, type) {
   });
 }
 
-app.get('/media/:type', (req, res) =>{
+app.get('/media/:type', (req, res) => {
   let type = req.params.type;
-  if(type=="widgets"||type=="images"||type=="audios"||type=="mycss")
+  if (type == "widgets" || type == "images" || type == "audios" || type == "mycss")
     getMedia(req, res, type);
 });
 
-app.post('/media/:type', (req, res) =>{
+app.post('/media/:type', (req, res) => {
   let type = req.params.type;
-  if(type=="widgets"||type=="images"||type=="audios"||type=="mycss")
+  if (type == "widgets" || type == "images" || type == "audios" || type == "mycss")
     postMedia(req, res, type);
 });
 
 //usare questo per richiedere un file della storia
-app.get('/media/:user/:type/:name', (req, res) =>{
+app.get('/media/:user/:type/:name', (req, res) => {
   let type = req.params.type;
-  if(type=="widgets"||type=="images"||type=="audios"||type=="mycss"){
-    const file = path.join(__dirname + "/users/"+req.params.user+"/"+req.params.type, req.params.name)
+  if (type == "widgets" || type == "images" || type == "audios" || type == "mycss") {
+    const file = path.join(__dirname + "/users/" + req.params.user + "/" + req.params.type, req.params.name)
     res.sendFile(file);
   }
 });
-  
+
 app.post('/stories', (req, res) => {
   //funzionedellestorieprovvisorie(req, res);
-  if (req.user.username && req.params.user == req.user.username){
+  if (req.user.username && req.params.user == req.user.username) {
     const directoryPath = path.join(__dirname + "/users/" + req.params.user, "private");
     let name = "new_story"
-    while (!fs.existsSync(path.join(directoryPath, name+".json"))) {
+    while (!fs.existsSync(path.join(directoryPath, name + ".json"))) {
       name += "_new";
     }
-    data = fs.writeFileSync(directoryPath + "/" + name + '.json', JSON.stringify(
-      {
-        
-        nome: "Nuova Storia",
-        categoria: "Singolo",
-        accessibile: false,
-        target: "7-10",
-        ngruppi: 1,
-        background: "", 
-        css:"", 
-        autore: req.user.username,
-        creatore: req.user.username,
-        scene:[
-          {
-            nome: "Inizio",
-            "x":15,
-            "y":15,
-            "risposte":[
-            {
-              "to":[-1]
-            }]
-          },
-          {
-            nome: "Fine",
-            x:150,
-            y:100
-          }
-        ]
-      }
-    ));
+    data = fs.writeFileSync(directoryPath + "/" + name + '.json', JSON.stringify({
+
+      nome: "Nuova Storia",
+      categoria: "Singolo",
+      accessibile: false,
+      target: "7-10",
+      ngruppi: 1,
+      background: "",
+      css: "",
+      autore: req.user.username,
+      creatore: req.user.username,
+      scene: [{
+          nome: "Inizio",
+          "x": 15,
+          "y": 15,
+          "risposte": [{
+            "to": [-1]
+          }]
+        },
+        {
+          nome: "Fine",
+          x: 150,
+          y: 100
+        }
+      ]
+    }));
     res.sendStatus(200);
   }
   res.end();
@@ -403,6 +399,13 @@ io.on("connection", (socket) => {
   socket.on('help', (data) => {
     socket.to(evalID).emit('help', {
       username: socket.username,
+      message: data
+    });
+  });
+
+  socket.on('helpIncoming', (targetId, data) => {
+    socket.to(targetId).emit('helpIncoming', {
+      username: evaluator,
       message: data
     });
   });

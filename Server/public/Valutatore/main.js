@@ -323,8 +323,8 @@ $(
     function myTimer() {
       var d = new Date();
       document.getElementById("timePassed").innerHTML = d.toLocaleTimeString();
-     /* ArrayofUsers.users[i].userTimer ++;
-      document.getElementById("timePassed").innerHTML = ArrayofUsers.users[i].userTimer;*/
+      /* ArrayofUsers.users[i].userTimer ++;
+       document.getElementById("timePassed").innerHTML = ArrayofUsers.users[i].userTimer;*/
     }
 
 
@@ -354,18 +354,20 @@ $(
     $inputMessage.click(() => {
       $inputMessage.focus();
     });
+
     //FROM LIST PAGE TO DATA PAGE
     $("#userList").on("click", '.list-group-item', function (event) {
 
       //var Mj = setInterval(myTimer(), 1000);
       currentTargetUser = event.currentTarget.id;
-      currentTargetId = document.getElementById(currentTargetUser).getAttribute('value');
+      document.getElementById('currentUser').innerHTML = currentTargetUser;
 
       changeScene($dataPage, $usersPage);
 
-      document.getElementById('currentUser').innerHTML = currentTargetUser;
       let i = ArrayofUsers.findElement(currentTargetUser);
       if (i >= 0) {
+
+        currentTargetId = ArrayofUsers.users[i].userId;
 
         document.getElementById("userStatus").innerHTML = "Si trova nella stanza: " + ArrayofUsers.users[i].userRoom;
         document.getElementById("SceneName").innerHTML = ArrayofUsers.users[i].userStoria.scene[ArrayofUsers.users[i].userRoom].nome;
@@ -404,6 +406,25 @@ $(
       }
     });
 
+    $("#listButton").click(() => {
+      currentTargetUser = 0;
+      currentTargetId = 0;
+
+      changeScene($usersPage, $dataPage);
+
+      $(".messages").html("");
+      $('#SceneAnswers').html("");
+    });
+
+
+    $('#helpButton').click(() => {
+      var helpingComment = prompt("Please enter the helping hint", "");
+      socket.emit('helpIncoming', currentTargetId, (helpingComment));
+      var element = document.getElementById(currentTargetUser);
+      element.className = element.className.replace(/\blist-group-item-danger\b/g, "");
+      document.getElementById("helpButton").disabled = true;
+    });
+
     //#endregion
 
     //#region  Socket events
@@ -413,7 +434,8 @@ $(
     });
 
     socket.on('help', (data) => {
-      $('#' + data.username).css('color: red');
+      $('#' + data.username).addClass('list-group-item-danger');
+      document.getElementById("helpButton").disabled = false;
       setTimeout(showToast(8, data), 2000);
     });
 
@@ -426,6 +448,8 @@ $(
         $(".progress-bar").css({
           'width': statusProgressbar + '%'
         });
+        document.getElementById("SceneName").innerHTML = ArrayofUsers.users[i].userStoria.scene[ArrayofUsers.users[i].userRoom].nome;
+        document.getElementById("SceneDescrizione").innerHTML = ArrayofUsers.users[i].userStoria.scene[ArrayofUsers.users[i].userRoom].descrizione;
       }
     });
 
