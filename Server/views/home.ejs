@@ -5,11 +5,11 @@
 </head>
 
 <body>
-	<div id="form">
+	<div class="form">
 		<% if (!user) { %>
-		<p id="title">Welcome! Please <a href="/login">log in</a>.</p>
+		<p class="title">Welcome! Please <a class="link" href="/login">log in</a>.</p>
 		<% } else { %>
-		<p  id="title">Hello, <%= user.username %>. View your <a href="/profile">profile</a>.</p>
+		<p  class="title">Hello, <%= user.username %>. View your <a class="link" href="/profile">profile</a>.</p>
 		<% } %>
 	</div>
 </body>

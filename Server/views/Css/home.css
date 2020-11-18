@@ -1,16 +1,19 @@
-  /* Login Page */
   * {
     box-sizing: border-box;
   }
-  
-  html, body {
+
+  html,
+  body {
     overflow-x: hidden;
   }
+
   body {
     background-color: #000;
     position: relative
   }
-  html, input {
+
+  html,
+  input {
     font-family:
       "HelveticaNeue-Light",
       "Helvetica Neue Light",
@@ -20,38 +23,61 @@
       "Lucida Grande",
       sans-serif;
   }
-  
-  #form {
+
+  .form {
     height: 100px;
     margin-top: -100px;
     position: absolute;
-  
+
     text-align: center;
     top: 50%;
     width: 100%;
   }
-  
+
   .form .usernameInput {
     background-color: transparent;
     border: none;
-    border-bottom: 2px solid #fff;
+    border-bottom: 0.1vw solid #fff;
     outline: none;
-    padding-bottom: 15px;
+    padding-bottom: 1vw;
     text-align: center;
     width: 400px;
   }
   
-  .login.page .title {
-    font-size: 200%;
+  .title {
+    font-size: 150%;
   }
-  
-  .login.page .usernameInput .valutatore {
-    font-size: 200%;
-    letter-spacing: 3px;
+
+  .usernameInput {
+    font-size: 100%;
+    letter-spacing: 0.2vw;
   }
-  
-  #title{
+
+  .title,
+  .usernameInput {
     color: #fff;
     font-weight: 100;
-    font-size: 150%;
+  }
+
+  .button {
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    background-color: #e7e7e7;
+    color: black;
+    border-radius: 4%;
+    transition-duration: 0.4s;
+  }
+
+  .button:hover {
+    background-color: #747474;
+    color: white;
+  }
+
+  .link {
+    color: rgb(85, 85, 163);
   }

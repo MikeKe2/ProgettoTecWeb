@@ -1,13 +1,25 @@
-<form action="/login" method="post">
-	<div>
-	<label>Username:</label>
-	<input type="text" name="username"/><br/>
-	</div>
-	<div>
-	<label>Password:</label>
-	<input type="password" name="password"/>
-	</div>
-	<div>
-	<input type="submit" value="Submit"/>
-	</div>
-</form>
+<html>
+
+<head>
+	<link href="/css/home.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+	<form action="/login" method="post">
+		<div class="form">
+			<div>
+				<h3 class="title">Username:
+				<input type="text" class="usernameInput" name="username" /></h3>
+			</div>
+			<div>
+				<h3 class="title">Password:
+				<input type="password" class="usernameInput" name="password" /></h3>
+			</div>
+			<div>
+				<input class="button" type="submit" value="Submit" />
+			</div>
+		</div>
+	</form>
+</body>
+
+</html>

@@ -12,7 +12,7 @@ function storiaCallback(data) {
 function initialize() {
     $("#titolo").html(storia.nome);
     $("#btn").click(function () {
-        checkResult(scena_corr == -1? null:document.getElementById("result").value);
+        checkResult(scena_corr == -1 ? null : document.getElementById("result").value);
     })
     $(".adventure").css({
         'background-image': 'url( "/backgrounds/' + storia.background + '")',
@@ -362,7 +362,7 @@ $(function () {
     // Whenever the server emits 'new message', update the chat body
     socket.on("new message", (data) => {
         ArrayofMessages.newMessage(data.username, data.id, username, data.message);
-        if($chatPage.is(":visible")){
+        if ($chatPage.is(":visible")) {
             addChatMessage(data);
         }
     });
