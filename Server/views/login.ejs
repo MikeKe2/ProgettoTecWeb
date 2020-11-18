@@ -9,11 +9,11 @@
 		<div class="form">
 			<div>
 				<h3 class="title">Username:
-				<input type="text" class="usernameInput" name="username" /></h3>
+					<input type="text" class="usernameInput" name="username" /></h3>
 			</div>
 			<div>
 				<h3 class="title">Password:
-				<input type="password" class="usernameInput" name="password" /></h3>
+					<input type="password" class="usernameInput" name="password" /></h3>
 			</div>
 			<div>
 				<input class="button" type="submit" value="Submit" />
@@ -21,5 +21,13 @@
 		</div>
 	</form>
 </body>
+<script>
+	$(function () {
+		$window.keydown((event) => {
+			if (event.which === 13)
+				$('.button').click();
+		});
+	});
+</script>
 
 </html>
