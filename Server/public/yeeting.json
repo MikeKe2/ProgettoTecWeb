@@ -10,7 +10,7 @@
         {
             "nome": "scena0",
             "descrizione": "C'era un pampino brutto che è stupido",
-            "widget": "inserisci url",
+            "widget": "lever.html",
             "tracciaAudio": 0,
             "valutatore" : 0,
             "x":15,
@@ -23,7 +23,7 @@
                     "points":5000
                 },
                 {
-                    "valore" : 15,
+                    "valore" : "15",
                     "maxTime": null,
                     "to":[1,2,2,1],
                     "points":500
@@ -33,7 +33,7 @@
         {
             "nome": "scena1",
             "descrizione": "C'era un altro pampino brutto che è stupido",
-            "widget": "inserisci url",
+            "widget": "number.html",
             "tracciaAudio": 0,
             "valutatore" : 0,
             "x":150,
@@ -56,7 +56,7 @@
         {
             "nome": "scena2",
             "descrizione": "C'era un altro pampino brutto che è stupido e sono troppi ora",
-            "widget": "text",
+            "widget": "text.html",
             "tracciaAudio": 0,
             "valutatore" : 0,
             "x":null,
