@@ -131,68 +131,44 @@ app.get('/start', function (req, res) {
 
 
 diname = __dirname + "/admin/";
-var resDirprivate = diname + "/private/";
-var resDirpublic = diname + "/public/";
 var resDir = __dirname + "/";
 
 app.use(express.static(__dirname + '/views'));
 
-//server.js
-app.post("/public",
-  function (req, res) {
-    var filelist = [];
-    var resDir = __dirname + "/users/" + req.user.username + "/public/";
-    find.file(resDir, function (files) {
-      for (let i = 0; i < files.length; i++) {
-        let fileRelative = path.relative(resDir, files[i]);
-        console.log(fileRelative);
-        res.write("<li class=\"ui-widget-content\" style=\"overflow: hidden;\" name=\"" + fileRelative + "\">" + fileRelative +
-          "<button class=\"ui-button ui-widget ui-corner-all ui-button-icon-only\" style=\"float: right;\" onclick=\"gotoEditor('" +
-          fileRelative + "', 'public')\"><span class=\"ui-icon ui-icon-pencil\"></span></button></li>\n");
-      }
-      res.end();
-    });
-  });
-
-app.post("/private",
-  function (req, res) {
-    var filelist = [];
-    var resDir = __dirname + "/users/" + req.user.username + "/private/";
-    find.file(resDir, function (files) {
-      for (let i = 0; i < files.length; i++) {
-        let fileRelative = path.relative(resDir, files[i]);
-        console.log(fileRelative);
-        res.write("<li class=\"ui-widget-content\" style=\"overflow: hidden;\" name=\"" + fileRelative + "\">" + fileRelative +
-          "<button class=\"ui-button ui-widget ui-corner-all ui-button-icon-only\" style=\"float: right;\" onclick=\"gotoEditor('" +
-          fileRelative + "', 'private')\"><span class=\"ui-icon ui-icon-pencil\"></span></button></li>\n");
-      }
-      res.end();
-    });
-  });
 
 app.post("/makeprivate", require('connect-ensure-login').ensureLoggedIn(),
   function (req, res) {
     var resDir = __dirname + "/users/" + req.user.username;
-    var filelist = req.body.files;
-    console.log(filelist);
-    for (let i = 0; i < filelist.length; i++) {
-      let file = filelist[i];
-      console.log(file);
-      fs.renameSync(resDir + "/public/" + file, resDir + "/private/" + file);
-    }
+    var file = req.body.name;
+    console.log(file);
+    fs.renameSync(resDir + "/public/" + file, resDir + "/private/" + file);
+    res.sendStatus(200);
+  });
+
+app.post("/rename", require('connect-ensure-login').ensureLoggedIn(),
+  function (req, res) {
+    var resDir = __dirname + "/users/" + req.user.username;
+    fs.renameSync(resDir + "/" + req.body.visibility + "/" + req.body.name, resDir + "/" + req.body.visibility + "/" + req.body.newName);
+    res.sendStatus(200);
   });
 
 app.post("/makepublic", require('connect-ensure-login').ensureLoggedIn(),
   function (req, res) {
     var resDir = __dirname + "/users/" + req.user.username;
-    var filelist = req.body.files;
-    console.log(filelist);
-    for (let i = 0; i < filelist.length; i++) {
-      let file = filelist[i];
-      console.log(file);
-      fs.renameSync(resDir + "/private/" + file, resDir + "/public/" + file);
-    }
+    var file = req.body.name;
+    console.log(file);
+    fs.renameSync(resDir + "/private/" + file, resDir + "/public/" + file);
+    res.sendStatus(200);
   });
+
+app.post("/delete", require('connect-ensure-login').ensureLoggedIn(),
+  function (req, res) {
+    var resDir = __dirname + "/users/" + req.user.username;
+    var file = req.body.name;
+    fs.unlinkSync(resDir + "/" + req.body.visibility + "/" + file);
+    res.sendStatus(200);
+  });
+
 
 
 // Check File Type
@@ -239,7 +215,6 @@ function getMedia(req, res, type) {
     let filelist = [];
     files.forEach(function (file) {
       // Do whatever you want to do with the file
-      console.log(file);
       filelist.push(file);
     });
     res.setHeader('Content-Type', 'application/json');
@@ -287,11 +262,45 @@ function postMedia(req, res, type) {
   });
 }
 
+app.get('/allStories', (req, res) => {
+  let filelist = [];
+  let directoryPath = path.join(__dirname + "/users/" + req.user.username, "private");
+  fs.readdir(directoryPath, function (err, files) {
+    //handling error
+    if (err) {
+      return console.log('Unable to scan directory: ' + err);
+    }
+    //listing all files using forEach
+    files.forEach(function (file) {
+      // Do whatever you want to do with the file
+      filelist.push({name : file, visibility : 'private'});
+    });
+
+    directoryPath = path.join(__dirname + "/users/" + req.user.username, "public");
+    fs.readdir(directoryPath, function (err, files) {
+      //handling error
+      if (err) {
+        return console.log('Unable to scan directory: ' + err);
+      }
+      //listing all files using forEach
+      files.forEach(function (file) {
+        // Do whatever you want to do with the file
+        filelist.push({name : file, visibility : 'public'});
+      });
+  
+      res.setHeader('Content-Type', 'application/json');
+      res.send(JSON.stringify(filelist));
+      res.end();
+    });
+  });
+});
+
 app.get('/media/:type', (req, res) => {
   let type = req.params.type;
   if (type == "widgets" || type == "images" || type == "audios" || type == "mycss")
     getMedia(req, res, type);
 });
+
 
 app.post('/media/:type', (req, res) => {
   let type = req.params.type;
@@ -308,42 +317,41 @@ app.get('/media/:user/:type/:name', (req, res) => {
   }
 });
 
-app.post('/stories', (req, res) => {
+app.post('/stories', require('connect-ensure-login').ensureLoggedIn(), (req, res) => {
   //funzionedellestorieprovvisorie(req, res);
-  if (req.user.username && req.params.user == req.user.username) {
-    const directoryPath = path.join(__dirname + "/users/" + req.params.user, "private");
-    let name = "new_story"
-    while (!fs.existsSync(path.join(directoryPath, name + ".json"))) {
-      name += "_new";
-    }
-    data = fs.writeFileSync(directoryPath + "/" + name + '.json', JSON.stringify({
-
-      nome: "Nuova Storia",
-      categoria: "Singolo",
-      accessibile: false,
-      target: "7-10",
-      ngruppi: 1,
-      background: "",
-      css: "",
-      autore: req.user.username,
-      creatore: req.user.username,
-      scene: [{
-          nome: "Inizio",
-          "x": 15,
-          "y": 15,
-          "risposte": [{
-            "to": [-1]
-          }]
-        },
-        {
-          nome: "Fine",
-          x: 150,
-          y: 100
-        }
-      ]
-    }));
-    res.sendStatus(200);
+  const directoryPath = path.join(__dirname + "/users/" + req.user.username, "private");
+  let name = req.body.name;
+  while (fs.existsSync(path.join(directoryPath, name + ".json"))) {
+    name += "_new";
   }
+  console.log("nome scelto")
+  data = fs.writeFileSync(directoryPath + "/" + name + '.json', JSON.stringify({
+    nome: "Nuova Storia",
+    categoria: "Singolo",
+    accessibile: false,
+    target: "7-10",
+    ngruppi: 1,
+    background: "",
+    css: "",
+    autore: req.user.username,
+    creatore: req.user.username,
+    scene: [{
+        nome: "Inizio",
+        "x": 15,
+        "y": 15,
+        "risposte": [{
+          "to": [-1]
+        }]
+      },
+      {
+        nome: "Fine",
+        x: 150,
+        y: 100
+      }
+    ]
+  }));
+  console.log(data);
+  res.send(name);
   res.end();
 });
 
