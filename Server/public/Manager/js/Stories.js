@@ -65,6 +65,12 @@ var Stories = new Vue({
 		
 		getQR: function(index){
 			alert("Se non funziona è colpa di martina");
-		}
+        },
+        
+        open: function(index){
+            if(confirm("vuoi modificare la storia: "+Stories.list[index].name+"?"))
+                window.open("/editorStoria/"+Stories.list[index].visibility+"/"+Stories.list[index].name.replace(".json","")+"/",'_self',false);
+
+        }
 	}
 });
