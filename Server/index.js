@@ -98,6 +98,32 @@ app.post(
   }
 );
 
+app.post("/newUser",function(req,res){
+  fs.readFile(__dirname +'/db/UsersData.json', function (err, data) {
+    let json = JSON.parse(data)
+    console.log(req.body.name, " ", req.body.password);
+    json.push({"id": json.length + 1, "username": req.body.name, "password": req.body.password, "displayName": req.body.name})
+    console.log(json);
+    fs.writeFile(__dirname +'/db/UsersData.json', JSON.stringify(json), function (err) {
+      if (err) throw err;
+      console.log('Saved!');  
+      let dir = './users/'+req.body.name;
+
+      if (!fs.existsSync(dir)){
+        fs.mkdirSync(dir);
+        fs.mkdirSync(dir+"/audios");
+        fs.mkdirSync(dir+"/images");
+        fs.mkdirSync(dir+"/mycss");
+        fs.mkdirSync(dir+"/private");
+        fs.mkdirSync(dir+"/public");
+        fs.mkdirSync(dir+"/widgets");
+      }
+      res.sendStatus(200);
+    })
+  })
+
+});
+
 //LOGOUT
 app.get("/logout", function (req, res) {
   req.logout();
@@ -512,6 +538,7 @@ io.on("connection", (socket) => {
 
 app.use(express.static(resDir + "/"));
 app.use(express.static(resDir + "public"));
+app.use(express.static(resDir + "db"));
 
 server.listen(8000, () => {
   console.log('Listening on: https://localhost:8000/')
