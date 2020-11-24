@@ -64,7 +64,9 @@ var Stories = new Vue({
 		},
 		
 		getQR: function(index){
-			alert("Se non funziona è colpa di martina");
+            qrmaker.clear(); // clear the code.
+            qrmaker.makeCode("/urlBase/"+this.list[index].name); // make another code.
+            $(".modal").modal();
         },
         
         open: function(index){
