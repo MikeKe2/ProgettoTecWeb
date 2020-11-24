@@ -209,7 +209,7 @@ function settingsToggle() {
     settings = settings.replace("$ACCESSIBILITA", storia.accessibile);
     settings = settings.replace("$IMMAGINE", storia.background != "" ? storia.background : "Non ancora inserito");
     settings = settings.replace("$AUTORE", storia.autore != "" ? storia.autore : "Non ancora inserito").replace("$AUTORE", storia.autore);
-    settings = settings.replace("$CSS", storia.css != "" ? storia.css : "Non ancora inserito").replace("$CSSCONTENT", getMedia("mycss"));
+    settings = settings.replace("$CSS", storia.css != "" ? storia.css : "Non ancora inserito").replace("$CSSCONTENT", getMedia("css"));
     $("body").append(settings);
     $("#settingsAccessibilita").prop("checked", storia.accessibile);
     $("#settingsCategoria").val(storia.categoria);
@@ -220,7 +220,7 @@ function settingsToggle() {
     initScene("#settings_div");
 
     //compila le opzioni con i file sul server
-    getMedia("mycss", "#settingsCss");
+    getMedia("css", "#settingsCss");
     getMedia("images", "#settingsBg");
   } else { //nascondi
     div.remove();

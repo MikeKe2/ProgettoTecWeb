@@ -113,7 +113,7 @@ app.post("/newUser",function(req,res){
         fs.mkdirSync(dir);
         fs.mkdirSync(dir+"/audios");
         fs.mkdirSync(dir+"/images");
-        fs.mkdirSync(dir+"/mycss");
+        fs.mkdirSync(dir+"/css");
         fs.mkdirSync(dir+"/private");
         fs.mkdirSync(dir+"/public");
         fs.mkdirSync(dir+"/widgets");
@@ -134,7 +134,7 @@ app.get("/logout", function (req, res) {
 //INDEX
 app.get("/index", require('connect-ensure-login').ensureLoggedIn(),
   function (req, res) {
-    res.render("index");
+    res.render("index", {user:req.user.username});
   }
 );
 
@@ -185,7 +185,8 @@ app.post("/makepublic", require('connect-ensure-login').ensureLoggedIn(),
     console.log(file);
     fs.renameSync(resDir + "/private/" + file, resDir + "/public/" + file);
     res.sendStatus(200);
-  });
+  }
+);
 
 app.post("/delete", require('connect-ensure-login').ensureLoggedIn(),
   function (req, res) {
@@ -193,7 +194,8 @@ app.post("/delete", require('connect-ensure-login').ensureLoggedIn(),
     var file = req.body.name;
     fs.unlinkSync(resDir + "/" + req.body.visibility + "/" + file);
     res.sendStatus(200);
-  });
+  }
+);
 
 
 
@@ -270,18 +272,21 @@ function postMedia(req, res, type) {
     if (err) {
       console.log(err)
       res.render('index', {
-        msg: err
+        msg: err,
+        user:req.user.username
       });
     } else {
       if (req.file == undefined) {
         res.render('index', {
-          msg: 'Error: No File Selected!'
+          msg: 'Error: No File Selected!',
+          user:req.user.username
         });
       } else {
         console.log(req.file.filename)
         res.render('index', {
           msg: 'File Uploaded!',
-          file: `uploads/${req.file.filename}`
+          file: `uploads/${req.file.filename}`,
+          user:req.user.username
         });
       }
     }
@@ -323,21 +328,39 @@ app.get('/allStories', (req, res) => {
 
 app.get('/media/:type', (req, res) => {
   let type = req.params.type;
-  if (type == "widgets" || type == "images" || type == "audios" || type == "mycss")
+  if (type == "widgets" || type == "images" || type == "audios" || type == "css")
     getMedia(req, res, type);
 });
 
 
 app.post('/media/:type', (req, res) => {
   let type = req.params.type;
-  if (type == "widgets" || type == "images" || type == "audios" || type == "mycss")
+  if (type == "widgets" || type == "images" || type == "audios" || type == "css")
     postMedia(req, res, type);
+});
+
+
+app.post("/media/rename/:type", require('connect-ensure-login').ensureLoggedIn(),
+  function (req, res) {
+    var resDir = __dirname + "/users/" + req.user.username;
+    fs.renameSync(resDir + "/" + req.params.type + "/" + req.body.name, resDir + "/" + req.params.type + "/" + req.body.newName);
+    res.sendStatus(200);
+    res.end();
+  }
+);
+
+app.post("/media/delete/:type", require('connect-ensure-login').ensureLoggedIn(),
+  function (req, res) {
+    var resDir = __dirname + "/users/" + req.user.username;
+    var file = req.body.name;
+    fs.unlinkSync(resDir + "/" + req.params.type + "/" + file);
+    res.sendStatus(200);
 });
 
 //usare questo per richiedere un file della storia
 app.get('/media/:user/:type/:name', (req, res) => {
   let type = req.params.type;
-  if (type == "widgets" || type == "images" || type == "audios" || type == "mycss") {
+  if (type == "widgets" || type == "images" || type == "audios" || type == "css") {
     const file = path.join(__dirname + "/users/" + req.params.user + "/" + req.params.type, req.params.name)
     res.sendFile(file);
   }

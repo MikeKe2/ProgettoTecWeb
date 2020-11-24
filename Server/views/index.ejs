@@ -18,8 +18,11 @@
         -ms-user-select: none; /* Internet Explorer/Edge */
         user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
       }
-      .cursor {
+      .clickable {
         cursor:pointer;
+      }
+      .card-body div{
+        padding: 0.4em;
       }
     </style>
   </head>
@@ -30,74 +33,57 @@
       <a class="nav-link" href="/logout">Log out</a>
     </nav>
 
-    <h1 class="display-4 text-center">Hello World</h1>
-    <div id="Stories">
-      <button class="btn btn-success" v-on:click="newFile()">New Story</button>
-      <ul class="list-group list-group-flush">
-        <template v-for="(story, index) in list">
-          <li class="list-group-item col-md-6 " v-bind:class="{active: story.selected}">
-            <div class="item-container d-flex justify-content-between cursor nonselectable" v-on:dblclick="open(index)">
-              {{story.name}} 
-              <div class="d-flex justify-content-around">
-                <!-- TODO mettere gli alt -->
-                <img style="width:20px; height:20px;" v-on:click="getQR(index)" src="/Manager/img/QRlogo.png" v-if="story.visibility=='public'">
-                <img style="width:20px; height:20px;" v-on:click="changevisibility(index)" v-bind:src="story.visibility=='public'?'/Manager/img/lucchettoAperto.png' : '/Manager/img/lucchettoChiuso.png'">
-                <img style="width:20px; height:20px;" v-on:click="changeName(index)" src="/Manager/img/matita.png">
-                <img style="width:20px; height:20px;" v-on:click="deleteStory(index)" src="/Manager/img/cestino.png">
-              </div>
-            </div>
-          </li>
-        </template>
-      </ul>
-    </div>
+    <span id="user" style="display: none;"><%= user %></span>
 
-    <div class="container-fluid">
-      <div class="row align-items-center">
-        <div class="col">
-          <form action="/media/images" method="POST" enctype="multipart/form-data">
-            <div class="form-group">
-              <label for="form-control-file">Image files</label>
-              <input class="form-control-file" name="my_images" type="file">
+    <h1 class="display-4 text-center">Hello World</h1>
+    <div class="d-flex justify-content-around">
+      <div id="Stories" class="col-md-5">
+        <button class="btn btn-success" v-on:click="newFile()">New Story</button>
+        <ul class="list-group list-group-flush">
+          <template v-for="(story, index) in list">
+            <li class="list-group-item" v-bind:class="{active: story.selected}">
+              <div class="item-container d-flex justify-content-between clickable nonselectable" v-on:dblclick="open(index)">
+                {{story.name}} 
+                <div class="d-flex justify-content-around">
+                  <!-- TODO mettere gli alt -->
+                  <img style="width:20px; height:20px;" v-on:click="getQR(index)" src="/Manager/img/QRlogo.png" v-if="story.visibility=='public'">
+                  <img style="width:20px; height:20px;" v-on:click="changevisibility(index)" v-bind:src="story.visibility=='public'?'/Manager/img/lucchettoAperto.png' : '/Manager/img/lucchettoChiuso.png'">
+                  <img style="width:20px; height:20px;" v-on:click="changeName(index)" src="/Manager/img/matita.png">
+                  <img style="width:20px; height:20px;" v-on:click="deleteStory(index)" src="/Manager/img/cestino.png">
+                </div>
+              </div>
+            </li>
+          </template>
+        </ul>
+      </div>
+      <div class="col-md-5"  id="Media">
+        <div class="card text-center">
+          <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs">
+              <li class="nav-item clickable" v-for="type in types">
+                <a v-bind:class="type==clicked ? 'nav-link active' : 'nav-link'" v-on:click="init(type)">{{type}}</a>
+              </li>
+            </ul>
+          </div>
+          <div class="card-body">
+            <div class="col-md-12 d-flex justify-content-around">
+              <label for="form-control-file" class="col-md-2">Load file</label>
+              <input class="form-control-file" id="newFile" type="file" v-on:change="newFile()">
             </div>
-            <input class="btn btn-outline-success" type="submit"></input>
-          </form>
-        </div>
-        <div class="col">
-          <form action="/media/audios" method="POST" enctype="multipart/form-data">
-            <div class="form-group">
-              <div>
-                <label for="form-control-file">Audio files</label>
-                <input class="form-control-file" name="my_audios" type="file">
+            <div class="file d-flex justify-content-between col-md-12 clickable nonselectable" v-for="(item, index) in list" v-on:dblclick="open(index)">
+              {{item}}
+              <div class="d-flex justify-content-around col-md-2">
+                <!-- TODO mettere gli alt -->
+                <img style="width:20px; height:20px;" v-on:click="changeName(index)" src="/Manager/img/matita.png">
+                <img style="width:20px; height:20px;" v-on:click="deleteMedia(index)" src="/Manager/img/cestino.png">
               </div>
             </div>
-            <input class="btn btn-outline-success" type="submit"></input>
-          </form>
-        </div>
-        <div class="col">
-          <form action="/media/widgets" method="POST" enctype="multipart/form-data">
-            <div class="form-group">
-              <div>
-                <label for="form-control-file">Widget files</label>
-                <input class="form-control-file" name="my_widgets" type="file">
-              </div>
-            </div>
-            <input class="btn btn-outline-success" type="submit"></input>
-          </form>
-        </div>
-        <div class="col">
-          <form action="/media/css" method="POST" enctype="multipart/form-data">
-            <div class="form-group">
-              <div>
-                <label for="form-control-file">Css files</label>
-                <input class="form-control-file" name="my_widgets" type="file">
-              </div>
-            </div>
-            <input class="btn btn-outline-success" type="submit"></input>
-          </form>
+          </div>
         </div>
       </div>
     </div>
     <script src="/Manager/js/Stories.js"></script>
+    <script src="/Manager/js/Media.js"></script>
     <script src="/Manager/js/utility.js"></script>
   </body>
 </html>
