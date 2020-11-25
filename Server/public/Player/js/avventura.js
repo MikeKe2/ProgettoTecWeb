@@ -12,7 +12,7 @@ function storiaCallback(data) {
 function initialize() {
     $("#titolo").html(storia.nome);
     $("#btn").click(function () {
-        checkResult(scena_corr == -1? null:document.getElementById("result").value);
+        checkResult(scena_corr == -1 ? null : document.getElementById("result").value);
     })
     $(".adventure").css({
         'background-image': 'url( "/backgrounds/' + storia.background + '")',
@@ -307,6 +307,7 @@ $(function () {
 
     $('#helpRequested').click(() => {
         socket.emit('help', (username));
+        document.getElementById('helpRequested').disabled = true;
     })
 
     $('#chatWithEvaluator').click(() => {
@@ -342,6 +343,11 @@ $(function () {
 
     // Socket events
 
+    socket.on('helpIncoming', (data) => {
+        window.alert("Il valutatore dice: " + data.message);
+        document.getElementById('helpRequested').disabled = false;
+    });
+
     // Whenever the server emits 'login', log the login message
     socket.on("login", (data) => {
         connected = true;
@@ -356,7 +362,7 @@ $(function () {
     // Whenever the server emits 'new message', update the chat body
     socket.on("new message", (data) => {
         ArrayofMessages.newMessage(data.username, data.id, username, data.message);
-        if($chatPage.is(":visible")){
+        if ($chatPage.is(":visible")) {
             addChatMessage(data);
         }
     });

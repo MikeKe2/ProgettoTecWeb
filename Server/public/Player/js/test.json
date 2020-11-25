@@ -24,8 +24,8 @@
                 },
                 {
                     "valore" : "15",
-                    "maxTime": null,
                     "to":[1,2,2,1],
+                    "maxTime": null,
                     "points":500
                 }
             ]
@@ -47,8 +47,8 @@
                 },
                 {
                     "valore" : 15,
-                    "maxTime": 0,
                     "to":[0,0,0,0],
+                    "maxTime": 0,
                     "points":500
                 }
             ]
@@ -70,8 +70,8 @@
                 },
                 {
                     "valore" : 15,
-                    "maxTime": null,
                     "to":[null,null,null,null],
+                    "maxTime": null,
                     "points":500
                 }
             ]

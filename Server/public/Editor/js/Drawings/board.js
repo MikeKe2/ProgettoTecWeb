@@ -181,7 +181,7 @@ var board={
 		scena.open(); //apre la finestra per la modifica
 
 
-		schena.graphicalSelect(id);
+		scena.graphicalSelect(id);
 		edit("#scena"+scena.id);
 		board.PopulateMenu($(".miniNav .attivato").attr("id")); //e ricarica le scene caricate nel menù laterale delle scene
 	},

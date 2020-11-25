@@ -79,20 +79,6 @@ $(
 
     var FADE_TIME = 150; // ms
     var TYPING_TIMER_LENGTH = 400; // ms
-    var COLORS = [
-      "#e21400",
-      "#91580f",
-      "#f8a700",
-      "#f78b00",
-      "#58dc00",
-      "#287b00",
-      "#a8f07a",
-      "#4ae8c4",
-      "#3b88eb",
-      "#3824aa",
-      "#a700ff",
-      "#d300e7",
-    ];
 
     var toasts = [
       new Toast('success', 'è entrato in chat. Ci sono ora: '),
@@ -323,8 +309,8 @@ $(
     function myTimer() {
       var d = new Date();
       document.getElementById("timePassed").innerHTML = d.toLocaleTimeString();
-     /* ArrayofUsers.users[i].userTimer ++;
-      document.getElementById("timePassed").innerHTML = ArrayofUsers.users[i].userTimer;*/
+      /* ArrayofUsers.users[i].userTimer ++;
+       document.getElementById("timePassed").innerHTML = ArrayofUsers.users[i].userTimer;*/
     }
 
 
@@ -346,6 +332,10 @@ $(
 
     // Click event
 
+    $('#formControlRange').on('input change', () => {
+      $('.valueSpan').html($('#formControlRange').val());
+    });
+
     $inputMessage.on("input", () => {
       updateTyping();
     });
@@ -354,18 +344,20 @@ $(
     $inputMessage.click(() => {
       $inputMessage.focus();
     });
+
     //FROM LIST PAGE TO DATA PAGE
     $("#userList").on("click", '.list-group-item', function (event) {
 
       //var Mj = setInterval(myTimer(), 1000);
       currentTargetUser = event.currentTarget.id;
-      currentTargetId = document.getElementById(currentTargetUser).getAttribute('value');
+      document.getElementById('currentUser').innerHTML = currentTargetUser;
 
       changeScene($dataPage, $usersPage);
 
-      document.getElementById('currentUser').innerHTML = currentTargetUser;
       let i = ArrayofUsers.findElement(currentTargetUser);
       if (i >= 0) {
+
+        currentTargetId = ArrayofUsers.users[i].userId;
 
         document.getElementById("userStatus").innerHTML = "Si trova nella stanza: " + ArrayofUsers.users[i].userRoom;
         document.getElementById("SceneName").innerHTML = ArrayofUsers.users[i].userStoria.scene[ArrayofUsers.users[i].userRoom].nome;
@@ -404,6 +396,32 @@ $(
       }
     });
 
+    $("#listButton").click(() => {
+      currentTargetUser = 0;
+      currentTargetId = 0;
+
+      changeScene($usersPage, $dataPage);
+
+      $(".messages").html("");
+      $('#SceneAnswers').html("");
+    });
+
+
+    $('#helpButton').click(() => {
+      var helpingComment = prompt("Please enter the helping hint", "");
+      socket.emit('helpIncoming', currentTargetId, (helpingComment));
+      var element = document.getElementById(currentTargetUser);
+      element.className = element.className.replace(/\blist-group-item-danger\b/g, "");
+      //document.getElementById("helpButton").disabled = true;
+    });
+
+    $('#rangeValue').click(() => {
+      var element = document.getElementById(currentTargetUser);
+      element.className = element.className.replace(/\blist-group-item-warning\b/g, "");
+      console.log($('#formControlRange').val());
+      socket.emit('answerFromEvaluator', currentTargetId, $('#formControlRange').val());
+    });
+
     //#endregion
 
     //#region  Socket events
@@ -413,7 +431,8 @@ $(
     });
 
     socket.on('help', (data) => {
-      $('#' + data.username).css('color: red');
+      $('#' + data.username).addClass('list-group-item-danger');
+      //document.getElementById("helpButton").disabled = false;
       setTimeout(showToast(8, data), 2000);
     });
 
@@ -426,7 +445,14 @@ $(
         $(".progress-bar").css({
           'width': statusProgressbar + '%'
         });
+        document.getElementById("SceneName").innerHTML = ArrayofUsers.users[i].userStoria.scene[ArrayofUsers.users[i].userRoom].nome;
+        document.getElementById("SceneDescrizione").innerHTML = ArrayofUsers.users[i].userStoria.scene[ArrayofUsers.users[i].userRoom].descrizione;
       }
+    });
+
+    socket.on("answerToEvaluator", (data) => {
+      $('#' + data.username).addClass('list-group-item-warning');
+      $(".form-group").show();
     });
 
     // Whenever the server emits 'login', log the login message
@@ -448,7 +474,7 @@ $(
     socket.on("user joined", (data) => {
       if (ArrayofUsers.findElement(data.username) == -1) {
         ArrayofUsers.newStoria(data.id, data.username, data.storia, 0, 0);
-        var $newUser = $('<li class="list-group-item" id="' + data.username.replace(/[^a-zA-Z]/g, "") + '">' + data.username + '</li>');
+        var $newUser = $('<li class="list-group-item" id="' + data.username.replace(/[^a-zA-Z0-9]/g, "") + '">' + data.username + '</li>');
         $('#userList').append($newUser);
         showToast(0, data);
       } else {
@@ -463,10 +489,11 @@ $(
         showToast(1, data);
         ArrayofUsers.users.pop(data.username);
         if (ArrayofUsers.countIdConnectedToUser(data.username) == 0)
-          $("#" + data.username.replace(/[^a-zA-Z]/g, "")).remove();
+          $("#" + data.username.replace(/[^a-zA-Z0-9]/g, "")).remove();
         removeChatTyping(data);
       }
     });
+
 
     // Whenever the server emits 'typing', show the typing message
     socket.on("typing", (data) => {
