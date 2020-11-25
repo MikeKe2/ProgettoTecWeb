@@ -35,14 +35,14 @@ var Stories = new Vue({
                     url: "/rename",
                     data: {name: this.list[index].name, newName: newname, visibility: this.list[index].visibility},
                     success: function(){
-                        Stories.list[index].name = newname;
+                        Stories.list[index].name = newname+".json";
                     }
                   });
 			}
 		},
 
 		deleteStory: function(index){
-			if(confirm("Sei sicuro di volere eliminare "+Stories.list[index].name+"?")){
+			if(confirm("Sei sicuro di volere eliminare "+this.list[index].name+"?")){
 				$.post("/delete", {name:Stories.list[index].name, visibility:this.list[index].visibility},()=>{
 					Stories.list.splice(index,1);
 				})
@@ -51,20 +51,28 @@ var Stories = new Vue({
 
         newFile: function(){
 			let newname = prompt("insersci un nuovo nome", "New_Story");
-			if(newname != ""){
+			if(newname != "" && newname!=null){
             $.ajax({
                 type: "POST",
 				url: "/stories",
 				data: {name:newname},
                 success: function(data){
-                    Stories.list.push({name: data, visibility: "private"})
+                    Stories.list.push({name: data+".json", visibility: "private"})
                 }
 			  });
 			}
 		},
 		
 		getQR: function(index){
-			alert("Se non funziona è colpa di martina");
-		}
+            qrmaker.clear(); // clear the code.
+            qrmaker.makeCode("/urlBase/"+this.list[index].name); // make another code.
+            $(".modal").modal();
+        },
+        
+        open: function(index){
+            if(confirm("vuoi modificare la storia: "+Stories.list[index].name+"?"))
+                window.open("/editorStoria/"+Stories.list[index].visibility+"/"+Stories.list[index].name.replace(".json","")+"/",'_self',false);
+
+        }
 	}
 });
