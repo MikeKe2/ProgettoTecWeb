@@ -413,8 +413,8 @@ $(function () {
         log("attempt to reconnect has failed");
     });
 
-    //init
-    $.getJSON("/public/Player/js/newtestdaadattare.json", function (data) {
+
+    $.getJSON(urlStoria, function (data) {
         storiaCallback(data);
     });
 

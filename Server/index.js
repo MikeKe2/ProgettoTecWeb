@@ -434,6 +434,14 @@ app.get('/editorStoria/:visibility/:nomeStoria/', (req, res) => {
   });
 });
 
+//ROUTE TO STORIES
+app.get('/avventura/:user/:name', (req, res) => {
+  url = '/users/'+ req.params.user + '/public/' + req.params.name + '.json';
+  res.render("avventura", {
+    urlStoria: url
+  });
+});
+
 var numUsers = 0;
 var evaluator = "valutatore";
 var evalID = 0;
