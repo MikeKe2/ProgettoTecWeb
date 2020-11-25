@@ -1,1 +1,154 @@
-{"nome":"STORIA MODIFICATA","categoria":"Gruppi_Piccoli","accessibile":"true","target":"7-10","ngruppi":"2","background":"","css":"","autore":"autore1","scene":[{"nome":"inizio","x":"15","y":"15","risposte":[{"to":["3","-1"]}]},{"nome":"fine","x":"500","y":"500"},{"nome":"scena0","descrizione":"C'era un pampino brutto che è stupido","img":"","imgdescription":"","widget":"text","tracciaAudio":"","valutatore":"false","x":"427","y":"97","risposte":[{"valore":"15","to":["3","-1"],"maxTime":"15","points":"5000"},{"valore":"15","maxTime":"0","to":["3","-1"],"points":"500"}]},{"nome":"scena1","descrizione":"C'era un altro pampino brutto che è stupido","img":"","imgdescription":"","widget":"text","tracciaAudio":"","valutatore":"false","x":"313","y":"400","risposte":[{"valore":"15","to":["-1","-1"],"maxTime":"15","points":"5000"},{"valore":"15","maxTime":"0","to":["2","-1"],"points":"500"}]},{"nome":"scena2","descrizione":"C'era un altro pampino brutto che è stupido e sono troppi ora","img":"","imgdescription":"","widget":"text","tracciaAudio":"","valutatore":"false","x":"0","y":"0","risposte":[{"valore":"15","to":["-1","-1"],"maxTime":"15","points":"5000"},{"valore":"15","maxTime":"0","to":["-1","-1"],"points":"500"}]},{"nome":"scena3","descrizione":"Inserisci descrizione...","widget":"","tracciaAudio":"","valutatore":"false","timemax":"","x":"0","y":"0"},{"nome":"scena4","descrizione":"Inserisci descrizione...","widget":"","tracciaAudio":"","valutatore":"false","timemax":"","x":"0","y":"0","risposte":[{"valore":"15","to":["-1","-1"],"maxTime":"15","points":"5000"}]}]}
+{
+    "nome": "STORIA MODIFICATA",
+    "categoria": "Gruppi_Piccoli",
+    "accessibile": "true",
+    "target": "7-10",
+    "ngruppi": "2",
+    "background": "taccuino.jpg",
+    "css": "",
+    "autore": "admin",
+    "scene": [
+        {
+            "nome": "inizio",
+            "x": "15",
+            "y": "15",
+            "risposte": [
+                {
+                    "to": [
+                        "2",
+                        "-1"
+                    ]
+                }
+            ]
+        },
+        {
+            "nome": "fine",
+            "x": "500",
+            "y": "500"
+        },
+        {
+            "nome": "scena0",
+            "descrizione": "C'era un pampino brutto che è stupido",
+            "img": "",
+            "imgdescription": "",
+            "widget": "text",
+            "tracciaAudio": "",
+            "valutatore": "false",
+            "x": "427",
+            "y": "97",
+            "risposte": [
+                {
+                    "valore": "15",
+                    "to": [
+                        "3",
+                        "-1"
+                    ],
+                    "maxTime": "15",
+                    "points": "5000"
+                },
+                {
+                    "valore": "15",
+                    "maxTime": "0",
+                    "to": [
+                        "3",
+                        "-1"
+                    ],
+                    "points": "500"
+                }
+            ]
+        },
+        {
+            "nome": "scena1",
+            "descrizione": "C'era un altro pampino brutto che è stupido",
+            "img": "",
+            "imgdescription": "",
+            "widget": "text",
+            "tracciaAudio": "",
+            "valutatore": "false",
+            "x": "313",
+            "y": "400",
+            "risposte": [
+                {
+                    "valore": "15",
+                    "to": [
+                        "4",
+                        "-1"
+                    ],
+                    "maxTime": "15",
+                    "points": "5000"
+                },
+                {
+                    "valore": "15",
+                    "maxTime": "0",
+                    "to": [
+                        "4",
+                        "-1"
+                    ],
+                    "points": "500"
+                }
+            ]
+        },
+        {
+            "nome": "scena2",
+            "descrizione": "C'era un altro pampino brutto che è stupido e sono troppi ora",
+            "img": "",
+            "imgdescription": "",
+            "widget": "text",
+            "tracciaAudio": "",
+            "valutatore": "false",
+            "x": "0",
+            "y": "0",
+            "risposte": [
+                {
+                    "valore": "15",
+                    "to": [
+                        "1",
+                        "-1"
+                    ],
+                    "maxTime": "15",
+                    "points": "5000"
+                },
+                {
+                    "valore": "15",
+                    "maxTime": "0",
+                    "to": [
+                        "1",
+                        "-1"
+                    ],
+                    "points": "500"
+                }
+            ]
+        },
+        {
+            "nome": "scena3",
+            "descrizione": "Inserisci descrizione...",
+            "widget": "",
+            "tracciaAudio": "",
+            "valutatore": "false",
+            "timemax": "",
+            "x": "0",
+            "y": "0"
+        },
+        {
+            "nome": "scena4",
+            "descrizione": "Inserisci descrizione...",
+            "widget": "",
+            "tracciaAudio": "",
+            "valutatore": "false",
+            "timemax": "",
+            "x": "0",
+            "y": "0",
+            "risposte": [
+                {
+                    "valore": "15",
+                    "to": [
+                        "-1",
+                        "-1"
+                    ],
+                    "maxTime": "15",
+                    "points": "5000"
+                }
+            ]
+        }
+    ]
+}

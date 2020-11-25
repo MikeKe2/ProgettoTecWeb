@@ -30,7 +30,7 @@ function initialize() {
         checkResult(scena_corr == 0 ? null : document.getElementById("result").value);
     })
     $(".adventure").css({
-        'background-image': 'url( "/backgrounds/' + storia.background + '")',
+        'background-image': 'url( "/users/'+ storia.autore +'/images/' + storia.background + '")',
         'background-repeat': 'no-repeat',
         'background-size': '100% 100%'
     });
@@ -40,39 +40,50 @@ function checkResult(result) {
     if(scena_corr!=0){
         time = end_time();
         storia.scene[scena_corr].risposte.forEach(risposta => {
-            if(result == risposta.valore && parseInt(risposta.maxTime) != null && time <= parseInt(risposta.maxTime)){
+            if(result == risposta.valore && parseInt(risposta.maxTime) != 0 && time <= parseInt(risposta.maxTime)){
                 punteggio += parseInt(risposta.points);
                 scena = parseInt(risposta.to[gruppo]);
                 nextScene(scena);
-            } else if (result == risposta.valore && risposta.maxTime == null){
+            } else if (result == risposta.valore && parseInt(risposta.maxTime) == 0){
                 punteggio += parseInt(risposta.points);
                 scena = parseInt(risposta.to[gruppo]);
                 nextScene(scena);
             }
         });
+    } else {
+        nextScene(storia.scene[scena_corr].risposte[0].to[gruppo]);
     }
-    nextScene(storia.scene[scena_corr].risposte[0].to[gruppo]);
 }
 
 function nextScene(scena) {
     start_time();
     scena_corr = scena;
     socket.emit("scene", username, (scena_corr));
-    track = $("#track");
-    track.attr("src", "/music/" + storia.scene[scena_corr].tracciaAudio);
-    player = $("#player");
-    player[0].pause();
-    player[0].load();
-    console.log(player[0])
-    player[0].oncanplaythrough = player[0].play();
-    $("#testo").html(storia.scene[scena_corr].descrizione);
-    console.log(storia.scene[scena_corr].widget);
-    if (storia.scene[scena_corr].widget != null) {
+    if(storia.scene[scena_corr].tracciaAudio != undefined && storia.scene[scena_corr].tracciaAudio != ""){
+        track = $("#track");
+        track.attr("src", "/users/" + storia.autore + "/audios/" + storia.scene[scena_corr].tracciaAudio);
+        player = $("#player");
+        player[0].pause();
+        player[0].load();
+        console.log(player[0])
+        player[0].oncanplaythrough = player[0].play();
+    }
+    if (storia.scene[scena_corr].descrizione != undefined && storia.scene[scena_corr].descrizione != ""){
+        $("#text-holder").show();
+        $("#testo").html(storia.scene[scena_corr].descrizione);
+        //console.log(storia.scene[scena_corr].widget);
+    } else if (storia.scene[scena_corr].nome == "inizio") {
+        $("#text-holder").show();
+        $("#testo").html(```
+            BENVENUTO NELLA STORIA 
+        ```);
+    }
+    if (storia.scene[scena_corr].widget != "") {
         $("#widget-holder").show();
-        $("#widget").load("/public/Player/widgets/" + storia.scene[scena_corr].widget);
+        $("#widget").load("/users/" + storia.autore + "/widgets/" + storia.scene[scena_corr].widget + ".html");
     } else
         $("#widget-holder").hide();
-    if (scena_corr == storia.scene.length - 1)
+    if (storia.scene[scena_corr].nome == "fine")
         $("#btn").hide();
 }
 
