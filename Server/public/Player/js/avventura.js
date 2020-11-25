@@ -1,7 +1,22 @@
 var storia;
-var scena_corr = -1;
+var scena_corr = 0;
 var socket = io("https://localhost:8000");
 var username;
+var gruppo = 0;
+var punteggio = 0;
+
+var startTime, endTime;
+
+function start_time() {
+  startTime = new Date();
+};
+
+function end_time() {
+  endTime = new Date();
+  var timeDiff = endTime - startTime; //in ms
+  var millis = Math.round(timeDiff);
+  return millis/1000;
+}
 
 function storiaCallback(data) {
     storia = data;
@@ -12,7 +27,7 @@ function storiaCallback(data) {
 function initialize() {
     $("#titolo").html(storia.nome);
     $("#btn").click(function () {
-        checkResult(scena_corr == -1 ? null : document.getElementById("result").value);
+        checkResult(scena_corr == 0 ? null : document.getElementById("result").value);
     })
     $(".adventure").css({
         'background-image': 'url( "/backgrounds/' + storia.background + '")',
@@ -22,22 +37,27 @@ function initialize() {
 }
 
 function checkResult(result) {
-    /*storia.scene[scena_corr].risposte.forEach(risposta => {
-        if(result == risposta.valore && risposta.maxTime != null && time <= risposta.maxTime){
-            //TODO: add ppppppppppppppppppscore;
-            nextScene();
-            socket.emit("scene", username, (scena_corr));
-        } else if (result == risposta.valore && risposta.maxTime == null){
-            //TODO: add ppppppppppppppppppscore;
-            nextScene();
-            socket.emit("scene", username, (scena_corr));
-        }
-    });*/
-    nextScene();
+    if(scena_corr!=0){
+        time = end_time();
+        storia.scene[scena_corr].risposte.forEach(risposta => {
+            if(result == risposta.valore && parseInt(risposta.maxTime) != null && time <= parseInt(risposta.maxTime)){
+                punteggio += parseInt(risposta.points);
+                scena = parseInt(risposta.to[gruppo]);
+                nextScene(scena);
+            } else if (result == risposta.valore && risposta.maxTime == null){
+                punteggio += parseInt(risposta.points);
+                scena = parseInt(risposta.to[gruppo]);
+                nextScene(scena);
+            }
+        });
+    }
+    nextScene(storia.scene[scena_corr].risposte[0].to[gruppo]);
 }
 
-function nextScene() {
-    scena_corr++;
+function nextScene(scena) {
+    start_time();
+    scena_corr = scena;
+    socket.emit("scene", username, (scena_corr));
     track = $("#track");
     track.attr("src", "/music/" + storia.scene[scena_corr].tracciaAudio);
     player = $("#player");
@@ -394,7 +414,7 @@ $(function () {
     });
 
     //init
-    $.getJSON("/public/Player/js/test.json", function (data) {
+    $.getJSON("/public/Player/js/newtestdaadattare.json", function (data) {
         storiaCallback(data);
     });
 
