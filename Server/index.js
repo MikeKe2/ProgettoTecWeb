@@ -78,9 +78,11 @@ app.use(passport.session());
 
 //HOME
 app.get("/", function (req, res) {
-  res.render("home", {
-    user: req.user
-  });
+  if (req.user) {
+    res.render("index", {user: req.user.username});
+} else {
+    res.redirect("login")
+}
 });
 
 //LOGIN
@@ -94,7 +96,7 @@ app.post(
     failureRedirect: "/login"
   }),
   function (req, res) {
-    res.redirect("index");
+    res.redirect("/");
   }
 );
 
