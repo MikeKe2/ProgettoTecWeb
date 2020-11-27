@@ -34,24 +34,31 @@ function initialize() {
         'background-repeat': 'no-repeat',
         'background-size': '100% 100%'
     });
+    nextScene(scena_corr);
 }
 
 function checkResult(result) {
     if(scena_corr!=0){
         time = end_time();
+        var pointsAdded = 0;
         storia.scene[scena_corr].risposte.forEach(risposta => {
-            if(result == risposta.valore && parseInt(risposta.maxTime) != 0 && time <= parseInt(risposta.maxTime)){
-                punteggio += parseInt(risposta.points);
+            if(result == risposta.valore && parseInt(risposta.maxTime) != 0 && time <= parseInt(risposta.maxTime) && pointsAdded == 0){
+                pointsAdded = parseInt(risposta.points);
+                punteggio += pointsAdded;
+                console.log(punteggio);
                 scena = parseInt(risposta.to[gruppo]);
                 nextScene(scena);
-            } else if (result == risposta.valore && parseInt(risposta.maxTime) == 0){
-                punteggio += parseInt(risposta.points);
+            } else if (result == risposta.valore && parseInt(risposta.maxTime) == 0  && pointsAdded == 0){
+                pointsAdded = parseInt(risposta.points);
+                punteggio += pointsAdded;
+                console.log(punteggio);
                 scena = parseInt(risposta.to[gruppo]);
                 nextScene(scena);
             }
         });
     } else {
         nextScene(storia.scene[scena_corr].risposte[0].to[gruppo]);
+        return;
     }
 }
 
@@ -68,23 +75,37 @@ function nextScene(scena) {
         console.log(player[0])
         player[0].oncanplaythrough = player[0].play();
     }
+
     if (storia.scene[scena_corr].descrizione != undefined && storia.scene[scena_corr].descrizione != ""){
         $("#text-holder").show();
         $("#testo").html(storia.scene[scena_corr].descrizione);
         //console.log(storia.scene[scena_corr].widget);
     } else if (storia.scene[scena_corr].nome == "inizio") {
         $("#text-holder").show();
-        $("#testo").html(```
-            BENVENUTO NELLA STORIA 
-        ```);
+        $("#testo").html(`
+BENVENUTO NELLA STORIA ${storia.nome}.<br>
+Quest'avventura è pensata per ${storia.categoria.replace('_', " ")}.<br>
+Il target di età è di ${storia.target} anni.<br>
+<br>
+Divertitevi!!!
+`       );
+    } else if (storia.scene[scena_corr].nome == "fine"){
+        //mostra punteggio e mandalo al server
+        socket.emit('score', username, (punteggio));
+        $("#text-holder").show();
+        $("#btn").hide();
+        $("#testo").html(`
+COMPLIMENTI! <br>
+Hai completato l'avventura totalizzando ben ${punteggio} punti! 
+`       );
     }
-    if (storia.scene[scena_corr].widget != "") {
+
+    if (storia.scene[scena_corr].widget != undefined && storia.scene[scena_corr].widget != "") {
         $("#widget-holder").show();
         $("#widget").load("/users/" + storia.autore + "/widgets/" + storia.scene[scena_corr].widget + ".html");
-    } else
+    } else {
         $("#widget-holder").hide();
-    if (storia.scene[scena_corr].nome == "fine")
-        $("#btn").hide();
+    }
 }
 
 $(function () {
