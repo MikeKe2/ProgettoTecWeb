@@ -28,13 +28,13 @@
 
 <script>
     function add(n){
-        var text = document.getElementById("textarea").value;
-        document.getElementById("textarea").value = text + n.toString();
+        var text = document.getElementById("result").value;
+        document.getElementById("result").value = text + n.toString();
     }
 
     function del(){
-        var text = document.getElementById("textarea").value;
+        var text = document.getElementById("result").value;
         text = text.slice(0, text.length-1);
-        document.getElementById("textarea").value = text;
+        document.getElementById("result").value = text;
     }
 </script>
