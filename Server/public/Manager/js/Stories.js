@@ -35,7 +35,7 @@ var Stories = new Vue({
                     url: "/rename",
                     data: {name: this.list[index].name, newName: newname, visibility: this.list[index].visibility},
                     success: function(){
-                        Stories.list[index].name = newname+".json";
+                        Stories.list[index].name = newname;
                     }
                   });
 			}
