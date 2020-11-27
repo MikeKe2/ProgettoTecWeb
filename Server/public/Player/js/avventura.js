@@ -8,14 +8,14 @@ var punteggio = 0;
 var startTime, endTime;
 
 function start_time() {
-  startTime = new Date();
+    startTime = new Date();
 };
 
 function end_time() {
-  endTime = new Date();
-  var timeDiff = endTime - startTime; //in ms
-  var millis = Math.round(timeDiff);
-  return millis/1000;
+    endTime = new Date();
+    var timeDiff = endTime - startTime; //in ms
+    var millis = Math.round(timeDiff);
+    return millis / 1000;
 }
 
 function storiaCallback(data) {
@@ -27,38 +27,49 @@ function storiaCallback(data) {
 function initialize() {
     $("#titolo").html(storia.nome);
     $("#btn").click(function () {
-        checkResult(scena_corr == 0 ? null : document.getElementById("result").value);
+        checkResult(scena_corr == 0 || document.getElementById("result") == undefined ? null : document.getElementById("result").value);
     })
     $(".adventure").css({
-        'background-image': 'url( "/users/'+ storia.autore +'/images/' + storia.background + '")',
+        'background-image': 'url( "/users/' + storia.autore + '/images/' + storia.background + '")',
         'background-repeat': 'no-repeat',
         'background-size': '100% 100%'
     });
     nextScene(scena_corr);
+    setInterval(1000, function () {
+        currTime = new Date();
+        if (scena_corr != 0 && startTime != undefined && Math.round((currTime - startTime) / 1000) % 60 == 0)
+            socket.emit("timer", username, (Math.round((currTime - startTime) / 1000)));
+    })
 }
 
 function checkResult(result) {
-    if(scena_corr!=0){
+    if (result != null) {
         time = end_time();
-        var pointsAdded = 0;
-        storia.scene[scena_corr].risposte.forEach(risposta => {
-            if(result == risposta.valore && parseInt(risposta.maxTime) != 0 && time <= parseInt(risposta.maxTime) && pointsAdded == 0){
-                pointsAdded = parseInt(risposta.points);
-                punteggio += pointsAdded;
-                console.log(punteggio);
-                scena = parseInt(risposta.to[gruppo]);
-                nextScene(scena);
-            } else if (result == risposta.valore && parseInt(risposta.maxTime) == 0  && pointsAdded == 0){
-                pointsAdded = parseInt(risposta.points);
-                punteggio += pointsAdded;
-                console.log(punteggio);
-                scena = parseInt(risposta.to[gruppo]);
-                nextScene(scena);
-            }
-        });
+        pointsAdded = 0;
+        if (storia.scene[scena_corr].valutatore == "false") {
+            storia.scene[scena_corr].risposte.forEach(risposta => {
+                if (result == risposta.valore && parseInt(risposta.maxTime) != 0 && time <= parseInt(risposta.maxTime) && pointsAdded == 0) {
+                    pointsAdded = parseInt(risposta.points);
+                    punteggio += pointsAdded;
+                    console.log(punteggio);
+                    scena = parseInt(risposta.to[gruppo]);
+                    nextScene(scena);
+                } else if (result == risposta.valore && parseInt(risposta.maxTime) == 0 && pointsAdded == 0) {
+                    pointsAdded = parseInt(risposta.points);
+                    punteggio += pointsAdded;
+                    console.log(punteggio);
+                    scena = parseInt(risposta.to[gruppo]);
+                    nextScene(scena);
+                }
+            });
+        } else {
+            socket.emit("answerToVal", username, (result));
+            scena = parseInt(storia.scene[scena_corr].risposte[0].to[gruppo]);
+            nextScene(scena);
+        }
     } else {
-        nextScene(storia.scene[scena_corr].risposte[0].to[gruppo]);
-        return;
+        scena = parseInt(storia.scene[scena_corr].risposte[0].to[gruppo]);
+        nextScene(scena);
     }
 }
 
@@ -66,7 +77,7 @@ function nextScene(scena) {
     start_time();
     scena_corr = scena;
     socket.emit("scene", username, (scena_corr));
-    if(storia.scene[scena_corr].tracciaAudio != undefined && storia.scene[scena_corr].tracciaAudio != ""){
+    if (storia.scene[scena_corr].tracciaAudio != undefined && storia.scene[scena_corr].tracciaAudio != "") {
         track = $("#track");
         track.attr("src", "/users/" + storia.autore + "/audios/" + storia.scene[scena_corr].tracciaAudio);
         player = $("#player");
@@ -76,7 +87,7 @@ function nextScene(scena) {
         player[0].oncanplaythrough = player[0].play();
     }
 
-    if (storia.scene[scena_corr].descrizione != undefined && storia.scene[scena_corr].descrizione != ""){
+    if (storia.scene[scena_corr].descrizione != undefined && storia.scene[scena_corr].descrizione != "") {
         $("#text-holder").show();
         $("#testo").html(storia.scene[scena_corr].descrizione);
         //console.log(storia.scene[scena_corr].widget);
@@ -89,7 +100,7 @@ Il target di età è di ${storia.target} anni.<br>
 <br>
 Divertitevi!!!
 `       );
-    } else if (storia.scene[scena_corr].nome == "fine"){
+    } else if (storia.scene[scena_corr].nome == "fine") {
         //mostra punteggio e mandalo al server
         socket.emit('score', username, (punteggio));
         $("#text-holder").show();
