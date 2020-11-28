@@ -12,8 +12,12 @@
 </head>
 
 <body>
+  <nav class="navbar navbar-light bg-light ">
+    <a class="navbar-brand" href="#"> Lato valutatore</a>
+    <button id="exportIron" class="btn btn-outline-success">export</button>
+  </nav>
   <ul class="pages">
-    <!--Chat Page, page where the selected user and the evaluator can chat-->
+    <!--CHAT PAGE, page where the selected user and the evaluator can chat-->
     <li class="chat page">
       <div class="container">
         <nav class="navbar navbar-light bg-light">
@@ -22,11 +26,11 @@
         </nav>
         <div class="chatArea">
           <ul class="messages"></ul>
+          <input id="inputMessage" type="text" class="form-control fixed-bottom" placeholder="Scriva qui..." />
         </div>
-        <input id="inputMessage" type="text" class="form-control fixed-bottom" placeholder="Scriva qui..." />
       </div>
     </li>
-    <!--Data Page, with all information regarding the status of a selected user-->
+    <!--DATA PAGE, with all information regarding the status of a selected user-->
     <li class="data page">
       <div class="container">
         <!-- Navbar -->
@@ -47,7 +51,7 @@
       <!--  Showing current status, possibile answers, etc etc-->
       <div class="container">
         <div class="row justify-content-center">
-          <div id="userStats" class="col-md-6">
+          <div id="userStats" class="col-md-6">Possibili Soluzioni
             <ul id="SceneAnswers" class="list-group list-group-flush">
             </ul>
           </div>
@@ -59,22 +63,21 @@
           </div>
         </div>
         <div>
-          <div class="form-group row">
-            <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
+          <!--<div class="form-group row">
             <div class="col-sm-10">
               <input type="text" readonly class="form-control-plaintext" disabled>
             </div>
-          </div>
+          </div>-->
           <div class="form-group row">
             <label for="formControlRange">Range input: </label>
-            <span class="valueSpan">0</span>
-            <input type="range" class="custom-range" min="0" max="5" id="formControlRange">
+            <span class="valueSpan"></span>
+            <input type="range" class="custom-range" min="0" max="10" id="formControlRange">
             <button id="rangeValue" class="btn btn-secondary btn-sm">Confirm vote</button>
           </div>
         </div>
       </div>
     </li>
-    <!--User Page, containing the list with all the user active-->
+    <!--USER PAGE, containing the list with all the user active-->
     <li class="users page">
       <div class="container-md" id="users">
         <ul id="userList" class="list-group">

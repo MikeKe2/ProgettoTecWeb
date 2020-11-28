@@ -142,6 +142,10 @@ ul {
   .adventure.page{
     display: none;
   }
+
+  .group.page {
+    display: none;
+  }
   
   /* Font */
   

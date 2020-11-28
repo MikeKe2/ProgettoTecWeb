@@ -16,6 +16,9 @@ const {
 var app = express();
 
 var multer = require('multer');
+const {
+  use
+} = require("passport");
 var uploader = multer({
   dest: 'uploads/'
 });
@@ -98,25 +101,30 @@ app.post(
   }
 );
 
-app.post("/newUser",function(req,res){
-  fs.readFile(__dirname +'/db/UsersData.json', function (err, data) {
+app.post("/newUser", function (req, res) {
+  fs.readFile(__dirname + '/db/UsersData.json', function (err, data) {
     let json = JSON.parse(data)
     console.log(req.body.name, " ", req.body.password);
-    json.push({"id": json.length + 1, "username": req.body.name, "password": req.body.password, "displayName": req.body.name})
+    json.push({
+      "id": json.length + 1,
+      "username": req.body.name,
+      "password": req.body.password,
+      "displayName": req.body.name
+    })
     console.log(json);
-    fs.writeFile(__dirname +'/db/UsersData.json', JSON.stringify(json), function (err) {
+    fs.writeFile(__dirname + '/db/UsersData.json', JSON.stringify(json), function (err) {
       if (err) throw err;
-      console.log('Saved!');  
-      let dir = './users/'+req.body.name;
+      console.log('Saved!');
+      let dir = './users/' + req.body.name;
 
-      if (!fs.existsSync(dir)){
+      if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir);
-        fs.mkdirSync(dir+"/audios");
-        fs.mkdirSync(dir+"/images");
-        fs.mkdirSync(dir+"/css");
-        fs.mkdirSync(dir+"/private");
-        fs.mkdirSync(dir+"/public");
-        fs.mkdirSync(dir+"/widgets");
+        fs.mkdirSync(dir + "/audios");
+        fs.mkdirSync(dir + "/images");
+        fs.mkdirSync(dir + "/css");
+        fs.mkdirSync(dir + "/private");
+        fs.mkdirSync(dir + "/public");
+        fs.mkdirSync(dir + "/widgets");
       }
       res.sendStatus(200);
     })
@@ -134,7 +142,9 @@ app.get("/logout", function (req, res) {
 //INDEX
 app.get("/index", require('connect-ensure-login').ensureLoggedIn(),
   function (req, res) {
-    res.render("index", {user:req.user.username});
+    res.render("index", {
+      user: req.user.username
+    });
   }
 );
 
@@ -273,20 +283,20 @@ function postMedia(req, res, type) {
       console.log(err)
       res.render('index', {
         msg: err,
-        user:req.user.username
+        user: req.user.username
       });
     } else {
       if (req.file == undefined) {
         res.render('index', {
           msg: 'Error: No File Selected!',
-          user:req.user.username
+          user: req.user.username
         });
       } else {
         console.log(req.file.filename)
         res.render('index', {
           msg: 'File Uploaded!',
           file: `uploads/${req.file.filename}`,
-          user:req.user.username
+          user: req.user.username
         });
       }
     }
@@ -304,7 +314,10 @@ app.get('/allStories', (req, res) => {
     //listing all files using forEach
     files.forEach(function (file) {
       // Do whatever you want to do with the file
-      filelist.push({name : file, visibility : 'private'});
+      filelist.push({
+        name: file,
+        visibility: 'private'
+      });
     });
 
     directoryPath = path.join(__dirname + "/users/" + req.user.username, "public");
@@ -316,9 +329,12 @@ app.get('/allStories', (req, res) => {
       //listing all files using forEach
       files.forEach(function (file) {
         // Do whatever you want to do with the file
-        filelist.push({name : file, visibility : 'public'});
+        filelist.push({
+          name: file,
+          visibility: 'public'
+        });
       });
-  
+
       res.setHeader('Content-Type', 'application/json');
       res.send(JSON.stringify(filelist));
       res.end();
@@ -355,7 +371,7 @@ app.post("/media/delete/:type", require('connect-ensure-login').ensureLoggedIn()
     var file = req.body.name;
     fs.unlinkSync(resDir + "/" + req.params.type + "/" + file);
     res.sendStatus(200);
-});
+  });
 
 //usare questo per richiedere un file della storia
 app.get('/media/:user/:type/:name', (req, res) => {
@@ -455,16 +471,15 @@ io.on("connection", (socket) => {
     fn('admin');
   });
 
-  socket.on('answerToEvaluator', (username, data ) => {
+  socket.on('answerToEvaluator', (username, data) => {
     socket.to(evalID).emit('answerToEvaluator', {
       username: username,
       message: data,
     });
   });
 
-  socket.on('answerFromEvaluator', (username, data ) => {
-    socket.to(evalID).emit('answerFromEvaluator', {
-      username: username,
+  socket.on('answerFromEvaluator', (id, data) => {
+    socket.to(id).emit('answerFromEvaluator', {
       message: data,
     });
   });
@@ -496,7 +511,6 @@ io.on("connection", (socket) => {
   // when the client emits 'new message', this listens and executes
   socket.on("new eval message", (targetID, data) => {
     // we tell the client to execute 'new message'
-    console.log(targetID);
     socket.to(targetID).emit('new message', {
       username: evaluator,
       message: data
@@ -511,9 +525,8 @@ io.on("connection", (socket) => {
   });
 
   // when the client emits 'add user', this listens and executes
-  socket.on("add user", (username, data) => {
+  socket.on("add user", (username, group, data) => {
     if (addedUser) return;
-
     // we store the username in the socket session for this client
     socket.username = username;
     ++numUsers;

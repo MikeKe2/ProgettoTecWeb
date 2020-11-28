@@ -19,6 +19,13 @@ function initialize() {
         'background-repeat': 'no-repeat',
         'background-size': '100% 100%'
     });
+    if (storia.categoria != 'single') {
+        for (i = 0; i < storia.ngruppi; i++) {
+            var $newGroup = $('<li class="list-group-item" id="' + i + '"> Gruppo ' + i + '</li>')
+            $('#groupPage').append($newGroup);
+        }
+    }
+
 }
 
 function checkResult(result) {
@@ -88,20 +95,6 @@ $(function () {
 
     var FADE_TIME = 150; // ms
     var TYPING_TIMER_LENGTH = 400; // ms
-    var COLORS = [
-        "#e21400",
-        "#91580f",
-        "#f8a700",
-        "#f78b00",
-        "#58dc00",
-        "#287b00",
-        "#a8f07a",
-        "#4ae8c4",
-        "#3b88eb",
-        "#3824aa",
-        "#a700ff",
-        "#d300e7",
-    ];
 
     // Initialize variables
     var $window = $(window);
@@ -112,6 +105,7 @@ $(function () {
     var $loginPage = $(".login.page"); // The login page
     var $chatPage = $(".chat.page"); // The chatroom page
     var $adventurePage = $(".adventure.page"); // The adventure page
+    var $groupPage = $('.group.page'); // The group selection page
 
     // Prompt for setting a username
     var connected = false;
@@ -127,12 +121,13 @@ $(function () {
         // If the username is valid
         if (username) {
             $loginPage.fadeOut();
-            $adventurePage.show();
-            //$chatPage.show();
             $loginPage.off("click");
-            //$currentInput = $inputMessage.focus();
-            // Tell the server your username
-            socket.emit("add user", username, (storia));
+            if (storia.categoria != 'single')
+                $groupPage.show();
+            else {
+                $adventurePage.show();
+                socket.emit("add user", username, null, (storia));
+            }
         }
     };
 
@@ -282,6 +277,14 @@ $(function () {
 
     // Click events
 
+    $groupPage.on("click", '.list-group-item', function (event) {
+        // Tell the server your username
+        $groupPage.fadeOut();
+        $adventurePage.show();
+        $groupPage.off("click");
+        socket.emit("add user", username, event.currentTarget.id, (storia));
+    });
+
     $(".valutatore").click(() => {
         var pass1;
         socket.emit('password', ';)', (data) => {
@@ -307,7 +310,7 @@ $(function () {
 
     $('#helpRequested').click(() => {
         socket.emit('help', (username));
-        document.getElementById('helpRequested').disabled = true;
+        $('#helpRequested').prop("disabled", true);
     })
 
     $('#chatWithEvaluator').click(() => {
@@ -343,9 +346,18 @@ $(function () {
 
     // Socket events
 
+    socket.on('answerFromEvaluator', (data) => {
+        console.log(data.message);
+        // punti += data;
+    });
+
+    socket.on('groupClosed', (data) => {
+        $('#' + data.id).remove();
+    });
+
     socket.on('helpIncoming', (data) => {
         window.alert("Il valutatore dice: " + data.message);
-        document.getElementById('helpRequested').disabled = false;
+        $('#helpRequested').prop("disabled", false);
     });
 
     // Whenever the server emits 'login', log the login message
@@ -362,6 +374,7 @@ $(function () {
     // Whenever the server emits 'new message', update the chat body
     socket.on("new message", (data) => {
         ArrayofMessages.newMessage(data.username, data.id, username, data.message);
+        //we just check if the page is visibile, because users have only one chat
         if ($chatPage.is(":visible")) {
             addChatMessage(data);
         }

@@ -51,7 +51,6 @@ $(
       }
 
       findElement(userUsername) {
-        //console.log(this.users[0].userUsername);
         for (var i = 0; i < this.users.length; i++)
           if (this.users[i].userUsername == userUsername)
             return i;
@@ -66,7 +65,7 @@ $(
         return conta;
       }
 
-      get numberOfStorie() {
+      get numberOfUsers() {
         return this.users.length;
       }
 
@@ -92,6 +91,7 @@ $(
       new Toast('error', "L'utente "),
     ];
 
+
     // Initialize variables
     var $window = $(window);
     var $messages = $(".messages"); // Messages area
@@ -114,11 +114,14 @@ $(
 
     //#region Toastr
 
+    toastr.options.preventDuplicates = true;
+    toastr.options.closeButton = true;
+    toastr.options.progressBar = true;
     toastr.options.positionClass = 'toast-top-right';
-    toastr.options.extendedTimeOut = 0; //1000;
-    toastr.options.timeOut = 4000;
-    toastr.options.fadeOut = 250;
-    toastr.options.fadeIn = 250;
+    toastr.options.extendedTimeOut = 1000; //1000;
+    toastr.options.timeOut = 2500;
+    toastr.options.fadeOut = 150;
+    toastr.options.fadeIn = 150;
 
 
     function showToast(i, data) {
@@ -306,15 +309,6 @@ $(
       input.prop("disabled", false);
     };
 
-    function myTimer() {
-      var d = new Date();
-      document.getElementById("timePassed").innerHTML = d.toLocaleTimeString();
-      /* ArrayofUsers.users[i].userTimer ++;
-       document.getElementById("timePassed").innerHTML = ArrayofUsers.users[i].userTimer;*/
-    }
-
-
-
     //#endregion
 
     //#region Events
@@ -345,12 +339,12 @@ $(
       $inputMessage.focus();
     });
 
-    //FROM LIST PAGE TO DATA PAGE
+    // LIST PAGE ==> DATA PAGE
     $("#userList").on("click", '.list-group-item', function (event) {
 
-      //var Mj = setInterval(myTimer(), 1000);
       currentTargetUser = event.currentTarget.id;
-      document.getElementById('currentUser').innerHTML = currentTargetUser;
+      //document.getElementById('currentUser').innerHTML = currentTargetUser;
+      $('#currentUser').html(currentTargetUser);
 
       changeScene($dataPage, $usersPage);
 
@@ -359,16 +353,16 @@ $(
 
         currentTargetId = ArrayofUsers.users[i].userId;
 
-        document.getElementById("userStatus").innerHTML = "Si trova nella stanza: " + ArrayofUsers.users[i].userRoom;
-        document.getElementById("SceneName").innerHTML = ArrayofUsers.users[i].userStoria.scene[ArrayofUsers.users[i].userRoom].nome;
-        document.getElementById("SceneDescrizione").innerHTML = ArrayofUsers.users[i].userStoria.scene[ArrayofUsers.users[i].userRoom].descrizione;
+        $("#userStatus").html("Si trova nella stanza: " + ArrayofUsers.users[i].userRoom);
+        $("#SceneName").html(ArrayofUsers.users[i].userStoria.scene[ArrayofUsers.users[i].userRoom].nome);
+        $("#SceneDescrizione").html(ArrayofUsers.users[i].userStoria.scene[ArrayofUsers.users[i].userRoom].descrizione);
 
         for (y in ArrayofUsers.users[i].userStoria.scene[ArrayofUsers.users[i].userRoom].risposte) {
+          var currentAnswer = Object.values(ArrayofUsers.users[i].userStoria.scene[ArrayofUsers.users[i].userRoom].risposte[y]);
           var answer = '<li class = "list-group-item"><ul class = "list-group">';
-          var test = Object.values(ArrayofUsers.users[i].userStoria.scene[ArrayofUsers.users[i].userRoom].risposte[y]);
-          for (k in test)
-            answer = answer.concat('<li class = "list group-item">' + test[k] + '</li>');
-
+          answer = answer.concat('<li class = "list-group-item">' + "Valore: " + currentAnswer[0] + '</li>');
+          answer = answer.concat('<li class = "list-group-item">' + "Tempo Massimo: " + currentAnswer[2] + '</li>');
+          answer = answer.concat('<li class = "list-group-item">' + "Punti: " + currentAnswer[3] + '</li>');
           answer = answer.concat('</ul></li>')
           $('#SceneAnswers').append(answer);
         }
@@ -409,18 +403,41 @@ $(
 
     $('#helpButton').click(() => {
       var helpingComment = prompt("Please enter the helping hint", "");
-      socket.emit('helpIncoming', currentTargetId, (helpingComment));
-      var element = document.getElementById(currentTargetUser);
-      element.className = element.className.replace(/\blist-group-item-danger\b/g, "");
+      if (helpingComment != null) {
+        socket.emit('helpIncoming', currentTargetId, (helpingComment));
+        var element = $('#currentTargetUser');
+        element.className = element.className.replace(/\blist-group-item-danger\b/g, "");
+      }
       //document.getElementById("helpButton").disabled = true;
     });
 
     $('#rangeValue').click(() => {
       var element = document.getElementById(currentTargetUser);
       element.className = element.className.replace(/\blist-group-item-warning\b/g, "");
-      console.log($('#formControlRange').val());
       socket.emit('answerFromEvaluator', currentTargetId, $('#formControlRange').val());
+      $(".form-group").fadeOut();
     });
+
+    $('#exportIron').click(() => {
+      var data = JSON.stringify(ArrayofUsers);
+      var file = new Blob([data], {
+        type: "json"
+      });
+      if (window.navigator.msSaveOrOpenBlob) // IE10+
+        window.navigator.msSaveOrOpenBlob(file, filename);
+      else { // Others
+        var a = document.createElement("a"),
+          url = URL.createObjectURL(file);
+        a.href = url;
+        a.download = "data.json";
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function () {
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        }, 0);
+      }
+    })
 
     //#endregion
 
@@ -445,8 +462,8 @@ $(
         $(".progress-bar").css({
           'width': statusProgressbar + '%'
         });
-        document.getElementById("SceneName").innerHTML = ArrayofUsers.users[i].userStoria.scene[ArrayofUsers.users[i].userRoom].nome;
-        document.getElementById("SceneDescrizione").innerHTML = ArrayofUsers.users[i].userStoria.scene[ArrayofUsers.users[i].userRoom].descrizione;
+        $("#SceneName").html(ArrayofUsers.users[i].userStoria.scene[ArrayofUsers.users[i].userRoom].nome);
+        $("#SceneDescrizione").html(ArrayofUsers.users[i].userStoria.scene[ArrayofUsers.users[i].userRoom].descrizione);
       }
     });
 
@@ -458,13 +475,12 @@ $(
     // Whenever the server emits 'login', log the login message
     socket.on("login", (data) => {
       connected = true;
-      showToast(6);
     });
 
     // Whenever the server emits 'new message', update the chat body
     socket.on("new message", (data) => {
       ArrayofMessages.newMessage(data.username, data.id, "valutatore", data.message);
-      if (currentTargetUser == data.username)
+      if (currentTargetUser == data.username && $chatPage.is(":visible"))
         addChatMessage(data);
       else
         showToast(2, data);
@@ -514,6 +530,11 @@ $(
       if (username) {
         socket.emit("add eval", username);
       }
+      /*for(i=0; i < ArrayofUsers.numberOfUsers; i++)
+      {
+        var $newUser = $('<li class="list-group-item" id="' + ArrayofUsers[i].userUsername.replace(/[^a-zA-Z0-9]/g, "") + '">' +  ArrayofUsers[i].userUsername + '</li>');
+        $('#userList').append($newUser);
+      }*/
     });
 
     socket.on("reconnect_error", () => {
