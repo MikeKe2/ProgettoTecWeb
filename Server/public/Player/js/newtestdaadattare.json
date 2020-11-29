@@ -4,22 +4,19 @@
     "accessibile": "true",
     "target": "7-10",
     "ngruppi": "2",
-    "background": "taccuino.jpg",
+    "background": "",
     "css": "",
-    "autore": "admin",
-    "scene": [
-        {
+    "autore": "autore1",
+    "scene": [{
             "nome": "inizio",
             "x": "15",
             "y": "15",
-            "risposte": [
-                {
-                    "to": [
-                        "2",
-                        "-1"
-                    ]
-                }
-            ]
+            "risposte": [{
+                "to": [
+                    "2",
+                    "-1"
+                ]
+            }]
         },
         {
             "nome": "fine",
@@ -33,11 +30,10 @@
             "imgdescription": "",
             "widget": "text",
             "tracciaAudio": "",
-            "valutatore": "true",
+            "valutatore": "false",
             "x": "427",
             "y": "97",
-            "risposte": [
-                {
+            "risposte": [{
                     "valore": "15",
                     "to": [
                         "3",
@@ -67,8 +63,7 @@
             "valutatore": "false",
             "x": "313",
             "y": "400",
-            "risposte": [
-                {
+            "risposte": [{
                     "valore": "15",
                     "to": [
                         "4",
@@ -98,11 +93,10 @@
             "valutatore": "false",
             "x": "0",
             "y": "0",
-            "risposte": [
-                {
+            "risposte": [{
                     "valore": "15",
                     "to": [
-                        "1",
+                        "2",
                         "-1"
                     ],
                     "maxTime": "15",
@@ -112,7 +106,7 @@
                     "valore": "15",
                     "maxTime": "0",
                     "to": [
-                        "1",
+                        "2",
                         "-1"
                     ],
                     "points": "500"
@@ -138,17 +132,15 @@
             "timemax": "",
             "x": "0",
             "y": "0",
-            "risposte": [
-                {
-                    "valore": "15",
-                    "to": [
-                        "-1",
-                        "-1"
-                    ],
-                    "maxTime": "15",
-                    "points": "5000"
-                }
-            ]
+            "risposte": [{
+                "valore": "15",
+                "to": [
+                    "-1",
+                    "-1"
+                ],
+                "maxTime": "15",
+                "points": "5000"
+            }]
         }
     ]
 }

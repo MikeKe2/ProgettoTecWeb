@@ -81,9 +81,13 @@ app.use(passport.session());
 
 //HOME
 app.get("/", function (req, res) {
-  res.render("home", {
-    user: req.user
-  });
+  if (req.user) {
+    res.render("index", {
+      user: req.user.username
+    });
+  } else {
+    res.redirect("login")
+  }
 });
 
 //LOGIN
@@ -97,7 +101,7 @@ app.post(
     failureRedirect: "/login"
   }),
   function (req, res) {
-    res.redirect("index");
+    res.redirect("/");
   }
 );
 
@@ -450,6 +454,14 @@ app.get('/editorStoria/:visibility/:nomeStoria/', (req, res) => {
   });
 });
 
+//ROUTE TO STORIES
+app.get('/avventura/:user/:name', (req, res) => {
+  url = '/users/' + req.params.user + '/public/' + req.params.name + '.json';
+  res.render("avventura", {
+    urlStoria: url
+  });
+});
+
 var numUsers = 0;
 var evaluator = "valutatore";
 var evalID = 0;
@@ -461,6 +473,7 @@ io.on("connection", (socket) => {
   socket.on("scene", (username, num) => {
     if (num > 0)
       currScene = num;
+
     socket.to(evalID).emit('scene', {
       username: username,
       room: num,
@@ -468,7 +481,14 @@ io.on("connection", (socket) => {
   });
 
   socket.on('password', (name, fn) => {
-    fn('admin');
+    fn('evaluator');
+  });
+
+  socket.on('score', (username, data) =>{
+    socket.to(evalID).emit('score', {
+      username: username,
+      score: data,
+    });
   });
 
   socket.on('answerToEvaluator', (username, data) => {

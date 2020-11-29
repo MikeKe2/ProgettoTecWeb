@@ -1,7 +1,22 @@
 var storia;
-var scena_corr = -1;
+var scena_corr = 0;
 var socket = io("https://localhost:8000");
 var username;
+var gruppo = 0;
+var punteggio = 0;
+
+var startTime, endTime;
+
+function start_time() {
+    startTime = new Date();
+};
+
+function end_time() {
+    endTime = new Date();
+    var timeDiff = endTime - startTime; //in ms
+    var millis = Math.round(timeDiff);
+    return millis / 1000;
+}
 
 function storiaCallback(data) {
     storia = data;
@@ -12,55 +27,102 @@ function storiaCallback(data) {
 function initialize() {
     $("#titolo").html(storia.nome);
     $("#btn").click(function () {
-        checkResult(scena_corr == -1 ? null : document.getElementById("result").value);
+        checkResult(scena_corr == 0 || document.getElementById("result") == undefined ? null : document.getElementById("result").value);
     })
     $(".adventure").css({
-        'background-image': 'url( "/backgrounds/' + storia.background + '")',
+        'background-image': 'url( "/users/' + storia.autore + '/images/' + storia.background + '")',
         'background-repeat': 'no-repeat',
         'background-size': '100% 100%'
     });
+    nextScene(scena_corr);
+    setInterval(1000, function () {
+        currTime = new Date();
+        if (scena_corr != 0 && startTime != undefined && Math.round((currTime - startTime) / 1000) % 60 == 0)
+            socket.emit("timer", username, (Math.round((currTime - startTime) / 1000)));
+    })
     if (storia.categoria != 'single') {
         for (i = 0; i < storia.ngruppi; i++) {
             var $newGroup = $('<li class="list-group-item" id="' + i + '"> Gruppo ' + i + '</li>')
             $('#groupPage').append($newGroup);
         }
     }
-
 }
 
 function checkResult(result) {
-    /*storia.scene[scena_corr].risposte.forEach(risposta => {
-        if(result == risposta.valore && risposta.maxTime != null && time <= risposta.maxTime){
-            //TODO: add ppppppppppppppppppscore;
-            nextScene();
-            socket.emit("scene", username, (scena_corr));
-        } else if (result == risposta.valore && risposta.maxTime == null){
-            //TODO: add ppppppppppppppppppscore;
-            nextScene();
-            socket.emit("scene", username, (scena_corr));
+    if (result != null) {
+        time = end_time();
+        pointsAdded = 0;
+        if (storia.scene[scena_corr].valutatore == "false") {
+            storia.scene[scena_corr].risposte.forEach(risposta => {
+                if (result == risposta.valore && parseInt(risposta.maxTime) != 0 && time <= parseInt(risposta.maxTime) && pointsAdded == 0) {
+                    pointsAdded = parseInt(risposta.points);
+                    punteggio += pointsAdded;
+                    console.log(punteggio);
+                    scena = parseInt(risposta.to[gruppo]);
+                    nextScene(scena);
+                } else if (result == risposta.valore && parseInt(risposta.maxTime) == 0 && pointsAdded == 0) {
+                    pointsAdded = parseInt(risposta.points);
+                    punteggio += pointsAdded;
+                    console.log(punteggio);
+                    scena = parseInt(risposta.to[gruppo]);
+                    nextScene(scena);
+                }
+            });
+        } else {
+            socket.emit("answerToEvaluator", username, (result));
+            scena = parseInt(storia.scene[scena_corr].risposte[0].to[gruppo]);
+            nextScene(scena);
         }
-    });*/
-    nextScene();
+    } else {
+        scena = parseInt(storia.scene[scena_corr].risposte[0].to[gruppo]);
+        nextScene(scena);
+    }
 }
 
-function nextScene() {
-    scena_corr++;
-    track = $("#track");
-    track.attr("src", "/music/" + storia.scene[scena_corr].tracciaAudio);
-    player = $("#player");
-    player[0].pause();
-    player[0].load();
-    console.log(player[0])
-    player[0].oncanplaythrough = player[0].play();
-    $("#testo").html(storia.scene[scena_corr].descrizione);
-    console.log(storia.scene[scena_corr].widget);
-    if (storia.scene[scena_corr].widget != null) {
-        $("#widget-holder").show();
-        $("#widget").load("/public/Player/widgets/" + storia.scene[scena_corr].widget);
-    } else
-        $("#widget-holder").hide();
-    if (scena_corr == storia.scene.length - 1)
+function nextScene(scena) {
+    start_time();
+    scena_corr = scena;
+    socket.emit("scene", username, (scena_corr));
+    if (storia.scene[scena_corr].tracciaAudio != undefined && storia.scene[scena_corr].tracciaAudio != "") {
+        track = $("#track");
+        track.attr("src", "/users/" + storia.autore + "/audios/" + storia.scene[scena_corr].tracciaAudio);
+        player = $("#player");
+        player[0].pause();
+        player[0].load();
+        console.log(player[0])
+        player[0].oncanplaythrough = player[0].play();
+    }
+
+    if (storia.scene[scena_corr].descrizione != undefined && storia.scene[scena_corr].descrizione != "") {
+        $("#text-holder").show();
+        $("#testo").html(storia.scene[scena_corr].descrizione);
+        //console.log(storia.scene[scena_corr].widget);
+    } else if (storia.scene[scena_corr].nome == "inizio") {
+        $("#text-holder").show();
+        $("#testo").html(`
+BENVENUTO NELLA STORIA ${storia.nome}.<br>
+Quest'avventura è pensata per ${storia.categoria.replace('_', " ")}.<br>
+Il target di età è di ${storia.target} anni.<br>
+<br>
+Divertitevi!!!
+`);
+    } else if (storia.scene[scena_corr].nome == "fine") {
+        //mostra punteggio e mandalo al server
+        socket.emit('score', username, (punteggio));
+        $("#text-holder").show();
         $("#btn").hide();
+        $("#testo").html(`
+COMPLIMENTI! <br>
+Hai completato l'avventura totalizzando ben ${punteggio} punti! 
+`);
+    }
+
+    if (storia.scene[scena_corr].widget != undefined && storia.scene[scena_corr].widget != "") {
+        $("#widget-holder").show();
+        $("#widget").load("/users/" + storia.autore + "/widgets/" + storia.scene[scena_corr].widget + ".html");
+    } else {
+        $("#widget-holder").hide();
+    }
 }
 
 $(function () {
@@ -406,8 +468,8 @@ $(function () {
         log("attempt to reconnect has failed");
     });
 
-    //init
-    $.getJSON("/public/Player/js/test.json", function (data) {
+
+    $.getJSON(urlStoria, function (data) {
         storiaCallback(data);
     });
 

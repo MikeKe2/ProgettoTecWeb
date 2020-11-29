@@ -31,12 +31,13 @@ $(
 
 
     class Utente {
-      constructor(userId, userUsername, userStoria, userRoom, userTimer) {
+      constructor(userId, userUsername, userStoria, userRoom, userTimer, userScore) {
         this.userId = userId;
         this.userUsername = userUsername;
         this.userStoria = userStoria;
         this.userRoom = userRoom;
         this.userTimer = userTimer;
+        this.userScore = userScore;
       }
     };
 
@@ -44,8 +45,8 @@ $(
       constructor() {
         this.users = [];
       }
-      newStoria(userId, userUsername, userStoria, userRoom, userTimer) {
-        let m = new Utente(userId, userUsername, userStoria, userRoom, userTimer);
+      newStoria(userId, userUsername, userStoria, userRoom, userTimer, userScore) {
+        let m = new Utente(userId, userUsername, userStoria, userRoom, userTimer, userScore);
         this.users.push(m);
         return m;
       }
@@ -405,12 +406,13 @@ $(
       var helpingComment = prompt("Please enter the helping hint", "");
       if (helpingComment != null) {
         socket.emit('helpIncoming', currentTargetId, (helpingComment));
-        var element = $('#currentTargetUser');
+        var element = document.getElementById(currentTargetUser);
         element.className = element.className.replace(/\blist-group-item-danger\b/g, "");
       }
       //document.getElementById("helpButton").disabled = true;
     });
 
+    //when asked to assing a score to a player, we send the value from the RangeValue 
     $('#rangeValue').click(() => {
       var element = document.getElementById(currentTargetUser);
       element.className = element.className.replace(/\blist-group-item-warning\b/g, "");
@@ -418,6 +420,7 @@ $(
       $(".form-group").fadeOut();
     });
 
+    //we export the ArrayOfUser in a .json file, checking wich browser the user is currently using
     $('#exportIron').click(() => {
       var data = JSON.stringify(ArrayofUsers);
       var file = new Blob([data], {
@@ -447,13 +450,18 @@ $(
       socket.emit("add eval", username);
     });
 
+    socket.on('score', (data) => {
+      let i = ArrayofUsers.findElement(data.username);
+      ArrayofUsers[i].userScore += data.score;
+    })
+
     socket.on('help', (data) => {
       $('#' + data.username).addClass('list-group-item-danger');
       //document.getElementById("helpButton").disabled = false;
       setTimeout(showToast(8, data), 2000);
     });
 
-    //Whenever the server emits 'scene', log the change
+    //Whenever the server emits 'scene', log the change and change the information regarding that room
     socket.on("scene", (data) => {
       let i = ArrayofUsers.findElement(data.username);
       if (i >= 0) {
@@ -467,9 +475,12 @@ $(
       }
     });
 
+    //the user need to have an answer evalued, so we show the form for assignin scores
     socket.on("answerToEvaluator", (data) => {
+      console.log(data);
       $('#' + data.username).addClass('list-group-item-warning');
       $(".form-group").show();
+      $('.form-control-plaintext').html(data.message);
     });
 
     // Whenever the server emits 'login', log the login message
@@ -489,14 +500,13 @@ $(
     // Whenever the server emits 'user joined', log it in the chat body
     socket.on("user joined", (data) => {
       if (ArrayofUsers.findElement(data.username) == -1) {
-        ArrayofUsers.newStoria(data.id, data.username, data.storia, 0, 0);
         var $newUser = $('<li class="list-group-item" id="' + data.username.replace(/[^a-zA-Z0-9]/g, "") + '">' + data.username + '</li>');
         $('#userList').append($newUser);
         showToast(0, data);
-      } else {
-        ArrayofUsers.newStoria(data.id, data.username, data.storia, 0, 0);
+      } else
         showToast(7, data);
-      }
+
+      ArrayofUsers.newStoria(data.id, data.username, data.storia, 0, 0, 0);
     });
 
     // Whenever the server emits 'user left', log it in the chat body

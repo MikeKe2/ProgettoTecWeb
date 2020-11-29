@@ -28,81 +28,93 @@
   </head>
 
   <body>
-    <nav class="navbar navbar-light bg-light">
-      <a href="#" class="navbar-brand mb-0 h1">Index</a>
-      <a class="nav-link" href="/logout">Log out</a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="/">M&M's</a>
+      <ul class="navbar-nav mr-auto">
+      </ul>
+      <div class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <%= user %>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/profile">Profile</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/logout">Logout</a>
+        </div>
+      </div>
     </nav>
 
-    <span id="user" style="display: none;"><%= user %></span>
-
-    <h1 class="display-4 text-center">Hello <%= user %></h1>
-    <div class="d-flex justify-content-around">
-      <div id="Stories" class="col-md-5">
-        <button class="btn btn-success" v-on:click="newFile()">New Story</button>
-        <ul class="list-group list-group-flush">
-          <template v-for="(story, index) in list">
-            <li class="list-group-item" v-bind:class="{active: story.selected}">
-              <div class="item-container d-flex justify-content-between clickable nonselectable" v-on:dblclick="open(index)">
-                {{story.name}} 
-                <div class="d-flex justify-content-around">
-                  <!-- TODO mettere gli alt -->
-                  <img style="width:20px; height:20px;" v-on:click="getQR(index)" src="/Manager/img/QRlogo.png" v-if="story.visibility=='public'">
-                  <img style="width:20px; height:20px;" v-on:click="changevisibility(index)" v-bind:src="story.visibility=='public'?'/Manager/img/lucchettoAperto.png' : '/Manager/img/lucchettoChiuso.png'">
-                  <img style="width:20px; height:20px;" v-on:click="changeName(index)" src="/Manager/img/matita.png">
-                  <img style="width:20px; height:20px;" v-on:click="deleteStory(index)" src="/Manager/img/cestino.png">
+    <div class="container"></div>
+      <span id="user" style="display: none;"><%= user %></span>
+      <h1 class="display-4 text-center">M&M's File Manager</h1>
+      <div class="container-fluid row justify-content-around">
+        <div id="Stories" class="col-md-6 container-sm">
+          <button class="btn btn-success" v-on:click="newFile()">New Story</button>
+          <ul class="list-group list-group-flush">
+            <template v-for="(story, index) in list">
+              <li class="list-group-item" v-bind:class="{active: story.selected}">
+                <div class="item-container d-flex justify-content-between clickable nonselectable" v-on:click="open(index)">
+                  {{story.name}} 
+                  <div class="d-flex justify-content-around">
+                    <!-- TODO mettere gli alt -->
+                    <img style="width:20px; height:20px;" v-on:click="getQR(index)" src="/Manager/img/QRlogo.png" v-if="story.visibility=='public'">
+                    <img style="width:20px; height:20px;" v-on:click="changevisibility(index)" v-bind:src="story.visibility=='public'?'/Manager/img/lucchettoAperto.png' : '/Manager/img/lucchettoChiuso.png'">
+                    <img style="width:20px; height:20px;" v-on:click="changeName(index)" src="/Manager/img/matita.png">
+                    <img style="width:20px; height:20px;" v-on:click="deleteStory(index)" src="/Manager/img/cestino.png">
+                  </div>
                 </div>
-              </div>
-            </li>
-          </template>
-        </ul>
-      </div>
-      <div class="col-md-5"  id="Media">
-        <div class="card text-center">
-          <div class="card-header">
-            <ul class="nav nav-tabs card-header-tabs">
-              <li class="nav-item clickable" v-for="type in types">
-                <a v-bind:class="type==clicked ? 'nav-link active' : 'nav-link'" v-on:click="init(type)">{{type}}</a>
               </li>
-            </ul>
-          </div>
-          <div class="card-body">
-            <div class="col-md-12 d-flex justify-content-around">
-              <label for="form-control-file" class="col-md-2">Load file</label>
-              <input class="form-control-file" id="newFile" type="file" v-on:change="newFile()">
+            </template>
+          </ul>
+        </div>
+        <div class="col-md-6 container-sm"  id="Media">
+          <div class="card text-center">
+            <div class="card-header">
+              <ul class="nav nav-tabs card-header-tabs">
+                <li class="nav-item clickable" v-for="type in types">
+                  <a v-bind:class="type==clicked ? 'nav-link active' : 'nav-link'" v-on:click="init(type)">{{type}}</a>
+                </li>
+              </ul>
             </div>
-            <div class="file d-flex justify-content-between col-md-12 clickable nonselectable" v-for="(item, index) in list" v-on:dblclick="open(index)">
-              {{item}}
-              <div class="d-flex justify-content-around col-md-2">
-                <!-- TODO mettere gli alt -->
-                <img style="width:20px; height:20px;" v-on:click="changeName(index)" src="/Manager/img/matita.png">
-                <img style="width:20px; height:20px;" v-on:click="deleteMedia(index)" src="/Manager/img/cestino.png">
-              </div>
+            <div class="card-body">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <input class="form-control-file" id="newFile" type="file" v-on:change="newFile()">
+                </li>
+                <li class="file list-group-item d-flex justify-content-between clickable nonselectable" v-for="(item, index) in list" v-on:click="open(index)">
+                  {{item}}
+                  <div class="d-flex justify-content-around">
+                    <!-- TODO mettere gli alt -->
+                    <img style="width:20px; height:20px;" v-on:click="changeName(index)" src="/Manager/img/matita.png">
+                    <img style="width:20px; height:20px;" v-on:click="deleteMedia(index)" src="/Manager/img/cestino.png">
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Modal -->
+      <div class="modal fade" id="ModalCenter" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Ecco il tuo codice qr</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body d-flex justify-content-around">
+              <div id="qr"></div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
           </div>
         </div>
       </div>
     </div>
-    
-    <!-- Modal -->
-    <div class="modal fade" id="ModalCenter" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">Ecco il tuo codice qr</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body d-flex justify-content-around">
-            <div id="qr"></div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <script src="/Manager/js/qrcode.min.js"></script>
     <script src="/Manager/js/Stories.js"></script>
     <script src="/Manager/js/Media.js"></script>
