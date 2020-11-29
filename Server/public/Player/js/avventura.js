@@ -468,6 +468,17 @@ $(function () {
         log("attempt to reconnect has failed");
     });
 
+    // chiedere a michele domani
+    socket.on("assignGroup", (user, groupN) => {
+        if(user == username)
+            gruppo == groupN;
+    });
+
+    socket.on("scoreFromVal", (user, score) => {
+        if(user == username)
+            punteggio += score;
+    });
+
 
     $.getJSON(urlStoria, function (data) {
         storiaCallback(data);
