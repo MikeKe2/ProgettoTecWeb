@@ -14,16 +14,13 @@
 <body>
   <nav class="navbar navbar-light bg-light ">
     <a class="navbar-brand" href="#"> Lato valutatore</a>
+    <button id="listButton" class="btn btn-default">LIST</button>
     <button id="exportIron" class="btn btn-outline-success">export</button>
   </nav>
   <ul class="pages">
     <!--CHAT PAGE, page where the selected user and the evaluator can chat-->
     <li class="chat page">
       <div class="container">
-        <nav class="navbar navbar-light bg-light">
-          <button id="userPageButton" class="btn btn-outline-secondary">Esci</button>
-          <a class="navbar-brand mb-0 h1" id="chatUser"></a>
-        </nav>
         <div class="chatArea">
           <ul class="messages"></ul>
           <input id="inputMessage" type="text" class="form-control fixed-bottom" placeholder="Scriva qui..." />
@@ -36,7 +33,6 @@
         <!-- Navbar -->
         <nav class="navbar navbar-light bg-light">
           <span id="currentUser" class="navbar-brand mb-0 h1"></span>
-          <button id="listButton" class="btn btn-default">LIST</button>
           <a class="navbar-text" id="userStatus"></a>
           <span class="navbar-text" id="timePassed"></span>
           <button id="helpButton" class="btn btn-danger">Send HELP</button>
@@ -49,30 +45,43 @@
         </div>
       </div>
       <!--  Showing current status, possibile answers, etc etc-->
-      <div class="container">
+      <div class="container justify-content-center">
         <div class="row justify-content-center">
-          <div id="userStats" class="col-md-6">Possibili Soluzioni
-            <ul id="SceneAnswers" class="list-group list-group-flush">
-            </ul>
-          </div>
-          <div class="col-md-6">
+          <div class="col-lg-6">
             <ul id="SceneDescription" class="list-group list-group-flush">
               <li id="SceneName" class="list-group-item">Name</li>
               <li id="SceneDescrizione" class="list-group-item">Description</li>
             </ul>
           </div>
+          <!-- POSSIBLE ANSWERS-->
+          <div id="userStats" class="col-lg-6 mt-1">
+            <ul id="SceneAnswers" class="list-group list-group-horizontal list-group-flush justify-content-center">
+            </ul>
+          </div>
         </div>
-        <div>
-          <div class="form-group row">
+      </div>
+      <div id="answerForm" class="container justify-content-center">
+        <hr />
+        <div class="row justify-content-center">
+          <div class="row justify-content-center">
             <div class="col-sm-10">
-              <input type="text" readonly class="form-control-plaintext" disabled></input>
+              <ul class="list-group justify-content-center list-group-horizontal">
+                <li class="list-group-item flex-fill">Domanda da rispondere:</li>
+                <li class="list-group-item flex-fill" id="soluzioneCorretta"></li>
+              </ul>
+              <ul class="list-group justify-content-center list-group-horizontal">
+                <li class="list-group-item flex-fill">Soluzione proposta:</li>
+                <li class="list-group-item flex-fill" id="soluzioneProposta"></li>
+              </ul>
             </div>
           </div>
-          <div class="form-group row">
-            <label for="formControlRange">Range input: </label>
-            <span class="valueSpan"></span>
-            <input type="range" class="custom-range" min="0" max="10" id="formControlRange">
-            <button id="rangeValue" class="btn btn-secondary btn-sm">Confirm vote</button>
+          <div class="row">
+            <div class="col-sm-10">
+              <label for="formControlRange">Che valore vuoi dare a questa risposta?: </label>
+              <span class="valueSpan"></span>
+              <input type="range" class="custom-range" min="0" max="10" id="formControlRange">
+              <button id="rangeValue" class="btn btn-secondary btn-sm">Confirm vote</button>
+            </div>
           </div>
         </div>
       </div>

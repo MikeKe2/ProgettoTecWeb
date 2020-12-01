@@ -40,12 +40,13 @@ function initialize() {
         if (scena_corr != 0 && startTime != undefined && Math.round((currTime - startTime) / 1000) % 60 == 0)
             socket.emit("timer", username, (Math.round((currTime - startTime) / 1000)));
     })
-    if (storia.categoria != 'single') {
+    //Se la storia non è single allora permetto l'utente di scegliere il gruppo
+    /*if (storia.categoria != 'single') {
         for (i = 0; i < storia.ngruppi; i++) {
             var $newGroup = $('<li class="list-group-item" id="' + i + '"> Gruppo ' + i + '</li>')
             $('#groupPage').append($newGroup);
         }
-    }
+    }*/
 }
 
 function checkResult(result) {
@@ -167,7 +168,7 @@ $(function () {
     var $loginPage = $(".login.page"); // The login page
     var $chatPage = $(".chat.page"); // The chatroom page
     var $adventurePage = $(".adventure.page"); // The adventure page
-    var $groupPage = $('.group.page'); // The group selection page
+    //var $groupPage = $('.group.page'); // The group selection page
 
     // Prompt for setting a username
     var connected = false;
@@ -184,12 +185,9 @@ $(function () {
         if (username) {
             $loginPage.fadeOut();
             $loginPage.off("click");
-            if (storia.categoria != 'single')
-                $groupPage.show();
-            else {
-                $adventurePage.show();
-                socket.emit("add user", username, null, (storia));
-            }
+            $adventurePage.show();
+            socket.emit("add user", username, (storia));
+
         }
     };
 
@@ -339,13 +337,13 @@ $(function () {
 
     // Click events
 
-    $groupPage.on("click", '.list-group-item', function (event) {
+    /*$groupPage.on("click", '.list-group-item', function (event) {
         // Tell the server your username
         $groupPage.fadeOut();
         $adventurePage.show();
         $groupPage.off("click");
         socket.emit("add user", username, event.currentTarget.id, (storia));
-    });
+    });*/
 
     $(".valutatore").click(() => {
         var pass1;
@@ -376,6 +374,10 @@ $(function () {
     })
 
     $('#chatWithEvaluator').click(() => {
+        var element = document.getElementById("chatWithEvaluator");
+        element.className = element.className.replace(/\bbtn-outline-danger\b/g, "" );
+        $('#chatWithEvaluator').addClass('btn-outline-info');
+        
         $adventurePage.fadeOut(100);
         $chatPage.show(800);
         $adventurePage.prop("disabled", true);
@@ -408,20 +410,23 @@ $(function () {
 
     // Socket events
 
+    
+    
+    /* socket.on("scoreFromVal", (user, score) => {
+        if(user == username)
+        punteggio += score;
+    });*/
+    
     socket.on('answerFromEvaluator', (data) => {
         console.log(data.message);
-        // punti += data;
+        punteggio += data.message;
     });
-
-    socket.on('groupClosed', (data) => {
-        $('#' + data.id).remove();
-    });
-
+    
     socket.on('helpIncoming', (data) => {
         window.alert("Il valutatore dice: " + data.message);
         $('#helpRequested').prop("disabled", false);
     });
-
+    
     // Whenever the server emits 'login', log the login message
     socket.on("login", (data) => {
         connected = true;
@@ -432,6 +437,10 @@ $(function () {
         });
         id = socket.id;
     });
+        
+    socket.on("assignGroup", (data) => {
+        gruppo = data.groupN;
+    });
 
     // Whenever the server emits 'new message', update the chat body
     socket.on("new message", (data) => {
@@ -439,49 +448,41 @@ $(function () {
         //we just check if the page is visibile, because users have only one chat
         if ($chatPage.is(":visible")) {
             addChatMessage(data);
+        }else{
+            var element = document.getElementById("chatWithEvaluator");
+            element.className = element.className.replace(/\bbtn-outline-info\b/g, "" );
+            $('#chatWithEvaluator').addClass('btn-outline-danger');
         }
     });
-
+    
     // Whenever the server emits 'typing', show the typing message
     socket.on("typing", (data) => {
         addChatTyping(data);
     });
-
+    
     // Whenever the server emits 'stop typing', kill the typing message
     socket.on("stop typing", (data) => {
         removeChatTyping(data);
     });
-
+    
     socket.on("disconnect", () => {
         log("you have been disconnected");
     });
-
+    
     socket.on("reconnect", () => {
         log("you have been reconnected");
         if (username) {
-            socket.emit("add user", username);
+            socket.emit("add user", username, (storia));
         }
         id = socket.id;
     });
-
+    
     socket.on("reconnect_error", () => {
         log("attempt to reconnect has failed");
     });
-
-    // chiedere a michele domani
-    socket.on("assignGroup", (user, groupN) => {
-        if(user == username)
-            gruppo == groupN;
-    });
-
-    socket.on("scoreFromVal", (user, score) => {
-        if(user == username)
-            punteggio += score;
-    });
-
-
+    
     $.getJSON(urlStoria, function (data) {
         storiaCallback(data);
     });
-
+    
 });

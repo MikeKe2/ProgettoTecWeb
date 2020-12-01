@@ -465,15 +465,11 @@ app.get('/avventura/:user/:name', (req, res) => {
 var numUsers = 0;
 var evaluator = "valutatore";
 var evalID = 0;
-var currScene = 0;
 
 io.on("connection", (socket) => {
   var addedUser = false;
 
   socket.on("scene", (username, num) => {
-    if (num > 0)
-      currScene = num;
-
     socket.to(evalID).emit('scene', {
       username: username,
       room: num,
@@ -484,7 +480,7 @@ io.on("connection", (socket) => {
     fn('evaluator');
   });
 
-  socket.on('score', (username, data) =>{
+  socket.on('score', (username, data) => {
     socket.to(evalID).emit('score', {
       username: username,
       score: data,
@@ -545,7 +541,7 @@ io.on("connection", (socket) => {
   });
 
   // when the client emits 'add user', this listens and executes
-  socket.on("add user", (username, group, data) => {
+  socket.on("add user", (username, data) => {
     if (addedUser) return;
     // we store the username in the socket session for this client
     socket.username = username;
@@ -554,6 +550,7 @@ io.on("connection", (socket) => {
     socket.emit("login", {
       numUsers: numUsers,
     });
+
     // echo to the Evaluator that a person has connected
     socket.to(evalID).emit("user joined", {
       username: username,
@@ -563,6 +560,13 @@ io.on("connection", (socket) => {
     });
 
   });
+
+  socket.on('assignGroup', (data) =>{
+    socket.to(data.id).emit("assignGroup", {
+     groupN : data.groupN,
+    });
+  });
+  
 
   // when the client emits 'typing', we broadcast it to others
   socket.on("typing", () => {

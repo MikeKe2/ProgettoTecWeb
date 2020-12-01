@@ -49,7 +49,6 @@ html, input {
 }
 
 #scena {
-    border: 1px solid red;
     text-align: center;
 }
 
@@ -63,14 +62,6 @@ html, input {
     justify-content: center;
     display: flex;
     padding: 1em;
-}
-
-#testo {
-    border: 1px solid blue;
-}
-
-#widget {
-    border: 1px solid darkgreen;
 }
 
 ul {
