@@ -25,13 +25,13 @@
   }
 
   .form {
-    position: absolute;
+    position: fixed;
     text-align: center;
     top: 40%;
     width: 100%;
   }
 
-  .add_user{
+  .form.add_user{
     display: none;
   }
 
