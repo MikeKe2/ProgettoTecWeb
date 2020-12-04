@@ -30,10 +30,10 @@ $(
     };
 
     class Utente {
-      constructor(userId, userUsername, userStoria, userRoom, userTimer, userScore, currentQuestion, possibleAnswer) {
+      constructor(userId, userUsername, /*userStoria,*/ userRoom, userTimer, userScore, currentQuestion, possibleAnswer) {
         this.userId = userId;
         this.userUsername = userUsername;
-        this.userStoria = userStoria;
+        //this.userStoria = userStoria;
         this.userRoom = userRoom;
         this.userTimer = userTimer;
         this.userScore = userScore;
@@ -47,8 +47,8 @@ $(
         this.users = [];
       }
 
-      newStoria(userId, userUsername, userStoria, userRoom, userTimer, userScore, currentQuestion, possibleAnswer) {
-        let m = new Utente(userId, userUsername, userStoria, userRoom, userTimer, userScore, currentQuestion, possibleAnswer);
+      newStoria(userId, userUsername, /*userStoria,*/ userRoom, userTimer, userScore, currentQuestion, possibleAnswer) {
+        let m = new Utente(userId, userUsername, /*userStoria,*/ userRoom, userTimer, userScore, currentQuestion, possibleAnswer);
         this.users.push(m);
         return m;
       }
@@ -152,6 +152,7 @@ $(
     var gruppo = 0;
     var ArrayofUsers = new Utenti();
     var ArrayofMessages = new Messages();
+    var storia;
 
     var FADE_TIME = 150; // ms
     var TYPING_TIMER_LENGTH = 400; // ms
@@ -297,15 +298,21 @@ $(
 
       //We show the current info on the selected user, such as Room number, name and description
       $("#userStatus").html("Si trova nella stanza: " + numRoom);
-      $("#SceneName").html(ArrayofUsers.users[i].userStoria.scene[numRoom].nome);
-      $("#SceneDescrizione").html(ArrayofUsers.users[i].userStoria.scene[numRoom].descrizione);
+      $("#SceneName").html(storia.scene[numRoom].nome);
+      $("#SceneDescrizione").html(storia.scene[numRoom].descrizione);
+
+      let k = numRoom;
+      let statusProgressbar = (100 * (k++)) / storia.scene.length;
+      $(".progress-bar").css({
+        'width': statusProgressbar + '%'
+      });
 
       //we show the possible answer to the current Room, and various data
-      for (y in ArrayofUsers.users[i].userStoria.scene[numRoom].risposte) {
-        var currentAnswer = Object.values(ArrayofUsers.users[i].userStoria.scene[numRoom].risposte[y]);
+      for (y in storia.scene[numRoom].risposte) {
+        var currentAnswer = Object.values(storia.scene[numRoom].risposte[y]);
         var answer = '<li class = "list-group-item"><ul class = "list-group">';
         answer = answer.concat('<li class = "list-group-item">' + "Possibile Risposta: " + currentAnswer[0] + '</li>');
-        answer = answer.concat('<li class = "list-group-item">' + "Tempo Massimo: " + currentAnswer[2] + '</li>');
+        answer = answer.concat('<li class = "list-group-item">' + "Tempo Massimo: " + currentAnswer[1] + '</li>');
         answer = answer.concat('<li class = "list-group-item">' + "Punti: " + currentAnswer[3] + '</li>');
         answer = answer.concat('</ul></li>')
         $('#SceneAnswers').append(answer);
@@ -373,9 +380,9 @@ $(
     $("#listButton").click(() => {
       currentTargetId = 0;
       currentTargetUser = 0;
-      if($dataPage.is(":visible"))
+      if ($dataPage.is(":visible"))
         changeScene($usersPage, $dataPage);
-      else if($chatPage.is(":visible"))
+      else if ($chatPage.is(":visible"))
         changeScene($usersPage, $chatPage);
 
       $(".messages").html("");
@@ -438,8 +445,14 @@ $(
 
     socket.on('score', (data) => {
       let i = ArrayofUsers.findElement(data.username);
-      ArrayofUsers[i].userScore += data.score;
+      ArrayofUsers.users[i].userScore += data.score;
+
+      if (storia.scene[ArrayofUsers.users[i].userRoom].nome == "fine"){
+        $('#' + data.username).html(data.username + " ha finito la storia con: " + ArrayofUsers.users[i].userScore + " punti");
+        $('#' + data.username).addClass('list-group-item-info');
+      }
     })
+
     //when a user ask for help we identify that user by highlighting its div
     socket.on('help', (data) => {
       $('#' + data.username).addClass('list-group-item-danger');
@@ -451,12 +464,8 @@ $(
       let i = ArrayofUsers.findElement(data.username);
       if (i >= 0) {
         ArrayofUsers.users[i].userRoom = data.room;
-        let k = data.room;
-        let statusProgressbar = (100 * (k++)) / ArrayofUsers.users[i].userStoria.scene.length;
-        $(".progress-bar").css({
-          'width': statusProgressbar + '%'
-        });
-        changeData(i, ArrayofUsers.users[i].userRoom);
+        if ($dataPage.is(":visible") && currentTargetUser == data.username)
+          changeData(i, ArrayofUsers.users[i].userRoom);
       }
     });
 
@@ -465,7 +474,7 @@ $(
 
       let i = ArrayofUsers.findElement(data.username);
       ArrayofUsers.users[i].possibleAnswer = data.message;
-      ArrayofUsers.users[i].currentQuestion = "nome: " + ArrayofUsers.users[i].userStoria.scene[ArrayofUsers.users[i].userRoom].nome + "\n e descrizione: " + ArrayofUsers.users[i].userStoria.scene[ArrayofUsers.users[i].userRoom].descrizione;
+      ArrayofUsers.users[i].currentQuestion = "nome: " + storia.scene[ArrayofUsers.users[i].userRoom].nome + "\n e descrizione: " + storia.scene[ArrayofUsers.users[i].userRoom].descrizione;
 
       $('#' + data.username).addClass('list-group-item-warning');
       $('#soluzioneProposta').html(data.message);
@@ -475,6 +484,10 @@ $(
         $(".form-group").show();
 
       showToast(9, data);
+    });
+
+    socket.on("avventura_in_corso", (data) => {
+      storia = data.storia;
     });
 
     // Whenever the server emits 'login', log the login message
@@ -499,38 +512,42 @@ $(
       } else
         showToast(7, data);
 
-      ArrayofUsers.newStoria(data.id, data.username, data.storia, 0, 0, 0, "NULL", "NULL");
+      ArrayofUsers.newStoria(data.id, data.username, /*data.storia,*/ 0, 0, 0, "NULL", "NULL");
 
       socket.emit("assignGroup", {
         id: data.id,
         groupN: gruppo,
       });
 
-      if (data.storia.ngruppi != "0") {
+      if (storia.ngruppi != "0") {
         gruppo++;
-        if (gruppo == parseInt(data.storia.ngruppi))
+        if (gruppo == parseInt(storia.ngruppi))
           gruppo = 0;
       }
     });
 
     // Whenever the server emits 'user left', log it in the chat body
     socket.on("user left", (data) => {
-      if (ArrayofUsers.findElement(data.username) >= 0) {
+      let i = 0;
+      if ((i = ArrayofUsers.findElement(data.username)) >= 0) {
         showToast(1, data);
-        if (ArrayofUsers.findElement(data.username) >= 0) {
-          $("#" + data.username.replace(/[^a-zA-Z0-9]/g, "")).remove();
-          removeChatTyping(data);
-        }
-        if(currentTargetUser == data.username){
+
+        $("#" + data.username.replace(/[^a-zA-Z0-9]/g, "")).remove();
+
+        ArrayofUsers.users.splice(i, 1);
+        removeChatTyping(data);
+
+        if (currentTargetUser == data.username) {
           currentTargetId = 0;
           currentTargetUser = 0;
-          if($dataPage.is(":visible"))
-          changeScene($usersPage, $dataPage);
-          else if($chatPage.is(":visible"))
-          changeScene($usersPage, $chatPage);
+
+          if ($dataPage.is(":visible"))
+            changeScene($usersPage, $dataPage);
+          else if ($chatPage.is(":visible"))
+            changeScene($usersPage, $chatPage);
         }
-        ArrayofUsers.users.pop(data.username);
       }
+
     });
 
     // Whenever the server emits 'typing', show the typing message

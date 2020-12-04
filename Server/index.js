@@ -95,6 +95,10 @@ app.get("/login", function (req, res) {
   res.render("login");
 });
 
+app.get("/valutatore", function (req, res){
+  res.render("valutatore")
+});
+
 app.post(
   "/login",
   passport.authenticate("local", {
@@ -462,6 +466,7 @@ app.get('/avventura/:user/:name', (req, res) => {
   });
 });
 
+var avventura = null;
 var numUsers = 0;
 var evaluator = "valutatore";
 var evalID = 0;
@@ -550,12 +555,16 @@ io.on("connection", (socket) => {
     socket.emit("login", {
       numUsers: numUsers,
     });
-
+    if(numUsers <= 1 || avventura == null){
+      avventura = data;
+      socket.to(evalID).emit("avventura_in_corso", {
+        storia: data,
+      });
+    }
     // echo to the Evaluator that a person has connected
     socket.to(evalID).emit("user joined", {
       username: username,
       id: socket.id,
-      storia: data,
       numUsers: numUsers,
     });
 
@@ -592,6 +601,9 @@ io.on("connection", (socket) => {
         username: socket.username,
         numUsers: numUsers,
       });
+
+      if(numUsers <= 0)
+        avventura = null;
     }
   });
 });

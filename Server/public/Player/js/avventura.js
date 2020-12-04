@@ -362,8 +362,7 @@ $(function () {
 
             if (password == pass1) {
                 alert("Access Granted!");
-
-                window.location = "../Valutatore/index.html";
+                location.replace("https://localhost:8000/valutatore");
             } else alert("Password is incorrect.");
         });
     });
@@ -375,9 +374,9 @@ $(function () {
 
     $('#chatWithEvaluator').click(() => {
         var element = document.getElementById("chatWithEvaluator");
-        element.className = element.className.replace(/\bbtn-outline-danger\b/g, "" );
+        element.className = element.className.replace(/\bbtn-outline-danger\b/g, "");
         $('#chatWithEvaluator').addClass('btn-outline-info');
-        
+
         $adventurePage.fadeOut(100);
         $chatPage.show(800);
         $adventurePage.prop("disabled", true);
@@ -410,23 +409,23 @@ $(function () {
 
     // Socket events
 
-    
-    
+
+
     /* socket.on("scoreFromVal", (user, score) => {
         if(user == username)
         punteggio += score;
     });*/
-    
+
     socket.on('answerFromEvaluator', (data) => {
         console.log(data.message);
-        punteggio += data.message;
+        punteggio += parseInt(data.message, 10);
     });
-    
+
     socket.on('helpIncoming', (data) => {
         window.alert("Il valutatore dice: " + data.message);
         $('#helpRequested').prop("disabled", false);
     });
-    
+
     // Whenever the server emits 'login', log the login message
     socket.on("login", (data) => {
         connected = true;
@@ -437,7 +436,7 @@ $(function () {
         });
         id = socket.id;
     });
-        
+
     socket.on("assignGroup", (data) => {
         gruppo = data.groupN;
     });
@@ -448,27 +447,27 @@ $(function () {
         //we just check if the page is visibile, because users have only one chat
         if ($chatPage.is(":visible")) {
             addChatMessage(data);
-        }else{
+        } else {
             var element = document.getElementById("chatWithEvaluator");
-            element.className = element.className.replace(/\bbtn-outline-info\b/g, "" );
+            element.className = element.className.replace(/\bbtn-outline-info\b/g, "");
             $('#chatWithEvaluator').addClass('btn-outline-danger');
         }
     });
-    
+
     // Whenever the server emits 'typing', show the typing message
     socket.on("typing", (data) => {
         addChatTyping(data);
     });
-    
+
     // Whenever the server emits 'stop typing', kill the typing message
     socket.on("stop typing", (data) => {
         removeChatTyping(data);
     });
-    
+
     socket.on("disconnect", () => {
         log("you have been disconnected");
     });
-    
+
     socket.on("reconnect", () => {
         log("you have been reconnected");
         if (username) {
@@ -476,13 +475,13 @@ $(function () {
         }
         id = socket.id;
     });
-    
+
     socket.on("reconnect_error", () => {
         log("attempt to reconnect has failed");
     });
-    
+
     $.getJSON(urlStoria, function (data) {
         storiaCallback(data);
     });
-    
+
 });
