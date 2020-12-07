@@ -25,13 +25,14 @@
   }
 
   .form {
-    height: 100px;
-    margin-top: -100px;
-    position: absolute;
-
+    position: fixed;
     text-align: center;
-    top: 50%;
+    top: 40%;
     width: 100%;
+  }
+
+  .form.add_user{
+    display: none;
   }
 
   .form .usernameInput {
@@ -43,7 +44,7 @@
     text-align: center;
     width: 400px;
   }
-  
+ 
   .title {
     font-size: 150%;
   }
@@ -80,4 +81,5 @@
 
   .link {
     color: rgb(85, 85, 163);
+    margin-top: 20px;
   }

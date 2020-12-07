@@ -22,12 +22,14 @@ input {
 html,
 body {
   background-color: antiquewhite;
+  padding-top: 10%;
   height: 100%;
   margin: 0;
   padding: 0;
 }
 
 ul {
+  padding: 0;
   list-style: none;
   word-wrap: break-word;
 }
@@ -79,10 +81,10 @@ ul {
   font-family: "Lucida Console", Courier, monospace;
   text-align: right;
 }
-/*
-.form-group{
+
+#answerForm{
   display: none;
-}*/
+}
 
 /* Input */
 
