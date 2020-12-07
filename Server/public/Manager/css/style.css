@@ -1,21 +1,4 @@
-<<<<<<< HEAD
 /* #feedback {
-=======
-* {
-	box-sizing: border-box;
-}
-
-html,
-body {
-	overflow-x: hidden;
-}
-
-body {
-	position: relative;
-}
-
-#feedback {
->>>>>>> dfe50c9dcd33939b817197c2fc18c9de02d7d007
 	font-size: 1.4em;
 }
 
@@ -70,7 +53,6 @@ body {
 	width: 80%;
 }
 
-<<<<<<< HEAD
 .nonselectable {
 	-webkit-touch-callout: none; /* iOS Safari */
 	-webkit-user-select: none; /* Safari */
@@ -90,10 +72,9 @@ img {
 	width:20px; 
 	height:20px; 
 	margin:2px;
-=======
+}
 .container-fluid .row {
 	border: none;
 	border-top: 0.1vw solid #000;
 	/*padding-top: 5%;*/
->>>>>>> dfe50c9dcd33939b817197c2fc18c9de02d7d007
 }
