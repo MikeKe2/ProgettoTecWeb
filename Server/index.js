@@ -103,13 +103,13 @@ app.post(
 app.post("/newUser",function(req,res){
   fs.readFile(__dirname +'/db/UsersData.json', function (err, data) {
     let json = JSON.parse(data)
-    console.log(req.body.name, " ", req.body.password);
-    json.push({"id": json.length + 1, "username": req.body.name, "password": req.body.password, "displayName": req.body.name})
+    console.log(req.body.newusername, " ", req.body.newpassword);
+    json.push({"id": json.length + 1, "username": req.body.newusername, "password": req.body.newpassword, "displayName": req.body.newusername})
     console.log(json);
     fs.writeFile(__dirname +'/db/UsersData.json', JSON.stringify(json), function (err) {
       if (err) throw err;
       console.log('Saved!');  
-      let dir = './users/'+req.body.name;
+      let dir = './users/'+req.body.newusername;
 
       if (!fs.existsSync(dir)){
         fs.mkdirSync(dir);
