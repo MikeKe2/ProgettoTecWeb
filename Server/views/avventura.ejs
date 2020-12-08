@@ -23,7 +23,8 @@
                 <div class="chatArea">
                     <ul class="messages"></ul>
                 </div>
-                <input id="inputMessage" type="text" aria-label="chat text input" class="form-control fixed-bottom" placeholder="Scrivi qui..." />
+                <input id="inputMessage" type="text" aria-label="chat text input" class="form-control fixed-bottom"
+                    placeholder="Scrivi qui..." />
             </div>
         </li>
         <!-- LOGIN PAGE-->
@@ -43,19 +44,26 @@
         </li>
         <!-- ADVENTURE PAGE-->
         <li class="adventure page">
-            <nav class="navbar navbar-default">
-                <div class="container-fluid">
-                    <div class="navbar-header">
-                        <a class="navbar-brand" href="/start">M&Ms</a>
-                    </div>
-                    <a class="navbar-right" href="#">About</a>
-                    <p class="navbar-text navbar-left" id='titolo'></p>
-                    <button id="helpRequested" class="btn btn-danger"> HELP </button>
-                    <button id="chatWithEvaluator" class="btn btn-outline-info"> Chat</button>
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" id='titolo' href="#"></a>
+                <a class="navbar-text" href="#">About</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                        </li>
+                    </ul>
+                    <form class="form-inline my-2 my-lg-0">
+                        <button id="helpRequested" class="btn btn-danger mr-sm-2"> HELP </button>
+                        <button id="chatWithEvaluator" class="btn btn-outline-info m-2 my-sm-0"> Chat</button>
+                    </form>
                 </div>
             </nav>
             <div class="container-fluid">
-                <div id="avventura" class="row justify-content-center h-75">
+                <div id="avventura" class="row justify-co   ntent-center h-75">
                     <div id="musica">
                         <audio id="player" loop="true">
                             <!--  <embed id="track" loop="true" hidden="true" autostart="true">-->
