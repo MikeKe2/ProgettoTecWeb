@@ -2,15 +2,18 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   overflow-x: hidden;
 }
+
 body {
   position: relative
 }
 
 
-html, input {
+html,
+input {
   font-family:
     "HelveticaNeue-Light",
     "Helvetica Neue Light",
@@ -21,16 +24,19 @@ html, input {
     sans-serif;
 }
 
-@media screen and (min-width: 299px) and (max-width: 1080px){
-    html, body {
-        height: 100%;
-        margin: 0;
-        overflow-y: hidden;
-    }
+@media screen and (min-width: 299px) and (max-width: 1080px) {
+
+  html,
+  body {
+    height: 100%;
+    margin: 0;
+    overflow-y: hidden;
+  }
 }
 
 
-#qr-wrapper, #intro {
+#qr-wrapper,
+#intro {
   text-align: center;
   justify-content: space-between;
   flex-direction: column;
@@ -38,157 +44,159 @@ html, input {
 }
 
 #btn-scan-qr {
-    cursor: pointer;
+  cursor: pointer;
 }
-  
+
 #btn-scan-qr img {
-    height: 10em;
-    padding: 15px;
-    margin: 15px;
-    background: white;
+  height: 10em;
+  padding: 15px;
+  margin: 15px;
+  background: white;
 }
 
 #scena {
-    text-align: center;
+  text-align: center;
 }
 
 #scena {
-    justify-content: space-between;
-    flex-direction: column;
-    display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  display: flex;
 }
 
 #scena #btn-holder {
-    justify-content: center;
-    display: flex;
-    padding: 1em;
+  justify-content: center;
+  display: flex;
+  padding: 1em;
 }
 
 ul {
-    list-style: none;
-    word-wrap: break-word;
-  }
-  
-  /* Pages */
-  
-  .pages {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-  }
-  
-  .page {
-    height: 100%;
-    position: absolute;
-    width: 100%;
-  }
-  
-  /* Login Page */
-  
-  .login.page {
-    background-color: #000;
-  }
-  
-  .login.page .form {
-    height: 100px;
-    margin-top: -100px;
-    position: absolute;
-  
-    text-align: center;
-    top: 50%;
-    width: 100%;
-  }
-  
-  .login.page .form .usernameInput {
-    background-color: transparent;
-    border: none;
-    border-bottom: 2px solid #fff;
-    outline: none;
-    padding-bottom: 15px;
-    text-align: center;
-    width: 400px;
-  }
-  
-  .login.page .title {
-    font-size: 200%;
-  }
-  
-  .login.page .usernameInput .valutatore {
-    font-size: 200%;
-    letter-spacing: 3px;
-  }
-  
-  .login.page .title, .login.page .usernameInput, .valutatore {
-    color: #fff;
-    font-weight: 100;
-  }
-  
-  /* Chat page */
-  
-  .chat.page {
-    display: none;
-  }
+  list-style: none;
+  word-wrap: break-word;
+}
 
-  .adventure.page{
-    display: none;
-  }
+/* Pages */
 
-  .group.page {
-    display: none;
-  }
-  
-  /* Font */
-  
-  .messages {
-    font-size: 150%;
-  }
-  
-  .inputMessage {
-    font-size: 100%;
-  }
-  
-  .log {
-    color: gray;
-    font-size: 70%;
-    margin: 5px;
-    text-align: center;
-  }
-  
-  /* Messages */
-  
-  .chatArea {
-    height: 100%;
-    padding-bottom: 60px;
-  }
-  
-  .messages {
-    height: 100%;
-    margin: 0;
-    overflow-y: scroll;
-    padding: 10px 20px 10px 20px;
-    font-size: 3vmin;
-  }
-  
-  .message.typing .messageBody {
-    color: gray;
-  }
-  
-  .username {
-    font-weight: 700;
-    overflow: hidden;
-    padding-right: 15px;
-    text-align: right;
-  }
+.pages {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
 
-  .player{
-    font-family: "Lucida Console", Courier, monospace;
-    text-align: right;
-  }
-  
-  /* Input */
-  
-  .valutatore{
-    cursor: pointer;
-    padding: 30px;
-  }
+.page {
+  height: 100%;
+  position: absolute;
+  width: 100%;
+}
+
+/* Login Page */
+
+.login.page {
+  background-color: whitesmoke;
+}
+
+.login.page .form {
+  height: 100px;
+  margin-top: -100px;
+  position: absolute;
+
+  text-align: center;
+  top: 50%;
+  width: 100%;
+}
+
+.login.page .form .usernameInput {
+  background-color: transparent;
+  border: none;
+  border-bottom: 2px solid #000000;
+  outline: none;
+  padding-bottom: 1%;
+  text-align: center;
+  width: 50vw;
+}
+
+.login.page .title {
+  font-size: 200%;
+}
+
+.login.page .usernameInput .valutatore {
+  font-size: 200%;
+  letter-spacing: 3px;
+}
+
+.login.page .title,
+.login.page .usernameInput,
+.valutatore {
+  color: #000;
+  font-weight: 100;
+}
+
+/* Chat page */
+
+.chat.page {
+  display: none;
+}
+
+.adventure.page {
+  display: none;
+}
+
+.group.page {
+  display: none;
+}
+
+/* Font */
+
+.messages {
+  font-size: 150%;
+}
+
+.inputMessage {
+  font-size: 100%;
+}
+
+.log {
+  color: gray;
+  font-size: 70%;
+  margin: 5px;
+  text-align: center;
+}
+
+/* Messages */
+
+.chatArea {
+  height: 100%;
+  padding-bottom: 60px;
+}
+
+.messages {
+  height: 100%;
+  margin: 0;
+  overflow-y: scroll;
+  padding: 10px 20px 10px 20px;
+  font-size: 3vmin;
+}
+
+.message.typing .messageBody {
+  color: gray;
+}
+
+.username {
+  font-weight: 700;
+  overflow: hidden;
+  padding-right: 15px;
+  text-align: right;
+}
+
+.player {
+  font-family: "Lucida Console", Courier, monospace;
+  text-align: right;
+}
+
+/* Input */
+
+.valutatore {
+  cursor: pointer;
+  padding: 30px;
+}
