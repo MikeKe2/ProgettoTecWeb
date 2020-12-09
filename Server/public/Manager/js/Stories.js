@@ -29,7 +29,7 @@ var Stories = new Vue({
         
         changeName:function(index){
             let newname = prompt("insersci un nuovo nome", this.list[index].name);
-			if(newname != ""){
+			if(newname != null && newname != ""){
 				$.ajax({
                     type: "POST",
                     url: "/rename",
