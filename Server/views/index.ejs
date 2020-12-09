@@ -43,7 +43,6 @@
                     {{story.name}} 
                   </div>
                   <div class="d-flex justify-content-around">
-                    <!-- TODO mettere gli alt -->
                     <img v-bind:alt="'Get '+story.name+' QR'" v-on:click="getQR(index)" src="/Manager/img/QRlogo.png" v-if="story.visibility=='public'">
                     <img v-bind:alt="'Make '+story.name+ story.visibility?'private':'public'" v-on:click="changevisibility(index)" v-bind:src="story.visibility=='public'?'/Manager/img/lucchettoAperto.png' : '/Manager/img/lucchettoChiuso.png'">
                     <img v-bind:alt="'Rename '+story.name" v-on:click="changeName(index)" src="/Manager/img/matita.png">
@@ -73,7 +72,6 @@
                     {{item}}
                   </div>
                   <div class="d-flex justify-content-around">
-                    <!-- TODO mettere gli alt -->
                     <img v-bind:alt="'Rename '+item" v-on:click="changeName(index)" src="/Manager/img/matita.png">
                     <img v-bind:alt="'Delete '+item" v-on:click="deleteMedia(index)" src="/Manager/img/cestino.png">
                   </div>

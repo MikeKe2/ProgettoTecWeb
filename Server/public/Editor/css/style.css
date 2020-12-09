@@ -34,7 +34,7 @@ html, body{
     justify-content: space-between;
 }
 
-.scenebody p:nth-child(11), #settings_div p:nth-child(6){
+.scenebody p:nth-child(10), #settings_div p:nth-child(6){
     display: flex;
     justify-content: flex-start;
 }
