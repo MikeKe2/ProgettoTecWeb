@@ -295,6 +295,7 @@ $(
       $("#SceneName").html("");
       $("#SceneDescrizione").html("");
       $('#SceneAnswers').html("");
+      $('.btn-group').html("");
 
       //We show the current info on the selected user, such as Room number, name and description
       $("#userStatus").html("Si trova nella stanza: " + numRoom);
@@ -319,8 +320,14 @@ $(
       }
 
       //if the current user has some question to be evalued, we show the module for it
-      if (ArrayofUsers.users[i].possibleAnswer != "NULL")
+      if (ArrayofUsers.users[i].possibleAnswer != "NULL") {
+        var buttons = '';
+        for (y in ArrayofUsers.users[i].currentQuestion.risposte)
+          buttons = buttons.concat('<button type="button" id="' + y + '" class="btn btn-secondary">' + ArrayofUsers.users[i].currentQuestion.risposte[y].valore + '</button>');
+
+        $('.btn-group').append(buttons)
         $('#answerForm').show();
+      }
     };
 
     //#endregion
@@ -337,11 +344,6 @@ $(
     });
 
     // Click event
-
-    //We show the current range value when the evaluator move the slider
-    $('#formControlRange').on('input change', () => {
-      $('.valueSpan').html($('#formControlRange').val());
-    });
 
     $inputMessage.on("input", () => {
       updateTyping();
@@ -364,6 +366,28 @@ $(
         currentTargetId = ArrayofUsers.users[i].userId;
         changeData(i, ArrayofUsers.users[i].userRoom);
       }
+    });
+
+    //when asked to assing a score to a player, we send the value from the RangeValue 
+    $('.btn-group').on("click", ".btn", function (event) {
+      let i = ArrayofUsers.findElement(currentTargetUser);
+
+      var element = document.getElementById(currentTargetUser);
+      element.className = element.className.replace(/\blist-group-item-warning\b/g, "");
+
+      if (ArrayofUsers.users[i].currentQuestion.nome == "fine") {
+        ArrayofUsers.users[i].userScore += ArrayofUsers.users[i].currentQuestion.risposte[event.currentTarget.id].points;
+        $('#' + data.username).addClass('list-group-item-info');
+      } else
+        socket.emit('answerFromEvaluator', currentTargetId, event.currentTarget.id);
+
+      ArrayofUsers.users[i].possibleAnswer = "NULL";
+      ArrayofUsers.users[i].currentQuestion = "NULL";
+
+      //we close the answer form
+      $('.btn-group').html("");
+      $("#answerForm").fadeOut();
+
     });
 
     // DATA PAGE ==> CHAT PAGE
@@ -397,20 +421,6 @@ $(
         var element = document.getElementById(currentTargetUser);
         element.className = element.className.replace(/\blist-group-item-danger\b/g, "");
       }
-    });
-
-    //when asked to assing a score to a player, we send the value from the RangeValue 
-    $('#rangeValue').click(() => {
-      let i = ArrayofUsers.findElement(currentTargetUser);
-      ArrayofUsers.users[i].possibleAnswer = "NULL";
-      ArrayofUsers.users[i].currentQuestion = "NULL";
-
-      var element = document.getElementById(currentTargetUser);
-      element.className = element.className.replace(/\blist-group-item-warning\b/g, "");
-      socket.emit('answerFromEvaluator', currentTargetId, $('#formControlRange').val());
-
-      //we close the answer form
-      $("#answerForm").fadeOut();
     });
 
     //we export the ArrayOfUser in a .json file, checking wich browser the user is currently using
@@ -447,7 +457,7 @@ $(
       let i = ArrayofUsers.findElement(data.username);
       ArrayofUsers.users[i].userScore += data.score;
 
-      if (storia.scene[ArrayofUsers.users[i].userRoom].nome == "fine"){
+      if (storia.scene[ArrayofUsers.users[i].userRoom].nome == "fine") {
         $('#' + data.username).html(data.username + " ha finito la storia con: " + ArrayofUsers.users[i].userScore + " punti");
         $('#' + data.username).addClass('list-group-item-info');
       }
@@ -473,12 +483,13 @@ $(
     socket.on("answerToEvaluator", (data) => {
 
       let i = ArrayofUsers.findElement(data.username);
+      ArrayofUsers.users[i].currentQuestion = storia.scene[ArrayofUsers.users[i].userRoom];
       ArrayofUsers.users[i].possibleAnswer = data.message;
-      ArrayofUsers.users[i].currentQuestion = "nome: " + storia.scene[ArrayofUsers.users[i].userRoom].nome + "\n e descrizione: " + storia.scene[ArrayofUsers.users[i].userRoom].descrizione;
+      //ArrayofUsers.users[i].currentQuestion = "nome: " + storia.scene[ArrayofUsers.users[i].userRoom].nome + "\n e descrizione: " + storia.scene[ArrayofUsers.users[i].userRoom].descrizione;
 
       $('#' + data.username).addClass('list-group-item-warning');
       $('#soluzioneProposta').html(data.message);
-      $('#soluzioneCorretta').html(ArrayofUsers.users[i].currentQuestion);
+      $('#soluzioneCorretta').html("nome: " + ArrayofUsers.users[i].currentQuestion.nome + "<br />descrizione: " + ArrayofUsers.users[i].currentQuestion.descrizione);
 
       if (currentTargetUser == data.username && $dataPage.is(":visible"))
         $(".form-group").show();

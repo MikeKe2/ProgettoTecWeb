@@ -71,6 +71,8 @@ function checkResult(result) {
             });
         } else {
             socket.emit("answerToEvaluator", username, (result));
+            //$("#loading").toggleClass("visibility");
+            waitEvaluator();
             scena = parseInt(storia.scene[scena_corr].risposte[0].to[gruppo]);
             nextScene(scena);
         }
@@ -79,6 +81,38 @@ function checkResult(result) {
         nextScene(scena);
     }
 }
+var coin = 0;
+
+function fetchData() {
+    // Here should be your api call, I`m using setTimeout here just for async example
+    return promise1 = new Promise(resolve => setTimeout(function () {
+        socket.on('answerFromEvaluator', (data) => {
+            $("#loading").toggleClass("visibility");
+            punteggio += parseInt(data.message, 10);
+        })
+    }, 2000));
+}
+
+async function waitEvaluator(_callback) {
+    $("#loading").toggleClass("visibility");
+    await fetchData();
+
+    /*
+        const promise1 = new Promise((resolve, reject) => {
+            setTimeout(function() {socket.on('answerFromEvaluator', (data) => {
+                coin += parseInt(data.message, 10);
+            })}, 200000);
+        });
+        
+        let results = await promise1;
+        
+        alert(results);
+        /*promise1.then((value) => {
+            console.log(value);
+            $("#loading").toggleClass("loading");
+        });*/
+};
+
 
 function nextScene(scena) {
     start_time();
@@ -315,7 +349,6 @@ $(function () {
             return $(this).data("username") === data.username;
         });
     };
-
     // Keyboard events
 
     $window.keydown((event) => {
@@ -336,14 +369,6 @@ $(function () {
     });
 
     // Click events
-
-    /*$groupPage.on("click", '.list-group-item', function (event) {
-        // Tell the server your username
-        $groupPage.fadeOut();
-        $adventurePage.show();
-        $groupPage.off("click");
-        socket.emit("add user", username, event.currentTarget.id, (storia));
-    });*/
 
     $(".valutatore").click(() => {
         var pass1;
@@ -367,12 +392,14 @@ $(function () {
         });
     });
 
-    $('#helpRequested').click(() => {
+    $('#helpRequested').click(function (e) {
+        e.preventDefault();
         socket.emit('help', (username));
         $('#helpRequested').prop("disabled", true);
     })
 
-    $('#chatWithEvaluator').click(() => {
+    $('#chatWithEvaluator').click(function (e) {
+        e.preventDefault();
         var element = document.getElementById("chatWithEvaluator");
         element.className = element.className.replace(/\bbtn-outline-danger\b/g, "");
         $('#chatWithEvaluator').addClass('btn-outline-info');
@@ -408,18 +435,6 @@ $(function () {
     });
 
     // Socket events
-
-
-
-    /* socket.on("scoreFromVal", (user, score) => {
-        if(user == username)
-        punteggio += score;
-    });*/
-
-    socket.on('answerFromEvaluator', (data) => {
-        console.log(data.message);
-        punteggio += parseInt(data.message, 10);
-    });
 
     socket.on('helpIncoming', (data) => {
         window.alert("Il valutatore dice: " + data.message);
