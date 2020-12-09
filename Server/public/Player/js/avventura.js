@@ -73,8 +73,10 @@ function checkResult(result) {
             socket.emit("answerToEvaluator", username, (result));
             //$("#loading").toggleClass("visibility");
             waitEvaluator();
+            /*
             scena = parseInt(storia.scene[scena_corr].risposte[0].to[gruppo]);
             nextScene(scena);
+            */
         }
     } else {
         scena = parseInt(storia.scene[scena_corr].risposte[0].to[gruppo]);
@@ -89,6 +91,8 @@ function fetchData() {
         socket.on('answerFromEvaluator', (data) => {
             $("#loading").toggleClass("visibility");
             punteggio += parseInt(data.message, 10);
+            scena = parseInt(storia.scene[scena_corr].risposte[0].to[gruppo]);
+            nextScene(scena);
         })
     }, 2000));
 }
@@ -96,7 +100,6 @@ function fetchData() {
 async function waitEvaluator(_callback) {
     $("#loading").toggleClass("visibility");
     await fetchData();
-
     /*
         const promise1 = new Promise((resolve, reject) => {
             setTimeout(function() {socket.on('answerFromEvaluator', (data) => {
