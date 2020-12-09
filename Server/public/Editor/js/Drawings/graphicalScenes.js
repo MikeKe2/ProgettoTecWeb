@@ -53,11 +53,12 @@ class graphicalScene{
 		}
 	}
 	open(){ //funzione per aprire la scena, si cerca il template nell'html e lo si compila con i campi specifici (la funzione controlla che la scena non sia già aperta, se lo è la chiude)
-		if(!$("#scena"+this.id)[0]){
-			let s_id = "#scena"+this.id;
+	let id = this.id;
+	if(!$("#scena"+id)[0]){
+			let s_id = "#scena"+id;
 			let html = $("#scena").html();
-			for(let i = 0; i<15; i++){
-				html = html.replace("$ID",this.id);
+			for(let i = 0; i<16; i++){
+				html = html.replace("$ID",id);
 			}
 			html = html.replace("$NAME", this.core.nome).replace("$NAME", this.core.nome);
 			html = html.replace("$DESCRIPTION", this.core.descrizione).replace("$DESCRIPTION", this.core.descrizione);
@@ -69,13 +70,23 @@ class graphicalScene{
 			html = html.replace("$AUDIO", this.core.tracciaAudio!= null? this.core.tracciaAudio : "nessun audio inserito");
 
 			html = html.replace("$VALUTATORE", this.core.valutatore?"ON":"OFF");
-			$("#editValutatore"+this.id).prop( "checked", this.core.valutatore);
+			$("#editValutatore"+id).prop( "checked", this.core.valutatore);
 			
 			$(".container").append(html);
 
-			getMedia("images","#editImmagine"+this.id);
-			getMedia("widgets", "#editWidget"+this.id);
-			getMedia("audios", "#editAudio"+this.id);
+			getMedia("images","#editImmagine"+id);
+			getMedia("widgets", "#editWidget"+id);
+			getMedia("audios", "#editAudio"+id);
+			if(this.core.widget != "image.html"){
+				$("#immagineWidget"+id).hide();
+			}
+			$("#editWidget"+id).on('change', function() {
+				if(this.value != "image.html"){
+					$("#immagineWidget"+id).hide();
+				}else{
+					$("#immagineWidget"+id).show();
+				}
+			});
 
 			this.populateRisp();
 
@@ -83,7 +94,7 @@ class graphicalScene{
 			initScene(s_id); //vengono aggiunti gli handler alle funzioni e si rende possibile lo spostamento della finestra 
 		}
 		else
-			close("#scena"+this.id);
+			close("#scena"+id);
 	}
 	populateRisp(){ //popola i campi delle risposte prendendo il template e sostituendo i campi corretti
 		$("#scena"+this.id+" ol").html("");
