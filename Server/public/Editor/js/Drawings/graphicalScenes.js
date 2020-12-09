@@ -131,7 +131,9 @@ class graphicalScene{
 				}
 			})
 		});
-		storia.scene[this.id].to=Array(storia.ngruppi).fill(-1);
+		for(let i = 0; i < this.core.risposte.length; i++){
+			this.core.risposte[i].to=Array(storia.ngruppi).fill(-1);
+		}
 	}
 	graphicalSelect(){
 		selectByValue("#editAudio"+this.id, this.core.tracciaAudio);
