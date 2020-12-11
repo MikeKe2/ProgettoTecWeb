@@ -157,7 +157,7 @@ Hai completato l'avventura totalizzando ben ${punteggio} punti!
 
     if (storia.scene[scena_corr].widget != undefined && storia.scene[scena_corr].widget != "") {
         $("#widget-holder").show();
-        $("#widget").load("/users/" + storia.autore + "/widgets/" + storia.scene[scena_corr].widget + ".html");
+        $("#widget").load("/users/" + storia.autore + "/widgets/" + storia.scene[scena_corr].widget);
     } else {
         $("#widget-holder").hide();
     }
