@@ -28,6 +28,7 @@ function initialize() {
     $("#titolo").html(storia.nome);
     $("#btn").click(function () {
         checkResult(scena_corr == 0 || document.getElementById("result") == undefined ? null : document.getElementById("result").value);
+        document.getElementById("result").value = "";
     })
     $(".adventure").css({
         'background-image': 'url( "/users/' + storia.autore + '/images/' + storia.background + '")',
@@ -53,6 +54,7 @@ function checkResult(result) {
     if (result != null) {
         time = end_time();
         pointsAdded = 0;
+        correct = false;
         if (storia.scene[scena_corr].valutatore == "false") {
             storia.scene[scena_corr].risposte.forEach(risposta => {
                 if (result == risposta.valore && parseInt(risposta.maxTime) != 0 && time <= parseInt(risposta.maxTime) && pointsAdded == 0) {
@@ -60,15 +62,19 @@ function checkResult(result) {
                     punteggio += pointsAdded;
                     console.log(punteggio);
                     scena = parseInt(risposta.to[gruppo]);
+                    correct = true;
                     nextScene(scena);
                 } else if (result == risposta.valore && parseInt(risposta.maxTime) == 0 && pointsAdded == 0) {
                     pointsAdded = parseInt(risposta.points);
                     punteggio += pointsAdded;
                     console.log(punteggio);
                     scena = parseInt(risposta.to[gruppo]);
+                    correct = true;
                     nextScene(scena);
                 }
             });
+            if (!correct)
+                alert("Risposta errata!");
         } else {
             socket.emit("answerToEvaluator", username, (result));
             //$("#loading").toggleClass("visibility");
