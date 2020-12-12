@@ -128,8 +128,14 @@ app.post("/newUser", function (req, res) {
         fs.mkdirSync(dir + "/private");
         fs.mkdirSync(dir + "/public");
         fs.mkdirSync(dir + "/widgets");
+        fs.copyFileSync('./users/Widget/image.html', dir + '/widgets/image.html');
+        fs.copyFileSync('./users/Widget/text.html', dir + '/widgets/text.html');
+        fs.copyFileSync('./users/Widget/lever.html', dir + '/widgets/lever.html');
+        fs.copyFileSync('./users/Widget/number.html', dir + '/widgets/number.html');
+        fs.copyFileSync('./users/Widget/sendImage.html', dir + '/widgets/sendImage.html');
+        fs.copyFileSync('./users/Widget/templateWidget.html', dir + '/widgets/templateWidget.html');
       }
-      res.sendStatus(200);
+      res.redirect("/");
     })
   })
 

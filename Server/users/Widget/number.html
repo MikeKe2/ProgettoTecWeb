@@ -1,0 +1,40 @@
+
+<div id="number">
+    <div id="textarea-holder">
+        <input disabled="true" name="textarea" id="result">
+    </div>
+    <div id="numpad" class="my-3">
+        <div class="row d-flex justify-content-center">
+            <button class="col-1 my-1" onclick="add(1)">1</button>
+            <button class="col-1 my-1" onclick="add(2)">2</button>
+            <button class="col-1 my-1" onclick="add(3)">3</button>
+        </div>    
+        <div class="row d-flex justify-content-center">
+            <button class="col-1 my-1" onclick="add(4)">4</button>
+            <button class="col-1 my-1" onclick="add(5)">5</button>
+            <button class="col-1 my-1" onclick="add(6)">6</button>
+        </div>
+        <div class="row d-flex justify-content-center">
+            <button class="col-1 my-1" onclick="add(7)">7</button>
+            <button class="col-1 my-1" onclick="add(8)">8</button>
+            <button class="col-1 my-1" onclick="add(9)">9</button>
+        </div>
+        <div class="row d-flex justify-content-center">
+            <button class="col-2 my-1" onclick="add(0)">0</button>
+            <button class="col-1 my-1" onclick="del()">c</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function add(n){
+        var text = document.getElementById("result").value;
+        document.getElementById("result").value = text + n.toString();
+    }
+
+    function del(){
+        var text = document.getElementById("result").value;
+        text = text.slice(0, text.length-1);
+        document.getElementById("result").value = text;
+    }
+</script>
