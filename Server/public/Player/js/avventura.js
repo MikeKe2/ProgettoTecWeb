@@ -96,9 +96,8 @@ function fetchData() {
     return promise1 = new Promise(resolve => setTimeout(function () {
         socket.on('answerFromEvaluator', (data) => {
             $("#loading").toggleClass("visibility");
-            punteggio += parseInt(data.message, 10);
-            scena = parseInt(storia.scene[scena_corr].risposte[0].to[gruppo]);
-            nextScene(scena);
+            punteggio += parseInt(storia.scene[scena_corr].risposte[parseInt(data.message,10)].points, 10);
+            nextScene(storia.scene[scena_corr].risposte[parseInt(data.message,10)].to[gruppo]);
         })
     }, 2000));
 }
