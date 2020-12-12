@@ -37,15 +37,15 @@
           <a id="currentUser" class="navbar-brand mb-0 h1"></a>
           <a class="navbar-text" id="userStatus"></a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavId"
-          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse " id="navbarNavId">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">              
-            </li>
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavId">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+              </li>
             </ul>
-            <form class="form-group mx-sm-1 mb-2 ">
+            <form class="form-group mx-sm-1 mb-2">
               <button id="helpButton" class="btn btn-danger mb-2">HELP</button>
               <button id="chatButton" class="btn btn-secondary mb-2">CHAT</button>
             </form>
@@ -87,13 +87,15 @@
                 <li class="list-group-item flex-fill" id="soluzioneProposta"></li>
               </ul>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-10">
-              <label for="formControlRange">Che valore vuoi dare a questa risposta?: </label>
-              <span class="valueSpan"></span>
-              <input type="range" class="custom-range" min="0" max="10" id="formControlRange">
-              <button id="rangeValue" class="btn btn-secondary btn-sm">Confirm vote</button>
+            <div class="col-10">
+              <ul class="list-group justify-content-center list-group-horizontal">
+                <li class="list-group-item flex-fill">Che valore vuoi dare a questa risposta?: </li>
+                <li class="list-group-item flex-fill">
+                  <div class="btn-group" role="group" aria-label="Basic example">
+
+                  </div>
+                </li>
+              </ul>
             </div>
           </div>
         </div>

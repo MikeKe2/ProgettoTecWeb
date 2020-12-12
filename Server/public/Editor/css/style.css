@@ -8,6 +8,13 @@ html, body{
     touch-action: manipulation;
 }
 
+@media only screen and (max-width: 1000px) {
+    .scenebody{
+        height: 300px;
+        overflow-y: scroll;
+    }
+}
+
 .scene{
     position: absolute;
     z-index: 9;
@@ -20,6 +27,34 @@ html, body{
     width: 25%;
     min-width: 200px;
     height: auto;
+}
+
+.scenebody p, #settings_div p{
+    display: flex;
+    justify-content: space-between;
+}
+
+.scenebody p:nth-child(10), #settings_div p:nth-child(6){
+    display: flex;
+    justify-content: flex-start;
+}
+
+.scenebody input:not([type='checkbox']), #settings_div input:not([type='checkbox']){
+    width: 30%;
+}
+
+#settings_div input[type='checkbox']{
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+#settings_div p{
+    width: 60%;
+    margin: 0px auto 6px auto;
+}
+
+#settings_div{
+    height: 60%;
 }
 
 .scene textarea{

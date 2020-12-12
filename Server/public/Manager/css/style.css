@@ -1,17 +1,4 @@
-* {
-	box-sizing: border-box;
-}
-
-html,
-body {
-	overflow-x: hidden;
-}
-
-body {
-	position: relative;
-}
-
-#feedback {
+/* #feedback {
 	font-size: 1.4em;
 }
 
@@ -59,13 +46,33 @@ body {
 	padding: 0.4em;
 	font-size: 1.4em;
 	height: 18px;
-}
+} */
 
 .ui-button {
 	height: 2em;
 	width: 80%;
 }
 
+.nonselectable {
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none; /* Safari */
+	-khtml-user-select: none; /* Konqueror HTML */
+	-moz-user-select: none; /* Old versions of Firefox */
+	-ms-user-select: none; /* Internet Explorer/Edge */
+	user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+}
+.clickable {	
+	cursor:pointer;
+}
+.card-body div{	
+	padding: 0.4em;
+}
+
+img {
+	width:20px; 
+	height:20px; 
+	margin:2px;
+}
 .container-fluid .row {
 	border: none;
 	border-top: 0.1vw solid #000;

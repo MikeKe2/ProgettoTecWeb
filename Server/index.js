@@ -125,17 +125,13 @@ app.post('/uploads', upload.single('fieldname'), function (req, res, next) {
 app.post("/newUser", function (req, res) {
   fs.readFile(__dirname + '/db/UsersData.json', function (err, data) {
     let json = JSON.parse(data)
-    console.log(req.body.name, " ", req.body.password);
-    json.push({
-      "id": json.length + 1,
-      "username": req.body.name,
-      "password": req.body.password,
-      "displayName": req.body.name
-    })
+    console.log(req.body.newusername, " ", req.body.newpassword);
+    json.push({"id": json.length + 1, "username": req.body.newusername, "password": req.body.newpassword, "displayName": req.body.newusername})
     console.log(json);
     fs.writeFile(__dirname + '/db/UsersData.json', JSON.stringify(json), function (err) {
       if (err) throw err;
-      let dir = resDir +'users/' + req.body.name;
+      console.log('Saved!');  
+      let dir = resDir +'users/'+req.body.newusername;
 
       if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir);
@@ -145,8 +141,14 @@ app.post("/newUser", function (req, res) {
         fs.mkdirSync(dir + "/private");
         fs.mkdirSync(dir + "/public");
         fs.mkdirSync(dir + "/widgets");
+        fs.copyFileSync('./users/Widget/image.html', dir + '/widgets/image.html');
+        fs.copyFileSync('./users/Widget/text.html', dir + '/widgets/text.html');
+        fs.copyFileSync('./users/Widget/lever.html', dir + '/widgets/lever.html');
+        fs.copyFileSync('./users/Widget/number.html', dir + '/widgets/number.html');
+        fs.copyFileSync('./users/Widget/sendImage.html', dir + '/widgets/sendImage.html');
+        fs.copyFileSync('./users/Widget/templateWidget.html', dir + '/widgets/templateWidget.html');
       }
-      res.sendStatus(200);
+      res.redirect("/");
     })
   })
 
