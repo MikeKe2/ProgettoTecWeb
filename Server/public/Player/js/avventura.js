@@ -1,6 +1,6 @@
 var storia;
 var scena_corr = 0;
-var socket = io("https://localhost:8000");
+var socket = io("https://site181993.tw.cs.unibo.it");
 var username;
 var gruppo = 0;
 var punteggio = 0;
@@ -187,7 +187,6 @@ $(function () {
             $loginPage.off("click");
             $adventurePage.show();
             socket.emit("add user", username, (storia));
-
         }
     };
 
@@ -362,7 +361,7 @@ $(function () {
 
             if (password == pass1) {
                 alert("Access Granted!");
-                location.replace("https://localhost:8000/valutatore");
+                location.replace("https://site181993.tw.cs.unibo.it/valutatore");
             } else alert("Password is incorrect.");
         });
     });

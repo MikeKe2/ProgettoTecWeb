@@ -157,7 +157,7 @@ $(
     var FADE_TIME = 150; // ms
     var TYPING_TIMER_LENGTH = 400; // ms
 
-    var socket = io("https://localhost:8000");
+    var socket = io("https://site181993.tw.cs.unibo.it");
 
 
     //#region Functions
@@ -367,7 +367,8 @@ $(
     });
 
     // DATA PAGE ==> CHAT PAGE
-    $("#chatButton").click(() => {
+    $("#chatButton").click(function (e) {
+      e.preventDefault();
       changeScene($chatPage, $dataPage);
 
       for (i in ArrayofMessages.messages) {
@@ -377,7 +378,8 @@ $(
     });
 
     // LIST PAGE ==> DATA PAGE
-    $("#listButton").click(() => {
+    $("#listButton").click(function (e) {
+      e.preventDefault();
       currentTargetId = 0;
       currentTargetUser = 0;
       if ($dataPage.is(":visible"))
@@ -390,7 +392,8 @@ $(
     });
 
     //If the evaluator click the helping button we control the message, if not null we send it to the current user
-    $('#helpButton').click(() => {
+    $('#helpButton').click(function (e) {
+      e.preventDefault();
       var helpingComment = prompt("Please enter the helping hint", "");
       if (helpingComment != null) {
         socket.emit('helpIncoming', currentTargetId, (helpingComment));
@@ -400,7 +403,8 @@ $(
     });
 
     //when asked to assing a score to a player, we send the value from the RangeValue 
-    $('#rangeValue').click(() => {
+    $('#rangeValue').click(function (e) {
+      e.preventDefault();
       let i = ArrayofUsers.findElement(currentTargetUser);
       ArrayofUsers.users[i].possibleAnswer = "NULL";
       ArrayofUsers.users[i].currentQuestion = "NULL";
@@ -414,7 +418,8 @@ $(
     });
 
     //we export the ArrayOfUser in a .json file, checking wich browser the user is currently using
-    $('#exportIron').click(() => {
+    $('#exportIron').click(function (e) {
+      e.preventDefault()
       var data = JSON.stringify(ArrayofUsers);
       var file = new Blob([data], {
         type: "json"
@@ -447,7 +452,7 @@ $(
       let i = ArrayofUsers.findElement(data.username);
       ArrayofUsers.users[i].userScore += data.score;
 
-      if (storia.scene[ArrayofUsers.users[i].userRoom].nome == "fine"){
+      if (storia.scene[ArrayofUsers.users[i].userRoom].nome == "fine") {
         $('#' + data.username).html(data.username + " ha finito la storia con: " + ArrayofUsers.users[i].userScore + " punti");
         $('#' + data.username).addClass('list-group-item-info');
       }

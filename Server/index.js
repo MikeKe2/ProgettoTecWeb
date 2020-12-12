@@ -1,10 +1,11 @@
-const express = require("express");
-
+var express = require('express');
 var app = express();
 
-var path = require("path");
-var find = require("find");
-var fs = require("fs");
+var fs = require('fs');
+var http = require('http');
+
+var path = require('path');
+var find = require('find');
 
 var passport = require("passport");
 var Strategy = require("passport-local").Strategy;
@@ -13,21 +14,25 @@ var db = require("./db");
 const {
   json
 } = require("body-parser");
-var app = express();
 
-var multer = require('multer');
+var multer = require("multer");
 const {
   use
 } = require("passport");
-var uploader = multer({
-  dest: 'uploads/'
+
+var upload = multer({
+  dest: __dirname + '/uploads'
 });
 
-const server = require('https').createServer({
+var server = http.createServer(app);
+var io = require('socket.io')(server);
+
+/*
+var server = https.createServer({
   key: fs.readFileSync(__dirname + '/https/server.key'),
   cert: fs.readFileSync(__dirname + '/https/server.cert')
 }, app);
-const io = require('socket.io')(server);
+*/
 
 passport.use(
   new Strategy(function (username, password, cb) {
@@ -62,6 +67,14 @@ passport.deserializeUser(function (id, cb) {
 app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
 
+var resDir = __dirname + "/";
+
+app.use(express.static(__dirname));
+app.use(express.static(resDir + "/"));
+app.use(express.static(resDir + "public"));
+app.use(express.static(resDir + "users"));
+app.use(express.static(resDir + "db"));
+
 // Use application-level middleware for common functionality, including
 // logging, parsing, and session handling.
 //app.use(require("morgan")("combined"));
@@ -95,10 +108,6 @@ app.get("/login", function (req, res) {
   res.render("login");
 });
 
-app.get("/valutatore", function (req, res){
-  res.render("valutatore")
-});
-
 app.post(
   "/login",
   passport.authenticate("local", {
@@ -108,6 +117,10 @@ app.post(
     res.redirect("/");
   }
 );
+
+app.post('/uploads', upload.single('fieldname'), function (req, res, next) {
+  //req.file has data of uploaded file
+});
 
 app.post("/newUser", function (req, res) {
   fs.readFile(__dirname + '/db/UsersData.json', function (err, data) {
@@ -122,8 +135,7 @@ app.post("/newUser", function (req, res) {
     console.log(json);
     fs.writeFile(__dirname + '/db/UsersData.json', JSON.stringify(json), function (err) {
       if (err) throw err;
-      console.log('Saved!');
-      let dir = './users/' + req.body.name;
+      let dir = resDir +'users/' + req.body.name;
 
       if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir);
@@ -172,13 +184,10 @@ app.get('/start', function (req, res) {
   res.sendFile(__dirname + "/public/Player/index.html");
 });
 
-
-
-diname = __dirname + "/admin/";
-var resDir = __dirname + "/";
-
-app.use(express.static(__dirname + '/views'));
-
+//EVALUATOR INTERFACE
+app.get("/valutatore", function (req, res) {
+  res.render("valutatore")
+});
 
 app.post("/makeprivate", require('connect-ensure-login').ensureLoggedIn(),
   function (req, res) {
@@ -473,7 +482,7 @@ var evalID = 0;
 
 io.on("connection", (socket) => {
   var addedUser = false;
-
+  console.log("qualcosa è entrato!");
   socket.on("scene", (username, num) => {
     socket.to(evalID).emit('scene', {
       username: username,
@@ -547,6 +556,7 @@ io.on("connection", (socket) => {
 
   // when the client emits 'add user', this listens and executes
   socket.on("add user", (username, data) => {
+	console.log(username + "-" + data);
     if (addedUser) return;
     // we store the username in the socket session for this client
     socket.username = username;
@@ -608,10 +618,6 @@ io.on("connection", (socket) => {
   });
 });
 
-app.use(express.static(resDir + "/"));
-app.use(express.static(resDir + "public"));
-app.use(express.static(resDir + "db"));
-
 server.listen(8000, () => {
-  console.log('Listening on: https://localhost:8000/')
+  console.log('Listening on: site181993.tw.cs.unibo.it')
 });

@@ -17,7 +17,7 @@ var Media = new Vue({
         },
         
         changeName:function(index){
-            let newname = prompt("insersci un nuovo nome", this.list[index]);
+            let newname = prompt("inserisci un nuovo nome", this.list[index]);
 			if(newname != ""){
 				$.post("/media/rename/"+this.clicked.toLowerCase(), {name: this.list[index], newName: newname},()=>{
 					Media.$set(Media.list, index, newname);
