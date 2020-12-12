@@ -482,7 +482,6 @@ var evalID = 0;
 
 io.on("connection", (socket) => {
   var addedUser = false;
-  console.log("qualcosa è entrato!");
   socket.on("scene", (username, num) => {
     socket.to(evalID).emit('scene', {
       username: username,
@@ -556,7 +555,6 @@ io.on("connection", (socket) => {
 
   // when the client emits 'add user', this listens and executes
   socket.on("add user", (username, data) => {
-	console.log(username + "-" + data);
     if (addedUser) return;
     // we store the username in the socket session for this client
     socket.username = username;
@@ -619,5 +617,5 @@ io.on("connection", (socket) => {
 });
 
 server.listen(8000, () => {
-  console.log('Listening on: site181993.tw.cs.unibo.it')
+  console.log('Listening on: https://site181993.tw.cs.unibo.it')
 });
