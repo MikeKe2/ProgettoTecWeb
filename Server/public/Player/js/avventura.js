@@ -28,6 +28,7 @@ function initialize() {
     $("#titolo").html(storia.nome);
     $("#btn").click(function () {
         checkResult(scena_corr == 0 || document.getElementById("result") == undefined ? null : document.getElementById("result").value);
+        document.getElementById("result").value = "";
     })
     $(".adventure").css({
         'background-image': 'url( "/users/' + storia.autore + '/images/' + storia.background + '")',
@@ -53,6 +54,7 @@ function checkResult(result) {
     if (result != null) {
         time = end_time();
         pointsAdded = 0;
+        correct = false;
         if (storia.scene[scena_corr].valutatore == "false") {
             storia.scene[scena_corr].risposte.forEach(risposta => {
                 if (result == risposta.valore && parseInt(risposta.maxTime) != 0 && time <= parseInt(risposta.maxTime) && pointsAdded == 0) {
@@ -60,25 +62,65 @@ function checkResult(result) {
                     punteggio += pointsAdded;
                     console.log(punteggio);
                     scena = parseInt(risposta.to[gruppo]);
+                    correct = true;
                     nextScene(scena);
                 } else if (result == risposta.valore && parseInt(risposta.maxTime) == 0 && pointsAdded == 0) {
                     pointsAdded = parseInt(risposta.points);
                     punteggio += pointsAdded;
                     console.log(punteggio);
                     scena = parseInt(risposta.to[gruppo]);
+                    correct = true;
                     nextScene(scena);
                 }
             });
+            if (!correct)
+                alert("Risposta errata!");
         } else {
             socket.emit("answerToEvaluator", username, (result));
+            //$("#loading").toggleClass("visibility");
+            waitEvaluator();
+            /*
             scena = parseInt(storia.scene[scena_corr].risposte[0].to[gruppo]);
             nextScene(scena);
+            */
         }
     } else {
         scena = parseInt(storia.scene[scena_corr].risposte[0].to[gruppo]);
         nextScene(scena);
     }
 }
+var coin = 0;
+
+function fetchData() {
+    // Here should be your api call, I`m using setTimeout here just for async example
+    return promise1 = new Promise(resolve => setTimeout(function () {
+        socket.on('answerFromEvaluator', (data) => {
+            $("#loading").toggleClass("visibility");
+            punteggio += parseInt(storia.scene[scena_corr].risposte[parseInt(data.message,10)].points, 10);
+            nextScene(storia.scene[scena_corr].risposte[parseInt(data.message,10)].to[gruppo]);
+        })
+    }, 2000));
+}
+
+async function waitEvaluator(_callback) {
+    $("#loading").toggleClass("visibility");
+    await fetchData();
+    /*
+        const promise1 = new Promise((resolve, reject) => {
+            setTimeout(function() {socket.on('answerFromEvaluator', (data) => {
+                coin += parseInt(data.message, 10);
+            })}, 200000);
+        });
+        
+        let results = await promise1;
+        
+        alert(results);
+        /*promise1.then((value) => {
+            console.log(value);
+            $("#loading").toggleClass("loading");
+        });*/
+};
+
 
 function nextScene(scena) {
     start_time();
@@ -120,7 +162,7 @@ Hai completato l'avventura totalizzando ben ${punteggio} punti!
 
     if (storia.scene[scena_corr].widget != undefined && storia.scene[scena_corr].widget != "") {
         $("#widget-holder").show();
-        $("#widget").load("/users/" + storia.autore + "/widgets/" + storia.scene[scena_corr].widget + ".html");
+        $("#widget").load("/users/" + storia.autore + "/widgets/" + storia.scene[scena_corr].widget);
     } else {
         $("#widget-holder").hide();
     }
@@ -315,7 +357,6 @@ $(function () {
             return $(this).data("username") === data.username;
         });
     };
-
     // Keyboard events
 
     $window.keydown((event) => {
@@ -336,14 +377,6 @@ $(function () {
     });
 
     // Click events
-
-    /*$groupPage.on("click", '.list-group-item', function (event) {
-        // Tell the server your username
-        $groupPage.fadeOut();
-        $adventurePage.show();
-        $groupPage.off("click");
-        socket.emit("add user", username, event.currentTarget.id, (storia));
-    });*/
 
     $(".valutatore").click(() => {
         var pass1;
@@ -367,12 +400,14 @@ $(function () {
         });
     });
 
-    $('#helpRequested').click(() => {
+    $('#helpRequested').click(function (e) {
+        e.preventDefault();
         socket.emit('help', (username));
         $('#helpRequested').prop("disabled", true);
     })
 
-    $('#chatWithEvaluator').click(() => {
+    $('#chatWithEvaluator').click(function (e) {
+        e.preventDefault();
         var element = document.getElementById("chatWithEvaluator");
         element.className = element.className.replace(/\bbtn-outline-danger\b/g, "");
         $('#chatWithEvaluator').addClass('btn-outline-info');
@@ -408,18 +443,6 @@ $(function () {
     });
 
     // Socket events
-
-
-
-    /* socket.on("scoreFromVal", (user, score) => {
-        if(user == username)
-        punteggio += score;
-    });*/
-
-    socket.on('answerFromEvaluator', (data) => {
-        console.log(data.message);
-        punteggio += parseInt(data.message, 10);
-    });
 
     socket.on('helpIncoming', (data) => {
         window.alert("Il valutatore dice: " + data.message);
