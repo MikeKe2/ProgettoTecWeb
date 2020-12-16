@@ -28,7 +28,7 @@ function initialize() {
     $("#titolo").html(storia.nome);
     $("#btn").click(function () {
         checkResult(scena_corr == 0 || document.getElementById("result") == undefined ? null : document.getElementById("result").value);
-        document.getElementById("result").value = "";
+        //document.getElementById("result").value = "";
     })
     $(".adventure").css({
         'background-image': 'url( "/users/' + storia.autore + '/images/' + storia.background + '")',
@@ -128,7 +128,7 @@ function nextScene(scena) {
     socket.emit("scene", username, (scena_corr));
     if (storia.scene[scena_corr].tracciaAudio != undefined && storia.scene[scena_corr].tracciaAudio != "") {
         track = $("#track");
-        track.attr("src", "/users/" + storia.autore + "/audios/" + storia.scene[scena_corr].tracciaAudio);
+        track.attr("src", `/users/${storia.autore}/audios/${storia.scene[scena_corr].tracciaAudio}`);
         player = $("#player");
         player[0].pause();
         player[0].load();
