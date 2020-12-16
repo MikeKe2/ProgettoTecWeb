@@ -57,7 +57,7 @@ class graphicalScene{
 	if(!$("#scena"+id)[0]){
 			let s_id = "#scena"+id;
 			let html = $("#scena").html();
-			for(let i = 0; i<16; i++){
+			for(let i = 0; i<17; i++){
 				html = html.replace("$ID",id);
 			}
 			html = html.replace("$NAME", this.core.nome).replace("$NAME", this.core.nome);
