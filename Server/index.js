@@ -6,7 +6,9 @@ var chmodr = require('chmodr');
 var http = require('http');
 
 var path = require('path');
-var find = require('find');
+
+
+const fileUpload = require('express-fileupload');
 
 var passport = require("passport");
 var Strategy = require("passport-local").Strategy;
@@ -24,6 +26,8 @@ const {
 var upload = multer({
   dest: __dirname + '/uploads'
 });
+
+app.use(fileUpload());
 
 var server = http.createServer(app);
 var io = require('socket.io')(server);
@@ -292,48 +296,6 @@ function getMedia(req, res, type) {
   });
 }
 
-function postMedia(req, res, type) {
-  let upload = multer({
-    storage: multer.diskStorage({
-      destination: './users/' + req.user.username + '/' + type + '/',
-      filename: function (req, file, cb) {
-        while (!fs.existsSync(path.join(docfolder, file.originalname))) {
-          file.originalname += "_new";
-        }
-        cb(null, file.originalname);
-      }
-
-    }),
-    fileFilter: function (req, file, cb) {
-      checkFileType(file, cb, type);
-    }
-  }).single("my_" + type);
-
-  upload(req, res, (err) => {
-    if (err) {
-      console.log(err)
-      res.render('index', {
-        msg: err,
-        user: req.user.username
-      });
-    } else {
-      if (req.file == undefined) {
-        res.render('index', {
-          msg: 'Error: No File Selected!',
-          user: req.user.username
-        });
-      } else {
-        console.log(req.file.filename)
-        res.render('index', {
-          msg: 'File Uploaded!',
-          file: `uploads/${req.file.filename}`,
-          user: req.user.username
-        });
-      }
-    }
-  });
-}
-
 app.get('/allStories', (req, res) => {
   let filelist = [];
   let directoryPath = path.join(__dirname + "/users/" + req.user.username, "private");
@@ -381,9 +343,24 @@ app.get('/media/:type', (req, res) => {
 
 
 app.post('/media/:type', (req, res) => {
-  let type = req.params.type;
-  if (type == "widgets" || type == "images" || type == "audios" || type == "css")
-    postMedia(req, res, type);
+  const type = req.params.type;
+  if (type == "widgets" || type == "images" || type == "audios" || type == "css"){
+    if (!req.files || Object.keys(req.files).length === 0) {
+      return res.status(400).send('No files were uploaded.');
+    }
+
+    // The name of the input field
+    let file = req.files.file;
+
+    // Use the mv() method to place the file somewhere on your server
+    const directoryPath = path.join(__dirname + "/users/" + req.user.username, type);
+    file.mv(directoryPath+"/"+file.name, function(err) {
+      if (err)
+        return res.status(500).send(err);
+
+      res.send(file.name);
+    });
+  }
 });
 
 

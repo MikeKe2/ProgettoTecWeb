@@ -35,10 +35,23 @@ var Media = new Vue({
         },
 
         newFile: function(){
-			let file = $("#newFile")[0].file[0];
-			$.post("/media/"+this.clicked.toLowerCase(), file).success(()=>{
-				Media.list.push(file.name);
-			})
+			let formdata = new FormData();
+			if($("#newFile").prop('files').length > 0)
+			{
+				let file =$("#newFile").prop('files')[0];
+				formdata.append("file", file);
+				$.ajax({
+					url: "/media/"+this.clicked.toLowerCase(),
+					type: "POST",
+					data: formdata,
+					processData: false,
+					contentType: false,
+					success: function (result) {
+						Media.list.push(result);
+					}
+				});
+				$("#newFile").val(null);
+			}
 		},
         
         open: function(index){

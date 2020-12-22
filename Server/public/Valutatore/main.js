@@ -312,9 +312,9 @@ $(
       for (y in storia.scene[numRoom].risposte) {
         var currentAnswer = Object.values(storia.scene[numRoom].risposte[y]);
         var answer = '<li class = "list-group-item"><ul class = "list-group">';
-        answer = answer.concat('<li class = "list-group-item">' + "Possibile Risposta: " + currentAnswer[0] + '</li>');
-        answer = answer.concat('<li class = "list-group-item">' + "Tempo Massimo: " + currentAnswer[1] + '</li>');
-        answer = answer.concat('<li class = "list-group-item">' + "Punti: " + currentAnswer[3] + '</li>');
+        answer = answer.concat(`<li class = "list-group-item">Possibile Risposta: ${currentAnswer[0]}</li>`);
+        answer = answer.concat(`<li class = "list-group-item">Tempo Massimo: ${currentAnswer[1]}</li>`);
+        answer = answer.concat(`<li class = "list-group-item">Punti: ${currentAnswer[3]}</li>`);
         answer = answer.concat('</ul></li>')
         $('#SceneAnswers').append(answer);
       }
@@ -323,7 +323,7 @@ $(
       if (ArrayofUsers.users[i].possibleAnswer != "NULL") {
         var buttons = '';
         for (y in ArrayofUsers.users[i].currentQuestion.risposte)
-          buttons = buttons.concat('<button type="button" id="' + y + '" class="btn btn-secondary">' + ArrayofUsers.users[i].currentQuestion.risposte[y].valore + '</button>');
+          buttons = buttons.concat(`<button type="button" id="${y}" class="btn btn-secondary">${ArrayofUsers.users[i].currentQuestion.risposte[y].valore}</button>`);
 
         $('.btn-group').append(buttons)
         $('#answerForm').show();
@@ -462,7 +462,7 @@ $(
       ArrayofUsers.users[i].userScore += data.score;
 
       if (storia.scene[ArrayofUsers.users[i].userRoom].nome == "fine") {
-        $('#' + data.username).html(data.username + " ha finito la storia con: " + ArrayofUsers.users[i].userScore + " punti");
+        $('#' + data.username).html(`${data.username} ha finito la storia con: ${ArrayofUsers.users[i].userScore} punti`);
         $('#' + data.username).addClass('list-group-item-info');
       }
     })
@@ -492,8 +492,11 @@ $(
       //ArrayofUsers.users[i].currentQuestion = "nome: " + storia.scene[ArrayofUsers.users[i].userRoom].nome + "\n e descrizione: " + storia.scene[ArrayofUsers.users[i].userRoom].descrizione;
 
       $('#' + data.username).addClass('list-group-item-warning');
-      $('#soluzioneProposta').html(data.message);
-      $('#soluzioneCorretta').html("nome: " + ArrayofUsers.users[i].currentQuestion.nome + "<br />descrizione: " + ArrayofUsers.users[i].currentQuestion.descrizione);
+      $('#soluzioneCorretta').html(`nome: ${ArrayofUsers.users[i].currentQuestion.nome}<br />descrizione: ${ArrayofUsers.users[i].currentQuestion.descrizione}`);
+      if (ArrayofUsers.users[i].currentQuestion.widget != "sendImage.html")
+        $('#soluzioneProposta').html(data.message);
+      else
+        $('#soluzioneProposta').html(`<img src=${data.message}>`);
 
       if (currentTargetUser == data.username && $dataPage.is(":visible"))
         $(".form-group").show();
@@ -521,7 +524,7 @@ $(
     // Whenever the server emits 'user joined', log it in the chat body
     socket.on("user joined", (data) => {
       if (ArrayofUsers.findElement(data.username) == -1) {
-        var $newUser = $('<li class="list-group-item" id="' + data.username.replace(/[^a-zA-Z0-9]/g, "") + '">' + data.username + '</li>');
+        var $newUser = $(`<li class="list-group-item" id="${data.username.replace(/[^a-zA-Z0-9]/g, "")}">${data.username}</li>`);
         $('#userList').append($newUser);
         showToast(0, data);
       } else
