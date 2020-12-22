@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 
 var fs = require('fs');
+var chmodr = require('chmodr');
 var http = require('http');
 
 var path = require('path');
@@ -126,13 +127,17 @@ app.post("/newUser", function (req, res) {
   fs.readFile(__dirname + '/db/UsersData.json', function (err, data) {
     let json = JSON.parse(data)
     console.log(req.body.newusername, " ", req.body.newpassword);
-    json.push({"id": json.length + 1, "username": req.body.newusername, "password": req.body.newpassword, "displayName": req.body.newusername})
+    json.push({
+      "id": json.length + 1,
+      "username": req.body.newusername,
+      "password": req.body.newpassword,
+      "displayName": req.body.newusername
+    })
     console.log(json);
     fs.writeFile(__dirname + '/db/UsersData.json', JSON.stringify(json), function (err) {
       if (err) throw err;
-      console.log('Saved!');  
-      let dir = resDir +'users/'+req.body.newusername;
-
+      console.log('Saved!');
+      let dir = resDir + 'users/' + req.body.newusername;
       if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir);
         fs.mkdirSync(dir + "/audios");
@@ -141,13 +146,20 @@ app.post("/newUser", function (req, res) {
         fs.mkdirSync(dir + "/private");
         fs.mkdirSync(dir + "/public");
         fs.mkdirSync(dir + "/widgets");
-        fs.copyFileSync('./users/Widget/image.html', dir + '/widgets/image.html');
-        fs.copyFileSync('./users/Widget/text.html', dir + '/widgets/text.html');
-        fs.copyFileSync('./users/Widget/lever.html', dir + '/widgets/lever.html');
-        fs.copyFileSync('./users/Widget/number.html', dir + '/widgets/number.html');
-        fs.copyFileSync('./users/Widget/sendImage.html', dir + '/widgets/sendImage.html');
-        fs.copyFileSync('./users/Widget/templateWidget.html', dir + '/widgets/templateWidget.html');
+        fs.copyFileSync(resDir + 'users/Widget/image.html', dir + '/widgets/image.html');
+        fs.copyFileSync(resDir + 'users/Widget/text.html', dir + '/widgets/text.html');
+        fs.copyFileSync(resDir + 'users/Widget/lever.html', dir + '/widgets/lever.html');
+        fs.copyFileSync(resDir + 'users/Widget/number.html', dir + '/widgets/number.html');
+        fs.copyFileSync(resDir + 'users/Widget/sendImage.html', dir + '/widgets/sendImage.html');
+        fs.copyFileSync(resDir + 'users/Widget/templateWidget.html', dir + '/widgets/templateWidget.html');
       }
+      chmodr('/folder', 0o777, (err) => {
+        if (err) {
+          console.log('Failed to execute chmod', err);
+        } else {
+          console.log('Success');
+        }
+      });
       res.redirect("/");
     })
   })
@@ -565,7 +577,7 @@ io.on("connection", (socket) => {
     socket.emit("login", {
       numUsers: numUsers,
     });
-    if(numUsers <= 1 || avventura == null){
+    if (numUsers <= 1 || avventura == null) {
       avventura = data;
       socket.to(evalID).emit("avventura_in_corso", {
         storia: data,
@@ -580,12 +592,12 @@ io.on("connection", (socket) => {
 
   });
 
-  socket.on('assignGroup', (data) =>{
+  socket.on('assignGroup', (data) => {
     socket.to(data.id).emit("assignGroup", {
-     groupN : data.groupN,
+      groupN: data.groupN,
     });
   });
-  
+
 
   // when the client emits 'typing', we broadcast it to others
   socket.on("typing", () => {
@@ -612,7 +624,7 @@ io.on("connection", (socket) => {
         numUsers: numUsers,
       });
 
-      if(numUsers <= 0)
+      if (numUsers <= 0)
         avventura = null;
     }
   });
