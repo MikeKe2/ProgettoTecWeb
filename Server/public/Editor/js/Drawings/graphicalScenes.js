@@ -68,11 +68,13 @@ class graphicalScene{
 			html = html.replace("$WIDGET", this.core.widget);
 			//select con l'audio
 			html = html.replace("$AUDIO", this.core.tracciaAudio!= null? this.core.tracciaAudio : "nessun audio inserito");
-
+			if(this.core.valutatore=="false")
+        		this.core.valutatore = false;
 			html = html.replace("$VALUTATORE", this.core.valutatore?"ON":"OFF");
-			$("#editValutatore"+id).prop( "checked", this.core.valutatore);
 			
 			$(".container").append(html);
+			$("#editValutatore"+id).prop( "checked", this.core.valutatore);
+			
 
 			getMedia("images","#editImmagine"+id);
 			getMedia("widgets", "#editWidget"+id);

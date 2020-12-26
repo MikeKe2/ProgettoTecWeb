@@ -46,14 +46,14 @@ $(window).on("load", function(){
 	};
 	$("#backImage").click(function(){ //setup pulsante back
 		if(confirm("Stai per lasciare la pagina, sei sicuro?"))
-			location.href="https://localhost:8000/index"
+			location.href="https://site181993.tw.cs.unibo.it/"
 	});
 	$("#saveImage").click(function(){ //setup pulsante save con controllo sulla validità della storia 
 		if (checkStory())
 		$.post("/stories/"+$("#user").html()+"/"+$("#visibility").html()+"/"+$("#name").html(),{data: storia}, ()=>{alert("Salvataggio Completato")});
 	});
 	$("#helpImage").click(function(){$("#Help").toggle()}); //setup pulsante di tutorial 
-	$("#downloadImage").click(function(){download});//setup pulsante download
+	$("#downloadImage").click(function(){download()});//setup pulsante download
 	$("#settingsImage").click(settingsToggle);
 });
 

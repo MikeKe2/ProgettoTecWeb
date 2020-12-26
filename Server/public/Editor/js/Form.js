@@ -77,7 +77,7 @@ function invia(id) {
   scena.imgdescription = $("#editDescImm" + ID).val();
   scena.widget = $("#editWidget" + ID).val();
   scena.tracciaAudio = $("#editAudio" + ID).val();
-  scena.valutatore = $("#editValutatore" + ID).val();
+  scena.valutatore = $("#editValutatore" + ID).prop("checked");
   scena.timemax = $("#editName" + ID).val();
   for (let i = 0; i < $("#risposte" + ID + " li").length; i++) {
     scena.risposte[i].valore = $("#editValore" + ID + "_" + i).val();

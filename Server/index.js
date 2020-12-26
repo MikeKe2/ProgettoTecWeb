@@ -18,26 +18,10 @@ const {
   json
 } = require("body-parser");
 
-var multer = require("multer");
-const {
-  use
-} = require("passport");
-
-var upload = multer({
-  dest: __dirname + '/uploads'
-});
-
 app.use(fileUpload());
 
 var server = http.createServer(app);
 var io = require('socket.io')(server);
-
-/*
-var server = https.createServer({
-  key: fs.readFileSync(__dirname + '/https/server.key'),
-  cert: fs.readFileSync(__dirname + '/https/server.cert')
-}, app);
-*/
 
 passport.use(
   new Strategy(function (username, password, cb) {
@@ -123,10 +107,6 @@ app.post(
   }
 );
 
-app.post('/uploads', upload.single('fieldname'), function (req, res, next) {
-  //req.file has data of uploaded file
-});
-
 app.post("/newUser", function (req, res) {
   fs.readFile(__dirname + '/db/UsersData.json', function (err, data) {
     let json = JSON.parse(data)
@@ -137,7 +117,6 @@ app.post("/newUser", function (req, res) {
       "password": req.body.newpassword,
       "displayName": req.body.newusername
     })
-    console.log(json);
     fs.writeFile(__dirname + '/db/UsersData.json', JSON.stringify(json), function (err) {
       if (err) throw err;
       console.log('Saved!');
@@ -157,7 +136,7 @@ app.post("/newUser", function (req, res) {
         fs.copyFileSync(resDir + 'users/Widget/sendImage.html', dir + '/widgets/sendImage.html');
         fs.copyFileSync(resDir + 'users/Widget/templateWidget.html', dir + '/widgets/templateWidget.html');
       }
-      chmodr('/folder', 0o777, (err) => {
+      chmodr(dir, 0o777, (err) => {
         if (err) {
           console.log('Failed to execute chmod', err);
         } else {
@@ -211,7 +190,6 @@ app.post("/makeprivate", require('connect-ensure-login').ensureLoggedIn(),
   function (req, res) {
     var resDir = __dirname + "/users/" + req.user.username;
     var file = req.body.name;
-    console.log(file);
     fs.renameSync(resDir + "/public/" + file, resDir + "/private/" + file);
     res.sendStatus(200);
   });
@@ -227,7 +205,6 @@ app.post("/makepublic", require('connect-ensure-login').ensureLoggedIn(),
   function (req, res) {
     var resDir = __dirname + "/users/" + req.user.username;
     var file = req.body.name;
-    console.log(file);
     fs.renameSync(resDir + "/private/" + file, resDir + "/public/" + file);
     res.sendStatus(200);
   }
@@ -344,7 +321,7 @@ app.get('/media/:type', (req, res) => {
 
 app.post('/media/:type', (req, res) => {
   const type = req.params.type;
-  if (type == "widgets" || type == "images" || type == "audios" || type == "css"){
+  if (type == "widgets" || type == "images" || type == "audios" || type == "css") {
     if (!req.files || Object.keys(req.files).length === 0) {
       return res.status(400).send('No files were uploaded.');
     }
@@ -354,7 +331,7 @@ app.post('/media/:type', (req, res) => {
 
     // Use the mv() method to place the file somewhere on your server
     const directoryPath = path.join(__dirname + "/users/" + req.user.username, type);
-    file.mv(directoryPath+"/"+file.name, function(err) {
+    file.mv(directoryPath + "/" + file.name, function (err) {
       if (err)
         return res.status(500).send(err);
 
@@ -397,7 +374,6 @@ app.post('/stories', require('connect-ensure-login').ensureLoggedIn(), (req, res
   while (fs.existsSync(path.join(directoryPath, name + ".json"))) {
     name += "_new";
   }
-  console.log("nome scelto")
   data = fs.writeFileSync(directoryPath + "/" + name + '.json', JSON.stringify({
     nome: "Nuova Storia",
     categoria: "Singolo",
@@ -423,7 +399,6 @@ app.post('/stories', require('connect-ensure-login').ensureLoggedIn(), (req, res
       }
     ]
   }));
-  console.log(data);
   res.send(name);
   res.end();
 });
@@ -442,9 +417,7 @@ app.get('/stories/:user/:visibility/:nomeStoria', (req, res) => {
 app.post('/stories/:user/:visibility/:nomeStoria', (req, res) => {
   if (req.user.username && req.params.user == req.user.username) {
     const directoryPath = path.join(__dirname + "/users/" + req.params.user, req.params.visibility);
-    console.log(JSON.stringify(req.body.data));
     data = fs.writeFileSync(directoryPath + "/" + req.params.nomeStoria + '.json', JSON.stringify(req.body.data));
-    console.log(req.body);
     res.sendStatus(200);
   }
   res.end();
