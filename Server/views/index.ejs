@@ -35,6 +35,8 @@
       <div class="container-fluid row justify-content-around">
         <div id="Stories" class="col-md-6 container-sm">
           <button class="btn btn-success" v-on:click="newFile()">New Story</button>
+          <button class="btn btn-info" v-on:click="importstory()">Import</button>
+          <input type="file" name="load" id="load" hidden>
           <ul class="list-group list-group-flush">
             <template v-for="(story, index) in list">
               <li class="list-group-item" v-bind:class="{active: story.selected}">

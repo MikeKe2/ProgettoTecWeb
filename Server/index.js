@@ -358,8 +358,15 @@ app.get('/media/:user/:type/:name', (req, res) => {
   }
 });
 
+app.post('/import', require('connect-ensure-login').ensureLoggedIn(), (req, res) => {
+  const directoryPath = path.join(__dirname + "/users/" + req.user.username, "private");
+  console.log(req.body.name);
+  fs.writeFileSync(directoryPath + "/" + req.body.name, JSON.stringify(req.body.data));
+  res.sendStatus(200);
+  res.end();
+});
+
 app.post('/stories', require('connect-ensure-login').ensureLoggedIn(), (req, res) => {
-  //funzionedellestorieprovvisorie(req, res);
   const directoryPath = path.join(__dirname + "/users/" + req.user.username, "private");
   let name = req.body.name;
   while (fs.existsSync(path.join(directoryPath, name + ".json"))) {
