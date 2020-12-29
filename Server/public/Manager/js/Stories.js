@@ -73,6 +73,10 @@ var Stories = new Vue({
             if(confirm("vuoi modificare la storia: "+Stories.list[index].name+"?"))
                 window.open("/editorStoria/"+Stories.list[index].visibility+"/"+Stories.list[index].name.replace(".json","")+"/",'_self',false);
 
+        },
+
+        importstory: function(){
+            $("#load").click();
         }
 	}
 });

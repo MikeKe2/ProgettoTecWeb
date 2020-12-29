@@ -186,7 +186,7 @@ function collapsehandler() {
 function download() {
   var element = document.createElement('a');
   element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(storia)));
-  element.setAttribute('download', storia.nome + ".mms");
+  element.setAttribute('download', storia.nome + ".json");
 
   element.style.display = 'none';
   document.body.appendChild(element);
