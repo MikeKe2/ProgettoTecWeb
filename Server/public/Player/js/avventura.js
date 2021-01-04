@@ -27,7 +27,7 @@ function storiaCallback(data) {
 function initialize() {
     $("#titolo").html(storia.nome);
     $("#btn").click(function () {
-        checkResult(scena_corr == 0 || document.getElementById("result") == undefined ? null : document.getElementById("result").value);
+        checkResult(scena_corr == 0 || storia.scene[scena_corr].widget == "" || storia.scene[scena_corr].widget == "image.html" ? null : document.getElementById("result").value);
         //document.getElementById("result").value = "";
     })
     $(".adventure").css({
