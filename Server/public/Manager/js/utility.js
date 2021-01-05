@@ -5,9 +5,7 @@ $(document).ready(() => {
   qrmaker = new QRCode($("#qr")[0]);
   $("#load").on("change", () => {
     let file = $("#load")[0].files[0];
-    console.log(file.name);
     for (story of Stories.list) {
-      console.log(story);
       if (story.name == file.name) {
         if (!confirm("Così facendo sovrascriverai il file " + story.name + ". Sei sicuro?"))
           return;

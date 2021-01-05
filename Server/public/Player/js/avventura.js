@@ -41,13 +41,6 @@ function initialize() {
         if (scena_corr != 0 && startTime != undefined && Math.round((currTime - startTime) / 1000) % 60 == 0)
             socket.emit("timer", username, (Math.round((currTime - startTime) / 1000)));
     })
-    //Se la storia non è single allora permetto l'utente di scegliere il gruppo
-    /*if (storia.categoria != 'single') {
-        for (i = 0; i < storia.ngruppi; i++) {
-            var $newGroup = $('<li class="list-group-item" id="' + i + '"> Gruppo ' + i + '</li>')
-            $('#groupPage').append($newGroup);
-        }
-    }*/
 }
 
 function checkResult(result) {
@@ -77,12 +70,7 @@ function checkResult(result) {
                 alert("Risposta errata!");
         } else {
             socket.emit("answerToEvaluator", username, (result));
-            //$("#loading").toggleClass("visibility");
             waitEvaluator();
-            /*
-            scena = parseInt(storia.scene[scena_corr].risposte[0].to[gruppo]);
-            nextScene(scena);
-            */
         }
     } else {
         scena = parseInt(storia.scene[scena_corr].risposte[0].to[gruppo]);
@@ -96,8 +84,8 @@ function fetchData() {
     return promise1 = new Promise(resolve => setTimeout(function () {
         socket.on('answerFromEvaluator', (data) => {
             $("#loading").toggleClass("visibility");
-            punteggio += parseInt(storia.scene[scena_corr].risposte[parseInt(data.message,10)].points, 10);
-            nextScene(storia.scene[scena_corr].risposte[parseInt(data.message,10)].to[gruppo]);
+            punteggio += parseInt(storia.scene[scena_corr].risposte[parseInt(data.message, 10)].points, 10);
+            nextScene(storia.scene[scena_corr].risposte[parseInt(data.message, 10)].to[gruppo]);
         })
     }, 2000));
 }
@@ -378,11 +366,6 @@ $(function () {
     // Click events
 
     $(".valutatore").click(() => {
-        var pass1;
-        socket.emit('password', ';)', (data) => {
-            pass1 = data;
-        });
-
         $("#loginModal").modal("show");
         $("#form-control").focus();
 
@@ -390,11 +373,15 @@ $(function () {
         $("#loginForm").submit(function (event) {
             event.preventDefault(); //stop a full postback
 
-            var password = $("#modalpass").val(); //get the entered value from the password box
+            //let pass1 = storia.password;
+            let pass1 = 'ciao';
+
+            let password = $("#modalpass").val(); //get the entered value from the password box
 
             if (password == pass1) {
                 alert("Access Granted!");
-                location.replace("https://site181993.tw.cs.unibo.it/valutatore");
+                //location.replace("https://site181993.tw.cs.unibo.it/valutatore");
+                window.location.pathname += "/Valutatore";
             } else alert("Password is incorrect.");
         });
     });
@@ -444,7 +431,7 @@ $(function () {
     // Socket events
 
     socket.on('helpIncoming', (data) => {
-        window.alert("Il valutatore dice: " + data.message);
+        window.alert(`Il valutatore dice: ${data.message}`);
         $('#helpRequested').prop("disabled", false);
     });
 

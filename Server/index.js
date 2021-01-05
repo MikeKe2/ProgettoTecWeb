@@ -136,7 +136,7 @@ app.post("/newUser", function (req, res) {
         fs.copyFileSync(resDir + 'users/Widget/sendImage.html', dir + '/widgets/sendImage.html');
         fs.copyFileSync(resDir + 'users/Widget/templateWidget.html', dir + '/widgets/templateWidget.html');
       }
-      chmodr(dir, 0o777, (err) => {
+      chmodr(dir, 0o775, (err) => {
         if (err) {
           console.log('Failed to execute chmod', err);
         } else {
@@ -179,11 +179,6 @@ app.get('/profile',
 app.use(express.static(path.join(__dirname, 'public/Player')))
 app.get('/start', function (req, res) {
   res.sendFile(__dirname + "/public/Player/index.html");
-});
-
-//EVALUATOR INTERFACE
-app.get("/valutatore", function (req, res) {
-  res.render("valutatore")
 });
 
 app.post("/makeprivate", require('connect-ensure-login').ensureLoggedIn(),
@@ -430,7 +425,7 @@ app.post('/stories/:user/:visibility/:nomeStoria', (req, res) => {
   res.end();
 });
 
-app.get('/editorStoria/:visibility/:nomeStoria/', (req, res) => {
+app.get('/editorStoria/:visibility/:nomeStoria/', require('connect-ensure-login').ensureLoggedIn(), (req, res) => {
   res.render("index_Editor", {
     data: req.params.nomeStoria,
     visibility: req.params.visibility,
@@ -442,6 +437,13 @@ app.get('/editorStoria/:visibility/:nomeStoria/', (req, res) => {
 app.get('/avventura/:user/:name', (req, res) => {
   url = '/users/' + req.params.user + '/public/' + req.params.name + '.json';
   res.render("avventura", {
+    urlStoria: url
+  });
+});
+
+app.get('/avventura/:user/:name/Valutatore', (req, res) => {
+  url = '/users/' + req.params.user + '/public/' + req.params.name + '.json';
+  res.render("valutatore", {
     urlStoria: url
   });
 });
@@ -458,10 +460,6 @@ io.on("connection", (socket) => {
       username: username,
       room: num,
     });
-  });
-
-  socket.on('password', (name, fn) => {
-    fn('evaluator');
   });
 
   socket.on('score', (username, data) => {
@@ -534,12 +532,6 @@ io.on("connection", (socket) => {
     socket.emit("login", {
       numUsers: numUsers,
     });
-    if (numUsers <= 1 || avventura == null) {
-      avventura = data;
-      socket.to(evalID).emit("avventura_in_corso", {
-        storia: data,
-      });
-    }
     // echo to the Evaluator that a person has connected
     socket.to(evalID).emit("user joined", {
       username: username,
