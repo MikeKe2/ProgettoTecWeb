@@ -429,23 +429,29 @@ $(
     //we export the ArrayOfUser in a .json file, checking wich browser the user is currently using
     $('#exportIron').click(function (e) {
       e.preventDefault()
-      var data = JSON.stringify(ArrayofUsers);
-      var file = new Blob([data], {
-        type: "json"
-      });
-      if (window.navigator.msSaveOrOpenBlob) // IE10+
-        window.navigator.msSaveOrOpenBlob(file, filename);
-      else { // Others
-        var a = document.createElement("a"),
-          url = URL.createObjectURL(file);
-        a.href = url;
-        a.download = "data.json";
-        document.body.appendChild(a);
-        a.click();
-        setTimeout(function () {
-          document.body.removeChild(a);
-          window.URL.revokeObjectURL(url);
-        }, 0);
+      if (ArrayofUsers.numberOfUsers > 0) {
+        var data = JSON.stringify(ArrayofUsers);
+        var file = new Blob([data], {
+          type: "json"
+        });
+        if (window.navigator.msSaveOrOpenBlob) // IE10+
+          window.navigator.msSaveOrOpenBlob(file, filename);
+        else { // Others
+          var a = document.createElement("a"),
+            url = URL.createObjectURL(file);
+          a.href = url;
+          a.download = "data.json";
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(function () {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+          }, 0);
+        }
+      }
+      else
+      {
+        alert("Nessun Giocatore");
       }
     })
 
