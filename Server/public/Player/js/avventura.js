@@ -20,7 +20,7 @@ function end_time() {
 
 function storiaCallback(data) {
     storia = data;
-    console.log(storia);
+    //console.log(storia);
     initialize();
 }
 
@@ -60,14 +60,14 @@ function checkResult(result) {
                 if (result == risposta.valore && parseInt(risposta.maxTime) != 0 && time <= parseInt(risposta.maxTime) && pointsAdded == 0) {
                     pointsAdded = parseInt(risposta.points);
                     punteggio += pointsAdded;
-                    console.log(punteggio);
+                    //console.log(punteggio);
                     scena = parseInt(risposta.to[gruppo]);
                     correct = true;
                     nextScene(scena);
                 } else if (result == risposta.valore && parseInt(risposta.maxTime) == 0 && pointsAdded == 0) {
                     pointsAdded = parseInt(risposta.points);
                     punteggio += pointsAdded;
-                    console.log(punteggio);
+                    //console.log(punteggio);
                     scena = parseInt(risposta.to[gruppo]);
                     correct = true;
                     nextScene(scena);
@@ -132,24 +132,30 @@ function nextScene(scena) {
         player = $("#player");
         player[0].pause();
         player[0].load();
-        console.log(player[0])
+        //console.log(player[0])
         player[0].oncanplaythrough = player[0].play();
     }
 
     if (storia.scene[scena_corr].descrizione != undefined && storia.scene[scena_corr].descrizione != "") {
         $("#text-holder").show();
-        $("#testo").html(storia.scene[scena_corr].descrizione);
+        testo = $("#testo");
+        testo.html(storia.scene[scena_corr].descrizione);
+        testo.attr("aria-label", storia.scene[scena_corr].descrizione);
         //console.log(storia.scene[scena_corr].widget);
-    } else if (storia.scene[scena_corr].nome == "inizio") {
+    } else if (storia.scene[scena_corr].nome == "Inizio") {
         $("#text-holder").show();
+        var acc = "";
+        if (storia.scene[scena_corr].accessibile == "true")
+            acc = "Questa storia è accessibile.";
         $("#testo").html(`
 BENVENUTO NELLA STORIA ${storia.nome}.<br>
 Quest'avventura è pensata per ${storia.categoria.replace('_', " ")}.<br>
 Il target di età è di ${storia.target} anni.<br>
+` + acc + `
 <br>
 Divertitevi!!!
 `);
-    } else if (storia.scene[scena_corr].nome == "fine") {
+    } else if (storia.scene[scena_corr].nome == "Fine") {
         //mostra punteggio e mandalo al server
         socket.emit('score', username, (punteggio));
         $("#text-holder").show();
