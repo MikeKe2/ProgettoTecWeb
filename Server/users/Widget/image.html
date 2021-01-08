@@ -3,5 +3,8 @@
 </div>
 
 <script>
-    document.getElementById("widget-image").setAttribute("src", "/users/" + storia.autore + "/images/" + storia.scene[scena_corr].img);
+    let img = document.getElementById("widget-image");
+    img.setAttribute("src", "/users/" + storia.autore + "/images/" + storia.scene[scena_corr].img);
+    img.setAttribute("alt", storia.scene[scena_corr].imgDescription);
+    img.setAttribute("aria-label", storia.scene[scena_corr].imgDescription);
 </script>
