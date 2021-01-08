@@ -30,10 +30,9 @@ $(
     };
 
     class Utente {
-      constructor(userId, userUsername, /*userStoria,*/ userRoom, userTimer, userScore, currentQuestion, possibleAnswer) {
+      constructor(userId, userUsername, userRoom, userTimer, userScore, currentQuestion, possibleAnswer) {
         this.userId = userId;
         this.userUsername = userUsername;
-        //this.userStoria = userStoria;
         this.userRoom = userRoom;
         this.userTimer = userTimer;
         this.userScore = userScore;
@@ -47,8 +46,8 @@ $(
         this.users = [];
       }
 
-      newStoria(userId, userUsername, /*userStoria,*/ userRoom, userTimer, userScore, currentQuestion, possibleAnswer) {
-        let m = new Utente(userId, userUsername, /*userStoria,*/ userRoom, userTimer, userScore, currentQuestion, possibleAnswer);
+      newStoria(userId, userUsername, userRoom, userTimer, userScore, currentQuestion, possibleAnswer) {
+        let m = new Utente(userId, userUsername, userRoom, userTimer, userScore, currentQuestion, possibleAnswer);
         this.users.push(m);
         return m;
       }
@@ -78,7 +77,7 @@ $(
       new Toast('warning', 'ha lasciato la chat. Ci sono ora: '),
       new Toast('info', 'ha lasciato un messaggio nella sua chat.'),
       new Toast('error', 'Connessione al server terminata'),
-      new Toast('info', 'Tentativo di riconessione in corso....'),
+      new Toast('info', 'Tentativo di riconnessione in corso....'),
       new Toast('success', 'Sei stato riconnesso'),
       new Toast('info', 'Collegamento avvenuto con successo!'),
       new Toast('info', "Ulteriore dispositivo collegato all'account: "),
@@ -159,6 +158,9 @@ $(
 
     var socket = io("https://site181993.tw.cs.unibo.it");
 
+    $.getJSON(urlStoria, function (data) {
+      storia = data;
+    });
 
     //#region Functions
 
@@ -429,23 +431,27 @@ $(
     //we export the ArrayOfUser in a .json file, checking wich browser the user is currently using
     $('#exportIron').click(function (e) {
       e.preventDefault()
-      var data = JSON.stringify(ArrayofUsers);
-      var file = new Blob([data], {
-        type: "json"
-      });
-      if (window.navigator.msSaveOrOpenBlob) // IE10+
-        window.navigator.msSaveOrOpenBlob(file, filename);
-      else { // Others
-        var a = document.createElement("a"),
-          url = URL.createObjectURL(file);
-        a.href = url;
-        a.download = "data.json";
-        document.body.appendChild(a);
-        a.click();
-        setTimeout(function () {
-          document.body.removeChild(a);
-          window.URL.revokeObjectURL(url);
-        }, 0);
+      if (ArrayofUsers.numberOfUsers > 0) {
+        var data = JSON.stringify(ArrayofUsers);
+        var file = new Blob([data], {
+          type: "json"
+        });
+        if (window.navigator.msSaveOrOpenBlob) // IE10+
+          window.navigator.msSaveOrOpenBlob(file, filename);
+        else { // Others
+          var a = document.createElement("a"),
+            url = URL.createObjectURL(file);
+          a.href = url;
+          a.download = "data.json";
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(function () {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+          }, 0);
+        }
+      } else {
+        alert("Nessun Giocatore");
       }
     })
 
@@ -504,10 +510,6 @@ $(
       showToast(9, data);
     });
 
-    socket.on("avventura_in_corso", (data) => {
-      storia = data.storia;
-    });
-
     // Whenever the server emits 'login', log the login message
     socket.on("login", (data) => {
       connected = true;
@@ -530,7 +532,7 @@ $(
       } else
         showToast(7, data);
 
-      ArrayofUsers.newStoria(data.id, data.username, /*data.storia,*/ 0, 0, 0, "NULL", "NULL");
+      ArrayofUsers.newStoria(data.id, data.username, 0, 0, 0, "NULL", "NULL");
 
       socket.emit("assignGroup", {
         id: data.id,
