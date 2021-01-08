@@ -241,6 +241,7 @@ $(function () {
     // Log a message
     const log = (message, options) => {
         var $el = $("<li>").addClass("log").text(message);
+        $el.attr("aria-label", message);
         addMessageElement($el, options);
     };
 
