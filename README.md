@@ -8,6 +8,3 @@ restart site181993
 logs 181993 //TI TROVA GLI ERRORI
 remove site181993
 create node-10 site181993 index.js
-
-bisogna fare degli script che salvino il chmod dei file/folder, l'unica zona problematica credo sia la creazione di storie e cartelle
-per editare sul server unibo, gedit
