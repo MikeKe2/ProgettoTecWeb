@@ -20,7 +20,6 @@ function end_time() {
 
 function storiaCallback(data) {
     storia = data;
-    //console.log(storia);
     initialize();
 }
 
@@ -28,7 +27,6 @@ function initialize() {
     $("#titolo").html(storia.nome);
     $("#btn").click(function () {
         checkResult(scena_corr == 0 || storia.scene[scena_corr].widget == "" || storia.scene[scena_corr].widget == "image.html" ? null : document.getElementById("result").value);
-        //document.getElementById("result").value = "";
     })
     $(".adventure").css({
         'background-image': 'url( "/users/' + storia.autore + '/images/' + storia.background + '")',
@@ -53,14 +51,12 @@ function checkResult(result) {
                 if (result == risposta.valore && parseInt(risposta.maxTime) != 0 && time <= parseInt(risposta.maxTime) && pointsAdded == 0) {
                     pointsAdded = parseInt(risposta.points);
                     punteggio += pointsAdded;
-                    //console.log(punteggio);
                     scena = parseInt(risposta.to[gruppo]);
                     correct = true;
                     nextScene(scena);
                 } else if (result == risposta.valore && parseInt(risposta.maxTime) == 0 && pointsAdded == 0) {
                     pointsAdded = parseInt(risposta.points);
                     punteggio += pointsAdded;
-                    //console.log(punteggio);
                     scena = parseInt(risposta.to[gruppo]);
                     correct = true;
                     nextScene(scena);
@@ -120,7 +116,6 @@ function nextScene(scena) {
         player = $("#player");
         player[0].pause();
         player[0].load();
-        //console.log(player[0])
         player[0].oncanplaythrough = player[0].play();
     }
 
@@ -129,7 +124,6 @@ function nextScene(scena) {
         testo = $("#testo");
         testo.html(storia.scene[scena_corr].descrizione);
         testo.attr("aria-label", storia.scene[scena_corr].descrizione);
-        //console.log(storia.scene[scena_corr].widget);
     } else if (storia.scene[scena_corr].nome == "Inizio") {
         $("#text-holder").show();
         var acc = "";
