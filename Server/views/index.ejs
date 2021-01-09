@@ -95,7 +95,10 @@
               </button>
             </div>
             <div class="modal-body d-flex justify-content-around">
-              <div id="qr"></div>
+              <a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" data-content="Url Copied!">
+                <div id="qr"></div>
+              </a>
+              <input type="text" id="urlValue" style="display: none;">
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

@@ -376,6 +376,7 @@ app.post('/stories', require('connect-ensure-login').ensureLoggedIn(), (req, res
   data = fs.writeFileSync(directoryPath + "/" + name + '.json', JSON.stringify({
     nome: "Nuova Storia",
     categoria: "Singolo",
+    password: req.user.username,
     accessibile: false,
     target: "7-10",
     ngruppi: 1,
