@@ -84,6 +84,16 @@ app.get("/", function (req, res) {
   }
 });
 
+//QR
+app.get("/avventure", function (req, res) {
+  fs.readFile(__dirname + '/db/UsersData.json', function (err, data) {
+    let json = JSON.parse(data);
+    if(err)
+      throw err;
+    res.render("qr", {data: json});
+  });
+});
+
 //LOGIN
 app.get("/login", function (req, res) {
   res.render("login");
