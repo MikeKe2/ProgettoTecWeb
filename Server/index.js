@@ -376,6 +376,19 @@ app.post('/import', require('connect-ensure-login').ensureLoggedIn(), (req, res)
   res.end();
 });
 
+app.get('/:user/stories', (req, res) => {
+  directoryPath = path.join(__dirname + "/users/" + req.params.user, "public");
+  fs.readdir(directoryPath, function (err, files) {
+    //handling error
+    if (err) {
+      return console.log('Unable to scan directory: ' + err);
+    }
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify(files));
+    res.end();
+  });
+});
+
 app.post('/stories', require('connect-ensure-login').ensureLoggedIn(), (req, res) => {
   const directoryPath = path.join(__dirname + "/users/" + req.user.username, "private");
   let name = req.body.name;
@@ -386,7 +399,6 @@ app.post('/stories', require('connect-ensure-login').ensureLoggedIn(), (req, res
   data = fs.writeFileSync(directoryPath + "/" + name + '.json', JSON.stringify({
     nome: "Nuova Storia",
     categoria: "Singolo",
-    password: req.user.username,
     accessibile: false,
     target: "7-10",
     ngruppi: 1,
