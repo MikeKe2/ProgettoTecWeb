@@ -108,7 +108,7 @@ class graphicalScene{
 			}
 			html = html.replace("$VALORE", risposta.valore).replace("$VALORE", risposta.valore);
 			html = html.replace("$LINK", risposta.to[board.activegroup] != -1 ? storia.scene[risposta.to[board.activegroup]].nome: "non ancora inserito");
-			html = html.replace("$TEMPO", risposta.maxTime ? risposta.maxTime : "illimitato").replace("$TEMPO", risposta.maxTime);
+			html = html.replace("$TEMPO", risposta.maxTime>0 ? risposta.maxTime : "illimitato").replace("$TEMPO", risposta.maxTime);
 			html = html.replace("$POINTS", risposta.points).replace("$POINTS", risposta.points);
 
 			$("#scena"+this.id+" ol").append(html);
