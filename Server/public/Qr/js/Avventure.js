@@ -16,7 +16,7 @@ var Avventure = new Vue({
 		copy: function(uindex, sindex){
 			let user = this.list[uindex].name;
 			let adventure = this.list[uindex].stories[sindex];
-			let text = "https://site181993.tw.cs.unibo.it/avventura/"+user+"/"+adventure;
+			let text = ("https://site181993.tw.cs.unibo.it/avventura/"+user+"/"+adventure).replaceAll(".json","");
 
 			var falseinput = document.createElement("textarea");
 			document.body.appendChild(falseinput);
