@@ -146,8 +146,7 @@
     result = document.getElementById("result");
 
     function updateResult() {
-        result.value = ((!lever1.checked) | 0).toString() + ((!lever2.checked) | 0).toString() + ((!lever3.checked) | 0)
-            .toString();
+        result.value = ((!lever1.checked) | 0).toString() + ((!lever2.checked) | 0).toString() + ((!lever3.checked) | 0).toString();
     }
     setInterval(updateResult, 1000);
 </script>
