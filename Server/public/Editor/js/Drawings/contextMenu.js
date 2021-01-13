@@ -51,7 +51,7 @@ var contextMenu = {
                 let risp = {
                     valore: 0, 
                     to:Array(storia.ngruppi).fill(-1),
-                    remainingTime: 0,
+                    maxTime: 0,
                     points: 0
                 };
                 board.scenes[id].core.risposte.push(risp);

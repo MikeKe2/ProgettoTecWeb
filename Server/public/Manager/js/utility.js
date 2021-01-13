@@ -3,7 +3,8 @@ $(document).ready(() => {
   Stories.init();
   Media.init(Media.types[0]);
   qrmaker = new QRCode($("#qr")[0]);
-  $("#load").on("change", () => {
+  $("#qr").click(copyToClipboard)
+  $("#load").on("change",()=>{
     let file = $("#load")[0].files[0];
     for (story of Stories.list) {
       if (story.name == file.name) {
@@ -28,4 +29,18 @@ $(document).ready(() => {
     };
     reader.readAsText($("#load")[0].files[0]);
   })
+  // $(function () {
+  //   $('[data-toggle="popover"]').popover();
+  // })
+  // $('.popover-dismiss').popover({
+  //   trigger: 'focus'
+  // })
 });
+function copyToClipboard(){
+  let cb = $("#urlValue")[0];
+  cb.style.display='block';
+  cb.select();
+  document.execCommand('copy');
+  cb.style.display='none';
+  alert("url copiato!");
+}

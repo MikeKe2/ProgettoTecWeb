@@ -111,6 +111,7 @@ function initScene(id) {
       e.preventDefault();
       storia.nome = $("#settingsNome").val();
       storia.categoria = $("#settingsCategoria").val();
+      storia.password = $("#settingPassword").val();
       groupCategories();
       storia.target = $("#settingsTarget").val();
       storia.background = $("#settingsBg").val();
@@ -210,7 +211,10 @@ function settingsToggle() {
     settings = settings.replace("$IMMAGINE", storia.background != "" ? storia.background : "Non ancora inserito");
     settings = settings.replace("$AUTORE", storia.autore != "" ? storia.autore : "Non ancora inserito").replace("$AUTORE", storia.autore);
     settings = settings.replace("$CSS", storia.css != "" ? storia.css : "Non ancora inserito").replace("$CSSCONTENT", getMedia("css"));
+    settings = settings.replace("$PASSWORD", storia.password).replace("$PASSWORD", storia.password); 
     $("body").append(settings);
+    if(storia.accessibile=="false")
+      storia.accessibile = false;
     $("#settingsAccessibilita").prop("checked", storia.accessibile);
     $("#settingsCategoria").val(storia.categoria);
     $("#settingsTarget").val(storia.target);

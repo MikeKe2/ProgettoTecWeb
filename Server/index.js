@@ -92,6 +92,16 @@ app.get("/", function (req, res) {
   }
 });
 
+//QR
+app.get("/avventure", function (req, res) {
+  fs.readFile(__dirname + '/db/UsersData.json', function (err, data) {
+    let json = JSON.parse(data);
+    if(err)
+      throw err;
+    res.render("qr", {data: json});
+  });
+});
+
 //LOGIN
 app.get("/login", function (req, res) {
   res.render("login");
@@ -368,6 +378,19 @@ app.post('/import', require('connect-ensure-login').ensureLoggedIn(), (req, res)
   fs.writeFileSync(directoryPath + "/" + req.body.name, JSON.stringify(req.body.data));
   res.sendStatus(200);
   res.end();
+});
+
+app.get('/:user/stories', (req, res) => {
+  directoryPath = path.join(__dirname + "/users/" + req.params.user, "public");
+  fs.readdir(directoryPath, function (err, files) {
+    //handling error
+    if (err) {
+      return console.log('Unable to scan directory: ' + err);
+    }
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify(files));
+    res.end();
+  });
 });
 
 app.post('/stories', require('connect-ensure-login').ensureLoggedIn(), (req, res) => {
