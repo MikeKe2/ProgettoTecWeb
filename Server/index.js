@@ -448,10 +448,10 @@ app.get('/avventura/:user/:name/Valutatore', (req, res) => {
   });
 });
 
-var avventura = null;
 var numUsers = 0;
 var evaluator = "valutatore";
-var evalID = 0;
+//Dizionario Storia = ID del valutatore su quella storia
+var evaluators = {};
 
 io.on("connection", (socket) => {
   var addedUser = false;
@@ -469,8 +469,8 @@ io.on("connection", (socket) => {
     });
   });
 
-  socket.on('answerToEvaluator', (username, data) => {
-    socket.to(evalID).emit('answerToEvaluator', {
+  socket.on('answerToEvaluator', (storia, username, data) => {
+    socket.to(evaluators[storia]).emit('answerToEvaluator', {
       username: username,
       message: data,
     });
@@ -482,8 +482,8 @@ io.on("connection", (socket) => {
     });
   });
 
-  socket.on('help', (data) => {
-    socket.to(evalID).emit('help', {
+  socket.on('help', (storia, data) => {
+    socket.to(evaluators[storia]).emit('help', {
       username: socket.username,
       message: data
     });
@@ -497,16 +497,17 @@ io.on("connection", (socket) => {
   });
 
   // when the client emits 'new message', this listens and executes
-  socket.on("new user message", (data) => {
+  socket.on("new user message", (storia, data) => {
+    console.log(data);
     // we tell the client to execute 'new message'
-    socket.to(evalID).emit('new message', {
+    socket.to(evaluators[storia]).emit('new message', {
       username: socket.username,
       id: socket.id,
       message: data
     });
   });
 
-  // when the client emits 'new message', this listens and executes
+  // when the evaluator emits 'new message', this listens and executes
   socket.on("new eval message", (targetID, data) => {
     // we tell the client to execute 'new message'
     socket.to(targetID).emit('new message', {
@@ -515,15 +516,15 @@ io.on("connection", (socket) => {
     });
   });
 
-  socket.on("add eval", () => {
-    evalID = socket.id;
+  socket.on("add eval", (storia) => {
+    evaluators[storia] = socket.id;
     socket.emit("login", {
       numUsers: numUsers
     });
   });
 
   // when the client emits 'add user', this listens and executes
-  socket.on("add user", (username, data) => {
+  socket.on("add user", (username) => {
     if (addedUser) return;
     // we store the username in the socket session for this client
     socket.username = username;

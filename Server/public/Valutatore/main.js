@@ -460,7 +460,7 @@ $(
     //#region  Socket events
 
     $(document).ready(function () {
-      socket.emit("add eval", username);
+      socket.emit("add eval", storia.nome);
     });
 
     socket.on('score', (data) => {

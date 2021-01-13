@@ -69,7 +69,7 @@ function checkResult(result) {
             if (!correct)
                 alert("Risposta errata!");
         } else {
-            socket.emit("answerToEvaluator", username, (result));
+            socket.emit("answerToEvaluator", storia.nome, username, (result));
             waitEvaluator();
         }
     } else {
@@ -216,7 +216,7 @@ $(function () {
             $loginPage.fadeOut();
             $loginPage.off("click");
             $adventurePage.show();
-            socket.emit("add user", username, (storia));
+            socket.emit("add user", username);
         }
     };
 
@@ -234,7 +234,7 @@ $(function () {
                 message: message,
             });
             // tell server to execute 'new message' and send along one parameter
-            socket.emit("new user message", (message));
+            socket.emit("new user message", storia.nome, message);
         }
     };
 
@@ -388,7 +388,7 @@ $(function () {
 
     $('#helpRequested').click(function (e) {
         e.preventDefault();
-        socket.emit('help', (username));
+        socket.emit('help', storia.nome, username);
         $('#helpRequested').prop("disabled", true);
     })
 
