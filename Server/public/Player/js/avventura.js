@@ -37,7 +37,7 @@ function initialize() {
     setInterval(1000, function () {
         currTime = new Date();
         if (scena_corr != 0 && startTime != undefined && Math.round((currTime - startTime) / 1000) % 60 == 0)
-            socket.emit("timer", username, (Math.round((currTime - startTime) / 1000)));
+            socket.emit("timer", username, storia.nome, (Math.round((currTime - startTime) / 1000)));
     })
 }
 
@@ -65,7 +65,7 @@ function checkResult(result) {
             if (!correct)
                 alert("Risposta errata!");
         } else {
-            socket.emit("answerToEvaluator", storia.nome, username, (result));
+            socket.emit("answerToEvaluator",  username, storia.nome, (result));
             waitEvaluator();
         }
     } else {
@@ -109,7 +109,7 @@ async function waitEvaluator(_callback) {
 function nextScene(scena) {
     start_time();
     scena_corr = scena;
-    socket.emit("scene", username, (scena_corr));
+    socket.emit("scene", username, storia.nome, (scena_corr));
     if (storia.scene[scena_corr].tracciaAudio != undefined && storia.scene[scena_corr].tracciaAudio != "") {
         track = $("#track");
         track.attr("src", `/users/${storia.autore}/audios/${storia.scene[scena_corr].tracciaAudio}`);
@@ -139,7 +139,7 @@ Divertitevi!!!
 `);
     } else if (storia.scene[scena_corr].nome == "Fine") {
         //mostra punteggio e mandalo al server
-        socket.emit('score', username, (punteggio));
+        socket.emit('score', username, storia.nome, (punteggio));
         $("#text-holder").show();
         $("#btn").hide();
         $("#testo").html(`
@@ -216,7 +216,7 @@ $(function () {
             $loginPage.fadeOut();
             $loginPage.off("click");
             $adventurePage.show();
-            socket.emit("add user", username);
+            socket.emit("add user", username, (storia.nome));
         }
     };
 
@@ -324,7 +324,7 @@ $(function () {
         if (connected) {
             if (!typing) {
                 typing = true;
-                socket.emit("typing");
+                socket.emit("typing", storia.nome);
             }
             lastTypingTime = new Date().getTime();
 
@@ -332,7 +332,7 @@ $(function () {
                 var typingTimer = new Date().getTime();
                 var timeDiff = typingTimer - lastTypingTime;
                 if (timeDiff >= TYPING_TIMER_LENGTH && typing) {
-                    socket.emit("stop typing");
+                    socket.emit("stop typing", storia.nome);
                     typing = false;
                 }
             }, TYPING_TIMER_LENGTH);
@@ -481,7 +481,7 @@ $(function () {
     socket.on("reconnect", () => {
         log("you have been reconnected");
         if (username) {
-            socket.emit("add user", username, (storia));
+            socket.emit("add user", username, (storia.nome));
         }
         id = socket.id;
     });

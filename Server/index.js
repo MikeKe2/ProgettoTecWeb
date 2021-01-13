@@ -96,9 +96,11 @@ app.get("/", function (req, res) {
 app.get("/avventure", function (req, res) {
   fs.readFile(__dirname + '/db/UsersData.json', function (err, data) {
     let json = JSON.parse(data);
-    if(err)
+    if (err)
       throw err;
-    res.render("qr", {data: json});
+    res.render("qr", {
+      data: json
+    });
   });
 });
 
@@ -478,25 +480,34 @@ var evaluators = {};
 
 io.on("connection", (socket) => {
   var addedUser = false;
-  socket.on("scene", (username, num) => {
-    socket.to(evalID).emit('scene', {
-      username: username,
-      room: num,
-    });
+
+  socket.on("scene", (username, storia, num) => {
+    try {
+      socket.to(evaluators[storia]).emit('scene', {
+        username: username,
+        room: num,
+      });
+    } catch (error) {}
   });
 
-  socket.on('score', (username, data) => {
-    socket.to(evalID).emit('score', {
-      username: username,
-      score: data,
-    });
+  socket.on('score', (username, storia, data) => {
+    try {
+      socket.to(evaluators[storia]).emit('score', {
+        username: username,
+        score: data,
+      });
+    } catch (error) {}
   });
 
-  socket.on('answerToEvaluator', (storia, username, data) => {
-    socket.to(evaluators[storia]).emit('answerToEvaluator', {
-      username: username,
-      message: data,
-    });
+  socket.on('answerToEvaluator', (username, storia, data) => {
+    try {
+      socket.to(evaluators[storia]).emit('answerToEvaluator', {
+        username: username,
+        message: data,
+      });
+    } catch (error) {
+
+    }
   });
 
   socket.on('answerFromEvaluator', (id, data) => {
@@ -521,7 +532,6 @@ io.on("connection", (socket) => {
 
   // when the client emits 'new message', this listens and executes
   socket.on("new user message", (storia, data) => {
-    console.log(data);
     // we tell the client to execute 'new message'
     socket.to(evaluators[storia]).emit('new message', {
       username: socket.username,
@@ -547,7 +557,7 @@ io.on("connection", (socket) => {
   });
 
   // when the client emits 'add user', this listens and executes
-  socket.on("add user", (username) => {
+  socket.on("add user", (username, storia) => {
     if (addedUser) return;
     // we store the username in the socket session for this client
     socket.username = username;
@@ -556,12 +566,17 @@ io.on("connection", (socket) => {
     socket.emit("login", {
       numUsers: numUsers,
     });
+    console.log(`Storia:${storia}, ID del valutatore: ${username}`);
+    try {
+      socket.to(evaluators[storia]).emit("user joined", {
+        username: username,
+        id: socket.id,
+        numUsers: numUsers,
+      });
+    } catch (error) {
+
+    }
     // echo to the Evaluator that a person has connected
-    socket.to(evalID).emit("user joined", {
-      username: username,
-      id: socket.id,
-      numUsers: numUsers,
-    });
 
   });
 
@@ -573,15 +588,15 @@ io.on("connection", (socket) => {
 
 
   // when the client emits 'typing', we broadcast it to others
-  socket.on("typing", () => {
-    socket.to(evalID).emit("typing", {
+  socket.on("typing", (storia) => {
+    socket.to(evaluators[storia]).emit("typing", {
       username: socket.username,
     });
   });
 
   // when the client emits 'stop typing', we broadcast it to others
-  socket.on("stop typing", () => {
-    socket.broadcast.emit("stop typing", {
+  socket.on("stop typing", (storia) => {
+    socket.to(evaluators[storia]).emit("stop typing", {
       username: socket.username,
     });
   });
