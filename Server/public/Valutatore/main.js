@@ -160,6 +160,7 @@ $(
 
     $.getJSON(urlStoria, function (data) {
       storia = data;
+      socket.emit("add eval", storia.nome);
     });
 
     //#region Functions
@@ -458,10 +459,6 @@ $(
     //#endregion
 
     //#region  Socket events
-
-    $(document).ready(function () {
-      socket.emit("add eval", username);
-    });
 
     socket.on('score', (data) => {
       let i = ArrayofUsers.findElement(data.username);

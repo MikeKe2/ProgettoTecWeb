@@ -81,7 +81,9 @@ var Stories = new Vue({
 
         getQR: function (index) {
             qrmaker.clear(); // clear the code.
-            qrmaker.makeCode(encodeURI("https://site181993.tw.cs.unibo.it/avventura/" + $('#user').html() + "/" + this.list[index].name)); // make another code.
+            let url="https://site181993.tw.cs.unibo.it/avventura/"+$('#user').html()+"/"+ this.list[index].name;
+            qrmaker.makeCode(encodeURI(url)); // make another code.
+            $("#urlValue").val(url);
             $(".modal").modal();
         },
 
