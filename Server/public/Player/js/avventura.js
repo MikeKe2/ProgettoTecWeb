@@ -42,6 +42,7 @@ function initialize() {
 }
 
 function checkResult(result) {
+    $("#alert").hide();
     if (result != null) {
         time = end_time();
         pointsAdded = 0;
@@ -63,7 +64,8 @@ function checkResult(result) {
                 }
             });
             if (!correct)
-                alert("Risposta errata!");
+                $("#alert").show();
+                //alert("Risposta errata!");
         } else {
             socket.emit("answerToEvaluator", username, (result));
             waitEvaluator();
