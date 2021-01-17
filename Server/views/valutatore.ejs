@@ -14,26 +14,27 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-light bg-light ">
-    <a class="navbar-brand" href="#"> Lato valutatore</a>
-    <button id="listButton" class="btn btn-secondary">LIST</button>
-    <button id="exportIron" class="btn btn-outline-success">export</button>
-  </nav>
   <ul class="pages">
     <!--CHAT PAGE, page where the selected user and the evaluator can chat-->
     <li class="chat page">
-      <div class="container">
-        <div class="chatArea">
-          <ul class="messages"></ul>
-          <input id="inputMessage" type="text" class="form-control fixed-bottom" placeholder="Scriva qui..." />
+      <div class="container-fluid">
+        <nav class="navbar navbar-light bg-light fixed-top ">
+          <a id="currentChatUser" class="navbar-brand mb-0 h1"></a>
+          <button id="FromChatToData" class="btn btn-secondary mb-2">GO BACK</button>
+        </nav>
+        <div class="container">
+          <div class="chatArea">
+            <ul class="messages"></ul>
+            <input id="inputMessage" type="text" class="form-control fixed-bottom" placeholder="Scriva qui..." />
+          </div>
         </div>
       </div>
     </li>
     <!--DATA PAGE, with all information regarding the status of a selected user-->
     <li class="data page">
-      <div class="container">
+      <div class="container-fluid">
         <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav id="DataNavbar" class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
           <a id="currentUser" class="navbar-brand mb-0 h1"></a>
           <a class="navbar-text" id="userStatus"></a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavId"
@@ -46,8 +47,9 @@
               </li>
             </ul>
             <form class="form-group mx-sm-1 mb-2">
+              <button id="FromDataToList" class="btn btn-secondary mb-2">GO BACK</button>
               <button id="helpButton" class="btn btn-danger mb-2">HELP</button>
-              <button id="chatButton" class="btn btn-secondary mb-2">CHAT</button>
+              <button id="chatButton" class="btn btn-info mb-2">CHAT</button>
             </form>
           </div>
         </nav>
@@ -102,6 +104,10 @@
     </li>
     <!--USER PAGE, containing the list with all the user active-->
     <li class="users page">
+      <nav class="navbar navbar-light bg-light fixed-top ">
+        <a class="navbar-brand" href="#"> Lato valutatore</a>
+        <button id="exportIron" class="btn btn-outline-success">export</button>
+      </nav>
       <div class="container-md" id="users">
         <ul id="userList" class="list-group">
         </ul>

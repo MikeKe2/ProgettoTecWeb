@@ -566,7 +566,6 @@ io.on("connection", (socket) => {
     socket.emit("login", {
       numUsers: numUsers,
     });
-    console.log(`Storia:${storia}, ID del valutatore: ${username}`);
     try {
       socket.to(evaluators[storia]).emit("user joined", {
         username: username,

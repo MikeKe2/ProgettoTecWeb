@@ -126,7 +126,6 @@ $(
     toastr.options.closeButton = true;
     toastr.options.progressBar = true;
     toastr.options.positionClass = 'toast-top-right';
-    toastr.options.extendedTimeOut = 1000; //1000;
     toastr.options.timeOut = 2500;
     toastr.options.fadeOut = 150;
     toastr.options.fadeIn = 150;
@@ -195,7 +194,10 @@ $(
         $typingMessages.remove();
       }
 
-      var $messageBodyDiv = $('<span class="messageBody">').text(data.message);
+      if (data.username == 'valutatore')
+        var $messageBodyDiv = $('<div class="messageBody eval">').text(data.message);
+      else
+        var $messageBodyDiv = $('<div class="messageBody player">').text(data.message);
       var typingClass = data.typing ? "typing" : "";
       var $messageDiv = $('<li class="message"/>')
         .data("username", data.username)
@@ -207,6 +209,7 @@ $(
       if (data.username == 'valutatore') {
         $(".message:last-child").addClass("evaluator");
       }
+      window.scrollTo(0, document.body.scrollHeight);
     };
 
     // Adds the visual chat typing message
@@ -316,8 +319,9 @@ $(
         var currentAnswer = Object.values(storia.scene[numRoom].risposte[y]);
         var answer = '<li class = "list-group-item"><ul class = "list-group">';
         answer = answer.concat(`<li class = "list-group-item">Possibile Risposta: ${currentAnswer[0]}</li>`);
-        answer = answer.concat(`<li class = "list-group-item">Tempo Massimo: ${currentAnswer[1]}</li>`);
+        answer = answer.concat(`<li class = "list-group-item">Tempo Massimo: ${currentAnswer[4]}</li>`);
         answer = answer.concat(`<li class = "list-group-item">Punti: ${currentAnswer[3]}</li>`);
+        answer = answer.concat(`<li class = "list-group-item">Conduce alla stanza n° ${currentAnswer[1]}</li>`);
         answer = answer.concat('</ul></li>')
         $('#SceneAnswers').append(answer);
       }
@@ -327,7 +331,6 @@ $(
         var buttons = '';
         for (y in ArrayofUsers.users[i].currentQuestion.risposte)
           buttons = buttons.concat(`<button type="button" id="${y}" class="btn btn-secondary">${ArrayofUsers.users[i].currentQuestion.risposte[y].valore}</button>`);
-
         $('.btn-group').append(buttons)
         $('#answerForm').show();
       }
@@ -396,27 +399,31 @@ $(
     // DATA PAGE ==> CHAT PAGE
     $("#chatButton").click(function (e) {
       e.preventDefault();
+      $('#currentChatUser').html(currentTargetUser);
       changeScene($chatPage, $dataPage);
 
       for (i in ArrayofMessages.messages) {
         if (currentTargetUser == ArrayofMessages.messages[i].username || currentTargetUser == ArrayofMessages.messages[i].dstUsername)
           addChatMessage(ArrayofMessages.messages[i]);
       }
+      window.scrollTo(0, document.body.scrollHeight);
     });
 
     // LIST PAGE ==> DATA PAGE
-    $("#listButton").click(function (e) {
+    $("#FromDataToList").click(function (e) {
       e.preventDefault();
       currentTargetId = 0;
       currentTargetUser = 0;
-      if ($dataPage.is(":visible"))
-        changeScene($usersPage, $dataPage);
-      else if ($chatPage.is(":visible"))
-        changeScene($usersPage, $chatPage);
-
-      $(".messages").html("");
+      changeScene($usersPage, $dataPage);
       $('#SceneAnswers').html("");
+      $('.navbar-collapse').collapse('hide');
     });
+
+    $("#FromChatToData").click(function (e) {
+      e.preventDefault();
+      changeScene($dataPage, $chatPage);
+      $(".messages").html("");
+    })
 
     //If the evaluator click the helping button we control the message, if not null we send it to the current user
     $('#helpButton').click(function (e) {

@@ -33,6 +33,11 @@ function initialize() {
         'background-repeat': 'no-repeat',
         'background-size': '100% 100%'
     });
+    $(".chat.page").css({
+        'background-image': 'url( "/users/' + storia.autore + '/images/' + storia.background + '")',
+        'background-repeat': 'no-repeat',
+        'background-size': '100% 100%'
+    });
     nextScene(scena_corr);
     setInterval(1000, function () {
         currTime = new Date();
@@ -65,7 +70,7 @@ function checkResult(result) {
             if (!correct)
                 alert("Risposta errata!");
         } else {
-            socket.emit("answerToEvaluator",  username, storia.nome, (result));
+            socket.emit("answerToEvaluator", username, storia.nome, (result));
             waitEvaluator();
         }
     } else {
@@ -255,7 +260,10 @@ $(function () {
             $typingMessages.remove();
         }
 
-        var $messageBodyDiv = $('<span class="messageBody">').text(data.message);
+        if (data.username != 'valutatore')
+            var $messageBodyDiv = $('<div class="messageBody player">').text(data.message);
+        else
+            var $messageBodyDiv = $('<div class="messageBody eval">').text(data.message);
         var typingClass = data.typing ? "typing" : "";
         var $messageDiv = $('<li class="message"/>')
             .data("username", data.username)
@@ -373,13 +381,10 @@ $(function () {
         //handle the form's "submit" event
         $("#loginForm").submit(function (event) {
             event.preventDefault(); //stop a full postback
-
-            //let pass1 = storia.password;
-            let pass1 = 'ciao';
-
+            
             let password = $("#modalpass").val(); //get the entered value from the password box
 
-            if (password == pass1) {
+            if (password == storia.password) {
                 alert("Access Granted!");
                 //location.replace("https://site181993.tw.cs.unibo.it/valutatore");
                 window.location.pathname += "/Valutatore";
@@ -396,11 +401,11 @@ $(function () {
     $('#chatWithEvaluator').click(function (e) {
         e.preventDefault();
         var element = document.getElementById("chatWithEvaluator");
-        element.className = element.className.replace(/\bbtn-outline-danger\b/g, "");
+        element.className = element.className.replace(/\bbtn-outline-warning\b/g, "");
         $('#chatWithEvaluator').addClass('btn-outline-info');
 
         $adventurePage.fadeOut(100);
-        $chatPage.show(800);
+        $chatPage.show(600);
         $adventurePage.prop("disabled", true);
         $chatPage.prop("disabled", false);
 
@@ -439,8 +444,6 @@ $(function () {
     // Whenever the server emits 'login', log the login message
     socket.on("login", (data) => {
         connected = true;
-        // Display the welcome message
-        var message = "Benvenuto " + username;
         log(message, {
             prepend: true,
         });
@@ -460,7 +463,7 @@ $(function () {
         } else {
             var element = document.getElementById("chatWithEvaluator");
             element.className = element.className.replace(/\bbtn-outline-info\b/g, "");
-            $('#chatWithEvaluator').addClass('btn-outline-danger');
+            $('#chatWithEvaluator').addClass('btn-outline-warning');
         }
     });
 
