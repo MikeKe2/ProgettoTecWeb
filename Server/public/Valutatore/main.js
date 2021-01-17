@@ -73,14 +73,13 @@ $(
     }
 
     var toasts = [
-      new Toast('success', 'è entrato in chat. Ci sono ora: '),
-      new Toast('warning', 'ha lasciato la chat. Ci sono ora: '),
+      new Toast('success', 'è entrato in chat.'),
+      new Toast('warning', 'ha lasciato la chat.'),
       new Toast('info', 'ha lasciato un messaggio nella sua chat.'),
-      new Toast('error', 'Connessione al server terminata'),
+      new Toast('error', 'Connessione al server terminata.'),
       new Toast('info', 'Tentativo di riconnessione in corso....'),
-      new Toast('success', 'Sei stato riconnesso'),
-      new Toast('info', 'Collegamento avvenuto con successo!'),
-      new Toast('info', "Ulteriore dispositivo collegato all'account: "),
+      new Toast('success', 'Sei stato riconnesso!'),
+      new Toast('info', 'Collegamento avvenuto con successo.'),
       new Toast('error', "L'utente "),
       new Toast('info', ' attende valutazione per una risposta'),
     ];
@@ -90,10 +89,10 @@ $(
 
       switch (i) {
         case 0:
-          toastr[t.type](data.username + " " + t.msg + data.numUsers + " partecipanti");
+          toastr[t.type](data.username + " " + t.msg);
           break;
         case 1:
-          toastr[t.type](data.username + " " + t.msg + data.numUsers + " partecipanti");
+          toastr[t.type](data.username + " " + t.msg);
           break;
         case 2:
           toastr[t.type](data.username + " " + t.msg);
@@ -523,7 +522,7 @@ $(
     });
 
     // Whenever the server emits 'login', log the login message
-    socket.on("login", (data) => {
+    socket.on("login", () => {
       connected = true;
     });
 
@@ -541,8 +540,7 @@ $(
         var $newUser = $(`<li class="list-group-item" id="${data.username.replace(/[^a-zA-Z0-9]/g, "")}">${data.username}</li>`);
         $('#userList').append($newUser);
         showToast(0, data);
-      } else
-        showToast(7, data);
+      }
 
       ArrayofUsers.newStoria(data.id, data.username, 0, 0, 0, "NULL", "NULL");
 

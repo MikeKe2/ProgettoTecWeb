@@ -473,7 +473,6 @@ app.get('/avventura/:user/:name/Valutatore', (req, res) => {
   });
 });
 
-var numUsers = 0;
 var evaluator = "valutatore";
 //Dizionario Storia = ID del valutatore su quella storia
 var evaluators = {};
@@ -551,9 +550,7 @@ io.on("connection", (socket) => {
 
   socket.on("add eval", (storia) => {
     evaluators[storia] = socket.id;
-    socket.emit("login", {
-      numUsers: numUsers
-    });
+    socket.emit("login");
   });
 
   // when the client emits 'add user', this listens and executes
@@ -561,16 +558,12 @@ io.on("connection", (socket) => {
     if (addedUser) return;
     // we store the username in the socket session for this client
     socket.username = username;
-    ++numUsers;
     addedUser = true;
-    socket.emit("login", {
-      numUsers: numUsers,
-    });
+    socket.emit("login");
     try {
       socket.to(evaluators[storia]).emit("user joined", {
         username: username,
         id: socket.id,
-        numUsers: numUsers,
       });
     } catch (error) {
 
@@ -603,16 +596,11 @@ io.on("connection", (socket) => {
   // when the user disconnects.. perform this
   socket.on("disconnect", () => {
     if (addedUser) {
-      if (socket.username != evaluator) --numUsers;
 
       // echo globally that this client has left
       socket.broadcast.emit("user left", {
         username: socket.username,
-        numUsers: numUsers,
       });
-
-      if (numUsers <= 0)
-        avventura = null;
     }
   });
 });
