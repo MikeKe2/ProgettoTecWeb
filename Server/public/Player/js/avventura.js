@@ -381,7 +381,7 @@ $(function () {
         //handle the form's "submit" event
         $("#loginForm").submit(function (event) {
             event.preventDefault(); //stop a full postback
-            
+
             let password = $("#modalpass").val(); //get the entered value from the password box
 
             if (password == storia.password) {
@@ -405,22 +405,38 @@ $(function () {
         $('#chatWithEvaluator').addClass('btn-outline-info');
 
         $adventurePage.fadeOut(100);
-        $chatPage.show(600);
+        $chatPage.show(300);
         $adventurePage.prop("disabled", true);
         $chatPage.prop("disabled", false);
+        $(".navbar-collapse").collapse('hide');
 
         for (var i = 0; i < ArrayofMessages.numberOfMessages; i++) {
             addChatMessage(ArrayofMessages.messages[i]);
         }
     });
 
-    $('#exitChatPage').click(() => {
+    $('#exitChatPage').click((e) => {
+        e.preventDefault();
         $chatPage.fadeOut(100);
-        $adventurePage.show(800);
+        $adventurePage.show(1);
         $chatPage.prop("disabled", true);
         $adventurePage.prop("disabled", false);
-
+    
         $(".messages").html("");
+    })
+
+    $("#MuteMusic").click((e) => {
+        e.preventDefault();
+        if (!player[0].paused) {
+            player[0].pause();
+            player[0].currentTime = 0;
+            $("#MuteMusic").text("RESTART MUSIC");
+        } else {
+            player[0].load();
+            player[0].oncanplaythrough = player[0].play();
+            $("#MuteMusic").text("MUTE MUSIC");
+        }
+
     })
 
 
@@ -444,9 +460,6 @@ $(function () {
     // Whenever the server emits 'login', log the login message
     socket.on("login", (data) => {
         connected = true;
-        log(message, {
-            prepend: true,
-        });
         id = socket.id;
     });
 
@@ -485,6 +498,7 @@ $(function () {
         log("you have been reconnected");
         if (username) {
             socket.emit("add user", username, (storia.nome));
+            socket.emit("scene", username, storia.nome, (scena_corr));
         }
         id = socket.id;
     });

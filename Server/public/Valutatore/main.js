@@ -362,6 +362,7 @@ $(
 
     // LIST PAGE ==> DATA PAGE
     $("#userList").on("click", '.list-group-item', function (event) {
+      event.preventDefault();
       changeScene($dataPage, $usersPage);
 
       currentTargetUser = event.currentTarget.id;
@@ -376,12 +377,13 @@ $(
 
     //when asked to assing a score to a player, we send the value from the RangeValue 
     $('.btn-group').on("click", ".btn", function (event) {
+      event.preventDefault();
       let i = ArrayofUsers.findElement(currentTargetUser);
 
       var element = document.getElementById(currentTargetUser);
       element.className = element.className.replace(/\blist-group-item-warning\b/g, "");
 
-      if (ArrayofUsers.users[i].currentQuestion.nome == "fine") {
+      if (ArrayofUsers.users[i].currentQuestion.nome == "Fine") {
         ArrayofUsers.users[i].userScore += ArrayofUsers.users[i].currentQuestion.risposte[event.currentTarget.id].points;
         $('#' + data.username).addClass('list-group-item-info');
       } else
@@ -401,6 +403,7 @@ $(
       e.preventDefault();
       $('#currentChatUser').html(currentTargetUser);
       changeScene($chatPage, $dataPage);
+      $("#inputMessage").focus();
 
       for (i in ArrayofMessages.messages) {
         if (currentTargetUser == ArrayofMessages.messages[i].username || currentTargetUser == ArrayofMessages.messages[i].dstUsername)
@@ -471,7 +474,7 @@ $(
       let i = ArrayofUsers.findElement(data.username);
       ArrayofUsers.users[i].userScore += data.score;
 
-      if (storia.scene[ArrayofUsers.users[i].userRoom].nome == "fine") {
+      if (storia.scene[ArrayofUsers.users[i].userRoom].nome == "Fine") {
         $('#' + data.username).html(`${data.username} ha finito la storia con: ${ArrayofUsers.users[i].userScore} punti`);
         $('#' + data.username).addClass('list-group-item-info');
       }
@@ -506,10 +509,15 @@ $(
       if (ArrayofUsers.users[i].currentQuestion.widget != "sendImage.html")
         $('#soluzioneProposta').html(data.message);
       else
-        $('#soluzioneProposta').html(`<img src=${data.message}>`);
+        $('#soluzioneProposta').html(`<img style="width:20vw" src=${data.message}>`);
 
-      if (currentTargetUser == data.username && $dataPage.is(":visible"))
-        $(".form-group").show();
+      if (currentTargetUser == data.username && $dataPage.is(":visible")) {
+        var buttons = '';
+        for (y in ArrayofUsers.users[i].currentQuestion.risposte)
+          buttons = buttons.concat(`<button type="button" id="${y}" class="btn btn-secondary">${ArrayofUsers.users[i].currentQuestion.risposte[y].valore}</button>`);
+        $('.btn-group').append(buttons)
+        $('#answerForm').show();
+      }
 
       showToast(9, data);
     });
