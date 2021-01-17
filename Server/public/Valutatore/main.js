@@ -341,7 +341,7 @@ $(
 
     // When the client hits ENTER on their keyboard we treat it as an Enter for the chat
     $window.keydown((event) => {
-      if (event.which === 13) {
+      if (event.which === 13 && $chatPage.is(":visible") && $("#inputMessage").val()) {
         sendMessage();
         socket.emit("stop typing");
         typing = false;

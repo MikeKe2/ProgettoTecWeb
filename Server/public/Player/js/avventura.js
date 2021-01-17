@@ -277,20 +277,6 @@ $(function () {
         };
     };
 
-    // Adds the visual chat typing message
-    const addChatTyping = (data) => {
-        data.typing = true;
-        data.message = "is typing";
-        addChatMessage(data);
-    };
-
-    // Removes the visual chat typing message
-    const removeChatTyping = (data) => {
-        getTypingMessages(data).fadeOut(function () {
-            $(this).remove();
-        });
-    };
-
     // Adds a message element to the messages and scrolls to the bottom
     // el - The element to add as a message
     // options.fade - If the element should fade-in (default = true)
@@ -358,11 +344,11 @@ $(function () {
     $window.keydown((event) => {
         // When the client hits ENTER on their keyboard
         if (event.which === 13) {
-            if (username) {
+            if (username && $chatPage.is(":visible") && $inputMessage.val()) {
                 sendMessage();
                 socket.emit("stop typing");
                 typing = false;
-            } else {
+            } else if (!username) {
                 setUsername();
             }
         }
@@ -409,6 +395,7 @@ $(function () {
         $adventurePage.prop("disabled", true);
         $chatPage.prop("disabled", false);
         $(".navbar-collapse").collapse('hide');
+        $inputMessage.focus();
 
         for (var i = 0; i < ArrayofMessages.numberOfMessages; i++) {
             addChatMessage(ArrayofMessages.messages[i]);
@@ -421,7 +408,7 @@ $(function () {
         $adventurePage.show(1);
         $chatPage.prop("disabled", true);
         $adventurePage.prop("disabled", false);
-    
+        $("#btn").focus();
         $(".messages").html("");
     })
 
