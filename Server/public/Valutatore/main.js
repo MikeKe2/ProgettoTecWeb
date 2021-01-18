@@ -73,14 +73,13 @@ $(
     }
 
     var toasts = [
-      new Toast('success', 'è entrato in chat. Ci sono ora: '),
-      new Toast('warning', 'ha lasciato la chat. Ci sono ora: '),
+      new Toast('success', 'è entrato in chat.'),
+      new Toast('warning', 'ha lasciato la chat.'),
       new Toast('info', 'ha lasciato un messaggio nella sua chat.'),
-      new Toast('error', 'Connessione al server terminata'),
+      new Toast('error', 'Connessione al server terminata.'),
       new Toast('info', 'Tentativo di riconnessione in corso....'),
-      new Toast('success', 'Sei stato riconnesso'),
-      new Toast('info', 'Collegamento avvenuto con successo!'),
-      new Toast('info', "Ulteriore dispositivo collegato all'account: "),
+      new Toast('success', 'Sei stato riconnesso!'),
+      new Toast('info', 'Collegamento avvenuto con successo.'),
       new Toast('error', "L'utente "),
       new Toast('info', ' attende valutazione per una risposta'),
     ];
@@ -90,10 +89,10 @@ $(
 
       switch (i) {
         case 0:
-          toastr[t.type](data.username + " " + t.msg + data.numUsers + " partecipanti");
+          toastr[t.type](data.username + " " + t.msg);
           break;
         case 1:
-          toastr[t.type](data.username + " " + t.msg + data.numUsers + " partecipanti");
+          toastr[t.type](data.username + " " + t.msg);
           break;
         case 2:
           toastr[t.type](data.username + " " + t.msg);
@@ -126,7 +125,6 @@ $(
     toastr.options.closeButton = true;
     toastr.options.progressBar = true;
     toastr.options.positionClass = 'toast-top-right';
-    toastr.options.extendedTimeOut = 1000; //1000;
     toastr.options.timeOut = 2500;
     toastr.options.fadeOut = 150;
     toastr.options.fadeIn = 150;
@@ -195,7 +193,10 @@ $(
         $typingMessages.remove();
       }
 
-      var $messageBodyDiv = $('<span class="messageBody">').text(data.message);
+      if (data.username == 'valutatore')
+        var $messageBodyDiv = $('<div class="messageBody eval">').text(data.message);
+      else
+        var $messageBodyDiv = $('<div class="messageBody player">').text(data.message);
       var typingClass = data.typing ? "typing" : "";
       var $messageDiv = $('<li class="message"/>')
         .data("username", data.username)
@@ -207,6 +208,7 @@ $(
       if (data.username == 'valutatore') {
         $(".message:last-child").addClass("evaluator");
       }
+      window.scrollTo(0, document.body.scrollHeight);
     };
 
     // Adds the visual chat typing message
@@ -316,8 +318,9 @@ $(
         var currentAnswer = Object.values(storia.scene[numRoom].risposte[y]);
         var answer = '<li class = "list-group-item"><ul class = "list-group">';
         answer = answer.concat(`<li class = "list-group-item">Possibile Risposta: ${currentAnswer[0]}</li>`);
-        answer = answer.concat(`<li class = "list-group-item">Tempo Massimo: ${currentAnswer[1]}</li>`);
+        answer = answer.concat(`<li class = "list-group-item">Tempo Massimo: ${currentAnswer[4]}</li>`);
         answer = answer.concat(`<li class = "list-group-item">Punti: ${currentAnswer[3]}</li>`);
+        answer = answer.concat(`<li class = "list-group-item">Conduce alla stanza n° ${currentAnswer[1]}</li>`);
         answer = answer.concat('</ul></li>')
         $('#SceneAnswers').append(answer);
       }
@@ -327,7 +330,6 @@ $(
         var buttons = '';
         for (y in ArrayofUsers.users[i].currentQuestion.risposte)
           buttons = buttons.concat(`<button type="button" id="${y}" class="btn btn-secondary">${ArrayofUsers.users[i].currentQuestion.risposte[y].valore}</button>`);
-
         $('.btn-group').append(buttons)
         $('#answerForm').show();
       }
@@ -339,7 +341,7 @@ $(
 
     // When the client hits ENTER on their keyboard we treat it as an Enter for the chat
     $window.keydown((event) => {
-      if (event.which === 13) {
+      if (event.which === 13 && $chatPage.is(":visible") && $("#inputMessage").val()) {
         sendMessage();
         socket.emit("stop typing");
         typing = false;
@@ -359,6 +361,7 @@ $(
 
     // LIST PAGE ==> DATA PAGE
     $("#userList").on("click", '.list-group-item', function (event) {
+      event.preventDefault();
       changeScene($dataPage, $usersPage);
 
       currentTargetUser = event.currentTarget.id;
@@ -373,12 +376,13 @@ $(
 
     //when asked to assing a score to a player, we send the value from the RangeValue 
     $('.btn-group').on("click", ".btn", function (event) {
+      event.preventDefault();
       let i = ArrayofUsers.findElement(currentTargetUser);
 
       var element = document.getElementById(currentTargetUser);
       element.className = element.className.replace(/\blist-group-item-warning\b/g, "");
 
-      if (ArrayofUsers.users[i].currentQuestion.nome == "fine") {
+      if (ArrayofUsers.users[i].currentQuestion.nome == "Fine") {
         ArrayofUsers.users[i].userScore += ArrayofUsers.users[i].currentQuestion.risposte[event.currentTarget.id].points;
         $('#' + data.username).addClass('list-group-item-info');
       } else
@@ -396,27 +400,32 @@ $(
     // DATA PAGE ==> CHAT PAGE
     $("#chatButton").click(function (e) {
       e.preventDefault();
+      $('#currentChatUser').html(currentTargetUser);
       changeScene($chatPage, $dataPage);
+      $("#inputMessage").focus();
 
       for (i in ArrayofMessages.messages) {
         if (currentTargetUser == ArrayofMessages.messages[i].username || currentTargetUser == ArrayofMessages.messages[i].dstUsername)
           addChatMessage(ArrayofMessages.messages[i]);
       }
+      window.scrollTo(0, document.body.scrollHeight);
     });
 
     // LIST PAGE ==> DATA PAGE
-    $("#listButton").click(function (e) {
+    $("#FromDataToList").click(function (e) {
       e.preventDefault();
       currentTargetId = 0;
       currentTargetUser = 0;
-      if ($dataPage.is(":visible"))
-        changeScene($usersPage, $dataPage);
-      else if ($chatPage.is(":visible"))
-        changeScene($usersPage, $chatPage);
-
-      $(".messages").html("");
+      changeScene($usersPage, $dataPage);
       $('#SceneAnswers').html("");
+      $('.navbar-collapse').collapse('hide');
     });
+
+    $("#FromChatToData").click(function (e) {
+      e.preventDefault();
+      changeScene($dataPage, $chatPage);
+      $(".messages").html("");
+    })
 
     //If the evaluator click the helping button we control the message, if not null we send it to the current user
     $('#helpButton').click(function (e) {
@@ -464,7 +473,7 @@ $(
       let i = ArrayofUsers.findElement(data.username);
       ArrayofUsers.users[i].userScore += data.score;
 
-      if (storia.scene[ArrayofUsers.users[i].userRoom].nome == "fine") {
+      if (storia.scene[ArrayofUsers.users[i].userRoom].nome == "Fine") {
         $('#' + data.username).html(`${data.username} ha finito la storia con: ${ArrayofUsers.users[i].userScore} punti`);
         $('#' + data.username).addClass('list-group-item-info');
       }
@@ -499,16 +508,21 @@ $(
       if (ArrayofUsers.users[i].currentQuestion.widget != "sendImage.html")
         $('#soluzioneProposta').html(data.message);
       else
-        $('#soluzioneProposta').html(`<img src=${data.message}>`);
+        $('#soluzioneProposta').html(`<img style="width:20vw" src=${data.message}>`);
 
-      if (currentTargetUser == data.username && $dataPage.is(":visible"))
-        $(".form-group").show();
+      if (currentTargetUser == data.username && $dataPage.is(":visible")) {
+        var buttons = '';
+        for (y in ArrayofUsers.users[i].currentQuestion.risposte)
+          buttons = buttons.concat(`<button type="button" id="${y}" class="btn btn-secondary">${ArrayofUsers.users[i].currentQuestion.risposte[y].valore}</button>`);
+        $('.btn-group').append(buttons)
+        $('#answerForm').show();
+      }
 
       showToast(9, data);
     });
 
     // Whenever the server emits 'login', log the login message
-    socket.on("login", (data) => {
+    socket.on("login", () => {
       connected = true;
     });
 
@@ -526,8 +540,7 @@ $(
         var $newUser = $(`<li class="list-group-item" id="${data.username.replace(/[^a-zA-Z0-9]/g, "")}">${data.username}</li>`);
         $('#userList').append($newUser);
         showToast(0, data);
-      } else
-        showToast(7, data);
+      }
 
       ArrayofUsers.newStoria(data.id, data.username, 0, 0, 0, "NULL", "NULL");
 

@@ -23,7 +23,6 @@ html,
 body {
   background-color: white;
   padding-top: 10%;
-  height: 100%;
   margin: 0;
   padding: 0;
 }
@@ -34,7 +33,7 @@ ul {
   word-wrap: break-word;
 }
 
-/* Chat page */
+/* Pages page */
 
 .chat.page {
   display: none;
@@ -57,9 +56,9 @@ ul {
 
 /* Messages */
 
+
 .chatArea {
   height: 100%;
-  /*padding-bottom: 60px;*/
 }
 
 .messages {
@@ -67,11 +66,57 @@ ul {
   margin: 0;
   overflow-y: auto;
   padding: 10px 20px 10px 20px;
-  font-size: 2.5vmax;
   -ms-overflow-style: none;
   /* IE and Edge */
   scrollbar-width: none;
   /* Firefox */
+}
+
+.message {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.message.evaluator{
+  justify-content: flex-end;
+}
+
+.messageBody {
+  margin: 20px;
+  border-radius: 15px;
+  background: #00bfb6;
+  color: #fff;
+  padding: 15px;
+  text-align: center;
+  font-weight: 700;
+  font-family: arial;
+  position: relative;
+}
+
+div.eval:before {
+  content: "";
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  border-left: 15px solid #00bfb6;
+  border-right: 15px solid transparent;
+  border-top: 15px solid #00bfb6;
+  border-bottom: 15px solid transparent;
+  right: -16px;
+  top: 0px;
+}
+
+div.player:before {
+  content: "";
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  border-left: 15px solid transparent;
+  border-right: 15px solid #00bfb6;
+  border-top: 15px solid #00bfb6;
+  border-bottom: 15px solid transparent;
+  left: -16px;
+  top: 0px;
 }
 
 /* Chrome and such*/
@@ -90,7 +135,8 @@ ul {
   text-align: right;
 }
 
-.evaluator {
-  font-family: "Lucida Console", Courier, monospace;
-  text-align: right;
+#users,
+.progress,
+.container-fluid .container {
+  margin-top: 60px;
 }
