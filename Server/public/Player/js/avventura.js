@@ -25,6 +25,8 @@ function storiaCallback(data) {
 
 function initialize() {
     $("#titolo").html(storia.nome);
+    if (storia.css != undefined && storia.css != "")
+        $("#mycss").load("/users/" + storia.autore + "/widgets/" + storia.css);
     $("#btn").click(function () {
         checkResult(scena_corr == 0 || storia.scene[scena_corr].widget == "" || storia.scene[scena_corr].widget == "image.html" ? null : document.getElementById("result").value);
     })
@@ -47,6 +49,7 @@ function initialize() {
 }
 
 function checkResult(result) {
+    $("#alert").hide();
     if (result != null) {
         time = end_time();
         pointsAdded = 0;
@@ -68,7 +71,8 @@ function checkResult(result) {
                 }
             });
             if (!correct)
-                alert("Risposta errata!");
+                $("#alert").show();
+                //alert("Risposta errata!");
         } else {
             socket.emit("answerToEvaluator", username, storia.nome, (result));
             waitEvaluator();
@@ -115,7 +119,7 @@ function nextScene(scena) {
     start_time();
     scena_corr = scena;
     socket.emit("scene", username, storia.nome, (scena_corr));
-    if (storia.scene[scena_corr].tracciaAudio != undefined && storia.scene[scena_corr].tracciaAudio != "") {
+    if (storia.scene[scena_corr].accessibile == "false" && storia.scene[scena_corr].tracciaAudio != undefined && storia.scene[scena_corr].tracciaAudio != "") {
         track = $("#track");
         track.attr("src", `/users/${storia.autore}/audios/${storia.scene[scena_corr].tracciaAudio}`);
         player = $("#player");
