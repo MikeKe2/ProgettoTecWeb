@@ -25,6 +25,8 @@ function storiaCallback(data) {
 
 function initialize() {
     $("#titolo").html(storia.nome);
+    if (storia.css != undefined && storia.css != "")
+        $("#mycss").load("/users/" + storia.autore + "/widgets/" + storia.css);
     $("#btn").click(function () {
         checkResult(scena_corr == 0 || storia.scene[scena_corr].widget == "" || storia.scene[scena_corr].widget == "image.html" ? null : document.getElementById("result").value);
     })
