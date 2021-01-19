@@ -151,6 +151,7 @@ app.post("/newUser", function (req, res) {
         fs.copyFileSync(resDir + 'users/Widget/number.html', dir + '/widgets/number.html');
         fs.copyFileSync(resDir + 'users/Widget/sendImage.html', dir + '/widgets/sendImage.html');
         fs.copyFileSync(resDir + 'users/Widget/templateWidget.html', dir + '/widgets/templateWidget.html');
+        fs.copyFileSync(resDir + 'users/Widget/csstemplate.css', dir + 'users/css/csstemplate.css');
       }
       chmodr(dir, 0o775, (err) => {
         if (err) {

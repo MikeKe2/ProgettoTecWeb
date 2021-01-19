@@ -80,6 +80,7 @@ $(
       new Toast('info', 'Tentativo di riconnessione in corso....'),
       new Toast('success', 'Sei stato riconnesso!'),
       new Toast('info', 'Collegamento avvenuto con successo.'),
+      new Toast('info', "Ulteriore dispositivo collegato all'account: "),
       new Toast('error', "L'utente "),
       new Toast('info', ' attende valutazione per una risposta'),
     ];
@@ -89,13 +90,13 @@ $(
 
       switch (i) {
         case 0:
-          toastr[t.type](data.username + " " + t.msg);
+          toastr[t.type](`${data.username} ${t.msg}`);
           break;
         case 1:
-          toastr[t.type](data.username + " " + t.msg);
+          toastr[t.type](`${data.username} ${t.msg}`);
           break;
         case 2:
-          toastr[t.type](data.username + " " + t.msg);
+          toastr[t.type](`${data.username} ${t.msg}`);
           break;
         case 3:
           toastr[t.type](t.msg);
@@ -106,11 +107,14 @@ $(
         case 5:
           toastr[t.type](t.msg);
           break;
+        case 6:
+          toastr[t.type](t.msg);
+          break;
         case 7:
           toastr[t.type](t.msg + data.username);
           break;
         case 8:
-          toastr[t.type](t.msg + data.username + " richiede il suo aiuto");
+          toastr[t.type](`${t.msg + data.username} richiede il suo aiuto`);
           break;
         case 9:
           toastr[t.type](data.username + t.msg);
