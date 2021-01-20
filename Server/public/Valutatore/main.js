@@ -389,6 +389,9 @@ $(
       if (ArrayofUsers.users[i].currentQuestion.nome == "Fine") {
         ArrayofUsers.users[i].userScore += ArrayofUsers.users[i].currentQuestion.risposte[event.currentTarget.id].points;
         $('#' + data.username).addClass('list-group-item-info');
+        $(".progress-bar").css({
+          'width': 100 + '%'
+        });
       } else
         socket.emit('answerFromEvaluator', currentTargetId, event.currentTarget.id);
 
@@ -480,6 +483,9 @@ $(
       if (storia.scene[ArrayofUsers.users[i].userRoom].nome == "Fine") {
         $('#' + data.username).html(`${data.username} ha finito la storia con: ${ArrayofUsers.users[i].userScore} punti`);
         $('#' + data.username).addClass('list-group-item-info');
+        $(".progress-bar").css({
+          'width': 100 + '%'
+        });
       }
     })
 

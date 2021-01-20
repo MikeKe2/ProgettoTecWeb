@@ -72,7 +72,7 @@ function checkResult(result) {
             });
             if (!correct)
                 $("#alert").show();
-                //alert("Risposta errata!");
+            //alert("Risposta errata!");
         } else {
             socket.emit("answerToEvaluator", username, storia.nome, (result));
             waitEvaluator();
@@ -88,7 +88,7 @@ function fetchData() {
     // Here should be your api call, I`m using setTimeout here just for async example
     return promise1 = new Promise(resolve => setTimeout(function () {
         socket.on('answerFromEvaluator', (data) => {
-            $("#loading").toggleClass("visibility");
+            $("#loading").hide();
             punteggio += parseInt(storia.scene[scena_corr].risposte[parseInt(data.message, 10)].points, 10);
             nextScene(storia.scene[scena_corr].risposte[parseInt(data.message, 10)].to[gruppo]);
         })
@@ -96,7 +96,7 @@ function fetchData() {
 }
 
 async function waitEvaluator(_callback) {
-    $("#loading").toggleClass("visibility");
+    $("#loading").show();
     await fetchData();
     /*
         const promise1 = new Promise((resolve, reject) => {
