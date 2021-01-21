@@ -3,19 +3,28 @@ var Avventure = new Vue({
 	data: {
 		list: []
 	},
-	methods: {
-		init: function () {
-			for (let usertag of $(".user")) {
-				let user = $(usertag).html();
-				$.get('/' + user + '/stories', (stories) => {
-					this.list.push({
-						name: user,
-						stories: stories
-					})
-				})
+	mounted: async function () {
+		for (let usertag of $(".user")) {
+			let user = $(usertag).html();
+			this.list.push({
+				name: user,
+				stories: await $.get('/' + user + '/stories')
+			});
+		}
+		this.$nextTick(function () {
+			for (let uindex = 0; uindex < this.list.length; uindex++) {
+				for (let sindex = 0; sindex < this.list[uindex].stories.length; sindex++) {
+					let user = this.list[uindex].name;
+					let adventure = this.list[uindex].stories[sindex];
+					let qrmaker = new QRCode($("#qr_" + uindex + "_" + sindex)[0])
+					qrmaker.clear(); // clear the code.
+					let url = "https://site181993.tw.cs.unibo.it/avventura/" + user + "/" + adventure;
+					qrmaker.makeCode(encodeURI(url)); // make another code.
+				}
 			}
-		},
-
+		});
+	},
+	methods: {
 		copy: function (uindex, sindex) {
 			let user = this.list[uindex].name;
 			let adventure = this.list[uindex].stories[sindex];
@@ -30,7 +39,10 @@ var Avventure = new Vue({
 
 			alert("url copiato!");
 		}
-	},
+	}
+});
+
+/*
 	updated: function () {
 		this.$nextTick(function () {
 			for (let uindex = 0; uindex < this.list.length; uindex++) {
@@ -40,9 +52,10 @@ var Avventure = new Vue({
 					let qrmaker = new QRCode($("#qr_" + uindex + "_" + sindex)[0])
 					qrmaker.clear(); // clear the code.
 					let url = "https://site181993.tw.cs.unibo.it/avventura/" + user + "/" + adventure;
-					qrmaker.makeCode(url); // make another code.
+					qrmaker.makeCode(encodeURI(url)); // make another code.
 				}
 			}
 		})
 	}
 });
+*/
