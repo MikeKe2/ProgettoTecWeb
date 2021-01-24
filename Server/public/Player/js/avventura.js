@@ -24,7 +24,7 @@ function storiaCallback(data) {
 }
 
 function initialize() {
-    if(!storia){
+    if (!storia) {
         alert("Mi dispiace ma la storia che hai richiesto non è stata trovata, ora verrai reindirizzato alla pagina con tutte le storie disponibili");
         window.location.href = "https://site181993.tw.cs.unibo.it/avventure";
     }
@@ -34,15 +34,10 @@ function initialize() {
     $("#btn").click(function () {
         checkResult(scena_corr == 0 || storia.scene[scena_corr].widget == "" || storia.scene[scena_corr].widget == "image.html" ? null : document.getElementById("result").value);
     })
-    $(".adventure").css({
+    $(".adventure, .chat.page").css({
         'background-image': 'url( "/users/' + storia.autore + '/images/' + storia.background + '")',
         'background-repeat': 'no-repeat',
-        'background-size': '100% 100%'
-    });
-    $(".chat.page").css({
-        'background-image': 'url( "/users/' + storia.autore + '/images/' + storia.background + '")',
-        'background-repeat': 'no-repeat',
-        'background-size': '100% 100%'
+        'background-position': 'center'
     });
     nextScene(scena_corr);
     setInterval(1000, function () {

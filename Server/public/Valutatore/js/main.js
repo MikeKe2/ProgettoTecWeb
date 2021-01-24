@@ -1,62 +1,62 @@
+function changeScene(input, output) {
+
+  output.fadeOut(200);
+  input.show(800);
+
+  output.prop("disabled", true);
+  input.prop("disabled", false);
+}
+
+function changeData(i, numRoom) {
+  //We clean the possible remains of another user
+  $("#SceneName").html("");
+  $("#SceneDescrizione").html("");
+  $('#SceneAnswers').html("");
+  $('.btn-group').html("");
+
+  //We show the current info on the selected user, such as Room number, name and description
+  $("#userStatus").html("Si trova nella stanza: " + numRoom);
+  $("#SceneName").html(storia.scene[numRoom].nome);
+  $("#SceneDescrizione").html(storia.scene[numRoom].descrizione);
+
+  let k = numRoom;
+
+  let statusProgressbar = (100 * (k++)) / storia.scene.length;
+  $(".progress-bar").css({
+    'width': statusProgressbar + '%'
+  });
+
+  //we show the possible answer to the current Room, and various data
+  for (y in storia.scene[numRoom].risposte) {
+    var currentAnswer = Object.values(storia.scene[numRoom].risposte[y]);
+
+    var answer = '<li class = "list-group-item"><ul class = "list-group">';
+    answer = answer.concat(`<li class = "list-group-item">Possibile Risposta: ${currentAnswer[0]}</li>`);
+    answer = answer.concat(`<li class = "list-group-item">Tempo Massimo: ${currentAnswer[4]}</li>`);
+    answer = answer.concat(`<li class = "list-group-item">Punti: ${currentAnswer[3]}</li>`);
+    answer = answer.concat(`<li class = "list-group-item">Conduce alla stanza n° ${currentAnswer[1]}</li>`);
+    answer = answer.concat('</ul></li>');
+
+    $('#SceneAnswers').append(answer);
+  }
+
+  //if the current user has some question to be evalued, we show the module for it
+  if (ArrayofUsers.users[i].possibleAnswer != "NULL") {
+    var buttons = '';
+    for (y in ArrayofUsers.users[i].currentQuestion.risposte)
+      buttons = buttons.concat(`<button type="button" id="${y}" class="btn btn-secondary">${ArrayofUsers.users[i].currentQuestion.risposte[y].valore}</button>`);
+
+    $('.btn-group').append(buttons);
+    $('#answerForm').show();
+  }
+}
+
 $(function () {
 
   $.getJSON(urlStoria, function (data) {
     storia = data;
     socket.emit("add eval", storia.nome);
   });
-
-  function changeScene(input, output) {
-
-    output.fadeOut(200);
-    input.show(800);
-
-    output.prop("disabled", true);
-    input.prop("disabled", false);
-  }
-
-  function changeData(i, numRoom) {
-    //We clean the possible remains of another user
-    $("#SceneName").html("");
-    $("#SceneDescrizione").html("");
-    $('#SceneAnswers').html("");
-    $('.btn-group').html("");
-
-    //We show the current info on the selected user, such as Room number, name and description
-    $("#userStatus").html("Si trova nella stanza: " + numRoom);
-    $("#SceneName").html(storia.scene[numRoom].nome);
-    $("#SceneDescrizione").html(storia.scene[numRoom].descrizione);
-
-    let k = numRoom;
-
-    let statusProgressbar = (100 * (k++)) / storia.scene.length;
-    $(".progress-bar").css({
-      'width': statusProgressbar + '%'
-    });
-
-    //we show the possible answer to the current Room, and various data
-    for (y in storia.scene[numRoom].risposte) {
-      var currentAnswer = Object.values(storia.scene[numRoom].risposte[y]);
-
-      var answer = '<li class = "list-group-item"><ul class = "list-group">';
-      answer = answer.concat(`<li class = "list-group-item">Possibile Risposta: ${currentAnswer[0]}</li>`);
-      answer = answer.concat(`<li class = "list-group-item">Tempo Massimo: ${currentAnswer[4]}</li>`);
-      answer = answer.concat(`<li class = "list-group-item">Punti: ${currentAnswer[3]}</li>`);
-      answer = answer.concat(`<li class = "list-group-item">Conduce alla stanza n° ${currentAnswer[1]}</li>`);
-      answer = answer.concat('</ul></li>');
-
-      $('#SceneAnswers').append(answer);
-    }
-
-    //if the current user has some question to be evalued, we show the module for it
-    if (ArrayofUsers.users[i].possibleAnswer != "NULL") {
-      var buttons = '';
-      for (y in ArrayofUsers.users[i].currentQuestion.risposte)
-        buttons = buttons.concat(`<button type="button" id="${y}" class="btn btn-secondary">${ArrayofUsers.users[i].currentQuestion.risposte[y].valore}</button>`);
-
-      $('.btn-group').append(buttons);
-      $('#answerForm').show();
-    }
-  }
 
   // When the client hits ENTER on their keyboard we treat it as an Enter for the chat
   $window.keydown((e) => {

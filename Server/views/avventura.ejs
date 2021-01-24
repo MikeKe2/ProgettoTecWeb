@@ -12,9 +12,9 @@
 </head>
 
 <body>
-    <ul class="pages">
+    <div class="pages">
         <!-- CHAT PAGE-->
-        <li class="chat page">
+        <div class="chat page">
             <div class="container-fluid">
                 <nav class="navbar navbar-light bg-light">
                     <button id="exitChatPage" class="btn btn-outline-secondary">CLOSE</button>
@@ -26,24 +26,24 @@
                 <input id="inputMessage" type="text" aria-label="chat text input" class="form-control fixed-bottom"
                     placeholder="Scrivi qui..." />
             </div>
-        </li>
+        </div>
         <!-- LOGIN PAGE-->
-        <li class="login page">
+        <div class="login page">
             <div class="form">
                 <h3 class="title">What's your nickname?</h3>
                 <input class="usernameInput" aria-label="inserisci nome utente" type="text" maxlength="14" />
                 <h4 class="lead valutatore">Sei il valutatore?</h4>
             </div>
-        </li>
+        </div>
         <!-- GROUP PAGE-->
-        <li class="group page">
+        <div class="group page">
             <div class="container">
                 <ul id="groupPage" class="list-group">
                 </ul>
             </div>
-        </li>
+        </div>
         <!-- ADVENTURE PAGE-->
-        <li class="adventure page">
+        <div class="adventure page">
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <a class="navbar-text" id='titolo' href="#"></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
@@ -81,7 +81,8 @@
 
                         <div id="widget-holder" class="row justify-content-center h-100">
                             <div class="col-10 col-md-8 my-auto">
-                                <div id="alert" role="alert" style="display: none;" aria-label="risposta errata">Risposta errata!</div>
+                                <div id="alert" role="alert" style="display: none;" aria-label="risposta errata">
+                                    Risposta errata!</div>
                                 <div id="widget"></div>
                             </div>
                         </div>
@@ -92,8 +93,8 @@
                     </div>
                 </div>
             </div>
-        </li>
-    </ul>
+        </div>
+    </div>
     <!-- ASKING IF THEY ARE THE EVALUATOR THROUGH A MODAL CONTAINING A FORM-->
     <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel"
         aria-hidden="true">
