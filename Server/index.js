@@ -20,6 +20,10 @@ const {
 
 app.use(fileUpload());
 
+var bodyParser = require('body-parser');
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true, parameterLimit: 1000000}));
+
 var server = http.createServer(app);
 var io = require('socket.io')(server);
 
@@ -147,6 +151,7 @@ app.post("/newUser", function (req, res) {
         fs.copyFileSync(resDir + 'users/Widget/number.html', dir + '/widgets/number.html');
         fs.copyFileSync(resDir + 'users/Widget/sendImage.html', dir + '/widgets/sendImage.html');
         fs.copyFileSync(resDir + 'users/Widget/templateWidget.html', dir + '/widgets/templateWidget.html');
+        fs.copyFileSync(resDir + 'users/Widget/csstemplate.css', dir + 'users/css/csstemplate.css');
       }
       chmodr(dir, 0o775, (err) => {
         if (err) {

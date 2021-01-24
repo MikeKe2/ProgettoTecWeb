@@ -1,3 +1,3 @@
 $(document).ready(()=>{
-	Avventure.init();
+	//Avventure.init();
 });
