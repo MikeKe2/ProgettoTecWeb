@@ -194,9 +194,6 @@ app.get('/profile',
 
 //PLAYER INTERFACE
 app.use(express.static(path.join(__dirname, 'public/Player')))
-app.get('/start', function (req, res) {
-  res.sendFile(__dirname + "/public/Player/index.html");
-});
 
 app.post("/makeprivate", require('connect-ensure-login').ensureLoggedIn(),
   function (req, res) {

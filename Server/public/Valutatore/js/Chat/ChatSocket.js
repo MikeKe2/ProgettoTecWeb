@@ -24,6 +24,7 @@ socket.on("scene", (data) => {
         ArrayofUsers.users[i].userRoom = data.room;
         if ($dataPage.is(":visible") && currentTargetUser == data.username)
             changeData(i, ArrayofUsers.users[i].userRoom);
+        sessionStorage.setItem('Users', JSON.stringify(ArrayofUsers));
     }
 });
 
@@ -66,25 +67,28 @@ socket.on("new message", (data) => {
     else
         showToast(2, data);
 });
+
 // Whenever the server emits 'user joined', log it in the chat body
 socket.on("user joined", (data) => {
     if (ArrayofUsers.findElement(data.username) == -1) {
+
         var $newUser = $(`<li class="list-group-item" id="${data.username.replace(/[^a-zA-Z0-9]/g, "")}">${data.username}</li>`);
         $('#userList').append($newUser);
         showToast(0, data);
-    }
 
-    ArrayofUsers.newStoria(data.id, data.username, 0, 0, 0, "NULL", "NULL");
+        ArrayofUsers.newStoria(data.id, data.username, 0, 0, 0, "NULL", "NULL");
+        sessionStorage.setItem('Users', JSON.stringify(ArrayofUsers));
 
-    socket.emit("assignGroup", {
-        id: data.id,
-        groupN: gruppo,
-    });
+        socket.emit("assignGroup", {
+            id: data.id,
+            groupN: gruppo,
+        });
 
-    if (storia.ngruppi != "0") {
-        gruppo++;
-        if (gruppo == parseInt(storia.ngruppi))
-            gruppo = 0;
+        if (storia.ngruppi != "0") {
+            gruppo++;
+            if (gruppo == parseInt(storia.ngruppi))
+                gruppo = 0;
+        }
     }
 });
 
@@ -98,6 +102,11 @@ socket.on("user left", (data) => {
 
         ArrayofUsers.users.splice(i, 1);
         removeChatTyping(data);
+        
+        if (ArrayofUsers.numberOfUsers() > 0)
+            sessionStorage.setItem('Users', JSON.stringify(ArrayofUsers));
+        else
+            sessionStorage.removeItem('Users');
 
         if (currentTargetUser == data.username) {
             currentTargetId = 0;

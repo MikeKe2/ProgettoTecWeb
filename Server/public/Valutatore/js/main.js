@@ -53,6 +53,17 @@ function changeData(i, numRoom) {
 
 $(function () {
 
+  let stored = sessionStorage.getItem('Users');
+  if (stored) {
+    var usersStored = JSON.parse(stored);
+    for (var user in usersStored['users']) {
+      var $newUser = $(`<li class="list-group-item" id="${usersStored['users'][user].userUsername.replace(/[^a-zA-Z0-9]/g, "")}">${usersStored['users'][user].userUsername}</li>`);
+      $('#userList').append($newUser);
+      if (ArrayofUsers.findElement(usersStored['users'][user].userUsername) == -1)
+        ArrayofUsers.newStoria(usersStored['users'][user].userId, usersStored['users'][user].userUsername, 0, 0, 0, "NULL", "NULL");
+    }
+  }
+  
   $.getJSON(urlStoria, function (data) {
     storia = data;
     socket.emit("add eval", storia.nome);
