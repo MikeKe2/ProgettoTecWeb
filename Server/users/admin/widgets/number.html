@@ -1,6 +1,6 @@
 
 <div id="number">
-    <div id="textarea-holder">
+    <div tabindex="0" id="textarea-holder" aria-label="risultato">
         <input disabled="true" name="textarea" id="result">
     </div>
     <div id="numpad" class="my-3">
@@ -30,11 +30,16 @@
     function add(n){
         var text = document.getElementById("result").value;
         document.getElementById("result").value = text + n.toString();
+        document.getElementById("textarea-holder").setAttribute("aria-label", text + n.toString());
     }
 
     function del(){
         var text = document.getElementById("result").value;
         text = text.slice(0, text.length-1);
         document.getElementById("result").value = text;
+        if(text.length < 1)
+            document.getElementById("textarea-holder").setAttribute("aria-label", "risultato");
+        else
+            document.getElementById("textarea-holder").setAttribute("aria-label", text);
     }
 </script>
