@@ -14,9 +14,9 @@
 </head>
 
 <body>
-  <ul class="pages">
+  <div class="pages">
     <!--CHAT PAGE, page where the selected user and the evaluator can chat-->
-    <li class="chat page">
+    <div class="chat page">
       <div class="container-fluid">
         <nav class="navbar navbar-light bg-light fixed-top ">
           <a id="currentChatUser" class="navbar-brand mb-0 h1"></a>
@@ -29,9 +29,9 @@
           </div>
         </div>
       </div>
-    </li>
+    </div>
     <!--DATA PAGE, with all information regarding the status of a selected user-->
-    <li class="data page">
+    <div class="data page">
       <div class="container-fluid">
         <!-- Navbar -->
         <nav id="DataNavbar" class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
@@ -101,9 +101,9 @@
           </div>
         </div>
       </div>
-    </li>
+    </div>
     <!--USER PAGE, containing the list with all the user active-->
-    <li class="users page">
+    <div class="users page">
       <nav class="navbar navbar-light bg-light fixed-top ">
         <a class="navbar-brand" href="#"> Lato valutatore</a>
         <button id="exportIron" class="btn btn-outline-success">export</button>
@@ -112,8 +112,8 @@
         <ul id="userList" class="list-group">
         </ul>
       </div>
-    </li>
-  </ul>
+    </div>
+  </div>
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous">
@@ -123,9 +123,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
   <script type="text/javascript" src="/public/Valutatore/js/UsersClasses.js"></script>
   <script type="text/javascript" src="/public/Valutatore/js/InfoPopup.js"></script>
+  <script type="text/javascript" src="/public/Valutatore/js/main.js"></script>
   <script type="text/javascript" src="/public/Valutatore/js/Chat/ChatSocket.js"></script>
   <script type="text/javascript" src="/public/Valutatore/js/Chat/ChatDisplay.js"></script>
-  <script type="text/javascript" src="/public/Valutatore/js/main.js"></script>
   <script type="text/javascript">
     var urlStoria = "<%= urlStoria %>"
   </script>

@@ -25,22 +25,28 @@ function storiaCallback(data) {
 
 function initialize() {
     $("#titolo").html(storia.nome);
+
     if (storia.css != undefined && storia.css != "")
         $("#mycss").load("/users/" + storia.autore + "/css/" + storia.css);
+
     $("#btn").click(function () {
         checkResult(scena_corr == 0 || storia.scene[scena_corr].widget == "" || storia.scene[scena_corr].widget == "image.html" ? null : document.getElementById("result").value);
     })
-    $(".adventure").css({
+
+    $(".adventure, .chat.page").css({
         'background-image': 'url( "/users/' + storia.autore + '/images/' + storia.background + '")',
         'background-repeat': 'no-repeat',
-        'background-size': '100% 100%'
+        'background-position': 'center'
     });
-    $(".chat.page").css({
-        'background-image': 'url( "/users/' + storia.autore + '/images/' + storia.background + '")',
-        'background-repeat': 'no-repeat',
-        'background-size': '100% 100%'
-    });
+
+    if (sessionStorage.getItem("Scene")) {
+        scena_corr = sessionStorage.getItem("Scene");
+        if (sessionStorage.getItem("Points"))
+            punteggio = sessionStorage.getItem("Points");
+    }
+
     nextScene(scena_corr);
+
     setInterval(1000, function () {
         currTime = new Date();
         if (scena_corr != 0 && startTime != undefined && Math.round((currTime - startTime) / 1000) % 60 == 0)
@@ -50,29 +56,38 @@ function initialize() {
 
 function checkResult(result) {
     $("#alert").hide();
+
     if (result != null) {
+
         time = end_time();
         pointsAdded = 0;
         correct = false;
+
         if (storia.scene[scena_corr].valutatore == "false") {
             storia.scene[scena_corr].risposte.forEach(risposta => {
+
                 if (result == risposta.valore && parseInt(risposta.maxTime) != 0 && time <= parseInt(risposta.maxTime) && pointsAdded == 0) {
                     pointsAdded = parseInt(risposta.points);
                     punteggio += pointsAdded;
                     scena = parseInt(risposta.to[gruppo]);
                     correct = true;
+                    sessionStorage.setItem("Scene", scena_corr);
+                    sessionStorage.setItem("Points", punteggio);
                     nextScene(scena);
                 } else if (result == risposta.valore && parseInt(risposta.maxTime) == 0 && pointsAdded == 0) {
                     pointsAdded = parseInt(risposta.points);
                     punteggio += pointsAdded;
                     scena = parseInt(risposta.to[gruppo]);
                     correct = true;
+                    sessionStorage.setItem("Scene", scena_corr);
+                    sessionStorage.setItem("Points", punteggio);
                     nextScene(scena);
+
                 }
             });
             if (!correct)
                 $("#alert").show();
-            //alert("Risposta errata!");
+
         } else {
             socket.emit("answerToEvaluator", username, storia.nome, (result));
             waitEvaluator();
@@ -81,41 +96,22 @@ function checkResult(result) {
         scena = parseInt(storia.scene[scena_corr].risposte[0].to[gruppo]);
         nextScene(scena);
     }
-}
-var coin = 0;
 
-function fetchData() {
-    // Here should be your api call, I`m using setTimeout here just for async example
-    return promise1 = new Promise(resolve => setTimeout(function () {
-        socket.on('answerFromEvaluator', (data) => {
-            $("#loading").hide();
-            punteggio += parseInt(storia.scene[scena_corr].risposte[parseInt(data.message, 10)].points, 10);
-            nextScene(storia.scene[scena_corr].risposte[parseInt(data.message, 10)].to[gruppo]);
-        })
-    }, 2000));
 }
 
 async function waitEvaluator(_callback) {
     $("#loading").show();
-    await fetchData();
-    /*
-        const promise1 = new Promise((resolve, reject) => {
-            setTimeout(function() {socket.on('answerFromEvaluator', (data) => {
-                coin += parseInt(data.message, 10);
-            })}, 200000);
-        });
-        
-        let results = await promise1;
-        
-        alert(results);
-        /*promise1.then((value) => {
-            console.log(value);
-            $("#loading").toggleClass("loading");
-        });*/
+    await socket.on('answerFromEvaluator', (data) => {
+        $("#loading").hide();
+        punteggio += parseInt(storia.scene[scena_corr].risposte[parseInt(data.message, 10)].points, 10);
+        sessionStorage.setItem("Scene", storia.scene[scena_corr].risposte[parseInt(data.message, 10)].to[gruppo]);
+        sessionStorage.setItem("Points", punteggio);
+        nextScene(storia.scene[scena_corr].risposte[parseInt(data.message, 10)].to[gruppo]);
+    });
 };
 
-
 function nextScene(scena) {
+
     start_time();
     scena_corr = scena;
     socket.emit("scene", username, storia.nome, (scena_corr));
@@ -138,23 +134,17 @@ function nextScene(scena) {
         var acc = "";
         if (storia.scene[scena_corr].accessibile == "true")
             acc = "Questa storia è accessibile.";
-        $("#testo").html(`
-BENVENUTO NELLA STORIA ${storia.nome}.<br>
-Quest'avventura è pensata per ${storia.categoria.replace('_', " ")}.<br>
-Il target di età è di ${storia.target} anni.<br>
-` + acc + `
-<br>
-Divertitevi!!!
-`);
+        $("#testo").html(`BENVENUTO NELLA STORIA ${storia.nome}.<br>Quest'avventura è pensata per ${storia.categoria.replace('_', " ")}.<br>Il target di età è di ${storia.target} anni.<br>` + acc + `<br>Divertitevi!!!`);
     } else if (storia.scene[scena_corr].nome == "Fine") {
+
         //mostra punteggio e mandalo al server
         socket.emit('score', username, storia.nome, (punteggio));
+
         $("#text-holder").show();
         $("#btn").hide();
-        $("#testo").html(`
-COMPLIMENTI! <br>
-Hai completato l'avventura totalizzando ben ${punteggio} punti! 
-`);
+        $("#testo").html(` COMPLIMENTI! <br> Hai completato l'avventura totalizzando ben ${punteggio} punti! `);
+
+        sessionStorage.clear();
     }
 
     if (storia.scene[scena_corr].widget != undefined && storia.scene[scena_corr].widget != "") {
@@ -166,7 +156,6 @@ Hai completato l'avventura totalizzando ben ${punteggio} punti!
 }
 
 $(function () {
-
     class Message {
         constructor(srcUsername, srcId, dstUsername, data) {
             this.username = srcUsername;
@@ -226,6 +215,7 @@ $(function () {
             $loginPage.off("click");
             $adventurePage.show();
             socket.emit("add user", username, (storia.nome));
+            sessionStorage.setItem('Username', username);
         }
     };
 
@@ -499,10 +489,28 @@ $(function () {
     });
 
     $.getJSON(urlStoria, function (data) {
+<<<<<<< HEAD
         storiaCallback(data);
     }).fail(function() {
         alert("Mi dispiace ma la storia che hai richiesto non è stata trovata, ora verrai reindirizzato alla pagina con tutte le storie disponibili");
         window.location.href = "https://site181993.tw.cs.unibo.it/avventure";
     });
 
+=======
+            storiaCallback(data);
+        })
+        .fail(() => {
+            alert("Mi dispiace ma la storia che hai richiesto non è stata trovata, ora verrai reindirizzato alla pagina con tutte le storie disponibili");
+            window.location.href = "https://site181993.tw.cs.unibo.it/avventure";
+        })
+        .done(() => {
+            if (sessionStorage.getItem('Username') && sessionStorage.getItem('Scene')) {
+                $loginPage.fadeOut();
+                $loginPage.off("click");
+                $adventurePage.show();
+                username = sessionStorage.getItem('Username');
+                socket.emit("add user", username, (storia.nome));
+            }
+        });
+>>>>>>> d6f19334cec4a7828282fe530fc713845bf37eb1
 });

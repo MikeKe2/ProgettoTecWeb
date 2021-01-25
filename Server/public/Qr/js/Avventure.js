@@ -18,8 +18,7 @@ var Avventure = new Vue({
 					let adventure = this.list[uindex].stories[sindex];
 					let qrmaker = new QRCode($("#qr_" + uindex + "_" + sindex)[0])
 					qrmaker.clear(); // clear the code.
-					let url = "https://site181993.tw.cs.unibo.it/avventura/" + user + "/" + adventure;
-					qrmaker.makeCode(encodeURI(url)); // make another code.
+					qrmaker.makeCode(encodeURI("https://site181993.tw.cs.unibo.it/avventura/" + user + "/" + adventure).replaceAll(".json", "")); // make another code.
 				}
 			}
 		});

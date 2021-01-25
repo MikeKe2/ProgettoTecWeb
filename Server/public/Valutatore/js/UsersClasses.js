@@ -56,7 +56,7 @@ class Utenti {
         return -1;
     }
 
-    get numberOfUsers() {
+    numberOfUsers() {
         return this.users.length;
     }
 
