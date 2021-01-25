@@ -21,30 +21,35 @@
   <% } %>
 
   <div class="container"></div>
-  <h1 class="display-4 text-center">Avventure Pubblicate</h1>
-  <div class="container-fluid row justify-content-around">
-    <div id="Stories" class="col-md-8 container-sm">
-      <ul class="list-group list-group-flush">
-        <template v-for="(user, uindex) in list">
-          <li v-if="( user.stories.length > 0)" class="list-group-item clickable nonselectable">
-            <strong>Autore: </strong> {{user.name}}
-          </li>
-          <li v-if="( user.stories.length > 0)" class="list-group-item clickable nonselectable">
-            <ul class="list-group list-group-flush">
-              <template v-for="(story, sindex) in user.stories">
-                <li class="list-group-item clickable nonselectable"><strong> Nome Storia: </strong>
-                  {{story.replaceAll('.json', '')}}</li>
-                <li class="list-group-item clickable">
-                  <div class="qr" v-bind:id="'qr_'+uindex+'_'+sindex" v-on:click="copy(uindex, sindex)"></div>
-                </li>
-              </template>
-            </ul>
-          </li>
-        </template>
-      </ul>
+    <h1 class="display-4 text-center">Avventure Pubblicate</h1>
+    <div class="container-fluid row justify-content-around">
+      <div id="Stories" class="col-md-8 container-sm">
+        <ul class="list-group list-group-flush">
+          <template v-for="(user, uindex) in list">
+            <li v-if="( user.stories.length > 0)" class="list-group-item clickable nonselectable">
+              <strong>Autore: </strong> {{user.name}}
+            </li>
+            <li v-if="( user.stories.length > 0)" class="list-group-item clickable nonselectable">
+              <ul class="list-group list-group-flush">
+                <template v-for="(story, sindex) in user.stories">
+                  <li class="list-group-item clickable nonselectable"><strong> Nome Storia: </strong>
+                    {{story.replaceAll('.json', '')}}</li>
+                  <li class="list-group-item clickable">
+                    <div class="qr" v-bind:id="'qr_'+uindex+'_'+sindex" v-on:click="copy(uindex, sindex)"></div>
+                  </li>
+                </template>
+              </ul>
+            </li>
+          </template>
+        </ul>
+      </div>
     </div>
   </div>
-  </div>
+  <footer id="sticky-footer" class="py-4 bg-secondary text-white-50">
+    <div class="container text-center">
+      <a  class="text-light" href="http://site181993.tw.cs.unibo.it/login">Se sei un autore clicca qua per accedere al manager delle tue storie</a>
+    </div>
+  </footer>
   <script src="/Manager/js/qrcode.min.js"></script>
   <script src="/Qr/js/Avventure.js"></script>
 </body>
