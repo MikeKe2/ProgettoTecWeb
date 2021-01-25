@@ -489,14 +489,6 @@ $(function () {
     });
 
     $.getJSON(urlStoria, function (data) {
-<<<<<<< HEAD
-        storiaCallback(data);
-    }).fail(function() {
-        alert("Mi dispiace ma la storia che hai richiesto non è stata trovata, ora verrai reindirizzato alla pagina con tutte le storie disponibili");
-        window.location.href = "https://site181993.tw.cs.unibo.it/avventure";
-    });
-
-=======
             storiaCallback(data);
         })
         .fail(() => {
@@ -512,5 +504,4 @@ $(function () {
                 socket.emit("add user", username, (storia.nome));
             }
         });
->>>>>>> d6f19334cec4a7828282fe530fc713845bf37eb1
 });
