@@ -17,7 +17,27 @@
         border-radius: 4px;
         position: relative;
         width: 100%;
+        height: 80%;
         /* Necessary for correct mouse co-ords in Firefox */
+    }
+
+    .some-class {
+        float: left;
+        clear: none;
+    }
+
+    label {
+        float: left;
+        clear: none;
+        display: block;
+        padding: 0px 1em 0px 8px;
+    }
+
+    input[type=radio],
+    input.radio {
+        float: left;
+        clear: none;
+        margin: 2px 0 0 2px;
     }
 </style>
 
@@ -32,92 +52,129 @@
         </canvas>
     </div>
 </div>
+<fieldset>
+    <div class="some-class">
+        <input type="radio" class="radio" name="colours" onchange="changeColour(this.value)" value="#FF0000" id="red" />
+        <label for="red">Red</label>
+        <input type="radio" class="radio" name="colours" onchange="changeColour(this.value)" value="#0800FF" id="blue" />
+        <label for="blue">Blue</label>
+        <input type="radio" class="radio" name="colours" onchange="changeColour(this.value)" value="#26ff00" id="green" />
+        <label for="green">Green</label>
+        <input type="radio" class="radio" name="colours" onchange="changeColour(this.value)" value="#f6ff00" id="yellow" />
+        <label for="yellow">Yellow</label>
+    </div>
+</fieldset>
 
 <script type="text/javascript">
 
-    var ctx, color;
-    var mouseX, mouseY, mouseDown = 0;
+    function changeColour(data) {
+        ctx.beginPath();
+        ctx.strokeStyle = data;
+    }
 
     var canvas = document.getElementById('sketchpad');
+    var ctx;
 
     // If the browser supports the canvas tag, get the 2d drawing context for this canvas
-    if (canvas.getContext)
+    if (canvas.getContext) {
         ctx = canvas.getContext('2d');
+        ctx.strokeStyle = "#222222";
+        ctx.lineWith = 2;
+    }
+
+    var drawing = false;
+    var mousePos = {
+        x: 0,
+        y: 0
+    };
+    var lastPos = mousePos;
 
     // Check that we have a valid context to draw on/with before adding event handlers
     if (ctx) {
-        canvas.addEventListener('mousedown', sketchpad_mouseDown, false);
-        canvas.addEventListener('mousemove', sketchpad_mouseMove, false);
-        canvas.addEventListener("touchdown", sketchpad_mouseDown, false);
-        canvas.addEventListener("touchmove", sketchpad_mouseMove, false);
-        /*canvas.addEventListener("touchmove", function (e) {
+
+        canvas.addEventListener("mousedown", function (e) {
+            drawing = true;
+
+            lastPos = getMousePos(canvas, e);
+        }, false);
+
+        canvas.addEventListener("mouseup", function (e) {
+            drawing = false;
+        }, false);
+
+        canvas.addEventListener("mousemove", function (e) {
+            mousePos = getMousePos(canvas, e);
+        }, false);
+
+        canvas.addEventListener("touchstart", function (e) {
+            mousePos = getTouchPos(canvas, e);
+            var touch = e.touches[0];
+            var mouseEvent = new MouseEvent("mousedown", {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            canvas.dispatchEvent(mouseEvent);
+        }, false);
+
+        canvas.addEventListener("touchend", function (e) {
+            var mouseEvent = new MouseEvent("mouseup", {});
+            canvas.dispatchEvent(mouseEvent);
+        }, false);
+
+        canvas.addEventListener("touchmove", function (e) {
             var touch = e.touches[0];
             var mouseEvent = new MouseEvent("mousemove", {
                 clientX: touch.clientX,
                 clientY: touch.clientY
             });
             canvas.dispatchEvent(mouseEvent);
-        }, false);*/
-        
-        window.addEventListener('mouseup', sketchpad_mouseUp, false);
+        }, false);
     }
 
-    // Parameters are: A canvas context, the x position, the y position, the size of the dot
-    function drawDot(ctx, x, y, size) {
-        // Let's use black by setting RGB values to 0, and 255 alpha (completely opaque)
-        r = 0;
-        g = 0;
-        b = 0;
-        a = 255;
-
-        // Select a fill style
-        ctx.fillStyle = "rgba(" + r + "," + g + "," + b + "," + (a / 255) + ")";
-
-        // Draw a filled circle
-        ctx.beginPath();
-        ctx.arc(x, y, size, 0, Math.PI * 2, true);
-        ctx.closePath();
-        ctx.fill();
+    function getMousePos(canvasDom, mouseEvent) {
+        var rect = canvasDom.getBoundingClientRect();
+        return {
+            x: mouseEvent.clientX - rect.left,
+            y: mouseEvent.clientY - rect.top
+        };
     }
 
-    // Clear the canvas context using the canvas width and height
+    function getTouchPos(canvasDom, touchEvent) {
+        var rect = canvasDom.getBoundingClientRect();
+        return {
+            x: touchEvent.touches[0].clientX - rect.left,
+            y: touchEvent.touches[0].clientY - rect.top
+        };
+    }
+
+    // Get a regular interval for drawing to the screen
+    window.requestAnimFrame = (function (callback) {
+        return window.requestAnimationFrame ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame ||
+            window.oRequestAnimationFrame ||
+            window.msRequestAnimaitonFrame ||
+            function (callback) {
+                window.setTimeout(callback, 1000 / 60);
+            };
+    })();
+    // Draw to the canvas
+    function renderCanvas() {
+        if (drawing) {
+            ctx.moveTo(lastPos.x, lastPos.y);
+            ctx.lineTo(mousePos.x, mousePos.y);
+            ctx.stroke();
+            lastPos = mousePos;
+        }
+    }
+
+    // Allow for animation
+    (function drawLoop() {
+        requestAnimFrame(drawLoop);
+        renderCanvas();
+    })();
+
     function clearCanvas(canvas, ctx) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-
-    // Keep track of the mouse button being pressed and draw a dot at current location
-    function sketchpad_mouseDown() {
-        mouseDown = 1;
-        drawDot(ctx, mouseX, mouseY, 12);
-    }
-
-    // Keep track of the mouse button being released
-    function sketchpad_mouseUp() {
-        mouseDown = 0;
-    }
-
-    // Keep track of the mouse position and draw a dot if mouse button is currently pressed
-    function sketchpad_mouseMove(e) {
-        // Update the mouse co-ordinates when moved
-        getMousePos(e);
-
-        // Draw a dot if the mouse button is currently being pressed
-        if (mouseDown == 1) {
-            drawDot(ctx, mouseX, mouseY, 12);
-        }
-    }
-
-    // Get the current mouse position relative to the top-left of the canvas
-    function getMousePos(e) {
-        if (!e)
-            var e = event;
-
-        if (e.offsetX) {
-            mouseX = e.offsetX;
-            mouseY = e.offsetY;
-        } else if (e.layerX) {
-            mouseX = e.layerX;
-            mouseY = e.layerY;
-        }
+        canvas.width = canvas.width;
     }
 </script>

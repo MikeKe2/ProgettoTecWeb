@@ -71,7 +71,7 @@ function checkResult(result) {
                     punteggio += pointsAdded;
                     scena = parseInt(risposta.to[gruppo]);
                     correct = true;
-                    sessionStorage.setItem("Scene", scena_corr);
+                    sessionStorage.setItem("Scene", scena);
                     sessionStorage.setItem("Points", punteggio);
                     nextScene(scena);
                 } else if (result == risposta.valore && parseInt(risposta.maxTime) == 0 && pointsAdded == 0) {
@@ -79,7 +79,7 @@ function checkResult(result) {
                     punteggio += pointsAdded;
                     scena = parseInt(risposta.to[gruppo]);
                     correct = true;
-                    sessionStorage.setItem("Scene", scena_corr);
+                    sessionStorage.setItem("Scene", scena);
                     sessionStorage.setItem("Points", punteggio);
                     nextScene(scena);
 
@@ -489,14 +489,6 @@ $(function () {
     });
 
     $.getJSON(urlStoria, function (data) {
-<<<<<<< HEAD
-        storiaCallback(data);
-    }).fail(function() {
-        alert("Mi dispiace ma la storia che hai richiesto non è stata trovata, ora verrai reindirizzato alla pagina con tutte le storie disponibili");
-        window.location.href = "https://site181993.tw.cs.unibo.it/avventure";
-    });
-
-=======
             storiaCallback(data);
         })
         .fail(() => {
@@ -512,5 +504,4 @@ $(function () {
                 socket.emit("add user", username, (storia.nome));
             }
         });
->>>>>>> d6f19334cec4a7828282fe530fc713845bf37eb1
 });
