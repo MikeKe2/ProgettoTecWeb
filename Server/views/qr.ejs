@@ -26,7 +26,7 @@
     <div id="Stories" class="col-md-8 container-sm">
       <ul class="list-group list-group-flush">
         <template v-for="(user, uindex) in list">
-          <li class="list-group-item clickable nonselectable">
+          <li v-if="( user.stories.length > 0)" class="list-group-item clickable nonselectable">
             <strong>Autore: </strong> {{user.name}}
           </li>
           <li class="list-group-item clickable nonselectable">
