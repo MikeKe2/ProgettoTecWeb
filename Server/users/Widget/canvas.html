@@ -1,6 +1,6 @@
 <style>
     /* Some CSS styling */
-    #sketchpadapp {
+    #canvaswidget {
         /* Prevent nearby text being highlighted when accidentally dragging mouse outside confines of the canvas */
         -webkit-touch-callout: none;
         -webkit-user-select: none;
@@ -10,66 +10,67 @@
         user-select: none;
     }
 
-
     #sketchpad {
         float: left;
         border: 2px solid #888;
         border-radius: 4px;
         position: relative;
-        width: 100%;
-        height: 80%;
-        /* Necessary for correct mouse co-ords in Firefox */
     }
 
-    .some-class {
-        float: left;
-        clear: none;
+    .container {
+        clear: both;
     }
 
-    label {
-        float: left;
-        clear: none;
-        display: block;
-        padding: 0px 1em 0px 8px;
+    #sketchpad {
+        background-color: rgba(255, 255, 255, 0.850);
     }
 
-    input[type=radio],
-    input.radio {
-        float: left;
-        clear: none;
-        margin: 2px 0 0 2px;
+    .form-check-label {
+        color: white;
+        text-shadow: 1px 0 0 #000, -1px 0 0 #000, 0 1px 0 #000, 0 -1px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
     }
 </style>
 
 
-
-<div id="sketchpadapp">
-    <div class="leftside1">
-        <input type="submit" class="btn-info mb-1" value="Clear Sketchpad" onclick="clearCanvas(canvas,ctx);">
+<div id="canvasBackground">
+    <div class="container" id="canvaswidget">
+        <div>
+            <input type="submit" class="btn-info mb-1" value="Clear Sketchpad" onclick="clearCanvas(canvas,ctx);">
+        </div>
+        <div>
+            <canvas id="sketchpad">
+            </canvas>
+        </div>
     </div>
-    <div class="rightside">
-        <canvas id="sketchpad">
-        </canvas>
+    <div class="container">
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="colours" onchange="changeColour(this.value)"
+                value="#FF0000" id="red" />
+            <label class="form-check-label" for="red">Red</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="colours" onchange="changeColour(this.value)"
+                value="#0800FF" id="blue" />
+            <label class="form-check-label" for="blue">Blue</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="colours" onchange="changeColour(this.value)"
+                value="#26ff00" id="green" />
+            <label class="form-check-label" for="green">Green</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="colours" onchange="changeColour(this.value)"
+                value="#f6ff00" id="yellow" />
+            <label class="form-check-label" for="yellow">Yellow</label>
+        </div>
     </div>
 </div>
-<fieldset>
-    <div class="some-class">
-        <input type="radio" class="radio" name="colours" onchange="changeColour(this.value)" value="#FF0000" id="red" />
-        <label for="red">Red</label>
-        <input type="radio" class="radio" name="colours" onchange="changeColour(this.value)" value="#0800FF" id="blue" />
-        <label for="blue">Blue</label>
-        <input type="radio" class="radio" name="colours" onchange="changeColour(this.value)" value="#26ff00" id="green" />
-        <label for="green">Green</label>
-        <input type="radio" class="radio" name="colours" onchange="changeColour(this.value)" value="#f6ff00" id="yellow" />
-        <label for="yellow">Yellow</label>
-    </div>
-</fieldset>
 
 <script type="text/javascript">
-
     function changeColour(data) {
         ctx.beginPath();
         ctx.strokeStyle = data;
+        ctx.lineWidth = 4;
     }
 
     var canvas = document.getElementById('sketchpad');
@@ -79,7 +80,11 @@
     if (canvas.getContext) {
         ctx = canvas.getContext('2d');
         ctx.strokeStyle = "#222222";
-        ctx.lineWith = 2;
+        ctx.lineWidth = 4;
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
     }
 
     var drawing = false;
@@ -108,11 +113,13 @@
 
         canvas.addEventListener("touchstart", function (e) {
             mousePos = getTouchPos(canvas, e);
+
             var touch = e.touches[0];
             var mouseEvent = new MouseEvent("mousedown", {
                 clientX: touch.clientX,
                 clientY: touch.clientY
             });
+
             canvas.dispatchEvent(mouseEvent);
         }, false);
 
@@ -132,7 +139,9 @@
     }
 
     function getMousePos(canvasDom, mouseEvent) {
+
         var rect = canvasDom.getBoundingClientRect();
+
         return {
             x: mouseEvent.clientX - rect.left,
             y: mouseEvent.clientY - rect.top
