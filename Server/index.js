@@ -145,6 +145,8 @@ app.post("/newUser", function (req, res) {
         fs.mkdirSync(dir + "/private");
         fs.mkdirSync(dir + "/public");
         fs.mkdirSync(dir + "/widgets");
+        fs.copyFileSync(resDir + 'users/Widget/canvas.html', dir + '/widgets/canvas.html');
+        fs.copyFileSync(resDir + 'users/Widget/combinazione.html', dir + '/widgets/combinazione.html');
         fs.copyFileSync(resDir + 'users/Widget/image.html', dir + '/widgets/image.html');
         fs.copyFileSync(resDir + 'users/Widget/text.html', dir + '/widgets/text.html');
         fs.copyFileSync(resDir + 'users/Widget/lever.html', dir + '/widgets/lever.html');

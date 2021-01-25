@@ -29,7 +29,7 @@
           <li v-if="( user.stories.length > 0)" class="list-group-item clickable nonselectable">
             <strong>Autore: </strong> {{user.name}}
           </li>
-          <li class="list-group-item clickable nonselectable">
+          <li v-if="( user.stories.length > 0)" class="list-group-item clickable nonselectable">
             <ul class="list-group list-group-flush">
               <template v-for="(story, sindex) in user.stories">
                 <li class="list-group-item clickable nonselectable"><strong> Nome Storia: </strong>
