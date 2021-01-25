@@ -1,0 +1,198 @@
+<style>
+    
+    @media only screen and (max-width: 800px) {
+        #lucchetto{
+            background-color: #d1bb2a;
+            border-bottom-left-radius: 5%;
+            border-bottom-right-radius: 5%;
+            height: 200px;
+            width: 130%;
+            margin-left: -15%
+        }
+        #parte_superiore{
+            border-color: grey;
+            border-width: 20px;
+            border-style: solid;
+            border-bottom-width: 0px;
+            border-top-left-radius: 20%;
+            border-top-right-radius: 20%;
+            height: 100px;
+            width: 80%;
+            margin-left: 10%;
+        }
+        .numero{
+            border-style: solid;
+            border-radius: 50%;
+            border-width: 3px;
+            border-color: grey;
+            background-color: black;
+            color:white;
+            text-align: center;
+            width:100%;
+            margin-top: 20%;
+            -webkit-user-select: none;         
+            -moz-user-select: none; 
+            -ms-user-select: none; 
+            user-select: none;
+        }
+        .bottone{
+            border-style: solid;
+            border-radius: 50%;
+            border-width: 1%;
+            border-color: black;
+            background-color: #a6a444;
+            text-align: center;
+            padding: 1%;
+            margin: auto;
+            margin-top: 20%;
+            -webkit-user-select: none;         
+            -moz-user-select: none; 
+            -ms-user-select: none; 
+            user-select: none;
+        }
+        .bottone:hover{
+            cursor: pointer;
+        }
+        .center{
+            margin-top: 8%;
+        }
+        .circle {
+            float: left;
+            width: 2em;
+            height: 2em;
+            border-radius: 50%;
+            background-color:black;
+            margin-left: 44%;
+        }
+        .triangle {
+          width: 3em;
+          height: 3em;
+          border-bottom: solid 30px black;
+          border-left: solid 30px transparent;
+          border-right: solid 30px transparent;
+          margin-left: 39%;
+        }
+    }
+    @media only screen and (min-width: 800px) {
+        #lucchetto{
+            background-color: #d1bb2a;
+            border-bottom-left-radius: 5%;
+            border-bottom-right-radius: 5%;
+            height: 500px;
+            width: 100%;
+        }
+        #parte_superiore{
+            border-color: grey;
+            border-width: 20px;
+            border-style: solid;
+            border-bottom-width: 0px;
+            border-top-left-radius: 20%;
+            border-top-right-radius: 20%;
+            height: 200px;
+            width: 80%;
+            margin-left: 10%;
+        }
+        .numero{
+            border-style: solid;
+            border-radius: 50%;
+            border-width: 3px;
+            border-color: grey;
+            background-color: black;
+            color:white;
+            text-align: center;
+            margin: auto;
+            padding-top: 1em;
+            width: 30%;
+            height: 30%;
+            margin-top: 20%;
+            -webkit-user-select: none;         
+            -moz-user-select: none; 
+            -ms-user-select: none; 
+            user-select: none;
+        }
+        .bottone{
+            border-style: solid;
+            border-radius: 50%;
+            border-width: 1%;
+            border-color: black;
+            background-color: #a6a444;
+            text-align: center;
+            margin: auto;
+            padding-top: 1em;
+            width: 30%;
+            height: 30%;
+            margin-top: 20%;
+            -webkit-user-select: none;         
+            -moz-user-select: none; 
+            -ms-user-select: none; 
+            user-select: none;
+        }
+        .bottone:hover{
+            cursor: pointer;
+        }
+        .center{
+            margin-top: 8%;
+        }
+        .circle {
+            float: left;
+            width: 8em;
+            height: 8em;
+            border-radius: 50%;
+            background-color:black;
+            margin-left: 42%;
+            margin-top: 7%;
+        }
+        .triangle {
+          width: 10em;
+          height: 10em;
+          border-bottom: solid 6em black;
+          border-left: solid 2em transparent;
+          border-right: solid 2em transparent;
+          margin-left: 40%;
+          margin-top: 8%;
+        }
+    }
+
+</style>
+<div hidden tabindex="0" id="textarea-holder" varia-label="risultato">
+    <input disabled="true" name="textarea" id="result">
+</div>
+<div class="container">
+    <div id="parte_superiore"></div>
+    <div id="lucchetto">
+        <div class="row">
+            <div class="center col-2"><div class="bottone" onclick="up('#number_1')">+</div><div id="number_1" class="numero">0</div><div class="bottone" onclick="down('#number_1')">-</div></div>
+            <div class="center col-2"><div class="bottone" onclick="up('#number_2')">+</div><div id="number_2" class="numero">0</div><div class="bottone" onclick="down('#number_2')">-</div></div>
+            <div class="center col-2"><div class="bottone" onclick="up('#number_3')">+</div><div id="number_3" class="numero">0</div><div class="bottone" onclick="down('#number_3')">-</div></div>
+            <div class="center col-2"><div class="bottone" onclick="up('#number_4')">+</div><div id="number_4" class="numero">0</div><div class="bottone" onclick="down('#number_4')">-</div></div>
+            <div class="center col-2"><div class="bottone" onclick="up('#number_5')">+</div><div id="number_5" class="numero">0</div><div class="bottone" onclick="down('#number_5')">-</div></div>
+            <div class="center col-2"><div class="bottone" onclick="up('#number_6')">+</div><div id="number_6" class="numero">0</div><div class="bottone" onclick="down('#number_6')">-</div></div>
+        </div>
+        <div class="circle"></div>
+        <div class="triangle"></div>
+    </div>
+</div>
+
+<script>
+    function up(id){
+        if(parseInt($(id).html()) < 9){
+            $(id).html(parseInt($(id).html()) + 1);
+            setResult();
+        }
+    }
+    function down(id){
+        if(parseInt($(id).html()) > 0){
+            $(id).html(parseInt($(id).html()) - 1);
+            setResult();
+        }
+    }
+    function setResult(){
+        value = "";
+        for(let i = 1; i < 7; i++){
+            value = value + $("#number_"+i).html();
+        }
+        
+        document.getElementById("textarea-holder").setAttribute("aria-label", value);
+        $("#result").val(value);
+    }
+</script>

@@ -24,10 +24,6 @@ function storiaCallback(data) {
 }
 
 function initialize() {
-    if(!storia){
-        alert("Mi dispiace ma la storia che hai richiesto non è stata trovata, ora verrai reindirizzato alla pagina con tutte le storie disponibili");
-        window.location.href = "https://site181993.tw.cs.unibo.it/avventure";
-    }
     $("#titolo").html(storia.nome);
     if (storia.css != undefined && storia.css != "")
         $("#mycss").load("/users/" + storia.autore + "/css/" + storia.css);
@@ -504,6 +500,9 @@ $(function () {
 
     $.getJSON(urlStoria, function (data) {
         storiaCallback(data);
+    }).fail(function() {
+        alert("Mi dispiace ma la storia che hai richiesto non è stata trovata, ora verrai reindirizzato alla pagina con tutte le storie disponibili");
+        window.location.href = "https://site181993.tw.cs.unibo.it/avventure";
     });
 
 });
