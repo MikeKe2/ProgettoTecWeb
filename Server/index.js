@@ -110,7 +110,7 @@ app.get("/avventure", function (req, res) {
 
 //LOGIN
 app.get("/login", function (req, res) {
-  res.render("login");
+  res.render("login",{user: "none"});
 });
 
 app.post(
@@ -119,7 +119,7 @@ app.post(
     failureRedirect: "/login"
   }),
   function (req, res) {
-    res.redirect("/");
+    res.redirect("/login");
   }
 );
 
@@ -134,7 +134,10 @@ app.post("/newUser", function (req, res) {
       "displayName": req.body.newusername
     })
     fs.writeFile(__dirname + '/db/UsersData.json', JSON.stringify(json), function (err) {
-      if (err) throw err;
+      if (err){ 
+        res.render("login", {user: "errore"});
+        throw err;
+      };
       console.log('Saved!');
       let dir = resDir + 'users/' + req.body.newusername;
       if (!fs.existsSync(dir)) {
@@ -162,7 +165,7 @@ app.post("/newUser", function (req, res) {
           console.log('Success');
         }
       });
-      res.redirect("/");
+      res.render("login", {user: req.body.newusername});
     })
   })
 
