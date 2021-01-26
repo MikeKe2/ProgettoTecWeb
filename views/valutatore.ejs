@@ -50,49 +50,51 @@
           </form>
         </div>
       </nav>
-      <!-- Progress Bar -->
-      <div class="progress">
-        <div class="progress-bar progress-bar-animated progress-bar-striped" role="progressbar">
-        </div>
-      </div>
-      <!--  Showing current status, possibile answers, etc etc-->
-      <div class="container justify-content-center">
-        <div class="row justify-content-center">
-          <div class="col-lg-6">
-            <ul id="SceneDescription" class="list-group list-group-flush">
-              <li id="SceneName" class="list-group-item">Name</li>
-              <li id="SceneDescrizione" class="list-group-item">Description</li>
-            </ul>
-          </div>
-          <!-- POSSIBLE ANSWERS-->
-          <div id="userStats" class="col-lg-6 mt-1">
-            <ul id="SceneAnswers" class="list-group list-group-horizontal list-group-flush justify-content-center">
-            </ul>
+      <div id="dataPageContainer" class="container">
+        <!-- Progress Bar -->
+        <div class="progress">
+          <div class="progress-bar progress-bar-animated progress-bar-striped" role="progressbar">
           </div>
         </div>
-      </div>
-      <div id="answerForm" class="container justify-content-center">
-        <hr />
-        <div class="row justify-content-center">
+        <!--  Showing current status, possibile answers, etc etc-->
+        <div class="container justify-content-center">
           <div class="row justify-content-center">
-            <div class="col-sm-10">
-              <ul class="list-group justify-content-center list-group-horizontal">
-                <li class="list-group-item flex-fill">Domanda da rispondere:</li>
-                <li class="list-group-item flex-fill" id="soluzioneCorretta"></li>
-              </ul>
-              <ul class="list-group justify-content-center list-group-horizontal">
-                <li class="list-group-item flex-fill">Soluzione proposta:</li>
-                <li class="list-group-item flex-fill" id="soluzioneProposta"></li>
+            <div class="col-lg-6">
+              <ul id="SceneDescription" class="list-group list-group-flush">
+                <li id="SceneName" class="list-group-item">Name</li>
+                <li id="SceneDescrizione" class="list-group-item">Description</li>
               </ul>
             </div>
-            <div class="col-sm-10">
-              <ul class="list-group justify-content-center list-group-horizontal">
-                <li class="list-group-item flex-fill">Che valore vuoi dare a questa risposta?: </li>
-                <li class="list-group-item flex-fill">
-                  <div class="btn-group" role="group" aria-label="Basic example">
-                  </div>
-                </li>
+            <!-- POSSIBLE ANSWERS-->
+            <div id="userStats" class="col-lg-6 mt-1">
+              <ul id="SceneAnswers" class="list-group list-group-horizontal list-group-flush justify-content-center">
               </ul>
+            </div>
+          </div>
+        </div>
+        <div id="answerForm" class="container justify-content-center">
+          <hr />
+          <div class="row justify-content-center">
+            <div class="row justify-content-center">
+              <div class="col-sm-10">
+                <ul class="list-group justify-content-center list-group-horizontal">
+                  <li class="list-group-item flex-fill">Domanda da rispondere:</li>
+                  <li class="list-group-item flex-fill" id="soluzioneCorretta"></li>
+                </ul>
+                <ul class="list-group justify-content-center list-group-horizontal">
+                  <li class="list-group-item flex-fill">Soluzione proposta:</li>
+                  <li class="list-group-item flex-fill" id="soluzioneProposta"></li>
+                </ul>
+              </div>
+              <div class="col-sm-10">
+                <ul class="list-group justify-content-center list-group-horizontal">
+                  <li class="list-group-item flex-fill">Che valore vuoi dare a questa risposta?: </li>
+                  <li class="list-group-item flex-fill">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                    </div>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>

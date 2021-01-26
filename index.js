@@ -480,11 +480,11 @@ app.get('/editorStoria/:visibility/:nomeStoria/', require('connect-ensure-login'
 //ROUTE TO STORIES
 app.get('/avventura/:user/:name', (req, res) => {
   url = '/users/' + req.params.user + '/public/' + req.params.name + '.json';
-  res.render("avventura", {
+  res.render("giocatore", {
     urlStoria: url
   });
 });
-
+  
 app.get('/avventura/:user/:name/Valutatore', (req, res) => {
   url = '/users/' + req.params.user + '/public/' + req.params.name + '.json';
   res.render("valutatore", {

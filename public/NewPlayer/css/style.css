@@ -1,0 +1,210 @@
+html,
+body {
+    background-color: whitesmoke;
+}
+
+html,
+input {
+    font-family:
+        "HelveticaNeue-Light",
+        "Helvetica Neue Light",
+        "Helvetica Neue",
+        Helvetica,
+        Arial,
+        "Lucida Grande",
+        sans-serif;
+}
+
+.nav {
+    position: fixed;
+}
+
+ul {
+    list-style: none;
+    word-wrap: break-word;
+}
+
+#avventura,
+.visibility {
+    display: none;
+}
+
+/* Login Page */
+
+#login {
+    display: inline;
+    background-color: whitesmoke;
+}
+
+#login .form {
+    height: 100px;
+    margin-top: -100px;
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    width: 100%;
+}
+
+#login .form .usernameInput {
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid #000000;
+    outline: none;
+    padding-bottom: 1%;
+    text-align: center;
+    width: 40vw;
+}
+
+#login .title {
+    font-size: 200%;
+}
+
+#login .usernameInput .valutatore {
+    font-size: 200%;
+    letter-spacing: 3px;
+}
+
+#login .title,
+#login .usernameInput,
+.valutatore {
+    color: #000;
+    font-weight: 100;
+}
+
+
+/*Modal per il valutatore*/
+.valutatore {
+    cursor: pointer;
+    padding: 30px;
+}
+
+/*Loading Gif*/
+
+.loading {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+    opacity: 0.7;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 999;
+    text-align: center;
+}
+
+.loader {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 1;
+    width: 150px;
+    height: 150px;
+    margin: -75px 0 0 -75px;
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    width: 120px;
+    height: 120px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+    opacity: 0.8;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/*Messages*/
+
+.message {
+    display: flex;
+    justify-content: flex-start;
+    word-break: break-word;
+}
+
+.message.player {
+
+    justify-content: flex-end;
+}
+
+.messageBody {
+    margin: 20px;
+    border-radius: 15px;
+    background: #00bfb6;
+    color: #fff;
+    padding: 15px;
+    text-align: center;
+    font-weight: 700;
+    font-family: arial;
+    position: relative;
+}
+
+div.player:before {
+    content: "";
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    border-left: 15px solid #00bfb6;
+    border-right: 15px solid transparent;
+    border-top: 15px solid #00bfb6;
+    border-bottom: 15px solid transparent;
+    right: -16px;
+    top: 0px;
+}
+
+div.eval:before {
+    content: "";
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    border-left: 15px solid transparent;
+    border-right: 15px solid #00bfb6;
+    border-top: 15px solid #00bfb6;
+    border-bottom: 15px solid transparent;
+    left: -16px;
+    top: 0px;
+}
+
+/*Storia*/
+#avventura {
+    background: yellow;
+    border-radius: 15px;
+    padding: 2em;
+}
+
+#description {
+    height: 40%;
+    overflow-y: auto;
+}
+
+#widget {
+    background-color: green;
+    height: 55%;
+}
+
+#next {
+    height: 5%;
+}
+
+
+@media only screen and (max-width: 600px) {
+    #avventura {
+        overflow-y:auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+@media only screen and (min-width: 600px) {
+    body{
+        overflow-y: hidden;
+    }
+    #avventura {
+        height: 900px;
+    }
+}
