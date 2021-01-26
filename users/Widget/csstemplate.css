@@ -11,23 +11,30 @@ la metà; le modifiche apportabili sono analoghe a quelle della scena
 analoghe a quelle della scena
 - testo, infine, serve a modificare colore e font del testo presente nelle scene. 
 
+Border-radius serve a arrotondare i bordi nel caso scegliate di mettere uno sfondo colorato, va indicato in percentuale, più è grande
+la percentuale, più sarà il raggio dell'arrotondamento, si consiglia di non esagerare (fino a 10% va bene).
 Tip: per background-color, se vuoi un colore translucente piuttosto che opaco, impostalo usando rgba(R,G,B,opacity), dove 
 opacity = 0 significa che lo sfondo è completamente trasparente mentre opacity = 1 che è opaco.
+
+Ricordate di cancellare gli attributi contenuti nelle parentesi che non vengono utilizzati.
 */
 
 #scena{
     border: ;
     background-color: ;
+    border-radius: ;
 }
 
 #text-holder{
     border: ;
     background-color: ;
+    border-radius: ;
 }
 
 #widget-holder{
     border: ;
     background-color: ;
+    border-radius: ;
 }
 
 #testo{
