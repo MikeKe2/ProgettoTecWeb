@@ -16,7 +16,7 @@ function initialize() {
     $("#titolo").html(storia.nome);
 
     if (storia.css != undefined && storia.css != "")
-        $("#mycss").load("/users/" + storia.autore + "/css/" + storia.css);
+        $("#mycss").attr("href", "/users/" + storia.autore + "/mycss/" + storia.css);
 
     $("#btn").click(function () {
 
