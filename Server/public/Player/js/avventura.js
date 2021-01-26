@@ -30,6 +30,10 @@ function initialize() {
         $("#mycss").load("/users/" + storia.autore + "/css/" + storia.css);
 
     $("#btn").click(function () {
+
+        if(storia.scene[scena_corr].widget == "canvas.html")
+            $("#result").attr('value', document.getElementById('sketchpad').toDataURL());
+
         checkResult(scena_corr == 0 || storia.scene[scena_corr].widget == "" || storia.scene[scena_corr].widget == "image.html" ? null : document.getElementById("result").value);
     })
 
