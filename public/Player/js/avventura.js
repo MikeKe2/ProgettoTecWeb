@@ -59,7 +59,7 @@ function checkResult(result) {
         if (storia.scene[scena_corr].valutatore == "false") {
             storia.scene[scena_corr].risposte.forEach(risposta => {
 
-                if (result == risposta.valore && parseInt(risposta.maxTime) != 0 && time <= parseInt(risposta.maxTime) && pointsAdded == 0) {
+                if (result.toLowerCase() == risposta.valore.toLowerCase() && parseInt(risposta.maxTime) != 0 && time <= parseInt(risposta.maxTime) && pointsAdded == 0) {
                     pointsAdded = parseInt(risposta.points);
                     punteggio += pointsAdded;
                     scena = parseInt(risposta.to[gruppo]);
@@ -67,7 +67,7 @@ function checkResult(result) {
                     sessionStorage.setItem("Scene", scena);
                     sessionStorage.setItem("Points", punteggio);
                     nextScene(scena);
-                } else if (result == risposta.valore && parseInt(risposta.maxTime) == 0 && pointsAdded == 0) {
+                } else if (result.toLowerCase() == risposta.valore.toLowerCase() && parseInt(risposta.maxTime) == 0 && pointsAdded == 0) {
                     pointsAdded = parseInt(risposta.points);
                     punteggio += pointsAdded;
                     scena = parseInt(risposta.to[gruppo]);
