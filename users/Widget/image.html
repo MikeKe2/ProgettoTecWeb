@@ -1,10 +1,10 @@
-<div id="image-holder" class="container-fluid" style="height: 100%;" class="my-3">
-    <img tabindex="0" id="widget-image" src="" style="display: block; width: auto; height: auto; max-width: 100%; max-height: 90%; margin-left: auto; margin-right: auto;" aria-label="">
+<div id="image-holder" style="max-height: 30vh;" class="my-3">
+    <img tabindex="0" id="widget-image" src="" style="display: block; width: auto; height: auto; max-width: 100%; max-height: 30vh; margin-left: auto; margin-right: auto;" aria-label="">
 </div>
 
 <script>
-    let idImg = document.getElementById("widget-image");
-    idImg.setAttribute("src", "/users/" + storia.autore + "/images/" + storia.scene[scena_corr].img);
-    idImg.setAttribute("aria-label", storia.scene[scena_corr].imgdescription);
-    idImg.setAttribute("alt", storia.scene[scena_corr].imgdescription);
+    var image = document.getElementById("widget-image");
+    image.setAttribute("src", "/users/" + storia.autore + "/images/" + storia.scene[scena_corr].img);
+    image.setAttribute("aria-label", storia.scene[scena_corr].imgdescription);
+    image.setAttribute("alt", storia.scene[scena_corr].imgdescription);
 </script>
