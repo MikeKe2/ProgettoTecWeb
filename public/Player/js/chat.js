@@ -36,7 +36,6 @@ var $messages = $(".messages"); // Messages area
 var $inputMessage = $("#inputMessage"); // Input message input box
 
 var $loginPage = $(".login.page"); // The login page
-var $chatPage = $(".chat.page"); // The chatroom page
 var $adventurePage = $(".adventure.page"); // The adventure page
 //var $groupPage = $('.group.page'); // The group selection page
 
@@ -200,7 +199,7 @@ $(function () {
     $window.keydown((event) => {
         // When the client hits ENTER on their keyboard
         if (event.which === 13) {
-            if (username && $chatPage.is(":visible") && $inputMessage.val()) {
+            if (username && $('#modalChat').is(':visible') && $inputMessage.val()) {
                 sendMessage();
                 socket.emit("stop typing");
                 typing = false;
@@ -245,11 +244,10 @@ $(function () {
     socket.on("new message", (data) => {
         ArrayofMessages.newMessage(data.username, data.id, username, data.message);
         //we just check if the page is visibile, because users have only one chat
-        if ($chatPage.is(":visible")) {
+        if ($('#modalChat').is(':visible'))
             addChatMessage(data);
-        } else {
-            var element = document.getElementById("chatWithEvaluator");
-            element.className = element.className.replace(/\bbtn-outline-info\b/g, "");
+        else {
+            $("chatWithEvaluator").removeClass("btn-outline-info");
             $('#chatWithEvaluator').addClass('btn-outline-warning');
         }
     });

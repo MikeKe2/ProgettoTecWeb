@@ -12,10 +12,10 @@ let avventura = new Vue({
 	},
 	mounted: async function () {
 		$.getJSON(urlStoria, function (data) {
-			this.scene = data.scene;
-			this.nowOn = 0;
-			this.storia = data;
-			$("#storyName").html(this.storia.nome);
+			avventura.scene = data.scene;
+			avventura.nowOn = 0;
+			avventura.storia = data;
+			$("#storyName").html(avventura.storia.nome);
 		})
 		.fail(() => {
 			alert("Mi dispiace ma la storia che hai richiesto non è stata trovata, ora verrai reindirizzato alla pagina con tutte le storie disponibili");
@@ -120,10 +120,10 @@ async function waitEvaluator(_callback) {
 
 $(() => {
 	$("nav").hide();
-	$usernameInput.focus();
+	$(".usernameInput").focus();
 
 	$('#login').click(() => {
-		$currentInput.focus();
+		$(".usernameInput").focus();
 	});
 
 	$(".valutatore").click(() => {

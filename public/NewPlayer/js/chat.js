@@ -46,16 +46,16 @@ var username;
 var connected = false;
 var typing = false;
 var lastTypingTime;
-var $currentInput = $usernameInput.focus();
 var ArrayofMessages = new Messages();
 
 $(function () {
 
     $('#modalChat').on('shown.bs.modal', () => {
-        $('#chatWithEvaluator').removeClass('btn-outline-warning');
-        $('#chatWithEvaluator').addClass('btn-outline-info');
+        $(".messages").html("");
+        $('#chatEvaluator').removeClass('btn-info');
+        $('#chatEvaluator').addClass('btn-outline-info');
         $inputMessage.focus();
-        for (var i = 0; i < ArrayofMessages.numberOfMessages; i++)
+        for (var i = 0; i < ArrayofMessages.numberOfMessages(); i++)
             addChatMessage(ArrayofMessages.messages[i]);
     });
 
@@ -231,12 +231,11 @@ $(function () {
     socket.on("new message", (data) => {
         ArrayofMessages.newMessage(data.username, data.id, username, data.message);
         //we just check if the page is visibile, because users have only one chat
-        if ($chatPage.is(":visible")) {
+        if ($('#modalChat').is(':visible')) {
             addChatMessage(data);
         } else {
-            var element = document.getElementById("chatWithEvaluator");
-            element.className = element.className.replace(/\bbtn-outline-info\b/g, "");
-            $('#chatWithEvaluator').addClass('btn-outline-warning');
+            $("#chatEvaluator").removeClass('btn-outline-info');
+            $('#chatEvaluator').addClass('btn-info');
         }
     });
 

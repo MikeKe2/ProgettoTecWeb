@@ -38,7 +38,7 @@
 
 				<button type="button" id="helpRequested" class="btn btn-outline-danger m-1">Aiuto</button>
 
-				<button type="button" class="btn btn-outline-info m-1" data-toggle="modal"
+				<button type="button" id="chatEvaluator" class="btn btn-outline-info m-1" data-toggle="modal"
 					data-target=".modal">Chat</button>
 			</form>
 		</div>
@@ -67,7 +67,7 @@
 						<form>
 							<div class="form-group">
 								<div class="chatArea" aria-live="polite">
-									<ul class="messages" >
+									<ul class="messages">
 									</ul>
 								</div>
 							</div>
@@ -81,7 +81,7 @@
 			</div>
 		</div>
 	</div>
-	<div id="avventura" class="col-lg-4 col-md-8 col-sm-12 mx-auto" >
+	<div id="avventura" class="col-lg-4 col-md-8 col-sm-12 mx-auto">
 		<div id="description" class="storyblock text-justify pt-1" aria-live="polite">
 			{{scene.length>0 ? scene[nowOn].descrizione}}
 		</div>
@@ -89,7 +89,7 @@
 			mamma
 		</div>
 		<div id="next" class="d-flex justify-content-center storyblock">
-			<button id="nextBtn" class= "btn btn-outline-secondary m-1" v-on:click="Next()">Avanti</button>
+			<button id="nextBtn" class="btn btn-outline-secondary m-1" v-on:click="Next()">Avanti</button>
 		</div>
 	</div>
 	<!--Modal per Valutatore-->
@@ -113,7 +113,16 @@
 					</div>
 					<div class="modal-footer">
 						<button type="submit" class="btn btn-outline-success">Login</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
 <script>
 	var urlStoria = "<%= urlStoria %>";
 </script>
+<script src="/public/NewPlayer/js/chat.js"></script>
 <script src="/public/NewPlayer/js/avventura.js"></script>
+
+</html>

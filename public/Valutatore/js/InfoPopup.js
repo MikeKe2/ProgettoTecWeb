@@ -59,7 +59,7 @@ function showToast(i, data) {
 toastr.options.preventDuplicates = true;
 toastr.options.closeButton = true;
 toastr.options.progressBar = true;
-toastr.options.positionClass = 'toast-top-right';
+toastr.options.positionClass = 'toast-top-left';
 toastr.options.timeOut = 2500;
 toastr.options.fadeOut = 150;
 toastr.options.fadeIn = 150;
