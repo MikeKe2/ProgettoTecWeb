@@ -21,8 +21,14 @@ const {
 app.use(fileUpload());
 
 var bodyParser = require('body-parser');
-app.use(bodyParser.json({limit: '50mb'}));
-app.use(bodyParser.urlencoded({limit: '50mb', extended: true, parameterLimit: 1000000}));
+app.use(bodyParser.json({
+  limit: '50mb'
+}));
+app.use(bodyParser.urlencoded({
+  limit: '50mb',
+  extended: true,
+  parameterLimit: 1000000
+}));
 
 var server = http.createServer(app);
 var io = require('socket.io')(server);
@@ -110,7 +116,9 @@ app.get("/avventure", function (req, res) {
 
 //LOGIN
 app.get("/login", function (req, res) {
-  res.render("login",{user: "none"});
+  res.render("login", {
+    user: "none"
+  });
 });
 
 app.post(
@@ -119,7 +127,7 @@ app.post(
     failureRedirect: "/login"
   }),
   function (req, res) {
-    res.redirect("/login");
+    res.redirect("/index");
   }
 );
 
@@ -134,8 +142,10 @@ app.post("/newUser", function (req, res) {
       "displayName": req.body.newusername
     })
     fs.writeFile(__dirname + '/db/UsersData.json', JSON.stringify(json), function (err) {
-      if (err){ 
-        res.render("login", {user: "errore"});
+      if (err) {
+        res.render("login", {
+          user: "errore"
+        });
         throw err;
       };
       console.log('Saved!');
@@ -165,7 +175,9 @@ app.post("/newUser", function (req, res) {
           console.log('Success');
         }
       });
-      res.render("login", {user: req.body.newusername});
+      res.render("login", {
+        user: req.body.newusername
+      });
     })
   })
 

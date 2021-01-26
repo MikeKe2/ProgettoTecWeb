@@ -75,6 +75,7 @@ ul {
 .message {
   display: flex;
   justify-content: flex-start;
+  word-break: break-word;
 }
 
 .message.evaluator{

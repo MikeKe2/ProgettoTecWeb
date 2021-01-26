@@ -14,18 +14,16 @@
 <body>
     <div class="pages">
         <!-- CHAT PAGE-->
-        <div class="chat page">
-            <div class="container-fluid">
-                <nav class="navbar navbar-light bg-light">
-                    <button id="exitChatPage" class="btn btn-outline-secondary">CLOSE</button>
-                    <a class="navbar-brand mb-0 h1" id="chatUser"></a>
-                </nav>
-                <div class="chatArea">
-                    <ul class="messages"></ul>
-                </div>
-                <input id="inputMessage" type="text" aria-label="chat text input" class="form-control fixed-bottom"
-                    placeholder="Scrivi qui..." />
+        <div class="chat page container-fluid ">
+            <nav class="navbar navbar-light bg-light">
+                <button id="exitChatPage" class="btn btn-outline-secondary">CLOSE</button>
+                <a class="navbar-brand mb-0 h1" id="chatUser"></a>
+            </nav>
+            <div class="chatArea">
+                <ul class="messages"></ul>
             </div>
+            <input id="inputMessage" type="text" aria-label="chat text input" class="form-control fixed-bottom"
+                placeholder="Scrivi qui..." />
         </div>
         <!-- LOGIN PAGE-->
         <div class="login page">
@@ -36,14 +34,13 @@
             </div>
         </div>
         <!-- GROUP PAGE-->
-        <div class="group page">
-            <div class="container">
-                <ul id="groupPage" class="list-group">
-                </ul>
-            </div>
+        <div class="group page container">
+            <ul id="groupPage" class="list-group">
+            </ul>
         </div>
         <!-- ADVENTURE PAGE-->
         <div class="adventure page">
+            <!--navbar-->
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <a class="navbar-text" id='titolo' href="#"></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
@@ -56,14 +53,16 @@
                         </li>
                     </ul>
                     <form class="form-inline my-2 my-lg-0">
-                        <button id="MuteMusic" class="btn btn-warning m-2 ml-sm-2"> MUTE MUSIC </button>
+                        <button id="MuteMusic" class="btn btn-warning m-2 ml-sm-2 animatebutton"> MUTE MUSIC </button>
                         <button id="helpRequested" class="btn btn-danger mr-sm-2"> HELP </button>
                         <button id="chatWithEvaluator" class="btn btn-outline-info m-2 my-sm-0"> Chat </button>
                     </form>
                 </div>
             </nav>
+            <!--lato avventura-->
             <div class="container-fluid">
                 <div id="avventura" class="row justify-content-center h-75">
+                    <!--lato musica-->
                     <div id="musica">
                         <audio id="player" loop="true">
                             <!--  <embed id="track" loop="true" hidden="true" autostart="true">-->
@@ -72,13 +71,13 @@
                     </div>
                     <!-- SCENA -->
                     <style id="mycss">
-                        #testo{
+                        #testo {
                             background-color: rgba(61, 61, 66, 0.8);
-                            color:white;
+                            color: white;
                             border-radius: 10%;
-                        } 
+                        }
                     </style>
-                    <div class = "row" >
+                    <div class="row">
                         <div id="scena" class="col-12 col-md-6 h-100">
                             <div class="row justify-content-center h-100" id="text-holder">
                                 <div class="col-10 col-md-8 my-auto">
@@ -88,13 +87,15 @@
                             <div class="col-12 col-md-6 h-100">
                                 <div id="widget-holder" class="row justify-content-center h-100">
                                     <div class="col-10 col-md-8 my-auto">
-                                        <div id="alert" role="alert" style="display: none;" aria-label="risposta errata">Risposta errata!</div>
-                                        <div id="widget" style="max-height: 50vh;"></div>
+                                        <div id="alert" role="alert" style="display: none;"
+                                            aria-label="risposta errata">Risposta errata!</div>
+                                        <div id="widget" style="max-height: 30vh;"></div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-12 col-md-6 h-100" id="btn-holder">
-                                <button id="btn" class="mt-3 btn btn-secondary" aria-label="prossima pagina">next</button>
+                                <button id="btn" class="mt-3 btn btn-secondary"
+                                    aria-label="prossima pagina">next</button>
                             </div>
                         </div>
                     </div>
@@ -139,6 +140,7 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script src="/public/Player/js/avventura.js"></script>
+    <script src="/public/Player/js/chat.js"></script>
 </body>
 
 <script>
