@@ -214,6 +214,7 @@ div.eval:before {
 #widget {
     max-height: 45vh;
     overflow: hidden;
+    min-height: 45vh;
 }
 
 #next {
