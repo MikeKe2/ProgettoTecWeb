@@ -27,22 +27,25 @@ ul {
 
 #MuteMusic,
 #helpRequested,
-#chatEvaluator{
+#chatEvaluator {
     text-align: center;
     vertical-align: middle;
 }
 
-.bi{
+.bi {
     font-size: 1.2rem;
 }
 
-#button-addon2 .bi{
+#button-addon2 .bi {
     font-size: 1rem;
 }
 
 #avventura,
 .visibility {
     display: none;
+    /*position: absolute !important;
+   top: -9999px !important;
+   left: -9999px !important;*/
 }
 
 /* Login Page */
@@ -96,15 +99,19 @@ ul {
 
 /*Loading Gif*/
 
+#loading .container .row {
+    color: whitesmoke;
+}
+
 .loading {
     width: 100%;
     height: 100%;
     top: 0;
     left: 0;
     position: fixed;
-    opacity: 0.7;
+    opacity: 1;
     background-color: rgba(0, 0, 0, 0.8);
-    z-index: 999;
+    z-index: 9999;
     text-align: center;
 }
 
@@ -208,18 +215,18 @@ div.eval:before {
     height: 5%;
 }
 
-
 @media only screen and (max-width: 600px) {
     #avventura {
-        overflow-y:auto;
+        overflow-y: auto;
         -webkit-overflow-scrolling: touch;
     }
 }
 
 @media only screen and (min-width: 600px) {
-    body{
+    body {
         overflow-y: hidden;
     }
+
     #avventura {
         height: 900px;
     }

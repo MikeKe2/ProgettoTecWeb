@@ -27,7 +27,7 @@
 
 <body>
 	<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-		<a class="navbar-brand" id="storyName" href="/">Story Name</a>
+		<a class="navbar-text" id="storyName">Story Name</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
 			aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
@@ -40,15 +40,15 @@
 			</ul>
 			<form class="form-inline my-2 my-lg-0">
 
-				<button type="button" id="MuteMusic" class="btn btn-outline-warning m-1">
+				<button type="button" id="MuteMusic" class="btn btn-outline-warning m-1" aria-label="Muta musica">
 					<i class="bi bi-volume-up-fill"></i>
 				</button>
 
-				<button type="button" id="helpRequested" class="btn btn-outline-danger m-1">
+				<button type="button" id="helpRequested" class="btn btn-outline-danger m-1" aria-label="Chiedi aiuto">
 					<i class="bi bi-question-square-fill"></i></button>
 
-				<button type="button" id="chatEvaluator" class="btn btn-outline-info m-1" data-toggle="modal"
-					data-target=".modal">
+				<button type="button" id="chatEvaluator" class="btn btn-outline-info m-1" aria-label="apri chat"
+					data-toggle="modal" data-target=".modal">
 					<i class="bi bi-chat-left-text-fill"></i></button>
 			</form>
 		</div>
@@ -76,7 +76,7 @@
 					<div class="modal-body">
 						<form>
 							<div class="form-group">
-								<div class="chatArea" aria-live="polite">
+								<div class="chatArea" tabindex="2" aria-live="polite">
 									<ul class="messages">
 									</ul>
 								</div>
@@ -85,10 +85,11 @@
 					</div>
 					<div class="modal-footer">
 						<div class="input-group">
-							<input id="inputMessage" type="text" class="form-control" aria-label="Input text for chat"
+							<input id="inputMessage" type="text" class="form-control" aria-label="scrivi messaggio"
 								placeholder="Scrivi qui..." />
 							<div class="input-group-append">
-								<button class="btn btn-outline-secondary" type="button" id="button-addon2">
+								<button class="btn btn-outline-secondary" type="button" id="button-addon2"
+									aria-label="invia messaggio">
 									<i class="bi bi-arrow-right-square-fill"></i>
 								</button>
 							</div>
@@ -129,11 +130,20 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="submit" class="btn btn-outline-success"><i class="bi bi-person-check-fill"></i></button>
+						<button type="submit" class="btn btn-outline-success"><i
+								class="bi bi-person-check-fill"></i></button>
 					</div>
 				</form>
 			</div>
 		</div>
+	</div>
+	<div class="loading visibility" id="loading" aria-live="polite">
+		<div class="container d-flex h-75 justify-content-center">
+			<label tabindex="1" for="loader" class="row lead justify-content-center align-self-center">
+				In attesa di risposta dal Valutatore...
+			</label>
+		</div>
+		<div id="loader" class="loader"></div>
 	</div>
 </body>
 <script>

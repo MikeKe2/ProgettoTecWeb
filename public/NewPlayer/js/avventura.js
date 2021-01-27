@@ -12,28 +12,29 @@ let avventura = new Vue({
 	},
 	mounted: async function () {
 		$.getJSON(urlStoria, function (data) {
-			avventura.scene = data.scene;
-			avventura.nowOn = 0;
-			avventura.storia = data;
-			$("#storyName").html(avventura.storia.nome);
-		})
-		.fail(() => {
-			alert("Mi dispiace ma la storia che hai richiesto non è stata trovata, ora verrai reindirizzato alla pagina con tutte le storie disponibili");
-			window.location.href = "https://site181993.tw.cs.unibo.it/avventure";
-		})
-		.done(() => {
-			if (sessionStorage.getItem('Username') && sessionStorage.getItem('Scene')) {
-				$("#login").fadeOut();
-				$("#login").off("click");
-				$("#avventura").show();
-				$("nav").show();
-				username = sessionStorage.getItem('Username');
-				socket.emit("add user", username, (avventura.storia.nome));
-			}
-		});
+				this.scene = data.scene;
+				this.nowOn = 0;
+				this.storia = data;
+				$("#storyName").html(this.storia.nome);
+				//this.Background(this.storia.autore, this.storia.background);
+			})
+			.fail(() => {
+				alert("Mi dispiace ma la storia che hai richiesto non è stata trovata, ora verrai reindirizzato alla pagina con tutte le storie disponibili");
+				window.location.href = "https://site181993.tw.cs.unibo.it/avventure";
+			})
+			.done(() => {
+				if (sessionStorage.getItem('Username') && sessionStorage.getItem('Scene')) {
+					$("#login").fadeOut();
+					$("#login").off("click");
+					$("#avventura").show();
+					$("nav").show();
+					username = sessionStorage.getItem('Username');
+					socket.emit("add user", username, (avventura.storia.nome));
+				}
+			});
 
 	},
-	methods: {	
+	methods: {
 		Next: function () {
 			let to = this.Evaluate()
 			if (to) {
@@ -74,6 +75,21 @@ let avventura = new Vue({
 			});
 		},
 
+		/*Dubito sinceramente funzioni*/
+		Background: function (autore, background) {
+			$.get(`/users/${autore}/images/${background}/`, (data) => {
+					$("#avventura").css({
+						'background-image': data,
+						'background-repeat': 'no-repeat',
+						'background-position': 'center'
+					});
+				})
+				.fail(function (err) {
+					console.log(err);
+				});
+		},
+
+
 		Evaluate: function () {
 			let finalTime = end(this.time);
 			if (this.scene[this.nowOn].valutatore == "true") {
@@ -88,8 +104,10 @@ let avventura = new Vue({
 				return false;
 			}
 		}
+
 	}
 });
+
 
 function start() {
 	return new Date();
