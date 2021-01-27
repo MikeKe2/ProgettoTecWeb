@@ -131,10 +131,10 @@
     lever1 = document.getElementById("toggle-b");
     lever2 = document.getElementById("toggle-d");
     lever3 = document.getElementById("toggle-f");
-    result = document.getElementById("result");
+    avventura.risposta_data = "000";
 
     function updateResult() {
-        result.value = ((!lever1.checked) | 0).toString() + ((!lever2.checked) | 0).toString() + ((!lever3.checked) | 0).toString();
-        console.log(result.value);
+        avventura.risposta_data = ((!lever1.checked) | 0).toString() + ((!lever2.checked) | 0).toString() + ((!lever3.checked) | 0).toString();
+        console.log("lever "+avventura.risposta_data);
     }
 </script>
