@@ -39,16 +39,24 @@ let avventura = new Vue({
 		Next: function () {
 			if(this.nowOn == 0){
 				this.nowOn = this.scene[this.nowOn].risposte[parseInt(this.gruppo)].to[parseInt(this.gruppo)];
+				if(avventura.storia.scene[this.nowOn].tracciaAudio != ""){
+					// ho provato con vue ma non sono riuscita a farlo andare :c però funziona
+					$("#track").attr("src", `/media/${avventura.storia.creatore}/audios/${avventura.storia.scene[this.nowOn].tracciaAudio}`);
+					player = $("#player");
+					player[0].pause();
+					player[0].load();
+					player[0].oncanplaythrough = player[0].play();
+				}
 				this.Load(this.scene[this.nowOn]);
 				return;
 			}
 			let to = this.Evaluate();
-			console.log(to);
 			if (to) {
 				this.nowOn = to.to[parseInt(this.gruppo)];
 				this.punti += parseInt(to.punti);
-				this.musica = this.scene[this.nowOn].tracciaAudio;
-				if(this.musica != ""){
+				if(avventura.storia.scene[this.nowOn].tracciaAudio != ""){
+					// ho provato con vue ma non sono riuscita a farlo andare :c però funziona
+					$("#track").attr("src", `/media/${avventura.storia.creatore}/audios/${avventura.storia.scene[this.nowOn].tracciaAudio}`);
 					player = $("#player");
 					player[0].pause();
 					player[0].load();
@@ -183,13 +191,15 @@ $(() => {
 	$("#MuteMusic").click((e) => {
 		e.preventDefault();
 		try {
-			if (!player[0].paused) {
-				player[0].pause();
-				player[0].currentTime = 0;
+			if (!player[0].muted) {
+				player[0].muted = true;
+				/*player[0].pause();
+				player[0].currentTime = 0;*/
 				$("#MuteMusic").html("<i class='bi bi-volume-mute-fill'></i>");
 			} else {
-				player[0].load();
-				player[0].oncanplaythrough = player[0].play();
+				player[0].muted = false;
+				/*player[0].load();
+				player[0].oncanplaythrough = player[0].play();*/
 				$("#MuteMusic").html("<i class='bi bi-volume-up-fill'></i>");
 			}
 		} catch (error) {
