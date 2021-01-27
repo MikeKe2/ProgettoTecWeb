@@ -66,7 +66,8 @@ let avventura = new Vue({
 				this.Load(this.scene[this.nowOn]);
 				this.time = start();
 			} else {
-				$('#nextBtn').popover({trigger: 'focus'});
+				//TODO COMMENTATO PERCHÈ VIENE RICHIAMATO ANCHE QUANDO NON DOVREBBE
+				//$('#nextBtn').popover({trigger: 'focus'});
 			}
 		},
 
@@ -127,8 +128,6 @@ let avventura = new Vue({
 
 	}
 });
-let i = null;
-
 function start() {
 	return new Date();
 };
