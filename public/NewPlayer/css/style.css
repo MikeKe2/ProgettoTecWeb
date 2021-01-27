@@ -196,38 +196,47 @@ div.eval:before {
 
 /*Storia*/
 #avventura {
-    background: yellow;
     border-radius: 15px;
     padding: 2em;
 }
 
 #description {
-    height: 40%;
+    max-height: 40vh;
     overflow-y: auto;
+    background-color: rgba(100, 100, 100, 0.7);
+    border-radius: 6px;
+    color: #f3f3f3;
+    padding: 2em;
+    text-align: justify;
+
 }
 
 #widget {
-    background-color: green;
-    height: 55%;
+    max-height: 40vh;
 }
 
 #next {
-    height: 5%;
+    /* margin-left: auto; */
+    /* width: auto; */
 }
 
+body {
+    overflow-y: hidden;
+}
+
+#avventura {
+    height: 90vh;
+}
 @media only screen and (max-width: 600px) {
+    body{
+        overflow-y: auto;
+    }
     #avventura {
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
     }
-}
+    #description{
+        padding: 1em;
 
-@media only screen and (min-width: 600px) {
-    body {
-        overflow-y: hidden;
-    }
-
-    #avventura {
-        height: 900px;
     }
 }

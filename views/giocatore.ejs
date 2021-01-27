@@ -100,14 +100,32 @@
 		</div>
 	</div>
 	<div id="avventura" class="col-lg-4 col-md-8 col-sm-12 mx-auto">
-		<div id="description" class="storyblock text-justify pt-1" aria-live="polite">
-			{{scene.length>0 ? scene[nowOn].descrizione}}
+		<div id="musica">
+			<audio id="player" loop="true">
+				<source id="track" src="{{this.musica}}" type="audio/mp3">
+			</audio>
 		</div>
-		<div id="widget" class="storyblock">
-			mamma
-		</div>
-		<div id="next" class="d-flex justify-content-center storyblock">
-			<button id="nextBtn" class="btn btn-outline-secondary m-1" v-on:click="Next()">Avanti</button>
+		<div v-if="storia != null" class="d-flex flex-column justify-content-between h-100">
+			<div class="d-flex flex-column justify-content-around h-100">
+				<div id="description" v-if = "nowOn == 0" class="storyblock text-justify " aria-live="polite" tabindex="0">
+					<p>{{storia.nome}}</p>
+					<p>{{storia.categoria}}</p>
+					<p>{{storia.accessibile}}</p>
+					<p>{{storia.target}}</p>
+				</div>
+				<div id="description" v-else class="text-justify" aria-live="polite">
+					{{scene[nowOn].descrizione}}
+				</div>
+				<div id="widget" v-if = "scene[nowOn].widget && scene[nowOn].widget!=''" class="d-flex justify-content-center" v-html="widget"></div>
+			</div>
+			<div id="next" class="align-self-end d-flex justify-content-center mx-auto">
+				<button id="nextBtn" class="btn btn-primary" v-on:click="Next()" 
+				data-trigger="focus"
+				data-placement="top"
+				data-content="Risposta non valida, prova ancora.">
+					Avanti
+				</button>
+			</div>
 		</div>
 	</div>
 	<!--Modal per Valutatore-->

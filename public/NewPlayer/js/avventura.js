@@ -8,15 +8,16 @@ let avventura = new Vue({
 		gruppo: 0,
 		punti: 0,
 		widget: null,
-		risposta_data: null
+		risposta_data: null,
+		musica: ""
 	},
 	mounted: async function () {
 		$.getJSON(urlStoria, function (data) {
-				this.scene = data.scene;
-				this.nowOn = 0;
-				this.storia = data;
-				$("#storyName").html(this.storia.nome);
-				//this.Background(this.storia.autore, this.storia.background);
+				avventura.scene = data.scene;
+				avventura.nowOn = 0;
+				avventura.storia = data;
+				$("#storyName").html(avventura.storia.nome);
+				avventura.Background(avventura.storia.creatore, avventura.storia.background);
 			})
 			.fail(() => {
 				alert("Mi dispiace ma la storia che hai richiesto non è stata trovata, ora verrai reindirizzato alla pagina con tutte le storie disponibili");
@@ -36,38 +37,37 @@ let avventura = new Vue({
 	},
 	methods: {
 		Next: function () {
-			let to = this.Evaluate()
+			if(this.nowOn == 0){
+				this.nowOn = this.scene[this.nowOn].risposte[parseInt(this.gruppo)].to[parseInt(this.gruppo)];
+				this.Load(this.scene[this.nowOn]);
+				return;
+			}
+			let to = this.Evaluate();
+			console.log(to);
 			if (to) {
-				this.nowOn = to.to[this.gruppo];
-				this.punti += to.punti;
+				this.nowOn = to.to[parseInt(this.gruppo)];
+				this.punti += parseInt(to.punti);
+				this.musica = this.scene[this.nowOn].tracciaAudio;
+				if(this.musica != ""){
+					player = $("#player");
+					player[0].pause();
+					player[0].load();
+					player[0].oncanplaythrough = player[0].play();
+				}
 				this.widget = null;
 				this.Load(this.scene[this.nowOn]);
 				this.time = start();
 			} else {
-				//risposta errata
+				$('#nextBtn').popover({trigger: 'focus'});
 			}
 		},
 
 		Load: function (scena) {
-			$.Ajax({
-				method: 'get',
-				url: '/media/' + this.storia.creatore + '/widget/' + scena.widget,
+			$.ajax({
+				url: '/media/' + this.storia.creatore + '/widgets/' + scena.widget,
 				success: function (data) {
-					this.widget = data;
-					$("#widget-image").attr("alt", scena.imgdescription);
-					$("#widget-image").attr("aria-label", scena.imgdescription);
-					if (scena.widget = "image.html") {
-						$.Ajax({
-							method: 'get',
-							url: '/media/' + this.storia.creatore + '/images/' + scena.img,
-							success: function (img) {
-								$("#widget-image").attr("src", img);
-							},
-							error: function (err) {
-								console.log(err);
-							}
-						});
-					}
+					avventura.widget = scena.widget != "image.html" ? data : 
+						data.replace("$SRC", '/media/' + avventura.storia.creatore + '/images/' + scena.img).replaceAll("$DESC", scena.imgdescription);
 				},
 				error: function (err) {
 					console.log(err);
@@ -75,39 +75,51 @@ let avventura = new Vue({
 			});
 		},
 
-		/*Dubito sinceramente funzioni*/
-		Background: function (autore, background) {
-			$.get(`/users/${autore}/images/${background}/`, (data) => {
-					$("#avventura").css({
-						'background-image': data,
-						'background-repeat': 'no-repeat',
-						'background-position': 'center'
-					});
-				})
-				.fail(function (err) {
-					console.log(err);
-				});
+		Background: function (creatore, background) {
+			if(background=="")
+				return;
+			$("#avventura").css({
+				'background-image': `url(/users/${creatore}/images/${background})`,
+				'background-repeat': 'no-repeat',
+				'background-position': 'center'
+			});
 		},
-
-
 		Evaluate: function () {
+			this.risposta_data = $("#result").val();
 			let finalTime = end(this.time);
 			if (this.scene[this.nowOn].valutatore == "true") {
-				socket.emit("answerToEvaluator", username, avventura.storia.nome, (risposta_data));
+				socket.emit("answerToEvaluator", username, avventura.storia.nome, (this.risposta_data));
 				return waitEvaluator();
 			} else {
-				for (risposta in this.scene[this.nowOn].risposte) {
-					if (risposta.valore == this.risposta_data && finalTime < risposta.maxTime) {
-						return risposta;
+				if(!this.widget || this.scene[this.nowOn].widget == "image.html"){
+					return this.scene[this.nowOn].risposte[0];
+				}
+				let risposta = null;
+
+				for (let i = 0; i < this.scene[this.nowOn].risposte.length; i++) {
+					if (this.scene[this.nowOn].risposte[i].valore.toLowerCase() == this.risposta_data.toLowerCase() && (finalTime < parseInt(this.scene[this.nowOn].risposte[i].maxTime))){
+						if(!risposta || risposta.maxTime<this.scene[this.nowOn].risposte[i].maxTime)
+							risposta = this.scene[this.nowOn].risposte[i];
 					}
 				}
-				return false;
+
+				if(risposta)
+					return risposta;
+
+				for (let i = 0; i < this.scene[this.nowOn].risposte.length; i++) {
+					if (this.scene[this.nowOn].risposte[i].valore.toLowerCase() == this.risposta_data.toLowerCase() && (parseInt(this.scene[this.nowOn].risposte[i].maxTime))==0){
+						if(!risposta || risposta.maxTime<this.scene[this.nowOn].risposte[i].maxTime)
+							risposta = this.scene[this.nowOn].risposte[i];
+					}
+				}
+
+				return risposta;
 			}
 		}
 
 	}
 });
-
+let i = null;
 
 function start() {
 	return new Date();
