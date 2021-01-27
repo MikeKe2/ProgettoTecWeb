@@ -1,4 +1,8 @@
 <div id="number">
+    <div>
+        <label for="result">Numero inserito:</label>
+        <input type="text" id="result" disabled class="form-control">
+    </div>
     <div id="numpad" class="my-3">
         <div class="row d-flex justify-content-center">
             <button class="col-2 col-xl-1 my-1 mr-1 btn btn-secondary" style="text-align: center;" onclick="add(1)">1</button>
@@ -27,12 +31,14 @@
         var text = document.getElementById("result").value;
         document.getElementById("result").value = text + n.toString();
         document.getElementById("textarea-holder").setAttribute("aria-label", text + n.toString());
+        avventura.risposta_data = text + n.toString();
     }
 
     function del(){
         var text = document.getElementById("result").value;
         text = text.slice(0, text.length-1);
         document.getElementById("result").value = text;
+        avventura.risposta_data = text + n.toString();
         if(text.length < 1)
             document.getElementById("textarea-holder").setAttribute("aria-label", "risultato");
         else
