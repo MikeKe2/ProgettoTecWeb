@@ -107,7 +107,8 @@
 		</div>
 		<div v-if="storia != null" class="d-flex flex-column justify-content-between h-100">
 			<div class="d-flex flex-column justify-content-around h-100">
-				<div id="description" v-if = "nowOn == 0" class="storyblock text-justify " aria-live="polite" tabindex="0">
+				<div id="description" v-if="nowOn == 0" class="storyblock text-justify " aria-live="polite"
+					tabindex="0">
 					<p>{{storia.nome}}</p>
 					<p>{{storia.categoria}}</p>
 					<p>{{storia.accessibile}}</p>
@@ -116,13 +117,12 @@
 				<div id="description" v-else class="text-justify" aria-live="polite">
 					{{scene[nowOn].descrizione}}
 				</div>
-				<div id="widget" v-if = "scene[nowOn].widget && scene[nowOn].widget!=''" class="d-flex justify-content-center" v-html="widget"></div>
+				<div id="widget" v-if="scene[nowOn].widget && scene[nowOn].widget!=''"
+					class="d-flex justify-content-center" v-html="widget"></div>
 			</div>
 			<div id="next" class="align-self-end d-flex justify-content-center mx-auto">
-				<button id="nextBtn" class="btn btn-primary" v-on:click="Next()" 
-				data-trigger="focus"
-				data-placement="top"
-				data-content="Risposta non valida, prova ancora.">
+				<button id="nextBtn" class="btn btn-primary" v-on:click="Evaluate()" data-trigger="focus"
+					data-placement="top" data-content="Risposta non valida, prova ancora.">
 					Avanti
 				</button>
 			</div>
@@ -163,6 +163,11 @@
 		</div>
 		<div id="loader" class="loader"></div>
 	</div>
+	<!--<div class="d-flex justify-content-center">
+		<div class="spinner-border text-primary" role="status">
+			<span class="sr-only">Loading...</span>
+		</div>
+	</div>-->
 </body>
 <script>
 	var urlStoria = "<%= urlStoria %>";

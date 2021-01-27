@@ -62,7 +62,7 @@ socket.on("login", () => {
 // Whenever the server emits 'new message', update the chat body
 socket.on("new message", (data) => {
     ArrayofMessages.newMessage(data.username, data.id, "valutatore", data.message);
-    if (currentTargetUser == data.username && $chatPage.is(":visible"))
+    if ($('#modalChat').is(':visible'))
         addChatMessage(data);
     else
         showToast(2, data);

@@ -17,11 +17,11 @@ class Messages {
         this.messages.push(m);
         return m;
     }
-    get allMessages() {
+    allMessages() {
         return this.messages;
     }
     // this could include summary stats like average score, etc. For simplicy, just the count for now
-    get numberOfMessages() {
+    numberOfMessages() {
         return this.messages.length;
     }
 };

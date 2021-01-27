@@ -31,30 +31,22 @@ let avventura = new Vue({
 					$("nav").show();
 					username = sessionStorage.getItem('Username');
 					socket.emit("add user", username, (avventura.storia.nome));
+
+					avventura.nowOn = sessionStorage.getItem("Scene");
+					avventura.punti = sessionStorage.getItem("Points");
+					socket.emit("scene", username, avventura.storia.nome, avventura.nowOn);
+					$("nav").show();
+					this.Load(this.scene[avventura.nowOn]);
 				}
 			});
 
 	},
 	methods: {
-		Next: function () {
-			if(this.nowOn == 0){
-				this.nowOn = this.scene[this.nowOn].risposte[parseInt(this.gruppo)].to[parseInt(this.gruppo)];
-				if(avventura.storia.scene[this.nowOn].tracciaAudio != ""){
-					// ho provato con vue ma non sono riuscita a farlo andare :c però funziona
-					$("#track").attr("src", `/media/${avventura.storia.creatore}/audios/${avventura.storia.scene[this.nowOn].tracciaAudio}`);
-					player = $("#player");
-					player[0].pause();
-					player[0].load();
-					player[0].oncanplaythrough = player[0].play();
-				}
-				this.Load(this.scene[this.nowOn]);
-				return;
-			}
-			let to = this.Evaluate();
+		Next: function (to) {
 			if (to) {
 				this.nowOn = to.to[parseInt(this.gruppo)];
 				this.punti += parseInt(to.punti);
-				if(avventura.storia.scene[this.nowOn].tracciaAudio != ""){
+				if (avventura.storia.scene[this.nowOn].tracciaAudio != "") {
 					// ho provato con vue ma non sono riuscita a farlo andare :c però funziona
 					$("#track").attr("src", `/media/${avventura.storia.creatore}/audios/${avventura.storia.scene[this.nowOn].tracciaAudio}`);
 					player = $("#player");
@@ -65,6 +57,11 @@ let avventura = new Vue({
 				this.widget = null;
 				this.Load(this.scene[this.nowOn]);
 				this.time = start();
+
+				sessionStorage.setItem("Scene", this.nowOn);
+				sessionStorage.setItem("Points", this.punti);
+				socket.emit("scene", username, this.storia.nome, this.nowOn);
+
 			} else {
 				//TODO COMMENTATO PERCHÈ VIENE RICHIAMATO ANCHE QUANDO NON DOVREBBE
 				//$('#nextBtn').popover({trigger: 'focus'});
@@ -75,7 +72,7 @@ let avventura = new Vue({
 			$.ajax({
 				url: '/media/' + this.storia.creatore + '/widgets/' + scena.widget,
 				success: function (data) {
-					avventura.widget = scena.widget != "image.html" ? data : 
+					avventura.widget = scena.widget != "image.html" ? data :
 						data.replace("$SRC", '/media/' + avventura.storia.creatore + '/images/' + scena.img).replaceAll("$DESC", scena.imgdescription);
 				},
 				error: function (err) {
@@ -85,7 +82,7 @@ let avventura = new Vue({
 		},
 
 		Background: function (creatore, background) {
-			if(background=="")
+			if (background == "")
 				return;
 			$("#avventura").css({
 				'background-image': `url(/users/${creatore}/images/${background})`,
@@ -93,41 +90,58 @@ let avventura = new Vue({
 				'background-position': 'center'
 			});
 		},
+
 		Evaluate: function () {
+
+			if (this.nowOn == 0) {
+				this.nowOn = this.scene[this.nowOn].risposte[parseInt(this.gruppo)].to[parseInt(this.gruppo)];
+				if (avventura.storia.scene[this.nowOn].tracciaAudio != "") {
+					// ho provato con vue ma non sono riuscita a farlo andare :c però funziona
+					$("#track").attr("src", `/media/${avventura.storia.creatore}/audios/${avventura.storia.scene[this.nowOn].tracciaAudio}`);
+					player = $("#player");
+					player[0].pause();
+					player[0].load();
+					player[0].oncanplaythrough = player[0].play();
+				}
+				this.Load(this.scene[this.nowOn]);
+				return;
+			}
+
 			this.risposta_data = $("#result").val();
 			let finalTime = end(this.time);
 			if (this.scene[this.nowOn].valutatore == "true") {
 				socket.emit("answerToEvaluator", username, avventura.storia.nome, (this.risposta_data));
 				return waitEvaluator();
 			} else {
-				if(!this.widget || this.scene[this.nowOn].widget == "image.html"){
-					return this.scene[this.nowOn].risposte[0];
+				if (!this.widget || this.scene[this.nowOn].widget == "image.html") {
+					this.Next(this.scene[this.nowOn].risposte[0]);
+					return;
 				}
 				let risposta = null;
 
 				for (let i = 0; i < this.scene[this.nowOn].risposte.length; i++) {
-					if (this.scene[this.nowOn].risposte[i].valore.toLowerCase() == this.risposta_data.toLowerCase() && (finalTime < parseInt(this.scene[this.nowOn].risposte[i].maxTime))){
-						if(!risposta || risposta.maxTime<this.scene[this.nowOn].risposte[i].maxTime)
+					if (this.scene[this.nowOn].risposte[i].valore.toLowerCase() == this.risposta_data.toLowerCase() && (finalTime < parseInt(this.scene[this.nowOn].risposte[i].maxTime))) {
+						if (!risposta || risposta.maxTime < this.scene[this.nowOn].risposte[i].maxTime)
 							risposta = this.scene[this.nowOn].risposte[i];
 					}
 				}
 
-				if(risposta)
+				if (risposta)
 					return risposta;
 
 				for (let i = 0; i < this.scene[this.nowOn].risposte.length; i++) {
-					if (this.scene[this.nowOn].risposte[i].valore.toLowerCase() == this.risposta_data.toLowerCase() && (parseInt(this.scene[this.nowOn].risposte[i].maxTime))==0){
-						if(!risposta || risposta.maxTime<this.scene[this.nowOn].risposte[i].maxTime)
+					if (this.scene[this.nowOn].risposte[i].valore.toLowerCase() == this.risposta_data.toLowerCase() && (parseInt(this.scene[this.nowOn].risposte[i].maxTime)) == 0) {
+						if (!risposta || risposta.maxTime < this.scene[this.nowOn].risposte[i].maxTime)
 							risposta = this.scene[this.nowOn].risposte[i];
 					}
 				}
-
-				return risposta;
+				this.Next(risposta);
 			}
 		}
 
 	}
 });
+
 function start() {
 	return new Date();
 };
@@ -147,11 +161,8 @@ async function waitEvaluator(_callback) {
 	$("#loading").show();
 	await socket.on('answerFromEvaluator', (answer_number) => {
 		$("#loading").hide();
-		sessionStorage.setItem("Scene", /*storia.scene[scena_corr].risposte[parseInt(data.message, 10)].to[gruppo]*/ );
-		sessionStorage.setItem("Points", punteggio);
-		return parseint(answer_number.message, 10);
-		/*punteggio += parseInt(storia.scene[scena_corr].risposte[parseInt(data.message, 10)].points, 10);
-		nextScene(storia.scene[scena_corr].risposte[parseInt(data.message, 10)].to[gruppo]);*/
+		let risposta = avventura.scene[avventura.nowOn].risposte[parseInt(answer_number.message, 10)];
+		avventura.Next(risposta);
 	});
 };
 
@@ -169,9 +180,11 @@ $(() => {
 
 		//handle the form's "submit" event
 		$("#loginForm").submit((e) => {
-			e.preventDefault(); //stop a full postback
+			e.preventDefault();
 
 			if ($("#modalpass").val() == avventura.storia.password) {
+				//$('#loginModal').modal('toggle');
+				//$(".spinner.border").show();
 				alert("Access Granted!");
 				window.location.pathname += "/Valutatore";
 			} else
