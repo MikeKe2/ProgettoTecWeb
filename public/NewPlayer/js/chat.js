@@ -52,12 +52,22 @@ $(function () {
 
     $('#modalChat').on('shown.bs.modal', () => {
         $(".messages").html("");
+        $("#inputMessage").val("");
         $('#chatEvaluator').removeClass('btn-info');
         $('#chatEvaluator').addClass('btn-outline-info');
         $inputMessage.focus();
         for (var i = 0; i < ArrayofMessages.numberOfMessages(); i++)
             addChatMessage(ArrayofMessages.messages[i]);
     });
+
+    $("#button-addon2").click((e)=>{
+        e.preventDefault();
+        if (username && $("#modalChat").is(":visible") && $inputMessage.val()) {
+            sendMessage();
+            socket.emit("stop typing");
+            typing = false;
+        }
+	});
 
     $window.keydown((e) => {
         // When the client hits ENTER on their keyboard
@@ -257,7 +267,7 @@ $(function () {
         log("you have been reconnected");
         if (username) {
             socket.emit("add user", username, (avventura.storia.nome));
-            socket.emit("scene", username, avventura.storia.nome, (scena_corr));
+            socket.emit("scene", username, avventura.storia.nome, (avventura.nowOn));
         }
         id = socket.id;
     });

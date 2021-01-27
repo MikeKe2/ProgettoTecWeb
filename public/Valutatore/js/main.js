@@ -63,10 +63,19 @@ $(function () {
         ArrayofUsers.newStoria(usersStored['users'][user].userId, usersStored['users'][user].userUsername, 0, 0, 0, "NULL", "NULL");
     }
   }
-  
+
   $.getJSON(urlStoria, function (data) {
     storia = data;
     socket.emit("add eval", storia.nome);
+  });
+
+  $("#button-addon2").click((e) => {
+    e.preventDefault();
+    if (username && $("#modalChat").is(":visible") && $inputMessage.val()) {
+      sendMessage();
+      socket.emit("stop typing");
+      typing = false;
+    }
   });
 
   // When the client hits ENTER on their keyboard we treat it as an Enter for the chat

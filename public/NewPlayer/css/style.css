@@ -25,6 +25,21 @@ ul {
     padding: 0;
 }
 
+#MuteMusic,
+#helpRequested,
+#chatEvaluator{
+    text-align: center;
+    vertical-align: middle;
+}
+
+.bi{
+    font-size: 1.2rem;
+}
+
+#button-addon2 .bi{
+    font-size: 1rem;
+}
+
 #avventura,
 .visibility {
     display: none;

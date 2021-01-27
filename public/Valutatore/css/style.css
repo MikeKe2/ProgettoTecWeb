@@ -32,6 +32,16 @@ ul {
   word-wrap: break-word;
 }
 
+#inputMessage{
+  font-size: 1.2rem;
+}
+
+.bi{
+  font-size: 1.2rem;
+  text-align: center;
+  vertical-align: middle;
+}
+
 /* Pages page */
 
 .chat.page {

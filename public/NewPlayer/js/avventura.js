@@ -28,7 +28,7 @@ let avventura = new Vue({
 				$("#avventura").show();
 				$("nav").show();
 				username = sessionStorage.getItem('Username');
-				socket.emit("add user", username, (storia.nome));
+				socket.emit("add user", username, (avventura.storia.nome));
 			}
 		});
 
@@ -77,7 +77,7 @@ let avventura = new Vue({
 		Evaluate: function () {
 			let finalTime = end(this.time);
 			if (this.scene[this.nowOn].valutatore == "true") {
-				socket.emit("answerToEvaluator", username, storia.nome, (risposta_data));
+				socket.emit("answerToEvaluator", username, avventura.storia.nome, (risposta_data));
 				return waitEvaluator();
 			} else {
 				for (risposta in this.scene[this.nowOn].risposte) {
@@ -120,6 +120,7 @@ async function waitEvaluator(_callback) {
 
 $(() => {
 	$("nav").hide();
+
 	$(".usernameInput").focus();
 
 	$('#login').click(() => {
@@ -144,9 +145,10 @@ $(() => {
 	/*When the help button is clicked, it send a requesto to the evaluator*/
 	$('#helpRequested').click(function (e) {
 		e.preventDefault();
-		socket.emit('help', storia.nome, username);
+		socket.emit('help', avventura.storia.nome, username);
 		$('#helpRequested').prop("disabled", true);
-	})
+		$('#helpRequested').html("<i class='bi bi-question-square'></i>");
+	});
 
 	$("#MuteMusic").click((e) => {
 		e.preventDefault();
@@ -154,11 +156,11 @@ $(() => {
 			if (!player[0].paused) {
 				player[0].pause();
 				player[0].currentTime = 0;
-				$("#MuteMusic").text("Musica: OFF");
+				$("#MuteMusic").html("<i class='bi bi-volume-mute-fill'></i>");
 			} else {
 				player[0].load();
 				player[0].oncanplaythrough = player[0].play();
-				$("#MuteMusic").text("Musica: On");
+				$("#MuteMusic").html("<i class='bi bi-volume-up-fill'></i>");
 			}
 		} catch (error) {
 			/*const element = document.querySelector('.animatebutton');
@@ -172,12 +174,12 @@ $(() => {
 
 	$('#loginModal').on('shown.bs.modal', () => {
 		$("#modalpass").focus();
-	})
+	});
 
 	/*TODO: FIX THIS MESS*/
 	$('#modalChat').on('shown.bs.modal', () => {
 		$('#modalChat').animate({
 			scrollTop: $('#modalChat .messages').height()
 		}, 500);
-	})
+	});
 });
