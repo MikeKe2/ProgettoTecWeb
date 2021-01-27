@@ -40,7 +40,12 @@ ul {
     font-size: 1rem;
 }
 
+.spinner-border{
+    display: none;
+}
+
 #avventura,
+
 .visibility {
     display: none;
     /*position: absolute !important;
@@ -215,10 +220,10 @@ div.eval:before {
     max-height: 40vh;
 }
 
-#next {
-    /* margin-left: auto; */
-    /* width: auto; */
-}
+/*#next {
+    margin-left: auto;
+    width: auto;
+}*/
 
 body {
     overflow-y: hidden;

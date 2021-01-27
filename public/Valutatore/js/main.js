@@ -41,7 +41,7 @@ function changeData(i, numRoom) {
   }
 
   //if the current user has some question to be evalued, we show the module for it
-  if (ArrayofUsers.users[i].possibleAnswer != "NULL") {
+  if (ArrayofUsers.users[i].possibleAnswer) {
     var buttons = '';
     for (y in ArrayofUsers.users[i].currentQuestion.risposte)
       buttons = buttons.concat(`<button type="button" id="${y}" class="btn btn-secondary">${ArrayofUsers.users[i].currentQuestion.risposte[y].valore}</button>`);
@@ -71,16 +71,29 @@ $(function () {
 
   $("#button-addon2").click((e) => {
     e.preventDefault();
-    if (username && $("#modalChat").is(":visible") && $inputMessage.val()) {
+    if ($("#modalChat").is(":visible") && $inputMessage.val()) {
       sendMessage();
       socket.emit("stop typing");
       typing = false;
     }
   });
 
+  $('#modalChat').on('shown.bs.modal', () => {
+    $(".messages").html("");
+    $("#inputMessage").val("");
+
+    $("#modalChatTitle").text(currentTargetUser);
+
+    $("#inputMessage").focus();
+
+    for (i in ArrayofMessages.messages)
+      if (currentTargetUser == ArrayofMessages.messages[i].username || currentTargetUser == ArrayofMessages.messages[i].dstUsername)
+        addChatMessage(ArrayofMessages.messages[i]);
+  });
+
   // When the client hits ENTER on their keyboard we treat it as an Enter for the chat
   $window.keydown((e) => {
-    if (e.which === 13 && $chatPage.is(":visible") && $("#inputMessage").val()) {
+    if (e.which === 13 && $("#modalChat").is(":visible") && $("#inputMessage").val()) {
       sendMessage();
       socket.emit("stop typing");
       typing = false;
@@ -139,21 +152,6 @@ $(function () {
 
   });
 
-  // DATA PAGE ==> CHAT PAGE
-  $("#chatButton").click((e) => {
-    e.preventDefault();
-
-    $('#currentChatUser').html(currentTargetUser);
-    changeScene($chatPage, $dataPage);
-    $("#inputMessage").focus();
-
-    for (i in ArrayofMessages.messages)
-      if (currentTargetUser == ArrayofMessages.messages[i].username || currentTargetUser == ArrayofMessages.messages[i].dstUsername)
-        addChatMessage(ArrayofMessages.messages[i]);
-
-    window.scrollTo(0, document.body.scrollHeight);
-  });
-
   // LIST PAGE ==> DATA PAGE
   $("#FromDataToList").click((e) => {
     e.preventDefault();
@@ -164,13 +162,6 @@ $(function () {
     $('#SceneAnswers').html("");
     $('.navbar-collapse').collapse('hide');
   });
-
-  $("#FromChatToData").click((e) => {
-    e.preventDefault();
-
-    changeScene($dataPage, $chatPage);
-    $(".messages").html("");
-  })
 
   //If the evaluator click the helping button we control the message, if not null we send it to the current user
   $('#helpButton').click((e) => {

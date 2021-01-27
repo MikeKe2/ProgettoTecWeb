@@ -78,6 +78,8 @@ $(function () {
                 typing = false;
             } else if (!username)
                 setUsername();
+            else
+                avventura.Evaluate();
         }
     });
 
@@ -225,6 +227,7 @@ $(function () {
     socket.on('helpIncoming', (data) => {
         window.alert(`Il valutatore dice: ${data.message}`);
         $('#helpRequested').prop("disabled", false);
+        $('#helpRequested').html("<i class='bi bi-question-square-fill'></i>");
     });
 
     // Whenever the server emits 'login', log the login message
@@ -234,7 +237,7 @@ $(function () {
     });
 
     socket.on("assignGroup", (data) => {
-        gruppo = data.groupN;
+        avventura.gruppo = data.groupN;
     });
 
     // Whenever the server emits 'new message', update the chat body
