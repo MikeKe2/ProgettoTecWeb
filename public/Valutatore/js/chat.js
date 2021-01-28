@@ -215,7 +215,7 @@ socket.on("user joined", (data) => {
       groupN: gruppo,
     });
 
-    if (parseInt(storia.ngruppi) > 0) {
+    if (parseInt(storia.ngruppi) > 1) {
       gruppo++;
       if (gruppo >= parseInt(storia.ngruppi))
         gruppo = 0;

@@ -74,15 +74,16 @@ function changeData(i, numRoom) {
   $('#sceneAnswers').html(totalAnswer);
 
   //if the current user has some question to be evalued, we show the module for it
-  if (ArrayofUsers.users[i].possibleAnswer) {
+  if (ArrayofUsers.users[i].possibleAnswer != undefined) {
     $("#evaluatedAnswer").show();
 
     $("#domandaNome").val(ArrayofUsers.users[i].currentQuestion.nome);
     $("#domandaDesc").val(ArrayofUsers.users[i].currentQuestion.descrizione);
+
     if (storia.scene[ArrayofUsers.users[i].userRoom].widget == "sendImage.html" || storia.scene[ArrayofUsers.users[i].userRoom].widget == "canvas.html")
       $('#soluzioneProposta').html(`<img style="width:100%" id=soluzioneProposta src=${ArrayofUsers.users[i].possibleAnswer}>`);
     else
-      $("#soluzioneProposta").val(`<input type="text" class="form-control" id=soluzioneProposta value=${ArrayofUsers.users[i].currentQuestion} readonly></input>`);
+      ArrayofUsers.users[i].currentQuestion ? $("#soluzioneProposta").val(`<input type="text" class="form-control" id=soluzioneProposta value=${ArrayofUsers.users[i].currentQuestion} readonly></input>`): "il giocatore non ha scritto nulla";
 
     let buttons = '';
     for (y in ArrayofUsers.users[i].currentQuestion.risposte)
@@ -113,7 +114,7 @@ $(function () {
     for (let user in usersStored['users']) {
       $('#userList').append(`<li class="list-group-item" id="${usersStored['users'][user].userUsername.replace(/[^a-zA-Z0-9]/g, "")}">${usersStored['users'][user].userUsername}</li>`);
       ArrayofUsers.newStoria(usersStored['users'][user].userId, usersStored['users'][user].userUsername, usersStored['users'][user].userRoom, usersStored['users'][user].userTimer, usersStored['users'][user].userScore, usersStored['users'][user].currentQuestion, usersStored['users'][user].possibleAnswer);
-      if (usersStored['users'][user].possibleAnswer)
+      if (usersStored['users'][user].possibleAnswer != undefined)
         $('#' + usersStored['users'][user].userUsername).addClass('list-group-item-warning');
     }
   }
@@ -246,7 +247,6 @@ $(function () {
       obj["giocatori"] = ArrayofUsers;
 
       let data = JSON.stringify(obj);
-
       let file = new Blob([data], {
         type: "json"
       });
@@ -264,7 +264,6 @@ $(function () {
           document.body.removeChild(a);
           window.URL.revokeObjectURL(url);
         }, 0);
-
       }
     }
   })
