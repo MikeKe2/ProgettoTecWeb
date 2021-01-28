@@ -114,6 +114,12 @@
 					<p>{{storia.accessibile}}</p>
 					<p>{{storia.target}}</p>
 				</div>
+				<div id="finale" v-if="nowOn == 1" class="storyblock text-justify justify-content-center"
+					aria-live="polite" tabindex="0">
+					<h3 class="text-align-center">Complimenti {{username}}!</h3>
+					<h3> Hai totalizzato {{storia.punti}} punti!</h3>
+					<h6> Premi avanti per riniziare la storia</h6>
+				</div>
 				<div id="description" v-else class="text-justify" aria-live="polite">
 					{{scene[nowOn].descrizione}}
 				</div>

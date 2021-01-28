@@ -61,6 +61,7 @@ let avventura = new Vue({
 				sessionStorage.setItem("Scene", this.nowOn);
 				sessionStorage.setItem("Points", this.punti);
 				socket.emit("scene", username, this.storia.nome, this.nowOn);
+				socket.emit('score', username, this.storia.nome, (this.punti));
 
 			} else {
 				//TODO COMMENTATO PERCHÈ VIENE RICHIAMATO ANCHE QUANDO NON DOVREBBE
@@ -93,6 +94,7 @@ let avventura = new Vue({
 
 		Evaluate: function () {
 
+			//Scena Iniziale
 			if (this.nowOn == 0) {
 				this.nowOn = this.scene[this.nowOn].risposte[parseInt(this.gruppo)].to[parseInt(this.gruppo)];
 				if (avventura.storia.scene[this.nowOn].tracciaAudio != "") {
@@ -104,6 +106,10 @@ let avventura = new Vue({
 					player[0].oncanplaythrough = player[0].play();
 				}
 				this.Load(this.scene[this.nowOn]);
+				return;
+			} else if (this.nowOn == 1) { //Scena Finale
+				sessionStorage.clear();
+				location.reload();
 				return;
 			}
 
