@@ -66,7 +66,9 @@ let avventura = new Vue({
 
 			} else {
 				console.log("Risposta Errata");
-				Popper.createPopper($("#nextBtn")[0], $("#errorePop")[0]);
+				Popper.createPopper($("#nextBtn")[0], $("#errorePop")[0], {
+					placement: "top"
+				});
 			}
 		},
 
