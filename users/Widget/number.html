@@ -27,11 +27,12 @@
 </div>
 
 <script>
+    var risposta;
     function add(n){
         var text = document.getElementById("result").value;
         document.getElementById("result").value = text + n.toString();
         document.getElementById("textarea-holder").setAttribute("aria-label", text + n.toString());
-        avventura.risposta_data = text + n.toString();
+        risposta = text + n.toString();
     }
 
     function del(){
@@ -43,5 +44,8 @@
             document.getElementById("textarea-holder").setAttribute("aria-label", "risultato");
         else
             document.getElementById("textarea-holder").setAttribute("aria-label", text);
+    }
+    function risultato(){
+        return risposta;
     }
 </script>

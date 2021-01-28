@@ -186,11 +186,11 @@
             setResult();
         }
     }
-    function setResult(){
+    function risultato(){
         value = "";
         for(let i = 1; i < 7; i++){
             value = value + $("#number_" + i).html();
         }
-        avventura.risposta_data = value;
+        return value;
     }
 </script>

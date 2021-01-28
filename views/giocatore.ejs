@@ -120,11 +120,11 @@
 					<h3> Hai totalizzato {{storia.punti}} punti!</h3>
 					<h6> Premi avanti per riniziare la storia</h6>
 				</div>
-				<div id="description" v-else class="text-justify" aria-live="polite">
+				<div id="description" v-if="nowOn > 1" class="text-justify" aria-live="polite">
 					{{scene[nowOn].descrizione}}
 				</div>
 				<div id="widget" v-if="scene[nowOn].widget && scene[nowOn].widget!=''"
-					class="d-flex justify-content-center" v-html="widget"></div>
+					class="d-flex justify-content-center"></div>
 			</div>
 			<div id="next" class="align-self-end d-flex justify-content-center mx-auto">
 				<button id="nextBtn" class="btn btn-primary" v-on:click="Evaluate()" data-trigger="focus"

@@ -56,12 +56,6 @@ let avventura = new Vue({
 				this.widget = null;
 				this.Load(this.scene[this.nowOn]);
 				this.time = start();
-				//Così funziona js dei widgets, però dobbiamo convertire ogni script in un file js
-				/*let recaptchaScript = document.createElement('script')
-				let filejs = avventura.storia.scene[this.nowOn].widget.replace(".html",".js");
-				recaptchaScript.setAttribute('src', `/users/${avventura.storia.creatore}/widgets/${filejs}`);
-				document.head.appendChild(recaptchaScript)*/
-
 
 				sessionStorage.setItem("Scene", this.nowOn);
 				sessionStorage.setItem("Points", this.punti);
@@ -81,6 +75,7 @@ let avventura = new Vue({
 				success: function (data) {
 					avventura.widget = scena.widget != "image.html" ? data :
 						data.replace("$SRC", '/media/' + avventura.storia.creatore + '/images/' + scena.img).replaceAll("$DESC", scena.imgdescription);
+					$("#widget").html(avventura.widget);
 				},
 				error: function (err) {
 					console.log(err);
@@ -113,21 +108,15 @@ let avventura = new Vue({
 				}
 				this.Load(this.scene[this.nowOn]);
 
-				let recaptchaScript = document.createElement('script')
-				let filejs = avventura.storia.scene[this.nowOn].widget.replace(".html",".js");
-				recaptchaScript.setAttribute('src', `/users/${avventura.storia.creatore}/widgets/${filejs}`);
-				document.head.appendChild(recaptchaScript)
-
 				return;
 			} else if (this.nowOn == 1) { //Scena Finale
 				sessionStorage.clear();
 				location.reload();
 				return;
 			}
-
-			this.risposta_data = $("#result").val();
 			let finalTime = end(this.time);
 			if (this.scene[this.nowOn].valutatore == "true") {
+				this.risposta_data = risultato();
 				socket.emit("answerToEvaluator", username, avventura.storia.nome, (this.risposta_data));
 				return waitEvaluator();
 			} else {
@@ -135,6 +124,7 @@ let avventura = new Vue({
 					this.Next(this.scene[this.nowOn].risposte[0]);
 					return;
 				}
+				this.risposta_data = risultato();
 				let risposta = null;
 
 				for (let i = 0; i < this.scene[this.nowOn].risposte.length; i++) {
@@ -144,8 +134,10 @@ let avventura = new Vue({
 					}
 				}
 
-				if (risposta)
-					return risposta;
+				if (risposta){
+					this.Next(risposta);
+					return;
+				}
 
 				for (let i = 0; i < this.scene[this.nowOn].risposte.length; i++) {
 					if (this.scene[this.nowOn].risposte[i].valore.toLowerCase() == this.risposta_data.toLowerCase() && (parseInt(this.scene[this.nowOn].risposte[i].maxTime)) == 0) {

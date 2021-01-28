@@ -1,0 +1,44 @@
+/*
+CSS FOR DUMMIES
+Se vuoi potrai apportare qualche modifica grafica alla visualizzazione della storia creando un file css che segue questo template 
+e inserendolo nella fase di creazione della storia.
+Qui sotto abbiamo 4 elementi:
+- scena si riferisce a un rettangolo contenente testo, widget e bottone next; un esempio di modifica che puoi apportare è aggiungere 
+delle linee di bordo e/o riempimenti
+- text-holder è l'area di scena che contiene il testo; essa occuperà nel caso di scena solo testuale, tutta la scena, altrimenti solo
+la metà; le modifiche apportabili sono analoghe a quelle della scena
+- widget-holder è presente solo quando vi sono dei widget e occupa sempre la metà inferiore della scena; le modifiche apportabili sono
+analoghe a quelle della scena
+- testo, infine, serve a modificare colore e font del testo presente nelle scene. 
+
+Border-radius serve a arrotondare i bordi nel caso scegliate di mettere uno sfondo colorato, va indicato in percentuale, più è grande
+la percentuale, più sarà il raggio dell'arrotondamento, si consiglia di non esagerare (fino a 10% va bene).
+Tip: per background-color, se vuoi un colore translucente piuttosto che opaco, impostalo usando rgba(R,G,B,opacity), dove 
+opacity = 0 significa che lo sfondo è completamente trasparente mentre opacity = 1 che è opaco.
+
+Ricordate di cancellare gli attributi contenuti nelle parentesi che non vengono utilizzati.
+*/
+
+#scena{
+    border: ;
+    background-color: ;
+    border-radius: ;
+}
+
+#text-holder{
+    border: ;
+    background-color: ;
+    border-radius: ;
+}
+
+#widget-holder{
+    border: ;
+    background-color: ;
+    border-radius: ;
+}
+
+#testo{
+    font-family: ;
+    font-style: ;
+    color: ;
+}
