@@ -42,6 +42,7 @@ let avventura = new Vue({
 	methods: {
 		Next: function (to) {
 			if (to) {
+				$("#description").focus()
 				this.nowOn = to.to[parseInt(this.gruppo)];
 				this.punti += parseInt(to.punti);
 				if (avventura.storia.scene[this.nowOn].tracciaAudio != "") {

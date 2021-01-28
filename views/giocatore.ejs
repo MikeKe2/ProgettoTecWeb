@@ -120,7 +120,7 @@
 					<p class="lead"> Hai totalizzato {{storia.punti}} punti!</p>
 					<p class="lead"> Premi avanti per riniziare la storia</p>
 				</div>
-				<div id="description" v-if="nowOn > 1" class="text-justify" aria-live="polite">
+				<div tabindex="0" id="description" v-if="nowOn > 1" class="text-justify" aria-live="polite">
 					{{scene[nowOn].descrizione}}
 				</div>
 				<div id="widget" v-if="scene[nowOn].widget && scene[nowOn].widget!=''"
