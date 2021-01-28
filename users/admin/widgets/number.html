@@ -31,7 +31,6 @@
     function add(n){
         var text = document.getElementById("result").value;
         document.getElementById("result").value = text + n.toString();
-        document.getElementById("textarea-holder").setAttribute("aria-label", text + n.toString());
         risposta = text + n.toString();
     }
 
@@ -39,11 +38,7 @@
         var text = document.getElementById("result").value;
         text = text.slice(0, text.length-1);
         document.getElementById("result").value = text;
-        avventura.risposta_data = text + n.toString();
-        if(text.length < 1)
-            document.getElementById("textarea-holder").setAttribute("aria-label", "risultato");
-        else
-            document.getElementById("textarea-holder").setAttribute("aria-label", text);
+        //avventura.risposta_data = text + n.toString();
     }
     function risultato(){
         return risposta;

@@ -1,6 +1,7 @@
 html,
 body {
     background-color: whitesmoke;
+    touch-action: manipulation;
 }
 
 html,
@@ -40,7 +41,7 @@ ul {
     font-size: 1rem;
 }
 
-.spinner-border{
+.spinner-border {
     display: none;
 }
 
@@ -214,19 +215,15 @@ div.eval:before {
     color: #f3f3f3;
     padding: 2em;
     text-align: justify;
-
 }
 
 #widget {
-    max-height: 45vh;
+    height: 45vh;
     overflow: hidden;
-    min-height: 45vh;
+    background-color: rgba(170, 170, 170, 0.7);
+    border-radius: 6px;
 }
 
-/*#next {
-    margin-left: auto;
-    width: auto;
-}*/
 
 body {
     overflow-y: hidden;
@@ -235,19 +232,23 @@ body {
 #avventura {
     height: 90vh;
 }
+
 @media only screen and (max-width: 800px) {
-    body{
+    body {
         overflow-y: auto;
     }
+
     #avventura {
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
     }
-    #description{
+
+    #description {
         padding: 1em;
 
     }
-    #widget{
+
+    #widget {
         overflow: auto;
     }
 }

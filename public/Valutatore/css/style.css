@@ -42,17 +42,23 @@ ul {
   vertical-align: middle;
 }
 
-/* Pages page */
-
-.chat.page {
+.chat {
   display: none;
 }
 
-.data.page {
+.data {
   display: none;
 }
 
 #answerForm {
+  display: none;
+}
+
+#currentUser,
+#userStatus,
+#dataToList,
+#helpButton,
+#chatButton{
   display: none;
 }
 

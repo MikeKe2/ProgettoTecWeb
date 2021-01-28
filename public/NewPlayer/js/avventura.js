@@ -18,6 +18,7 @@ let avventura = new Vue({
 				avventura.storia = data;
 				$("#storyName").html(avventura.storia.nome);
 				avventura.Background(avventura.storia.creatore, avventura.storia.background);
+				console.log(avventura.storia)
 			})
 			.fail(() => {
 				alert("Mi dispiace ma la storia che hai richiesto non è stata trovata, ora verrai reindirizzato alla pagina con tutte le storie disponibili");
@@ -48,10 +49,10 @@ let avventura = new Vue({
 				if (avventura.storia.scene[this.nowOn].tracciaAudio != "") {
 					// ho provato con vue ma non sono riuscita a farlo andare :c però funziona
 					$("#track").attr("src", `/media/${avventura.storia.creatore}/audios/${avventura.storia.scene[this.nowOn].tracciaAudio}`);
-					player = $("#player");
-					player[0].pause();
-					player[0].load();
-					player[0].oncanplaythrough = player[0].play();
+					music = $("#music")[0];
+					music.pause();
+					music.load();
+					music.oncanplaythrough = music.play();
 				}
 				this.widget = null;
 				this.Load(this.scene[this.nowOn]);
@@ -64,8 +65,8 @@ let avventura = new Vue({
 				socket.emit('score', username, this.storia.nome, (this.punti));
 
 			} else {
-				//TODO COMMENTATO PERCHÈ VIENE RICHIAMATO ANCHE QUANDO NON DOVREBBE
-				//$('#nextBtn').popover({trigger: 'focus'});
+				console.log("Risposta Errata");
+				Popper.createPopper($("#nextBtn")[0], $("#errorePop")[0]);
 			}
 		},
 
@@ -96,20 +97,7 @@ let avventura = new Vue({
 		Evaluate: function () {
 
 			//Scena Iniziale
-			if (this.nowOn == 0) {
-				this.nowOn = this.scene[this.nowOn].risposte[parseInt(this.gruppo)].to[parseInt(this.gruppo)];
-				if (avventura.storia.scene[this.nowOn].tracciaAudio != "") {
-					// ho provato con vue ma non sono riuscita a farlo andare :c però funziona
-					$("#track").attr("src", `/media/${avventura.storia.creatore}/audios/${avventura.storia.scene[this.nowOn].tracciaAudio}`);
-					player = $("#player");
-					player[0].pause();
-					player[0].load();
-					player[0].oncanplaythrough = player[0].play();
-				}
-				this.Load(this.scene[this.nowOn]);
-
-				return;
-			} else if (this.nowOn == 1) { //Scena Finale
+			if (this.nowOn == 1) { //Scena Finale
 				sessionStorage.clear();
 				location.reload();
 				return;
@@ -212,26 +200,16 @@ $(() => {
 
 	$("#MuteMusic").click((e) => {
 		e.preventDefault();
-		try {
-			if (!player[0].muted) {
-				player[0].muted = true;
-				/*player[0].pause();
-				player[0].currentTime = 0;*/
-				$("#MuteMusic").html("<i class='bi bi-volume-mute-fill'></i>");
-			} else {
-				player[0].muted = false;
-				/*player[0].load();
-				player[0].oncanplaythrough = player[0].play();*/
-				$("#MuteMusic").html("<i class='bi bi-volume-up-fill'></i>");
-			}
-		} catch (error) {
-			/*const element = document.querySelector('.animatebutton');
-			element.classList.add('animated', 'shake');
-			setTimeout(function () {
-			    element.classList.remove('shake');
-			}, 1000);*/
+		music.muted = !music.muted;
+		if (music.muted) {
+			/*music[0].pause();
+			music[0].currentTime = 0;*/
+			$("#MuteMusic").html("<i class='bi bi-volume-mute-fill'></i>");
+		} else {
+			/*music[0].load();
+			music[0].oncanplaythrough = music[0].play();*/
+			$("#MuteMusic").html("<i class='bi bi-volume-up-fill'></i>");
 		}
-
 	});
 
 	$('#loginModal').on('shown.bs.modal', () => {

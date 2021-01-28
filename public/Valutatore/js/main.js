@@ -1,13 +1,35 @@
+var $window = $(window);
+var $messages = $(".messages"); // Messages area
+var $inputMessage = $("#inputMessage"); // Input message input box
+
+var $usersPage = $(".users");
+var $dataPage = $('.data');
+
+var ArrayofUsers = new Utenti();
+var ArrayofMessages = new Messages();
+
+var currentTargetUser = "";
+var currentTargetId = "";
+var typing = false;
+var socket = io("https://site181993.tw.cs.unibo.it");
+var gruppo = 0;
+var lastTypingTime;
+var storia;
+var FADE_TIME = 150; // ms
+var TYPING_TIMER_LENGTH = 400; // ms
+
+
 function changeScene(input, output) {
 
   output.fadeOut(200);
-  input.show(800);
+  input.show(500);
 
   output.prop("disabled", true);
   input.prop("disabled", false);
 }
 
 function changeData(i, numRoom) {
+
   //We clean the possible remains of another user
   $("#SceneName").html("");
   $("#SceneDescrizione").html("");
@@ -31,11 +53,7 @@ function changeData(i, numRoom) {
     var currentAnswer = Object.values(storia.scene[numRoom].risposte[y]);
 
     var answer = '<li class = "list-group-item"><ul class = "list-group">';
-    answer = answer.concat(`<li class = "list-group-item">Possibile Risposta: ${currentAnswer[0]}</li>`);
-    answer = answer.concat(`<li class = "list-group-item">Tempo Massimo: ${currentAnswer[4]}</li>`);
-    answer = answer.concat(`<li class = "list-group-item">Punti: ${currentAnswer[3]}</li>`);
-    answer = answer.concat(`<li class = "list-group-item">Conduce alla stanza n° ${currentAnswer[1]}</li>`);
-    answer = answer.concat('</ul></li>');
+    answer = answer.concat(`<li class = "list-group-item">Possibile Risposta: ${currentAnswer[0]}</li><li class = "list-group-item">Tempo Massimo: ${currentAnswer[4]}</li><li class = "list-group-item">Punti: ${currentAnswer[3]}</li><li class = "list-group-item">Conduce alla stanza n° ${currentAnswer[1]}</li></ul></li>`);
 
     $('#SceneAnswers').append(answer);
   }
@@ -53,30 +71,22 @@ function changeData(i, numRoom) {
 
 $(function () {
 
-  let stored = sessionStorage.getItem('Users');
-  if (stored) {
-    var usersStored = JSON.parse(stored);
-    for (var user in usersStored['users']) {
-      var $newUser = $(`<li class="list-group-item" id="${usersStored['users'][user].userUsername.replace(/[^a-zA-Z0-9]/g, "")}">${usersStored['users'][user].userUsername}</li>`);
-      $('#userList').append($newUser);
-      if (ArrayofUsers.findElement(usersStored['users'][user].userUsername) == -1)
-        ArrayofUsers.newStoria(usersStored['users'][user].userId, usersStored['users'][user].userUsername, 0, 0, 0, "NULL", "NULL");
+  if (sessionStorage.getItem('Users')) {
+    let usersStored = JSON.parse(sessionStorage.getItem('Users'));
+
+    for (let user in usersStored['users']) {
+      $('#userList').append(`<li class="list-group-item" id="${usersStored['users'][user].userUsername.replace(/[^a-zA-Z0-9]/g, "")}">${usersStored['users'][user].userUsername}</li>`);
+      ArrayofUsers.newStoria(usersStored['users'][user].userId, usersStored['users'][user].userUsername, usersStored['users'][user].userRoom, 0, usersStored['users'][user].userScore, "NULL", "NULL");
     }
   }
 
+  /*Otteniamo la storia e segniamo al server che ora c'è un Valutatore*/
   $.getJSON(urlStoria, function (data) {
     storia = data;
     socket.emit("add eval", storia.nome);
   });
 
-  $("#button-addon2").click((e) => {
-    e.preventDefault();
-    if ($("#modalChat").is(":visible") && $inputMessage.val()) {
-      sendMessage();
-      socket.emit("stop typing");
-      typing = false;
-    }
-  });
+  /*Chat Section*/
 
   $('#modalChat').on('shown.bs.modal', () => {
     $(".messages").html("");
@@ -91,48 +101,60 @@ $(function () {
         addChatMessage(ArrayofMessages.messages[i]);
   });
 
+
+  $("#button-addon2").click((e) => {
+
+    e.preventDefault();
+
+    if ($("#modalChat").is(":visible") && $inputMessage.val()) {
+      sendMessage();
+      socket.emit("stop typing");
+      typing = false;
+    }
+
+  });
+
   // When the client hits ENTER on their keyboard we treat it as an Enter for the chat
   $window.keydown((e) => {
+
     if (e.which === 13 && $("#modalChat").is(":visible") && $("#inputMessage").val()) {
       sendMessage();
       socket.emit("stop typing");
       typing = false;
     }
+
   });
 
-  // Click event
-  $inputMessage.on("input", () => {
-    updateTyping();
-  });
-
-  // Focus input when clicking on the message input's border
-  $inputMessage.click(() => {
-    $inputMessage.focus();
-  });
-
-  // LIST PAGE ==> DATA PAGE
+  // da LIST PAGE a DATA PAGE
   $("#userList").on("click", '.list-group-item', (e) => {
     e.preventDefault();
+
     changeScene($dataPage, $usersPage);
 
     currentTargetUser = e.currentTarget.id;
-    $('#currentUser').html(currentTargetUser);
 
     let i = ArrayofUsers.findElement(currentTargetUser);
+
+    $(".navbar-brand").text(currentTargetUser);
+    $("#exportFile").hide();
+    $("#userStatus").show();
+    $("#dataToList").show();
+    $("#helpButton").show();
+    $("#chatButton").show();
+
     if (i >= 0) {
       currentTargetId = ArrayofUsers.users[i].userId;
       changeData(i, ArrayofUsers.users[i].userRoom);
     }
   });
 
-  //when asked to assing a score to a player, we send the value from the RangeValue 
+  //Risposta da valutatore
   $('.btn-group').on("click", ".btn", (e) => {
     e.preventDefault();
 
     let i = ArrayofUsers.findElement(currentTargetUser);
 
-    var element = document.getElementById(currentTargetUser);
-    element.className = element.className.replace(/\blist-group-item-warning\b/g, "");
+    $("#" + currentTargetUser).removeClass("list-group-item-warning");
 
     if (ArrayofUsers.users[i].currentQuestion.nome == "Fine") {
       ArrayofUsers.users[i].userScore += ArrayofUsers.users[i].currentQuestion.risposte[e.currentTarget.id].points;
@@ -152,38 +174,53 @@ $(function () {
 
   });
 
-  // LIST PAGE ==> DATA PAGE
-  $("#FromDataToList").click((e) => {
+  // da user a list
+    $("#dataToList").click((e) => {
     e.preventDefault();
 
     currentTargetId = 0;
     currentTargetUser = 0;
+
+    $(".navbar-brand").text("Valutatore");
+    $("#exportFile").show();
+    $("#userStatus").hide();
+    $("#dataToList").hide();
+    $("#helpButton").hide();
+    $("#chatButton").hide();
+
     changeScene($usersPage, $dataPage);
+
     $('#SceneAnswers').html("");
     $('.navbar-collapse').collapse('hide');
   });
 
-  //If the evaluator click the helping button we control the message, if not null we send it to the current user
+  //Manda un messaggio d'aiuto al giocatore in crisi
   $('#helpButton').click((e) => {
     e.preventDefault();
 
-    var helpingComment = prompt("Please enter the helping hint", "");
+    let helpingComment = prompt("Inserisci il suggerimento", "");
+
     if (helpingComment != null) {
       socket.emit('helpIncoming', currentTargetId, (helpingComment));
-      var element = document.getElementById(currentTargetUser);
-      element.className = element.className.replace(/\blist-group-item-danger\b/g, "");
+      $("#" + currentTargetUser).removeClass("list-group-item-danger");
     }
+
   });
 
   //we export the ArrayOfUser in a .json file, checking wich browser the user is currently using
-  $('#exportIron').click((e) => {
+  $('#exportFile').click((e) => {
     e.preventDefault();
+    if (confirm('Vuoi scaricare un file .json contentente la storia e i giocatori?')) {
+      let obj = {};
+      obj["storia"] = storia;
+      obj["giocatori"] = ArrayofUsers;
 
-    if (ArrayofUsers.numberOfUsers > 0) {
-      var data = JSON.stringify(ArrayofUsers);
-      var file = new Blob([data], {
+      let data = JSON.stringify(obj);
+
+      let file = new Blob([data], {
         type: "json"
       });
+
       if (window.navigator.msSaveOrOpenBlob) // IE10+
         window.navigator.msSaveOrOpenBlob(file, filename);
       else { // Others
@@ -197,8 +234,8 @@ $(function () {
           document.body.removeChild(a);
           window.URL.revokeObjectURL(url);
         }, 0);
+
       }
-    } else
-      alert("Nessun Giocatore");
+    }
   })
 });
