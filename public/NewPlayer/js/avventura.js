@@ -54,7 +54,8 @@ let avventura = new Vue({
 					music.oncanplaythrough = music.play();
 				}
 				this.widget = null;
-				this.Load(this.scene[this.nowOn]);
+				if(this.scene[this.nowOn].widget != "")
+					this.Load(this.scene[this.nowOn]);
 				this.time = start();
 
 				sessionStorage.setItem("Scene", this.nowOn);
