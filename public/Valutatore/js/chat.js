@@ -156,28 +156,32 @@ socket.on("scene", (data) => {
 socket.on("answerToEvaluator", (data) => {
 
   let i = ArrayofUsers.findElement(data.username);
-  
+
   ArrayofUsers.users[i].currentQuestion = storia.scene[ArrayofUsers.users[i].userRoom];
   ArrayofUsers.users[i].possibleAnswer = data.message;
-  //ArrayofUsers.users[i].currentQuestion = "nome: " + storia.scene[ArrayofUsers.users[i].userRoom].nome + "\n e descrizione: " + storia.scene[ArrayofUsers.users[i].userRoom].descrizione;
+
+  sessionStorage.setItem('Users', JSON.stringify(ArrayofUsers));
 
   $('#' + data.username).addClass('list-group-item-warning');
 
-  $('#soluzioneCorretta').html(`nome: ${ArrayofUsers.users[i].currentQuestion.nome}<br />descrizione: ${ArrayofUsers.users[i].currentQuestion.descrizione}`);
-
-  if (storia.scene[ArrayofUsers.users[i].userRoom].widget == "sendImage.html" || storia.scene[ArrayofUsers.users[i].userRoom].widget == "canvas.html")
-    $('#soluzioneProposta').html(`<img style="width:20vw" src=${data.message}>`);
-  else
-    $('#soluzioneProposta').html(data.message);
-
   if (currentTargetUser == data.username && $dataPage.is(":visible")) {
-    var buttons = '';
+
+    $("#domandaNome").val(ArrayofUsers.users[i].currentQuestion.nome);
+    $("#domandaDesc").val(ArrayofUsers.users[i].currentQuestion.descrizione);
+
+    if (storia.scene[ArrayofUsers.users[i].userRoom].widget == "sendImage.html" || storia.scene[ArrayofUsers.users[i].userRoom].widget == "canvas.html")
+      $('#soluzioneProposta').html(`<img style="width:100%" id=soluzioneProposta src=${ArrayofUsers.users[i].possibleAnswer}>`);
+    else
+      $("#soluzioneProposta").val(`<input type="text" class="form-control" id=soluzioneProposta value=${ArrayofUsers.users[i].currentQuestion} readonly></input>`);
+  
+    let buttons = '';
     for (y in ArrayofUsers.users[i].currentQuestion.risposte)
       buttons = buttons.concat(`<button type="button" id="${y}" class="btn btn-secondary">${ArrayofUsers.users[i].currentQuestion.risposte[y].valore}</button>`);
-    $('.btn-group').append(buttons)
-    $('#answerForm').show();
-  }
 
+    $('.btn-group').append(buttons);
+
+    $('#evaluatedAnswer').show();
+  }
   showToast(9, data);
 });
 
@@ -203,7 +207,7 @@ socket.on("user joined", (data) => {
     $('#userList').append($newUser);
     showToast(0, data);
 
-    ArrayofUsers.newStoria(data.id, data.username, 0, 0, 0, "NULL", "NULL");
+    ArrayofUsers.newStoria(data.id, data.username, 0, 0, 0, null, null);
     sessionStorage.setItem('Users', JSON.stringify(ArrayofUsers));
 
     socket.emit("assignGroup", {
@@ -211,7 +215,7 @@ socket.on("user joined", (data) => {
       groupN: gruppo,
     });
 
-    if (parseInt(storia.ngruppi) > 0) {
+    if (parseInt(storia.ngruppi) > 1) {
       gruppo++;
       if (gruppo >= parseInt(storia.ngruppi))
         gruppo = 0;

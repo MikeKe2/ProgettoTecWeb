@@ -72,12 +72,12 @@ let avventura = new Vue({
 		Load: function (scena) {
 			$.ajax({
 				url: '/media/' + this.storia.creatore + '/widgets/' + scena.widget,
-				success: function (data) {
+				success: (data) => {
 					avventura.widget = scena.widget != "image.html" ? data :
 						data.replace("$SRC", '/media/' + avventura.storia.creatore + '/images/' + scena.img).replaceAll("$DESC", scena.imgdescription);
 					$("#widget").html(avventura.widget);
 				},
-				error: function (err) {
+				error: (err) => {
 					console.log(err);
 				}
 			});

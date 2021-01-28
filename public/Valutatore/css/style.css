@@ -1,5 +1,6 @@
 * {
   box-sizing: border-box;
+  touch-action: manipulation;
 }
 
 html {
@@ -54,6 +55,8 @@ ul {
   display: none;
 }
 
+
+#evaluatedAnswer,
 #currentUser,
 #userStatus,
 #dataToList,
