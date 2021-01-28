@@ -31,43 +31,79 @@ function changeScene(input, output) {
 function changeData(i, numRoom) {
 
   //We clean the possible remains of another user
-  $("#SceneName").html("");
-  $("#SceneDescrizione").html("");
-  $('#SceneAnswers').html("");
+  $("evaluatedAnswer").hide();
+  $('#sceneAnswers').html("");
   $('.btn-group').html("");
 
   //We show the current info on the selected user, such as Room number, name and description
   $("#userStatus").html("Si trova nella stanza: " + numRoom);
-  $("#SceneName").html(storia.scene[numRoom].nome);
-  $("#SceneDescrizione").html(storia.scene[numRoom].descrizione);
+  storia.scene[numRoom].nome ? $("#SceneName").html(storia.scene[numRoom].nome) : "undefined";
+  storia.scene[numRoom].descrizione ? $("#SceneDescrizione").html(storia.scene[numRoom].descrizione) : "undefined";
+  if(storia.scene[numRoom] == "image.html")
+  insertImage(numRoom);
 
   let k = numRoom;
-
   let statusProgressbar = (100 * (k++)) / storia.scene.length;
   $(".progress-bar").css({
     'width': statusProgressbar + '%'
   });
 
+  let totalAnswer = ``;
   //we show the possible answer to the current Room, and various data
   for (y in storia.scene[numRoom].risposte) {
-    var currentAnswer = Object.values(storia.scene[numRoom].risposte[y]);
-
-    var answer = '<li class = "list-group-item"><ul class = "list-group">';
-    answer = answer.concat(`<li class = "list-group-item">Possibile Risposta: ${currentAnswer[0]}</li><li class = "list-group-item">Tempo Massimo: ${currentAnswer[4]}</li><li class = "list-group-item">Punti: ${currentAnswer[3]}</li><li class = "list-group-item">Conduce alla stanza n° ${currentAnswer[1]}</li></ul></li>`);
-
-    $('#SceneAnswers').append(answer);
+    let currentAnswer = Object.values(storia.scene[numRoom].risposte[y]);
+    let answer = `
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="flush-heading${y}">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+          data-bs-target="#flush-collapse${y}">
+          Possibile Risposta : ${currentAnswer[0]}
+        </button>
+      </h2>
+      <div id="flush-collapse${y}" class="accordion-collapse collapse" aria-labelledby="flush-heading${currentAnswer[0]}"
+        data-bs-parent="#sceneAnswers">
+        <div class="accordion-body">
+        <p>Tempo Massimo: ${currentAnswer[4]}</p>
+        <p>Punti: ${currentAnswer[3]}</p>
+        <p>Conduce alla stanza n° ${currentAnswer[1]}</p>
+        </div>
+      </div>
+    </div>`
+    totalAnswer += answer
   }
+  $('#sceneAnswers').html(totalAnswer);
 
   //if the current user has some question to be evalued, we show the module for it
   if (ArrayofUsers.users[i].possibleAnswer) {
-    var buttons = '';
+    $("#evaluatedAnswer").show();
+
+    $("#domandaNome").val(ArrayofUsers.users[i].currentQuestion.nome);
+    $("#domandaDesc").val(ArrayofUsers.users[i].currentQuestion.descrizione);
+    if (storia.scene[ArrayofUsers.users[i].userRoom].widget == "sendImage.html" || storia.scene[ArrayofUsers.users[i].userRoom].widget == "canvas.html")
+      $('#soluzioneProposta').html(`<img style="width:100%" id=soluzioneProposta src=${ArrayofUsers.users[i].possibleAnswer}>`);
+    else
+      $("#soluzioneProposta").val(`<input type="text" class="form-control" id=soluzioneProposta value=${ArrayofUsers.users[i].currentQuestion} readonly></input>`);
+
+    let buttons = '';
     for (y in ArrayofUsers.users[i].currentQuestion.risposte)
       buttons = buttons.concat(`<button type="button" id="${y}" class="btn btn-secondary">${ArrayofUsers.users[i].currentQuestion.risposte[y].valore}</button>`);
 
     $('.btn-group').append(buttons);
-    $('#answerForm').show();
   }
-}
+};
+
+async function insertImage(numRoom) {
+  await $.ajax({
+    url: '/media/' + storia.creatore + '/widgets/' + storia.scene[numRoom].widget,
+    success: (data) => {
+      var image = data.replace("$SRC", '/media/' + storia.creatore + '/images/' + storia.scene[numRoom].img).replaceAll("$DESC", storia.scene[numRoom].imgdescription);
+      $("#immagine").html(image);
+    },
+    error: (err) => {
+      console.log(err);
+    }
+  });
+};
 
 $(function () {
 
@@ -76,7 +112,9 @@ $(function () {
 
     for (let user in usersStored['users']) {
       $('#userList').append(`<li class="list-group-item" id="${usersStored['users'][user].userUsername.replace(/[^a-zA-Z0-9]/g, "")}">${usersStored['users'][user].userUsername}</li>`);
-      ArrayofUsers.newStoria(usersStored['users'][user].userId, usersStored['users'][user].userUsername, usersStored['users'][user].userRoom, 0, usersStored['users'][user].userScore, "NULL", "NULL");
+      ArrayofUsers.newStoria(usersStored['users'][user].userId, usersStored['users'][user].userUsername, usersStored['users'][user].userRoom, usersStored['users'][user].userTimer, usersStored['users'][user].userScore, usersStored['users'][user].currentQuestion, usersStored['users'][user].possibleAnswer);
+      if (usersStored['users'][user].possibleAnswer)
+        $('#' + usersStored['users'][user].userUsername).addClass('list-group-item-warning');
     }
   }
 
@@ -91,9 +129,7 @@ $(function () {
   $('#modalChat').on('shown.bs.modal', () => {
     $(".messages").html("");
     $("#inputMessage").val("");
-
     $("#modalChatTitle").text(currentTargetUser);
-
     $("#inputMessage").focus();
 
     for (i in ArrayofMessages.messages)
@@ -103,26 +139,21 @@ $(function () {
 
 
   $("#button-addon2").click((e) => {
-
     e.preventDefault();
-
     if ($("#modalChat").is(":visible") && $inputMessage.val()) {
       sendMessage();
       socket.emit("stop typing");
       typing = false;
     }
-
   });
 
   // When the client hits ENTER on their keyboard we treat it as an Enter for the chat
   $window.keydown((e) => {
-
     if (e.which === 13 && $("#modalChat").is(":visible") && $("#inputMessage").val()) {
       sendMessage();
       socket.emit("stop typing");
       typing = false;
     }
-
   });
 
   // da LIST PAGE a DATA PAGE
@@ -165,17 +196,16 @@ $(function () {
     } else
       socket.emit('answerFromEvaluator', currentTargetId, e.currentTarget.id);
 
-    ArrayofUsers.users[i].possibleAnswer = "NULL";
-    ArrayofUsers.users[i].currentQuestion = "NULL";
+    ArrayofUsers.users[i].possibleAnswer = null;
+    ArrayofUsers.users[i].currentQuestion = null;
 
     //we close the answer form
-    $('.btn-group').html("");
-    $("#answerForm").fadeOut();
+    $("#evaluatedAnswer").hide();
 
   });
 
   // da user a list
-    $("#dataToList").click((e) => {
+  $("#dataToList").click((e) => {
     e.preventDefault();
 
     currentTargetId = 0;
@@ -190,7 +220,7 @@ $(function () {
 
     changeScene($usersPage, $dataPage);
 
-    $('#SceneAnswers').html("");
+    $('#sceneAnswers').html("");
     $('.navbar-collapse').collapse('hide');
   });
 
