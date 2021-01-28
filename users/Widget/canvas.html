@@ -39,18 +39,16 @@
         </canvas>
     </div>
     <div class="container mt-1">
-        <button type="button" onchange="changeColour(this.value)" value="#FF0000" class="btn btn-danger">Rosso</button>
-        <button type="button" onchange="changeColour(this.value)" value="#0800FF" class="btn btn-primary">Blu</button>
-        <button type="button" onchange="changeColour(this.value)" value="#26FF00" class="btn btn-success">Verde</button>
-        <button type="button" onchange="changeColour(this.value)" value="#F6FF00"
+        <button type="button" onclick="changeColour(this.value)" value="#FF0000" class="btn btn-danger">Rosso</button>
+        <button type="button" onclick="changeColour(this.value)" value="#0800FF" class="btn btn-primary">Blu</button>
+        <button type="button" onclick="changeColour(this.value)" value="#26FF00" class="btn btn-success">Verde</button>
+        <button type="button" onclick="changeColour(this.value)" value="#F6FF00"
             class="btn btn-warning">Giallo</button>
-        <button type="button" onchange="changeColour(this.value)" value="#FFFFFF" class="btn btn-light">Bianco</button>
-        <button type="button" onchange="changeColour(this.value)" value="#000000" class="btn btn-dark">Nero</button>
+        <button type="button" onclick="changeColour(this.value)" value="#FFFFFF" class="btn btn-light">Bianco</button>
+        <button type="button" onclick="changeColour(this.value)" value="#000000" class="btn btn-dark">Nero</button>
     </div>
 </div>
 <script type="text/javascript">
-    console.log("hey");
-
     function changeColour(data) {
         ctx.beginPath();
         ctx.strokeStyle = data;

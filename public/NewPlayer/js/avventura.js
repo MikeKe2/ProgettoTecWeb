@@ -39,7 +39,6 @@ let avventura = new Vue({
 					this.Load(this.scene[avventura.nowOn]);
 				}
 			});
-
 	},
 	methods: {
 		Next: function (to) {
@@ -57,9 +56,16 @@ let avventura = new Vue({
 				this.widget = null;
 				this.Load(this.scene[this.nowOn]);
 				this.time = start();
+				//Così funziona js dei widgets, però dobbiamo convertire ogni script in un file js
+				/*let recaptchaScript = document.createElement('script')
+				let filejs = avventura.storia.scene[this.nowOn].widget.replace(".html",".js");
+				recaptchaScript.setAttribute('src', `/users/${avventura.storia.creatore}/widgets/${filejs}`);
+				document.head.appendChild(recaptchaScript)*/
+
 
 				sessionStorage.setItem("Scene", this.nowOn);
 				sessionStorage.setItem("Points", this.punti);
+				//Inviamo al valutatore i dati sul giocatore
 				socket.emit("scene", username, this.storia.nome, this.nowOn);
 				socket.emit('score', username, this.storia.nome, (this.punti));
 
@@ -106,6 +112,12 @@ let avventura = new Vue({
 					player[0].oncanplaythrough = player[0].play();
 				}
 				this.Load(this.scene[this.nowOn]);
+
+				let recaptchaScript = document.createElement('script')
+				let filejs = avventura.storia.scene[this.nowOn].widget.replace(".html",".js");
+				recaptchaScript.setAttribute('src', `/users/${avventura.storia.creatore}/widgets/${filejs}`);
+				document.head.appendChild(recaptchaScript)
+
 				return;
 			} else if (this.nowOn == 1) { //Scena Finale
 				sessionStorage.clear();
