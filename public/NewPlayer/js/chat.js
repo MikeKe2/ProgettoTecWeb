@@ -92,7 +92,7 @@ $(function () {
             $("#login").fadeOut();
             $("#login").off("click");
             $("#avventura").show();
-            $("nav").show()
+            $("nav").show();
             socket.emit("add user", username, (avventura.storia.nome));
             sessionStorage.setItem('Username', username);
         }

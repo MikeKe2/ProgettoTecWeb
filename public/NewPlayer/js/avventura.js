@@ -18,7 +18,6 @@ let avventura = new Vue({
 				avventura.storia = data;
 				$("#storyName").html(avventura.storia.nome);
 				avventura.Background(avventura.storia.creatore, avventura.storia.background);
-				console.log(avventura.storia)
 			})
 			.fail(() => {
 				alert("Mi dispiace ma la storia che hai richiesto non è stata trovata, ora verrai reindirizzato alla pagina con tutte le storie disponibili");
@@ -32,12 +31,11 @@ let avventura = new Vue({
 					$("nav").show();
 					username = sessionStorage.getItem('Username');
 					socket.emit("add user", username, (avventura.storia.nome));
-
+					
 					avventura.nowOn = sessionStorage.getItem("Scene");
 					avventura.punti = sessionStorage.getItem("Points");
 					socket.emit("scene", username, avventura.storia.nome, avventura.nowOn);
-					$("nav").show();
-					this.Load(this.scene[avventura.nowOn]);
+					avventura.Load(avventura.scene[avventura.nowOn]);
 				}
 			});
 	},
@@ -65,10 +63,7 @@ let avventura = new Vue({
 				socket.emit('score', username, this.storia.nome, (this.punti));
 
 			} else {
-				console.log("Risposta Errata");
-				Popper.createPopper($("#nextBtn")[0], $("#errorePop")[0], {
-					placement: "top"
-				});
+				$("#myPopup").addClass("show");
 			}
 		},
 
@@ -167,6 +162,8 @@ async function waitEvaluator(_callback) {
 };
 
 $(() => {
+	$('#nextBtn').blur(()=>{$("#myPopup").removeClass("show")});
+
 	$("nav").hide();
 
 	$(".usernameInput").focus();
