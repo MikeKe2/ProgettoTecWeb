@@ -38,7 +38,7 @@ var $inputMessage = $("#inputMessage"); // Input message input box
 var $chatPage = $("#chat"); // The chatroom page
 
 
-var socket = io("https://site181993.tw.cs.unibo.it");
+var socket = io.connect("https://site181993.tw.cs.unibo.it");
 
 
 // Prompt for setting a username
@@ -60,7 +60,7 @@ $(function () {
             addChatMessage(ArrayofMessages.messages[i]);
     });
 
-    $("#button-addon2").click((e)=>{
+    $("#button-addon2").click((e) => {
         e.preventDefault();
         if (username && $("#modalChat").is(":visible") && $inputMessage.val()) {
             sendMessage();
@@ -68,13 +68,15 @@ $(function () {
             typing = false;
         }
     });
-    
+
     $('input').on('keypress', function (event) {
-        var regex = new RegExp("^[a-zA-Z0-9]+$");
-        var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-        if (!regex.test(key)) {
-           event.preventDefault();
-           return false;
+        if ($("#login").is(":visible")) {
+            var regex = new RegExp("^[a-zA-Z0-9]+$");
+            var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+            if (!regex.test(key)) {
+                event.preventDefault();
+                return false;
+            }
         }
     });
 
@@ -237,6 +239,10 @@ $(function () {
         window.alert(`Il valutatore dice: ${data.message}`);
         $('#helpRequested').prop("disabled", false);
         $('#helpRequested').html("<i class='bi bi-question-square-fill'></i>");
+    });
+
+    socket.on('changeRoom', (data) => {
+        avventura.Next(avventura.scene[avventura.nowOn].risposte[data.soluzione]);
     });
 
     // Whenever the server emits 'login', log the login message

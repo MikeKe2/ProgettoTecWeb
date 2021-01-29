@@ -206,15 +206,15 @@ socket.on("user joined", (data) => {
     var $newUser = $(`<li class="list-group-item" id="${data.username.replace(/[^a-zA-Z0-9]/g, "")}">${data.username}</li>`);
     $('#userList').append($newUser);
     showToast(0, data);
-
-    ArrayofUsers.newStoria(data.id, data.username, 0, 0, 0, null, null);
-    sessionStorage.setItem('Users', JSON.stringify(ArrayofUsers));
-
+    
     socket.emit("assignGroup", {
       id: data.id,
       groupN: gruppo,
     });
 
+    ArrayofUsers.newStoria(data.id, data.username, 0, 0, 0, gruppo, null, null);
+    sessionStorage.setItem('Users', JSON.stringify(ArrayofUsers));
+    
     if (parseInt(storia.ngruppi) > 1) {
       gruppo++;
       if (gruppo >= parseInt(storia.ngruppi))

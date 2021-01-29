@@ -99,12 +99,13 @@ class Messages {
 /*Users*/
 
 class Utente {
-    constructor(userId, userUsername, userRoom, userTimer, userScore, currentQuestion, possibleAnswer) {
+    constructor(userId, userUsername, userRoom, userTimer, userScore, userGroup, currentQuestion, possibleAnswer) {
         this.userId = userId;
         this.userUsername = userUsername;
         this.userRoom = userRoom;
         this.userTimer = userTimer;
         this.userScore = userScore;
+        this.userGroup = userGroup;
         this.currentQuestion = currentQuestion;
         this.possibleAnswer = possibleAnswer;
     }
@@ -115,8 +116,8 @@ class Utenti {
         this.users = [];
     }
 
-    newStoria(userId, userUsername, userRoom, userTimer, userScore, currentQuestion, possibleAnswer) {
-        let m = new Utente(userId, userUsername, userRoom, userTimer, userScore, currentQuestion, possibleAnswer);
+    newStoria(userId, userUsername, userRoom, userTimer, userScore, userGroup, currentQuestion, possibleAnswer) {
+        let m = new Utente(userId, userUsername, userRoom, userTimer, userScore, userGroup, currentQuestion, possibleAnswer);
         this.users.push(m);
         return m;
     }

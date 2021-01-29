@@ -11,12 +11,31 @@ var ArrayofMessages = new Messages();
 var currentTargetUser = "";
 var currentTargetId = "";
 var typing = false;
-var socket = io("https://site181993.tw.cs.unibo.it");
+var socket = io.connect("https://site181993.tw.cs.unibo.it");
 var gruppo = 0;
 var lastTypingTime;
 var storia;
 var FADE_TIME = 150; // ms
 var TYPING_TIMER_LENGTH = 400; // ms
+var found = false,
+  indx = 0;
+
+function findRoom(i, numRoom, userGruppo) {
+  if (storia.scene[numRoom].nome == "Fine") {
+    found = true;
+    return indx = i;
+  } else {
+    if (i <= storia.scene.length && !found) {
+      i++;
+      for (risposta in storia.scene[numRoom].risposte) {
+        findRoom(i, storia.scene[numRoom].risposte[parseInt(risposta)].to[userGruppo], userGruppo);
+        if (found)
+          break;
+      }
+    }
+  }
+  return indx;
+}
 
 
 function changeScene(input, output) {
@@ -39,11 +58,12 @@ function changeData(i, numRoom) {
   $("#userStatus").html("Si trova nella stanza: " + numRoom);
   storia.scene[numRoom].nome ? $("#SceneName").html(storia.scene[numRoom].nome) : "undefined";
   storia.scene[numRoom].descrizione ? $("#SceneDescrizione").html(storia.scene[numRoom].descrizione) : "undefined";
-  if(storia.scene[numRoom] == "image.html")
-  insertImage(numRoom);
+  if (storia.scene[numRoom] == "image.html")
+    insertImage(numRoom);
 
-  let k = numRoom;
-  let statusProgressbar = (100 * (k++)) / storia.scene.length;
+  let k = findRoom(0, numRoom, ArrayofUsers.users[i].userGroup); //numRoom;
+  found = false;
+  let statusProgressbar = (100 * (numRoom)) / k;
   $(".progress-bar").css({
     'width': statusProgressbar + '%'
   });
@@ -65,7 +85,7 @@ function changeData(i, numRoom) {
         <div class="accordion-body">
         <p>Tempo Massimo: ${currentAnswer[4]}</p>
         <p>Punti: ${currentAnswer[3]}</p>
-        <p>Conduce alla stanza n° ${currentAnswer[1]}</p>
+        <p>Conduce alla stanza n°  <input type="button" class="btn btn-outline-secondary changeRoom" value="${currentAnswer[1]}" id="${y}"></input></p>
         </div>
       </div>
     </div>`
@@ -83,7 +103,7 @@ function changeData(i, numRoom) {
     if (storia.scene[ArrayofUsers.users[i].userRoom].widget == "sendImage.html" || storia.scene[ArrayofUsers.users[i].userRoom].widget == "canvas.html")
       $('#soluzioneProposta').html(`<img style="width:100%" id=soluzioneProposta src=${ArrayofUsers.users[i].possibleAnswer}>`);
     else
-      ArrayofUsers.users[i].currentQuestion ? $("#soluzioneProposta").val(`<input type="text" class="form-control" id=soluzioneProposta value=${ArrayofUsers.users[i].currentQuestion} readonly></input>`): "il giocatore non ha scritto nulla";
+      ArrayofUsers.users[i].possibleAnswer ? $("#soluzioneProposta").html(`<input type="text" class="form-control" id=soluzioneProposta value=${ArrayofUsers.users[i].possibleAnswer} readonly></input>`) : "il giocatore non ha scritto nulla";
 
     let buttons = '';
     for (y in ArrayofUsers.users[i].currentQuestion.risposte)
@@ -113,7 +133,7 @@ $(function () {
 
     for (let user in usersStored['users']) {
       $('#userList').append(`<li class="list-group-item" id="${usersStored['users'][user].userUsername.replace(/[^a-zA-Z0-9]/g, "")}">${usersStored['users'][user].userUsername}</li>`);
-      ArrayofUsers.newStoria(usersStored['users'][user].userId, usersStored['users'][user].userUsername, usersStored['users'][user].userRoom, usersStored['users'][user].userTimer, usersStored['users'][user].userScore, usersStored['users'][user].currentQuestion, usersStored['users'][user].possibleAnswer);
+      ArrayofUsers.newStoria(usersStored['users'][user].userId, usersStored['users'][user].userUsername, usersStored['users'][user].userRoom, usersStored['users'][user].userTimer, usersStored['users'][user].userScore, usersStored['users'][user].userGroup, usersStored['users'][user].currentQuestion, usersStored['users'][user].possibleAnswer);
       if (usersStored['users'][user].possibleAnswer != undefined)
         $('#' + usersStored['users'][user].userUsername).addClass('list-group-item-warning');
     }
@@ -196,13 +216,20 @@ $(function () {
       });
     } else
       socket.emit('answerFromEvaluator', currentTargetId, e.currentTarget.id);
-
     ArrayofUsers.users[i].possibleAnswer = null;
     ArrayofUsers.users[i].currentQuestion = null;
-
     //we close the answer form
     $("#evaluatedAnswer").hide();
+  });
 
+  $('#sceneAnswers').on("click", ".btn", (e) => {
+    e.preventDefault();
+
+    let i = ArrayofUsers.findElement(currentTargetUser);
+    socket.emit("changeRoom", currentTargetId, e.currentTarget.id);
+
+    if (ArrayofUsers.users[i].possibleAnswer != undefined)
+      ArrayofUsers.users[i].possibleAnswer = ArrayofUsers.users[i].currentQuestion = null;
   });
 
   // da user a list
