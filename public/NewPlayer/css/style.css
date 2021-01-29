@@ -207,6 +207,7 @@ div.eval:before {
 }
 
 #finale,
+#beginning,
 #description {
     max-height: 40vh;
     overflow-y: auto;

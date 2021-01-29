@@ -2,7 +2,7 @@
 <html lang="it">
 
 <head>
-	<title>avventura</title>
+	<title>Avventura</title>
 	<!--Meta-->
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta charset="utf-8">
@@ -106,19 +106,18 @@
 			</audio>
 		</div>
 		<div class="d-flex flex-column justify-content-between h-100">
-			<div v-if="storia != null"  class="d-flex flex-column justify-content-around h-100">
-				<div id="description" v-if="nowOn == 0" class="storyblock text-justify " aria-live="polite"
-					tabindex="0">
-					<p>{{storia.nome}}</p>
-					<p>{{storia.categoria}}</p>
-					<p>{{storia.accessibile}}</p>
-					<p>{{storia.target}}</p>
+			<div v-if="storia != null" class="d-flex flex-column justify-content-around h-100">
+				<div id="beginning" v-if="nowOn == 0" class="storyblock text-justify " aria-live="polite" tabindex="0">
+					<p>Bevenuto nella storia {{storia.nome}}</p>
+					<p>Categoria: {{storia.categoria}}</p>
+					<p>Questa storia è stata pensata per: {{storia.target}}</p>
+					<p>QE' richiesto un valutatore per proseguire: {{storia.accessibile}}</p>
 				</div>
 				<div id="finale" v-if="nowOn == 1" class="storyblock text-justify justify-content-center"
 					aria-live="polite" tabindex="0">
 					<p class="lead">Complimenti {{username}}!</p>
-					<p class="lead"> Hai totalizzato {{storia.punti}} punti!</p>
-					<p class="lead"> Premi avanti per riniziare la storia</p>
+					<p class="lead">Hai totalizzato {{punti}} punti!</p>
+					<p class="lead">Premi avanti per ri-niziare la storia</p>
 				</div>
 				<div tabindex="0" id="description" v-if="nowOn > 1" class="text-justify" aria-live="polite">
 					{{scene[nowOn].descrizione}}

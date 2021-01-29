@@ -44,7 +44,7 @@ let avventura = new Vue({
 			if (to) {
 				$("#description").focus()
 				this.nowOn = to.to[parseInt(this.gruppo)];
-				this.punti += parseInt(to.points);
+				this.punti += parseInt(to.points) || 0;
 				if (avventura.storia.scene[this.nowOn].tracciaAudio != "") {
 					// ho provato con vue ma non sono riuscita a farlo andare :c però funziona
 					$("#track").attr("src", `/media/${avventura.storia.creatore}/audios/${avventura.storia.scene[this.nowOn].tracciaAudio}`);
@@ -54,7 +54,7 @@ let avventura = new Vue({
 					music.oncanplaythrough = music.play();
 				}
 				this.widget = null;
-				if (this.scene[this.nowOn].widget != "")
+				if (this.scene[this.nowOn].widget != undefined)
 					this.Load(this.scene[this.nowOn]);
 				this.time = start();
 
