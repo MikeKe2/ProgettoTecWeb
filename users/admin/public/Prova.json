@@ -1,0 +1,76 @@
+{
+    "nome": "Prova",
+    "categoria": "Singolo",
+    "accessibile": "false",
+    "target": "7-10",
+    "ngruppi": "1",
+    "background": "",
+    "css": "csstemplate.css",
+    "autore": "admin",
+    "creatore": "admin",
+    "scene": [{
+        "nome": "Inizio",
+        "x": 15,
+        "y": 15,
+        "risposte": [{
+            "to": ["2"]
+        }]
+    }, {
+        "nome": "Fine",
+        "x": 647,
+        "y": 379,
+        "risposte": []
+    }, {
+        "nome": "scena0",
+        "descrizione": "Inserisci descrizione...",
+        "widget": "canvas.html",
+        "tracciaAudio": "",
+        "valutatore": "true",
+        "timemax": "scena0",
+        "x": 373.796875,
+        "y": 215,
+        "risposte": [{
+            "valore": "0",
+            "to": ["1"],
+            "maxTime": "0",
+            "points": "100"
+        }],
+        "img": "",
+        "imgdescription": "undefined"
+    }, {
+        "nome": "scena1",
+        "descrizione": "Inserisci descrizione...",
+        "widget": "lever.html",
+        "tracciaAudio": "",
+        "valutatore": "false",
+        "timemax": "scena1",
+        "x": 0,
+        "y": 0,
+        "risposte": [{
+            "valore": "101",
+            "to": ["-1"],
+            "maxTime": "0",
+            "points": "0"
+        }],
+        "img": "",
+        "imgdescription": "undefined"
+    }, {
+        "nome": "scena2",
+        "descrizione": "Inserisci descrizione...",
+        "widget": "number.html",
+        "tracciaAudio": "",
+        "valutatore": "false",
+        "timemax": "scena2",
+        "x": 0,
+        "y": 0,
+        "risposte": [{
+            "valore": "0",
+            "to": ["-1"],
+            "maxTime": "0",
+            "points": "0"
+        }],
+        "img": "",
+        "imgdescription": "undefined"
+    }],
+    "password": "Papere"
+}

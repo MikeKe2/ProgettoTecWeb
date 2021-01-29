@@ -1,5 +1,6 @@
 * {
   box-sizing: border-box;
+  touch-action: manipulation;
 }
 
 html {
@@ -22,7 +23,6 @@ input {
 html,
 body {
   background-color: white;
-  padding-top: 10%;
   margin: 0;
   padding: 0;
 }
@@ -33,17 +33,35 @@ ul {
   word-wrap: break-word;
 }
 
-/* Pages page */
+#inputMessage{
+  font-size: 1.2rem;
+}
 
-.chat.page {
+.bi{
+  font-size: 1.2rem;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.chat {
   display: none;
 }
 
-.data.page {
+.data {
   display: none;
 }
 
 #answerForm {
+  display: none;
+}
+
+
+#evaluatedAnswer,
+#currentUser,
+#userStatus,
+#dataToList,
+#helpButton,
+#chatButton{
   display: none;
 }
 
@@ -134,10 +152,4 @@ div.player:before {
   overflow: hidden;
   padding-right: 15px;
   text-align: right;
-}
-
-#users,
-.progress,
-.container-fluid .container {
-  margin-top: 60px;
 }

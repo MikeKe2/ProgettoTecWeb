@@ -31,7 +31,11 @@ app.use(bodyParser.urlencoded({
 }));
 
 var server = http.createServer(app);
-var io = require('socket.io')(server);
+var io = require('socket.io')(server, {
+  cors: {
+    origin: '*',
+  }
+});
 
 passport.use(
   new Strategy(function (username, password, cb) {
@@ -480,7 +484,7 @@ app.get('/editorStoria/:visibility/:nomeStoria/', require('connect-ensure-login'
 //ROUTE TO STORIES
 app.get('/avventura/:user/:name', (req, res) => {
   url = '/users/' + req.params.user + '/public/' + req.params.name + '.json';
-  res.render("avventura", {
+  res.render("giocatore", {
     urlStoria: url
   });
 });
@@ -506,6 +510,12 @@ io.on("connection", (socket) => {
         room: num,
       });
     } catch (error) {}
+  });
+
+  socket.on('changeRoom', (id, num) => {
+    socket.to(id).emit('changeRoom', {
+      soluzione: num,
+    });
   });
 
   socket.on('score', (username, storia, data) => {

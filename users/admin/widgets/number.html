@@ -1,45 +1,47 @@
-
 <div id="number">
-    <div tabindex="0" id="textarea-holder" aria-label="risultato">
-        <input disabled="true" name="textarea" id="result">
+    <div>
+        <label for="result">Numero inserito:</label>
+        <input type="text" id="result" disabled class="form-control">
     </div>
     <div id="numpad" class="my-3">
         <div class="row d-flex justify-content-center">
-            <button class="col-2 col-xl-1 my-1 mr-1 btn btn-secondary" style="text-align: center;" onclick="add(1)">1</button>
-            <button class="col-2 col-xl-1 my-1 mr-1 btn btn-secondary" style="text-align: center;" onclick="add(2)">2</button>
-            <button class="col-2 col-xl-1 my-1 btn btn-secondary" style="text-align: center;" onclick="add(3)">3</button>
+            <button class="col-2 my-1 mr-1 btn btn-secondary" style="text-align: center;" onclick="add(1)" aria-label="uno">1</button>
+            <button class="col-2 my-1 mr-1 btn btn-secondary" style="text-align: center;" onclick="add(2)" aria-label="due">2</button>
+            <button class="col-2 my-1 btn btn-secondary" style="text-align: center;" onclick="add(3)" aria-label="tre">3</button>
         </div>    
         <div class="row d-flex justify-content-center">
-            <button class="col-2 col-xl-1 my-1 mr-1 btn btn-secondary" style="text-align: center;" onclick="add(4)">4</button>
-            <button class="col-2 col-xl-1 my-1 mr-1 btn btn-secondary" style="text-align: center;" onclick="add(5)">5</button>
-            <button class="col-2 col-xl-1 my-1 btn btn-secondary" style="text-align: center;" onclick="add(6)">6</button>
+            <button class="col-2 my-1 mr-1 btn btn-secondary" style="text-align: center;" onclick="add(4)" aria-label="quattro">4</button>
+            <button class="col-2 my-1 mr-1 btn btn-secondary" style="text-align: center;" onclick="add(5)" aria-label="cinque">5</button>
+            <button class="col-2 my-1 btn btn-secondary" style="text-align: center;" onclick="add(6)" aria-label="sei">6</button>
         </div>
         <div class="row d-flex justify-content-center">
-            <button class="col-2 col-xl-1 my-1 mr-1 btn btn-secondary" style="text-align: center;" onclick="add(7)">7</button>
-            <button class="col-2 col-xl-1 my-1 mr-1 btn btn-secondary" style="text-align: center;" onclick="add(8)">8</button>
-            <button class="col-2 col-xl-1 my-1 btn btn-secondary" style="text-align: center;" onclick="add(9)">9</button>
+            <button class="col-2 my-1 mr-1 btn btn-secondary" style="text-align: center;" onclick="add(7)" aria-label="sette">7</button>
+            <button class="col-2 my-1 mr-1 btn btn-secondary" style="text-align: center;" onclick="add(8)" aria-label="otto">8</button>
+            <button class="col-2 my-1 btn btn-secondary" style="text-align: center;" onclick="add(9)" aria-label="nove">9</button>
         </div>
         <div class="row d-flex justify-content-center">
-            <button class="col-4 col-xl-2 my-1 mr-2 btn btn-secondary" style="text-align: center;" onclick="add(0)">0</button>
-            <button class="col-2 col-xl-1 my-1 btn btn-secondary" style="text-align: center;" onclick="del()">c</button>
+            <button class="col-4 my-1 mr-2 btn btn-secondary" style="text-align: center;" onclick="add(0)" aria-label="zero">0</button>
+            <button class="col-2 my-1 btn btn-secondary" style="text-align: center;" onclick="del()" aria-label="cancella">c</button>
         </div>
     </div>
 </div>
 
 <script>
+    var risposta;
     function add(n){
         var text = document.getElementById("result").value;
         document.getElementById("result").value = text + n.toString();
-        document.getElementById("textarea-holder").setAttribute("aria-label", text + n.toString());
+        risposta = text + n.toString();
     }
 
     function del(){
         var text = document.getElementById("result").value;
         text = text.slice(0, text.length-1);
+        risposta = text
         document.getElementById("result").value = text;
-        if(text.length < 1)
-            document.getElementById("textarea-holder").setAttribute("aria-label", "risultato");
-        else
-            document.getElementById("textarea-holder").setAttribute("aria-label", text);
+        //avventura.risposta_data = text + n.toString();
+    }
+    function risultato(){
+        return risposta;
     }
 </script>

@@ -17,11 +17,11 @@ class Messages {
         this.messages.push(m);
         return m;
     }
-    get allMessages() {
+    allMessages() {
         return this.messages;
     }
     // this could include summary stats like average score, etc. For simplicy, just the count for now
-    get numberOfMessages() {
+    numberOfMessages() {
         return this.messages.length;
     }
 };
@@ -29,56 +29,85 @@ class Messages {
 var FADE_TIME = 150; // ms
 var TYPING_TIMER_LENGTH = 400; // ms
 
+
 // Initialize variables
 var $window = $(window);
 var $usernameInput = $(".usernameInput"); // Input for username
 var $messages = $(".messages"); // Messages area
 var $inputMessage = $("#inputMessage"); // Input message input box
+var $chatPage = $("#chat"); // The chatroom page
 
-var $loginPage = $(".login.page"); // The login page
-var $adventurePage = $(".adventure.page"); // The adventure page
-//var $groupPage = $('.group.page'); // The group selection page
+
+var socket = io.connect("https://site181993.tw.cs.unibo.it");
+
 
 // Prompt for setting a username
+var username;
 var connected = false;
 var typing = false;
 var lastTypingTime;
-var $currentInput = $usernameInput.focus();
 var ArrayofMessages = new Messages();
 
 $(function () {
 
-    $('#chatWithEvaluator').click((e) => {
-            e.preventDefault();
-            var element = document.getElementById("chatWithEvaluator");
-            element.className = element.className.replace(/\bbtn-outline-warning\b/g, "");
-            $('#chatWithEvaluator').addClass('btn-outline-info');
+    $('#modalChat').on('shown.bs.modal', () => {
+        $(".messages").html("");
+        $("#inputMessage").val("");
+        $('#chatEvaluator').removeClass('btn-info');
+        $('#chatEvaluator').addClass('btn-outline-info');
+        $inputMessage.focus();
+        for (var i = 0; i < ArrayofMessages.numberOfMessages(); i++)
+            addChatMessage(ArrayofMessages.messages[i]);
+    });
 
-            $adventurePage.fadeOut(100);
-            $chatPage.show(300);
-            $adventurePage.prop("disabled", true);
-            $chatPage.prop("disabled", false);
-            $(".navbar-collapse").collapse('hide');
-            $inputMessage.focus();
+    $("#button-addon2").click((e) => {
+        e.preventDefault();
+        if (username && $("#modalChat").is(":visible") && $inputMessage.val()) {
+            sendMessage();
+            socket.emit("stop typing");
+            typing = false;
+        }
+    });
 
-            for (var i = 0; i < ArrayofMessages.numberOfMessages; i++) {
-                addChatMessage(ArrayofMessages.messages[i]);
+    $('input').on('keypress', function (event) {
+        if ($("#login").is(":visible")) {
+            var regex = new RegExp("^[a-zA-Z0-9]+$");
+            var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+            if (!regex.test(key)) {
+                event.preventDefault();
+                return false;
             }
-        });
+        }
+    });
+
+    $window.keydown((e) => {
+        // When the client hits ENTER on their keyboard
+        if (e.which === 13) {
+            if (username && $("#modalChat").is(":visible") && $inputMessage.val()) {
+                sendMessage();
+                socket.emit("stop typing");
+                typing = false;
+            } else if (!username)
+                setUsername();
+            else
+                avventura.Evaluate();
+        }
+    });
 
     // Sets the client's username
-    const setUsername = () => {
+    function setUsername() {
         username = cleanInput($usernameInput.val().trim());
 
         // If the username is valid
         if (username) {
-            $loginPage.fadeOut();
-            $loginPage.off("click");
-            $adventurePage.show();
-            socket.emit("add user", username, (storia.nome));
+            $("#login").fadeOut();
+            $("#login").off("click");
+            $("#avventura").show();
+            $("nav").show();
+            socket.emit("add user", username, (avventura.storia.nome));
             sessionStorage.setItem('Username', username);
         }
-    };
+    }
 
     // Sends a chat message
     const sendMessage = () => {
@@ -94,7 +123,7 @@ $(function () {
                 message: message,
             });
             // tell server to execute 'new message' and send along one parameter
-            socket.emit("new user message", storia.nome, message);
+            socket.emit("new user message", avventura.storia.nome, message);
         }
     };
 
@@ -173,7 +202,7 @@ $(function () {
         if (connected) {
             if (!typing) {
                 typing = true;
-                socket.emit("typing", storia.nome);
+                socket.emit("typing", avventura.storia.nome);
             }
             lastTypingTime = new Date().getTime();
 
@@ -181,7 +210,7 @@ $(function () {
                 var typingTimer = new Date().getTime();
                 var timeDiff = typingTimer - lastTypingTime;
                 if (timeDiff >= TYPING_TIMER_LENGTH && typing) {
-                    socket.emit("stop typing", storia.nome);
+                    socket.emit("stop typing", avventura.storia.nome);
                     typing = false;
                 }
             }, TYPING_TIMER_LENGTH);
@@ -194,28 +223,9 @@ $(function () {
             return $(this).data("username") === data.username;
         });
     };
-    // Keyboard events
-
-    $window.keydown((event) => {
-        // When the client hits ENTER on their keyboard
-        if (event.which === 13) {
-            if (username && $('#modalChat').is(':visible') && $inputMessage.val()) {
-                sendMessage();
-                socket.emit("stop typing");
-                typing = false;
-            } else if (!username) {
-                setUsername();
-            }
-        }
-    });
 
     $inputMessage.on("input", () => {
         updateTyping();
-    });
-
-    // Focus input when clicking anywhere on login page
-    $loginPage.click(() => {
-        $currentInput.focus();
     });
 
     // Focus input when clicking on the message input's border
@@ -228,6 +238,11 @@ $(function () {
     socket.on('helpIncoming', (data) => {
         window.alert(`Il valutatore dice: ${data.message}`);
         $('#helpRequested').prop("disabled", false);
+        $('#helpRequested').html("<i class='bi bi-question-square-fill'></i>");
+    });
+
+    socket.on('changeRoom', (data) => {
+        avventura.Next(avventura.scene[avventura.nowOn].risposte[data.soluzione]);
     });
 
     // Whenever the server emits 'login', log the login message
@@ -237,18 +252,18 @@ $(function () {
     });
 
     socket.on("assignGroup", (data) => {
-        gruppo = data.groupN;
+        avventura.gruppo = data.groupN;
     });
 
     // Whenever the server emits 'new message', update the chat body
     socket.on("new message", (data) => {
         ArrayofMessages.newMessage(data.username, data.id, username, data.message);
         //we just check if the page is visibile, because users have only one chat
-        if ($('#modalChat').is(':visible'))
+        if ($('#modalChat').is(':visible')) {
             addChatMessage(data);
-        else {
-            $("chatWithEvaluator").removeClass("btn-outline-info");
-            $('#chatWithEvaluator').addClass('btn-outline-warning');
+        } else {
+            $("#chatEvaluator").removeClass('btn-outline-info');
+            $('#chatEvaluator').addClass('btn-info');
         }
     });
 
@@ -269,8 +284,8 @@ $(function () {
     socket.on("reconnect", () => {
         log("you have been reconnected");
         if (username) {
-            socket.emit("add user", username, (storia.nome));
-            socket.emit("scene", username, storia.nome, (scena_corr));
+            socket.emit("add user", username, (avventura.storia.nome));
+            socket.emit("scene", username, avventura.storia.nome, (avventura.nowOn));
         }
         id = socket.id;
     });

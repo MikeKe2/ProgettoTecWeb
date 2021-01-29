@@ -125,17 +125,19 @@
             <span class="toggle-inside"></span>
         </span>
     </div>
-    <input type="text" hidden="true" id="result">
 </div>
 
 <script>
     lever1 = document.getElementById("toggle-b");
     lever2 = document.getElementById("toggle-d");
     lever3 = document.getElementById("toggle-f");
-    result = document.getElementById("result");
+    var risp = "000";
 
     function updateResult() {
-        result.value = ((!lever1.checked) | 0).toString() + ((!lever2.checked) | 0).toString() + ((!lever3.checked) | 0).toString();
-        console.log(result.value);
+        risp = ((!lever1.checked) | 0).toString() + ((!lever2.checked) | 0).toString() + ((!lever3.checked) | 0).toString();
+        console.log("lever "+risp);
+    }
+    function risultato(){
+        return risp;
     }
 </script>

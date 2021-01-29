@@ -191,7 +191,6 @@ var board = {
 			widget: null,
 			tracciaAudio: null,
 			valutatore: false,
-			timemax: null,
 			x: null,
 			y: null,
 			risposte: []

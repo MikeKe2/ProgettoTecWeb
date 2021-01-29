@@ -40,21 +40,3 @@ var Avventure = new Vue({
 		}
 	}
 });
-
-/*
-	updated: function () {
-		this.$nextTick(function () {
-			for (let uindex = 0; uindex < this.list.length; uindex++) {
-				for (let sindex = 0; sindex < this.list[uindex].stories.length; sindex++) {
-					let user = this.list[uindex].name;
-					let adventure = this.list[uindex].stories[sindex];
-					let qrmaker = new QRCode($("#qr_" + uindex + "_" + sindex)[0])
-					qrmaker.clear(); // clear the code.
-					let url = "https://site181993.tw.cs.unibo.it/avventura/" + user + "/" + adventure;
-					qrmaker.makeCode(encodeURI(url)); // make another code.
-				}
-			}
-		})
-	}
-});
-*/

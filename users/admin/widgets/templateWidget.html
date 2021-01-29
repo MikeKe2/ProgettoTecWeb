@@ -1,25 +1,19 @@
-<!--
-BENVENUTO A "WIDGETS FOR DUMMIES"
-Fai copia-incolla di questo template e adattalo alle tue esigenze!
-Ecco qui alcune linee guida:
--prima del tag input con id result che puoi vedere benissimo qua sotto,
-inserisci gli elementi che vuoi vedere visualizzati nel widget;
--nel caso volessi nascondere l'input di result, aggiungi prima della sua > hidden="true" (se il widget è
-accessibile aggiungi anche aria-hidden="true");
--usa il tag script se il tuo widget necessita di meccaniche inseribili solo con linee di codice;
--ricordati in ogni caso di fare in modo che l'attributo value, adesso vuoto,
-contenga la risposta che desideri ricevere e successivamente controllare;
--per rendere accessibile il widget anche ai non vedenti, aggiungi l'attributo aria-label="cosa deve leggere 
-il lettore" e l'attributo tabindex="0" (mai modificare questo valore 0).
+<!-- CSS -->
+<style>
 
-Grazie mille per averci scelti! <3
--->
+</style>
 
+<!-- HTML -->
 <div>
 
-    <input type="text" value="" id="result">
 </div>
 
+<!-- JS -->
 <script>
-
+    //per ottenere il risultato noi richiamiamo una funzione chiamata "risultato" che non prende argomenti e ritorna la risposta
+    //in questo modo se dovessi svolgere alcune operazioni prima di inviare la risposta potresti benissimo farlo in quella funzione che,
+    //a parte per la presenza del return, non ha altri vincoli e può essere personalizzata a piacimento 
+    function risultato(){
+        return "la tua risposta"
+    }
 </script>
