@@ -31,7 +31,7 @@ let avventura = new Vue({
 					$("nav").show();
 					username = sessionStorage.getItem('Username');
 					socket.emit("add user", username, (avventura.storia.nome));
-					
+
 					avventura.nowOn = sessionStorage.getItem("Scene");
 					avventura.punti = sessionStorage.getItem("Points");
 					socket.emit("scene", username, avventura.storia.nome, avventura.nowOn);
@@ -44,7 +44,7 @@ let avventura = new Vue({
 			if (to) {
 				$("#description").focus()
 				this.nowOn = to.to[parseInt(this.gruppo)];
-				this.punti += parseInt(to.punti);
+				this.punti += parseInt(to.points);
 				if (avventura.storia.scene[this.nowOn].tracciaAudio != "") {
 					// ho provato con vue ma non sono riuscita a farlo andare :c però funziona
 					$("#track").attr("src", `/media/${avventura.storia.creatore}/audios/${avventura.storia.scene[this.nowOn].tracciaAudio}`);
@@ -54,7 +54,7 @@ let avventura = new Vue({
 					music.oncanplaythrough = music.play();
 				}
 				this.widget = null;
-				if(this.scene[this.nowOn].widget != "")
+				if (this.scene[this.nowOn].widget != "")
 					this.Load(this.scene[this.nowOn]);
 				this.time = start();
 
@@ -121,7 +121,7 @@ let avventura = new Vue({
 					}
 				}
 
-				if (risposta){
+				if (risposta) {
 					this.Next(risposta);
 					return;
 				}
@@ -164,7 +164,9 @@ async function waitEvaluator(_callback) {
 };
 
 $(() => {
-	$('#nextBtn').blur(()=>{$("#myPopup").removeClass("show")});
+	$('#nextBtn').blur(() => {
+		$("#myPopup").removeClass("show")
+	});
 
 	$("nav").hide();
 
