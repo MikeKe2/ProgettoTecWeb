@@ -70,6 +70,8 @@ let avventura = new Vue({
 		},
 
 		Load: function (scena) {
+			if(scena.widget == "")
+				return;
 			$.ajax({
 				url: '/media/' + this.storia.creatore + '/widgets/' + scena.widget,
 				success: (data) => {
@@ -135,94 +137,5 @@ let avventura = new Vue({
 				this.Next(risposta);
 			}
 		}
-
 	}
-});
-
-function start() {
-	return new Date();
-};
-
-function end(startTime) {
-	let endTime = new Date();
-	let timeDiff = endTime - startTime; //in ms
-	// strip the ms
-	timeDiff /= 1000;
-
-	// get seconds 
-	let seconds = Math.round(timeDiff);
-	return seconds;
-}
-
-async function waitEvaluator(_callback) {
-	$("#loading").show();
-	await socket.on('answerFromEvaluator', (answer_number) => {
-		$("#loading").hide();
-		let risposta = avventura.scene[avventura.nowOn].risposte[parseInt(answer_number.message, 10)];
-		avventura.Next(risposta);
-	});
-};
-
-$(() => {
-	$('#nextBtn').blur(() => {
-		$("#myPopup").removeClass("show")
-	});
-
-	$("nav").hide();
-
-	$(".usernameInput").focus();
-
-	$('#login').click(() => {
-		$(".usernameInput").focus();
-	});
-
-	$(".valutatore").click(() => {
-		$("#loginModal").modal("show");
-
-		//handle the form's "submit" event
-		$("#loginForm").submit((e) => {
-			e.preventDefault();
-
-			if ($("#modalpass").val() == avventura.storia.password) {
-				//$('#loginModal').modal('toggle');
-				//$(".spinner.border").show();
-				alert("Access Granted!");
-				window.location.pathname += "/Valutatore";
-			} else
-				alert("Password is incorrect.");
-		});
-	});
-
-	/*When the help button is clicked, it send a requesto to the evaluator*/
-	$('#helpRequested').click(function (e) {
-		e.preventDefault();
-		socket.emit('help', avventura.storia.nome, username);
-		$('#helpRequested').prop("disabled", true);
-		$('#helpRequested').html("<i class='bi bi-question-square'></i>");
-	});
-
-	$("#MuteMusic").click((e) => {
-		e.preventDefault();
-		music.muted = !music.muted;
-		if (music.muted) {
-			/*music[0].pause();
-			music[0].currentTime = 0;*/
-			$("#MuteMusic").html("<i class='bi bi-volume-mute-fill'></i>");
-		} else {
-			/*music[0].load();
-			music[0].oncanplaythrough = music[0].play();*/
-			$("#MuteMusic").html("<i class='bi bi-volume-up-fill'></i>");
-		}
-	});
-
-	$('#loginModal').on('shown.bs.modal', () => {
-		$("#modalpass").focus();
-	});
-
-	/*TODO: FIX THIS MESS*/
-	$('#modalChat').on('shown.bs.modal', () => {
-		$('#modalChat').animate({
-			scrollTop: $('#modalChat .messages').height()
-		}, 500);
-	});
 });

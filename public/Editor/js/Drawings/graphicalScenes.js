@@ -53,8 +53,8 @@ class graphicalScene{
 		}
 	}
 	open(){ //funzione per aprire la scena, si cerca il template nell'html e lo si compila con i campi specifici (la funzione controlla che la scena non sia già aperta, se lo è la chiude)
-	let id = this.id;
-	if(!$("#scena"+id)[0]){
+		let id = this.id;
+		if(!$("#scena"+id)[0]){
 			let s_id = "#scena"+id;
 			let html = $("#scena").html();
 			for(let i = 0; i<17; i++){
@@ -69,15 +69,15 @@ class graphicalScene{
 			//select con l'audio
 			html = html.replace("$AUDIO", this.core.tracciaAudio!= null? this.core.tracciaAudio : "nessun audio inserito");
 			if(this.core.valutatore=="false")
-        		this.core.valutatore = false;
+    			this.core.valutatore = false;
 			html = html.replace("$VALUTATORE", this.core.valutatore?"ON":"OFF");
 			
 			$(".container").append(html);
 			$("#editValutatore"+id).prop( "checked", this.core.valutatore);
 			
-
-			getMedia("images","#editImmagine"+id);
-			getMedia("widgets", "#editWidget"+id);
+	
+		getMedia("images","#editImmagine"+id);
+		getMedia("widgets", "#editWidget"+id);
 			getMedia("audios", "#editAudio"+id);
 			if(this.core.widget != "image.html"){
 				$("#immagineWidget"+id).hide();
@@ -89,11 +89,11 @@ class graphicalScene{
 					$("#immagineWidget"+id).show();
 				}
 			});
-
-			this.populateRisp();
-
-			$(s_id+" .header").css({"background-color":storia.categoria=="Singolo"?"purple":groups[board.activegroup]}); //la barra superiore è del colore del gruppo attivo o viola se la storia è singola 
-			initScene(s_id); //vengono aggiunti gli handler alle funzioni e si rende possibile lo spostamento della finestra 
+	
+		this.populateRisp();
+	
+		$(s_id+" .header").css({"background-color":storia.categoria=="Singolo"?"purple":groups[board.activegroup]}); //la barra superiore è del colore del gruppo attivo o viola se la storia è singola 
+		initScene(s_id); //vengono aggiunti gli handler alle funzioni e si rende possibile lo spostamento della finestra 
 		}
 		else
 			close("#scena"+id);
