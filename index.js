@@ -399,7 +399,6 @@ app.get('/media/:user/:type/:name', (req, res) => {
 
 app.post('/import', require('connect-ensure-login').ensureLoggedIn(), (req, res) => {
   const directoryPath = path.join(__dirname + "/users/" + req.user.username, "private");
-  console.log(req.body.name);
   fs.writeFileSync(directoryPath + "/" + req.body.name, JSON.stringify(req.body.data));
   res.sendStatus(200);
   res.end();
@@ -528,7 +527,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on('answerToEvaluator', (username, storia, data) => {
-    console.log("inviato giocatore!" + data);
     try {
       socket.to(evaluators[storia]).emit('answerToEvaluator', {
         username: username,
@@ -540,7 +538,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on('answerFromEvaluator', (targetId, data) => {
-    console.log("inviato valutatore!" + data);
     socket.to(targetId).emit('answerFromEvaluator', {
       message: data,
     });
