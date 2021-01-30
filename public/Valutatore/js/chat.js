@@ -50,7 +50,7 @@ function addChatMessage(data, options) {
 // Adds the visual chat typing message
 const addChatTyping = (data) => {
   data.typing = true;
-  data.message = "is typing";
+  data.message = "sta scrivendo...";
   addChatMessage(data);
 };
 
