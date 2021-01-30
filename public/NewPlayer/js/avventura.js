@@ -66,6 +66,7 @@ let avventura = new Vue({
 
 			} else {
 				$("#myPopup").addClass("show");
+				$('#nextBtn').attr("aria-label", $("#myPopup").html());
 				$('#nextBtn').focus();
 			}
 		},

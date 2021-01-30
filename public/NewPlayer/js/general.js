@@ -31,6 +31,7 @@ async function waitEvaluator() {
 $(() => {
     $('#nextBtn').blur(() => {
         $("#myPopup").removeClass("show")
+        $('#nextBtn').attr("aria-label", "");
     });
 
     $("nav").hide();
