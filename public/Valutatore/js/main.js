@@ -11,8 +11,7 @@ var ArrayofMessages = new Messages();
 var currentTargetUser = "";
 var currentTargetId = "";
 var typing = false;
-//var socket = io.connect("https://site181993.tw.cs.unibo.it");
-var socket = io.connect("http://localhost:8000");
+var socket = io.connect("https://site181993.tw.cs.unibo.it");
 var gruppo = 0;
 var lastTypingTime;
 var storia;
@@ -73,7 +72,7 @@ function changeData(i, numRoom) {
   //we show the possible answer to the current Room, and various data
   for (y in storia.scene[numRoom].risposte) {
     let currentAnswer = Object.values(storia.scene[numRoom].risposte[y]);
-    let answer = $("#answers").html().replaceAll("$y", y).replaceAll("$CA0",currentAnswer[0]).replace("$CA1",currentAnswer[1]).replace("$CA3",currentAnswer[3]).replace("$CA4",currentAnswer[4]);
+    let answer = $("#answers").html().replaceAll("$y", y).replaceAll("$CA0", currentAnswer[0]).replace("$CA1", currentAnswer[1]).replace("$CA3", currentAnswer[3]).replace("$CA4", currentAnswer[4]);
     totalAnswer += answer;
   }
   $('#sceneAnswers').html(totalAnswer);
@@ -128,7 +127,7 @@ $(function () {
 
     for (i in ArrayofMessages.messages)
       if (currentTargetUser == ArrayofMessages.messages[i].username || currentTargetUser == ArrayofMessages.messages[i].dstUsername)
-      addChatMessage(ArrayofMessages.messages[i]);
+        addChatMessage(ArrayofMessages.messages[i]);
   });
 
 
@@ -189,7 +188,7 @@ $(function () {
       });
     } else
       socket.emit("answerFromEvaluator", currentTargetId, e.currentTarget.id);
-    
+
     ArrayofUsers.users[i].possibleAnswer = null;
     ArrayofUsers.users[i].currentQuestion = null;
     //we close the answer form
@@ -270,20 +269,20 @@ $(function () {
   })
 });
 
-function populatePossibleRisp(ArrayofUsers, i){
+function populatePossibleRisp(ArrayofUsers, i) {
   $('.btn-group').html("");
   $("#domandaNome").val(ArrayofUsers.users[i].currentQuestion.nome);
   $("#domandaDesc").val(ArrayofUsers.users[i].currentQuestion.descrizione);
   let sol;
   if (storia.scene[ArrayofUsers.users[i].userRoom].widget == "sendImage.html" || storia.scene[ArrayofUsers.users[i].userRoom].widget == "canvas.html")
-    sol = $('#imgRisposta').html().replace("$IMG",ArrayofUsers.users[i].possibleAnswer);
+    sol = $('#imgRisposta').html().replace("$IMG", ArrayofUsers.users[i].possibleAnswer);
   else
     sol = $("#textRisposta").html().replace("$VAL", ArrayofUsers.users[i].possibleAnswer ? ArrayofUsers.users[i].possibleAnswer : "il giocatore non ha scritto nulla");
 
   $('#soluzioneProposta').html(sol)
   let buttons = '';
-  buttons = buttons.concat($("#btnRisps").html().replace("$ID","-1").replace("$VAL","nessuna di queste"));
+  buttons = buttons.concat($("#btnRisps").html().replace("$ID", "-1").replace("$VAL", "nessuna di queste"));
   for (y in ArrayofUsers.users[i].currentQuestion.risposte)
-    buttons = buttons.concat($("#btnRisps").html().replace("$ID", y).replace("$VAL",ArrayofUsers.users[i].currentQuestion.risposte[y].valore));
+    buttons = buttons.concat($("#btnRisps").html().replace("$ID", y).replace("$VAL", ArrayofUsers.users[i].currentQuestion.risposte[y].valore));
   $('.btn-group').append(buttons);
 }
