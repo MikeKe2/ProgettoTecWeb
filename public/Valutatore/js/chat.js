@@ -162,9 +162,10 @@ socket.on("answerToEvaluator", (data) => {
   sessionStorage.setItem('Users', JSON.stringify(ArrayofUsers));
 
   $('#' + data.username).addClass('list-group-item-warning');
-
+  console.log("answerToEvaluator")
   if (currentTargetUser == data.username && $dataPage.is(":visible")) {
     populatePossibleRisp(ArrayofUsers, i);
+    $('#evaluatedAnswer').show();
   }
   showToast(9, data);
 });
@@ -187,7 +188,7 @@ socket.on("new message", (data) => {
 socket.on("user joined", (data) => {
   if (ArrayofUsers.findElement(data.username) == -1) {
 
-    var $newUser = $("#newUsr").html().replace("ID", data.username.replace(/[^a-zA-Z0-9]/g, "")).replace("$VAL", data.username);
+    var $newUser = $("#newUsr").html().replace("$ID", data.username.replace(/[^a-zA-Z0-9]/g, "")).replace("$VAL", data.username);
     $('#userList').append($newUser);
     showToast(0, data);
     

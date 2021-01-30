@@ -51,7 +51,7 @@ function changeScene(input, output) {
 function changeData(i, numRoom) {
 
   //We clean the possible remains of another user
-  $("evaluatedAnswer").hide();
+  $("#evaluatedAnswer").hide();
   $('#sceneAnswers').html("");
   $('.btn-group').html("");
 
@@ -77,9 +77,11 @@ function changeData(i, numRoom) {
     totalAnswer += answer;
   }
   $('#sceneAnswers').html(totalAnswer);
-
+  $('.btn-group').html("");
   //if the current user has some question to be evalued, we show the module for it
-  if (ArrayofUsers.users[i].possibleAnswer != undefined) {
+  console.log("changeData", i, ArrayofUsers.users[i].possibleAnswer)
+  if (ArrayofUsers.users[i].possibleAnswer != null) {
+    $('#evaluatedAnswer').show();
     populatePossibleRisp(ArrayofUsers, i);
   }
 };
@@ -126,7 +128,7 @@ $(function () {
 
     for (i in ArrayofMessages.messages)
       if (currentTargetUser == ArrayofMessages.messages[i].username || currentTargetUser == ArrayofMessages.messages[i].dstUsername)
-        addChatMessage(ArrayofMessages.messages[i]);
+      addChatMessage(ArrayofMessages.messages[i]);
   });
 
 
@@ -284,5 +286,4 @@ function populatePossibleRisp(ArrayofUsers, i){
   for (y in ArrayofUsers.users[i].currentQuestion.risposte)
     buttons = buttons.concat($("#btnRisps").html().replace("$ID", y).replace("$VAL",ArrayofUsers.users[i].currentQuestion.risposte[y].valore));
   $('.btn-group').append(buttons);
-  $('#evaluatedAnswer').show();
 }
