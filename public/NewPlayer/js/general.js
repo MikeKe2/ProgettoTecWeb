@@ -15,15 +15,13 @@ function end(startTime) {
 
 async function waitEvaluator() {
     $("#loading").show();
-    await socket.on('answerFromEvaluator', (answer_number) => {
-        console.log("yeet");
+    await socket.once('answerFromEvaluator', (answer_number) => {
         $("#loading").hide();
         if (parseInt(answer_number.message) < 0) {
             avventura.Next(null);
             return;
         } else {
             let risposta = avventura.scene[avventura.nowOn].risposte[parseInt(answer_number.message)];
-            console.log(risposta);
             avventura.Next(risposta);
         }
     });

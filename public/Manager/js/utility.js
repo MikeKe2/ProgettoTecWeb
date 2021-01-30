@@ -15,7 +15,6 @@ $(document).ready(() => {
 
     var reader = new FileReader();
     reader.onload = (event) => {
-      console.log(event.target.result);
       var obj = JSON.parse(event.target.result);
       $.post("/import", {
         name: file.name,

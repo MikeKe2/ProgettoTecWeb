@@ -105,7 +105,6 @@ let avventura = new Vue({
 			let finalTime = end(this.time);
 			if (this.scene[this.nowOn].valutatore == "true") {
 				this.risposta_data = risultato();
-				console.log(this.risposta_data);
 				socket.emit("answerToEvaluator", username, avventura.storia.nome, (this.risposta_data));
 				waitEvaluator();
 				return;
