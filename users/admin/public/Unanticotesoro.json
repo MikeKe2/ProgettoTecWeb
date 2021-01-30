@@ -41,7 +41,7 @@
         "descrizione": "provando ad aprire il baule notate che è chiuso con un lucchetto! Provate ad aprirlo lo stesso o cercate in giro?",
         "widget": "text.html",
         "tracciaAudio": "",
-        "valutatore": "true",
+        "valutatore": "false",
         "timemax": "il primo ostacolo",
         "x": "410",
         "y": "13",

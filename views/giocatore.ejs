@@ -23,6 +23,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
 	<!--CSS-->
 	<link rel="stylesheet" type="text/css" href="/public/NewPlayer/css/style.css">
+	<link rel="icon" href="/icon.jpeg">
 </head>
 
 <body>
@@ -111,7 +112,7 @@
 					<p>Bevenuto nella storia {{storia.nome}}</p>
 					<p>Categoria: {{storia.categoria}}</p>
 					<p>Questa storia è stata pensata per: {{storia.target}}</p>
-					<p>Questa storia <span v-if="!storia.accessibile">non </span>è accessibile!</p>
+					<p>Questa storia <span v-if="storia.accessibile=='false'">non </span>è accessibile!</p>
 					
 				</div>
 				<div id="finale" v-if="nowOn == 1" class="storyblock text-justify justify-content-center"

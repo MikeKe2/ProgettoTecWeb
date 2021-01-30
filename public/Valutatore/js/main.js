@@ -73,45 +73,14 @@ function changeData(i, numRoom) {
   //we show the possible answer to the current Room, and various data
   for (y in storia.scene[numRoom].risposte) {
     let currentAnswer = Object.values(storia.scene[numRoom].risposte[y]);
-    let answer = `
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="flush-heading${y}">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-          data-bs-target="#flush-collapse${y}">
-          Possibile Risposta : ${currentAnswer[0]}
-        </button>
-      </h2>
-      <div id="flush-collapse${y}" class="accordion-collapse collapse" aria-labelledby="flush-heading${currentAnswer[0]}"
-        data-bs-parent="#sceneAnswers">
-        <div class="accordion-body">
-        <p>Tempo Massimo: ${currentAnswer[4]}</p>
-        <p>Punti: ${currentAnswer[3]}</p>
-        <p>Conduce alla stanza n°  <input type="button" class="btn btn-outline-secondary changeRoom" value="${currentAnswer[1]}" id="${y}"></input></p>
-        </div>
-      </div>
-    </div>`
+    let answer = $("#answers").html().replaceAll("$y", y).replaceAll("$CA0",urrentAnswer[0]).replace("$CA1",urrentAnswer[1]).replace("$CA3",urrentAnswer[3]).replace("$CA4",urrentAnswer[4]);
     totalAnswer += answer
   }
   $('#sceneAnswers').html(totalAnswer);
 
   //if the current user has some question to be evalued, we show the module for it
   if (ArrayofUsers.users[i].possibleAnswer != undefined) {
-    $("#evaluatedAnswer").show();
-
-    $("#domandaNome").val(ArrayofUsers.users[i].currentQuestion.nome);
-    $("#domandaDesc").val(ArrayofUsers.users[i].currentQuestion.descrizione);
-
-    if (storia.scene[ArrayofUsers.users[i].userRoom].widget == "sendImage.html" || storia.scene[ArrayofUsers.users[i].userRoom].widget == "canvas.html")
-      $('#soluzioneProposta').html(`<img style="width:100%" id=soluzioneProposta src=${ArrayofUsers.users[i].possibleAnswer}>`);
-    else
-      ArrayofUsers.users[i].possibleAnswer ? $("#soluzioneProposta").html(`<input type="text" class="form-control" id=soluzioneProposta value=${ArrayofUsers.users[i].possibleAnswer} readonly></input>`) : $("#soluzioneProposta").html(`<input type="text" class="form-control" id=soluzioneProposta value="il giocatore non ha scritto nulla" readonly></input>`);
-
-    let buttons = '';
-    buttons = buttons.concat(`<button type="button" id="${-1}" class="btn btn-secondary">Nessuna di queste</button>`);
-    for (y in ArrayofUsers.users[i].currentQuestion.risposte)
-      buttons = buttons.concat(`<button type="button" id="${y}" class="btn btn-secondary">${ArrayofUsers.users[i].currentQuestion.risposte[y].valore}</button>`);
-
-    $('.btn-group').append(buttons);
+    populatePossibleRisp();
   }
 };
 
@@ -298,3 +267,22 @@ $(function () {
     }
   })
 });
+
+function populatePossibleRisp(){
+  $('.btn-group').html("");
+  $("#domandaNome").val(ArrayofUsers.users[i].currentQuestion.nome);
+  $("#domandaDesc").val(ArrayofUsers.users[i].currentQuestion.descrizione);
+  let sol;
+  if (storia.scene[ArrayofUsers.users[i].userRoom].widget == "sendImage.html" || storia.scene[ArrayofUsers.users[i].userRoom].widget == "canvas.html")
+    sol = $('#imgRisposta').html().replace("$IMG",ArrayofUsers.users[i].possibleAnswer);
+  else
+    sol = $("#textRisposta").html().replace("$VAL", ArrayofUsers.users[i].possibleAnswer ? ArrayofUsers.users[i].possibleAnswer : "il giocatore non ha scritto nulla");
+
+  $('#soluzioneProposta').html(sol)
+  let buttons = '';
+  buttons = buttons.concat($("#btnRisps").html().replace("$ID","-1").replace("$VAL","nessuna di queste"));
+  for (y in ArrayofUsers.users[i].currentQuestion.risposte)
+    buttons = buttons.concat($("#btnRisps").html().replace("$ID", y).replace("$VAL",ArrayofUsers.users[i].currentQuestion.risposte[y].valore));
+  $('.btn-group').append(buttons);
+  $('#evaluatedAnswer').show();
+}
