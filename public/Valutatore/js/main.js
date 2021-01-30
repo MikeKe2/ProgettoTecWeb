@@ -73,14 +73,14 @@ function changeData(i, numRoom) {
   //we show the possible answer to the current Room, and various data
   for (y in storia.scene[numRoom].risposte) {
     let currentAnswer = Object.values(storia.scene[numRoom].risposte[y]);
-    let answer = $("#answers").html().replaceAll("$y", y).replaceAll("$CA0",urrentAnswer[0]).replace("$CA1",urrentAnswer[1]).replace("$CA3",urrentAnswer[3]).replace("$CA4",urrentAnswer[4]);
-    totalAnswer += answer
+    let answer = $("#answers").html().replaceAll("$y", y).replaceAll("$CA0",currentAnswer[0]).replace("$CA1",currentAnswer[1]).replace("$CA3",currentAnswer[3]).replace("$CA4",currentAnswer[4]);
+    totalAnswer += answer;
   }
   $('#sceneAnswers').html(totalAnswer);
 
   //if the current user has some question to be evalued, we show the module for it
   if (ArrayofUsers.users[i].possibleAnswer != undefined) {
-    populatePossibleRisp();
+    populatePossibleRisp(ArrayofUsers, i);
   }
 };
 
@@ -268,7 +268,7 @@ $(function () {
   })
 });
 
-function populatePossibleRisp(){
+function populatePossibleRisp(ArrayofUsers, i){
   $('.btn-group').html("");
   $("#domandaNome").val(ArrayofUsers.users[i].currentQuestion.nome);
   $("#domandaDesc").val(ArrayofUsers.users[i].currentQuestion.descrizione);

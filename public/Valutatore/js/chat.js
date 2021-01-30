@@ -164,7 +164,7 @@ socket.on("answerToEvaluator", (data) => {
   $('#' + data.username).addClass('list-group-item-warning');
 
   if (currentTargetUser == data.username && $dataPage.is(":visible")) {
-    populatePossibleRisp();
+    populatePossibleRisp(ArrayofUsers, i);
   }
   showToast(9, data);
 });
