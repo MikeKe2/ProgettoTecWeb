@@ -38,7 +38,8 @@ var $inputMessage = $("#inputMessage"); // Input message input box
 var $chatPage = $("#chat"); // The chatroom page
 
 
-var socket = io.connect("https://site181993.tw.cs.unibo.it");
+//var socket = io.connect("https://site181993.tw.cs.unibo.it");
+var socket = io("http://localhost:8000", {reconnection:false});
 
 
 // Prompt for setting a username

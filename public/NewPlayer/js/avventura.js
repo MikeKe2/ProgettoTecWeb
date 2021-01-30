@@ -32,8 +32,8 @@ let avventura = new Vue({
 					username = sessionStorage.getItem('Username');
 					socket.emit("add user", username, (avventura.storia.nome));
 
-					avventura.nowOn = sessionStorage.getItem("Scene");
-					avventura.punti = sessionStorage.getItem("Points");
+					avventura.nowOn = parseInt(sessionStorage.getItem("Scene"));
+					avventura.punti = parseInt(sessionStorage.getItem("Points"));
 					socket.emit("scene", username, avventura.storia.nome, avventura.nowOn);
 					avventura.Load(avventura.scene[avventura.nowOn]);
 				}
@@ -43,7 +43,7 @@ let avventura = new Vue({
 		Next: function (to) {
 			if (to) {
 				$("#description").focus()
-				this.nowOn = to.to[parseInt(this.gruppo)];
+				this.nowOn = parseInt(to.to[parseInt(this.gruppo)]);
 				this.punti += parseInt(to.points) || 0;
 				if (avventura.storia.scene[this.nowOn].tracciaAudio != "") {
 					// ho provato con vue ma non sono riuscita a farlo andare :c però funziona
@@ -96,8 +96,7 @@ let avventura = new Vue({
 		},
 
 		Evaluate: function () {
-
-			//Scena Iniziale
+			
 			if (this.nowOn == 1) { //Scena Finale
 				sessionStorage.clear();
 				location.reload();
@@ -106,8 +105,10 @@ let avventura = new Vue({
 			let finalTime = end(this.time);
 			if (this.scene[this.nowOn].valutatore == "true") {
 				this.risposta_data = risultato();
+				console.log(this.risposta_data);
 				socket.emit("answerToEvaluator", username, avventura.storia.nome, (this.risposta_data));
-				return waitEvaluator();
+				waitEvaluator();
+				return;
 			} else {
 				if (!this.widget || this.scene[this.nowOn].widget == "image.html") {
 					this.Next(this.scene[this.nowOn].risposte[0]);
@@ -115,7 +116,6 @@ let avventura = new Vue({
 				}
 				this.risposta_data = risultato();
 				let risposta = null;
-
 				for (let i = 0; i < this.scene[this.nowOn].risposte.length; i++) {
 					if (this.scene[this.nowOn].risposte[i].valore.toLowerCase() == this.risposta_data.toLowerCase() && (finalTime < parseInt(this.scene[this.nowOn].risposte[i].maxTime))) {
 						if (!risposta || risposta.maxTime < this.scene[this.nowOn].risposte[i].maxTime)

@@ -78,7 +78,7 @@ function invia(id) {
   scena.widget = $("#editWidget" + ID).val();
   scena.tracciaAudio = $("#editAudio" + ID).val();
   scena.valutatore = $("#editValutatore" + ID).prop("checked");
-  if(scena.widget == null || scena.widget == "" || scena.widget == "image.html"){
+  if((scena.widget == null || scena.widget == "" || scena.widget == "image.html") && scena.valutatore){
     alert("il campo 'valutatore' serve far controllare al valutatore la risposta al widget quando viene inserita. Non è possibile abilitarlo se non cè un widget o il widget è un'immagine");
     scena.valutatore = false;
   }

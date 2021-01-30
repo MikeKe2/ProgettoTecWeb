@@ -11,7 +11,8 @@ var ArrayofMessages = new Messages();
 var currentTargetUser = "";
 var currentTargetId = "";
 var typing = false;
-var socket = io.connect("https://site181993.tw.cs.unibo.it");
+//var socket = io.connect("https://site181993.tw.cs.unibo.it");
+var socket = io.connect("http://localhost:8000");
 var gruppo = 0;
 var lastTypingTime;
 var storia;
@@ -103,9 +104,10 @@ function changeData(i, numRoom) {
     if (storia.scene[ArrayofUsers.users[i].userRoom].widget == "sendImage.html" || storia.scene[ArrayofUsers.users[i].userRoom].widget == "canvas.html")
       $('#soluzioneProposta').html(`<img style="width:100%" id=soluzioneProposta src=${ArrayofUsers.users[i].possibleAnswer}>`);
     else
-      ArrayofUsers.users[i].possibleAnswer ? $("#soluzioneProposta").html(`<input type="text" class="form-control" id=soluzioneProposta value=${ArrayofUsers.users[i].possibleAnswer} readonly></input>`) : "il giocatore non ha scritto nulla";
+      ArrayofUsers.users[i].possibleAnswer ? $("#soluzioneProposta").html(`<input type="text" class="form-control" id=soluzioneProposta value=${ArrayofUsers.users[i].possibleAnswer} readonly></input>`) : $("#soluzioneProposta").html(`<input type="text" class="form-control" id=soluzioneProposta value="il giocatore non ha scritto nulla" readonly></input>`);
 
     let buttons = '';
+    buttons = buttons.concat(`<button type="button" id="${-1}" class="btn btn-secondary">Nessuna di queste</button>`);
     for (y in ArrayofUsers.users[i].currentQuestion.risposte)
       buttons = buttons.concat(`<button type="button" id="${y}" class="btn btn-secondary">${ArrayofUsers.users[i].currentQuestion.risposte[y].valore}</button>`);
 
@@ -215,7 +217,8 @@ $(function () {
         'width': 100 + '%'
       });
     } else
-      socket.emit('answerFromEvaluator', currentTargetId, e.currentTarget.id);
+      socket.emit("answerFromEvaluator", currentTargetId, e.currentTarget.id);
+    
     ArrayofUsers.users[i].possibleAnswer = null;
     ArrayofUsers.users[i].currentQuestion = null;
     //we close the answer form

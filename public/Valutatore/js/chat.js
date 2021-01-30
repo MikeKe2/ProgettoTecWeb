@@ -154,7 +154,6 @@ socket.on("scene", (data) => {
 
 //the user need to have an answer evalued, so we show the form for assignin scores
 socket.on("answerToEvaluator", (data) => {
-
   let i = ArrayofUsers.findElement(data.username);
 
   ArrayofUsers.users[i].currentQuestion = storia.scene[ArrayofUsers.users[i].userRoom];
@@ -165,6 +164,7 @@ socket.on("answerToEvaluator", (data) => {
   $('#' + data.username).addClass('list-group-item-warning');
 
   if (currentTargetUser == data.username && $dataPage.is(":visible")) {
+    $('.btn-group').html("");
 
     $("#domandaNome").val(ArrayofUsers.users[i].currentQuestion.nome);
     $("#domandaDesc").val(ArrayofUsers.users[i].currentQuestion.descrizione);
@@ -172,9 +172,10 @@ socket.on("answerToEvaluator", (data) => {
     if (storia.scene[ArrayofUsers.users[i].userRoom].widget == "sendImage.html" || storia.scene[ArrayofUsers.users[i].userRoom].widget == "canvas.html")
       $('#soluzioneProposta').html(`<img style="width:100%" id=soluzioneProposta src=${ArrayofUsers.users[i].possibleAnswer}>`);
     else
-      $("#soluzioneProposta").val(`<input type="text" class="form-control" id=soluzioneProposta value=${ArrayofUsers.users[i].currentQuestion} readonly></input>`);
+      ArrayofUsers.users[i].possibleAnswer ? $("#soluzioneProposta").html(`<input type="text" class="form-control" id=soluzioneProposta value=${ArrayofUsers.users[i].possibleAnswer} readonly></input>`) : $("#soluzioneProposta").html(`<input type="text" class="form-control" id=soluzioneProposta value="il giocatore non ha scritto nulla" readonly></input>`);
   
     let buttons = '';
+    buttons = buttons.concat(`<button type="button" id="${-1}" class="btn btn-secondary">Nessuna di queste</button>`);
     for (y in ArrayofUsers.users[i].currentQuestion.risposte)
       buttons = buttons.concat(`<button type="button" id="${y}" class="btn btn-secondary">${ArrayofUsers.users[i].currentQuestion.risposte[y].valore}</button>`);
 

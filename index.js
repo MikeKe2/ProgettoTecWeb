@@ -528,6 +528,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on('answerToEvaluator', (username, storia, data) => {
+    console.log("inviato giocatore!" + data);
     try {
       socket.to(evaluators[storia]).emit('answerToEvaluator', {
         username: username,
@@ -538,8 +539,9 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on('answerFromEvaluator', (id, data) => {
-    socket.to(id).emit('answerFromEvaluator', {
+  socket.on('answerFromEvaluator', (targetId, data) => {
+    console.log("inviato valutatore!" + data);
+    socket.to(targetId).emit('answerFromEvaluator', {
       message: data,
     });
   });
