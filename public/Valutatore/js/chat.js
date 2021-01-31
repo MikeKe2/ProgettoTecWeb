@@ -162,7 +162,6 @@ socket.on("answerToEvaluator", (data) => {
   sessionStorage.setItem('Users', JSON.stringify(ArrayofUsers));
 
   $('#' + data.username).addClass('list-group-item-warning');
-  console.log("answerToEvaluator")
   if (currentTargetUser == data.username && $dataPage.is(":visible")) {
     populatePossibleRisp(ArrayofUsers, i);
     $('#evaluatedAnswer').show();

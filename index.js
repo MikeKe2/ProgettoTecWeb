@@ -482,21 +482,29 @@ app.get('/editorStoria/:visibility/:nomeStoria/', require('connect-ensure-login'
 
 //ROUTE TO STORIES
 app.get('/avventura/:user/:name', (req, res) => {
-  url = '/users/' + req.params.user + '/public/' + req.params.name + '.json';
+  let url = '/users/' + req.params.user + '/public/' + req.params.name + '.json';
   res.render("giocatore", {
-    urlStoria: url
+    urlStoria: url,
+    autore: req.params.user,
+    nome: req.params.name
   });
 });
 
-app.get('/avventura/:user/:name/Valutatore', (req, res) => {
-  url = '/users/' + req.params.user + '/public/' + req.params.name + '.json';
-  res.render("valutatore", {
-    urlStoria: url
-  });
+app.post('/avventura/:user/:name/Valutatore', (req, res) => {
+  let url = '/users/' + req.params.user + '/public/' + req.params.name + '.json';
+  const directoryPath = path.join(__dirname + "/users/" + req.params.user + "/public", req.params.name);
+  let data = JSON.parse(fs.readFileSync(directoryPath + ".json"));
+  if (req.body.password == data.password) {
+    res.render("valutatore", {
+      urlStoria: url
+    });
+  } else {
+    res.status(403);
+  }
 });
 
 var evaluator = "valutatore";
-//Dizionario Storia = ID del valutatore su quella storia
+//Dizionario Storia = ID del valutatore su quella storiaW
 var evaluators = {};
 
 io.on("connection", (socket) => {

@@ -113,7 +113,7 @@
 					<p>Categoria: {{storia.categoria}}</p>
 					<p>Questa storia è stata pensata per: {{storia.target}}</p>
 					<p>Questa storia <span v-if="storia.accessibile=='false'">non </span>è accessibile!</p>
-					
+
 				</div>
 				<div id="finale" v-if="nowOn == 1" class="storyblock text-justify justify-content-center"
 					aria-live="polite" tabindex="0">
@@ -128,9 +128,10 @@
 					class="d-flex justify-content-center"></div>
 			</div>
 			<div id="next" class="align-self-end d-flex justify-content-center mx-auto">
-				<div class="popup" >
+				<div class="popup">
 					<button id="nextBtn" class="btn btn-primary" v-on:click="Evaluate()"> Avanti </button>
-					<span tabindex="0" class="popuptext popup" id="myPopup" role="tooltip">Risposta non valida, prova ancora.</span>
+					<span tabindex="0" class="popuptext popup" id="myPopup" role="tooltip">Risposta non valida, prova
+						ancora.</span>
 				</div>
 			</div>
 		</div>
@@ -146,12 +147,12 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<form id="loginForm">
+				<form id="loginForm" method="POST" action="/avventura/<%=autore%>/<%=nome%>/Valutatore">
 					<!-- form with an ID so we can identify it, now includes both the textbox and the button within it -->
 					<div class="modal-body">
 						<div class="form-group">
-							<label for="modalpass" class="col-form-label">Password:</label>
-							<input type="password" name="modalpass" class="form-control" id="modalpass" />
+							<label for="valutatorePassword" class="col-form-label">Password:</label>
+							<input type="password" id="valutatorePassword" name="password" class="form-control"/>
 						</div>
 					</div>
 					<div class="modal-footer">
@@ -191,4 +192,5 @@
 <script src="/public/NewPlayer/js/chat.js"></script>
 <script src="/public/NewPlayer/js/avventura.js"></script>
 <script src="/public/NewPlayer/js/general.js"></script>
+
 </html>

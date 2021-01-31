@@ -46,14 +46,9 @@ $(() => {
         $("#loginModal").modal("show");
 
         //handle the form's "submit" event
-        $("#loginForm").submit((e) => {
-            e.preventDefault();
-
-            if ($("#modalpass").val() == avventura.storia.password) {
-                //$('#loginModal').modal('toggle');
-                //$(".spinner.border").show();
+        $("#loginForm").submit(() => {
+            if ($("#valutatorePassword").val() == avventura.storia.password) {
                 alert("Access Granted!");
-                window.location.pathname += "/Valutatore";
             } else
                 alert("Password is incorrect.");
         });

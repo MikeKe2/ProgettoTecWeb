@@ -17,26 +17,43 @@ var lastTypingTime;
 var storia;
 var FADE_TIME = 150; // ms
 var TYPING_TIMER_LENGTH = 400; // ms
-var found = false,
-  indx = 0;
 
-function findRoom(i, numRoom, userGruppo) {
-  if (storia.scene[numRoom].nome == "Fine") {
-    found = true;
-    return indx = i;
-  } else {
-    if (i <= storia.scene.length && !found) {
-      i++;
-      for (risposta in storia.scene[numRoom].risposte) {
-        findRoom(i, storia.scene[numRoom].risposte[parseInt(risposta)].to[userGruppo], userGruppo);
-        if (found)
-          break;
+/*
+function HowLong(nowOn, gruppo) {
+  let nodes = Array(storia.scene.length).fill(0);
+  let changes;
+  nodes[1] = 1;
+  //WILLIAM
+  //finché vengono contrassegnati dei nodi
+  do {
+    changes = 0;
+
+    for (let j = 0; j < storia.scene.length; j++) {
+      let any = false;
+      //imposta a true un nodo se collegato alla fine o ad una scena che porta alla fine
+      if (!nodes[j] && storia.scene[j].risposte) {
+        for (let k = 0; k < storia.scene[j].risposte.length; k++) {
+          //controlla il valore che dovrebbe avere il nodo
+          any = any || nodes[storia.scene[j].risposte[k].to[i] * 1];
+        }
+        //se any = nodo allora non è cambiato
+        if (any != nodes[j]) {
+          nodes[j] = any;
+          changes++;
+        }
       }
     }
-  }
-  return indx;
-}
+  } while (changes > 0)
 
+  //se una scena è contrassegnata come false non può raggiungere la fine
+  if (!nodes.reduce((and, value) => and && value)) {
+    if (!confirm("Il gruppo numero " + (i + 1) + " ha un percorso che non raggiunge la fine, vuoi continuare?")) {
+      return false;
+    }
+  };
+
+  return true;
+}*/
 
 function changeScene(input, output) {
 
@@ -61,24 +78,24 @@ function changeData(i, numRoom) {
   if (storia.scene[numRoom] == "image.html")
     insertImage(numRoom);
 
-  let k = findRoom(0, numRoom, ArrayofUsers.users[i].userGroup); //numRoom;
-  found = false;
-  let statusProgressbar = (100 * (numRoom)) / k;
+  let statusProgressbar = (100 * (numRoom)) / HowLong(numRoom, ArrayofUsers.users[i].userGroup);
   $(".progress-bar").css({
     'width': statusProgressbar + '%'
   });
 
   let totalAnswer = ``;
   //we show the possible answer to the current Room, and various data
-  for (y in storia.scene[numRoom].risposte) {
-    let currentAnswer = Object.values(storia.scene[numRoom].risposte[y]);
-    let answer = $("#answers").html().replaceAll("$y", y).replaceAll("$CA0", currentAnswer[0]).replace("$CA1", currentAnswer[1]).replace("$CA3", currentAnswer[3]).replace("$CA4", currentAnswer[4]);
-    totalAnswer += answer;
+  if (numRoom > 0) {
+    for (y in storia.scene[numRoom].risposte) {
+      let currentAnswer = Object.values(storia.scene[numRoom].risposte[y]);
+      let answer = $("#answers").html().replaceAll("$y", y).replaceAll("$CA0", currentAnswer[0]).replace("$CA1", currentAnswer[1][ArrayofUsers.users[i].userGroup]).replace("$CA3", currentAnswer[3]).replace("$CA4", currentAnswer[4]);
+      totalAnswer += answer;
+    }
   }
+
   $('#sceneAnswers').html(totalAnswer);
   $('.btn-group').html("");
   //if the current user has some question to be evalued, we show the module for it
-  console.log("changeData", i, ArrayofUsers.users[i].possibleAnswer)
   if (ArrayofUsers.users[i].possibleAnswer != null) {
     $('#evaluatedAnswer').show();
     populatePossibleRisp(ArrayofUsers, i);
@@ -273,6 +290,7 @@ function populatePossibleRisp(ArrayofUsers, i) {
   $('.btn-group').html("");
   $("#domandaNome").val(ArrayofUsers.users[i].currentQuestion.nome);
   $("#domandaDesc").val(ArrayofUsers.users[i].currentQuestion.descrizione);
+
   let sol;
   if (storia.scene[ArrayofUsers.users[i].userRoom].widget == "sendImage.html" || storia.scene[ArrayofUsers.users[i].userRoom].widget == "canvas.html")
     sol = $('#imgRisposta').html().replace("$IMG", ArrayofUsers.users[i].possibleAnswer);
