@@ -18,11 +18,11 @@ async function waitEvaluator() {
     await socket.once('answerFromEvaluator', (answer_number) => {
         $("#loading").hide();
         if (parseInt(answer_number.message) < 0) {
-            avventura.Next(null);
+            avventura.updateAttributes(null);
             return;
         } else {
             let risposta = avventura.scene[avventura.nowOn].risposte[parseInt(answer_number.message)];
-            avventura.Next(risposta);
+            avventura.updateAttributes(risposta);
         }
     });
 };
@@ -282,7 +282,7 @@ $(() => {
     });
 
     socket.on('changeRoom', (data) => {
-        avventura.Next(avventura.scene[avventura.nowOn].risposte[data.soluzione]);
+        avventura.updateAttributes(avventura.scene[avventura.nowOn].risposte[data.soluzione]);
         $("#loading").hide();
     });
 
