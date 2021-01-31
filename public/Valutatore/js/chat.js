@@ -189,7 +189,7 @@ socket.on("new message", (data) => {
 socket.on("user joined", (data) => {
   if (ArrayofUsers.findElement(data.id) == -1) {
 
-    var $newUser = $("#newUsr").html().replace("$ID", data.id.replace(/[^a-zA-Z0-9]/g, "")).replace("$VAL", data.username);
+    var $newUser = $("#newUsr").html().replace("$ID", data.id).replace("$VAL", data.username);
     $('#userList').append($newUser);
     showToast(0, data);
 
@@ -215,7 +215,7 @@ socket.on("user left", (data) => {
   if ((i = ArrayofUsers.findElement(data.id)) >= 0) {
     showToast(1, data);
 
-    $("#" + data.id.replace(/[^a-zA-Z0-9]/g, "")).remove();
+    $("#" + data.id).remove();
 
     ArrayofUsers.users.splice(i, 1);
     removeChatTyping(data);
@@ -267,7 +267,7 @@ socket.on("reconnect", () => {
     let usersStored = JSON.parse(sessionStorage.getItem('Users'));
 
     for (let user in usersStored['users']) {
-      $('#userList').append(`<li class="list-group-item" id="${usersStored['users'][user].userUsername.replace(/[^a-zA-Z0-9]/g, "")}">${usersStored['users'][user].userUsername}</li>`);
+      $('#userList').append(`<li class="list-group-item" id="${usersStored['users'][user].userId}">${usersStored['users'][user].userUsername}</li>`);
       ArrayofUsers.newStoria(usersStored['users'][user].userId, usersStored['users'][user].userUsername, usersStored['users'][user].userRoom, usersStored['users'][user].userTimer, usersStored['users'][user].userScore, usersStored['users'][user].userGroup, usersStored['users'][user].currentQuestion, usersStored['users'][user].possibleAnswer);
       if (usersStored['users'][user].possibleAnswer != undefined)
         $('#' + usersStored['users'][user].userUsername).addClass('list-group-item-warning');
