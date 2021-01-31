@@ -162,15 +162,15 @@ app.post("/newUser", function (req, res) {
         fs.mkdirSync(dir + "/private");
         fs.mkdirSync(dir + "/public");
         fs.mkdirSync(dir + "/widgets");
-        fs.copyFileSync(resDir + 'users/Widget/canvas.html', dir + '/widgets/canvas.html');
-        fs.copyFileSync(resDir + 'users/Widget/combinazione.html', dir + '/widgets/combinazione.html');
-        fs.copyFileSync(resDir + 'users/Widget/image.html', dir + '/widgets/image.html');
-        fs.copyFileSync(resDir + 'users/Widget/text.html', dir + '/widgets/text.html');
-        fs.copyFileSync(resDir + 'users/Widget/lever.html', dir + '/widgets/lever.html');
-        fs.copyFileSync(resDir + 'users/Widget/number.html', dir + '/widgets/number.html');
-        fs.copyFileSync(resDir + 'users/Widget/sendImage.html', dir + '/widgets/sendImage.html');
-        fs.copyFileSync(resDir + 'users/Widget/templateWidget.html', dir + '/widgets/templateWidget.html');
-        fs.copyFileSync(resDir + 'users/Widget/csstemplate.css', dir + '/css/csstemplate.css');
+        fs.copyFileSync(resDir + '/Widget/canvas.html', dir + '/widgets/canvas.html');
+        fs.copyFileSync(resDir + '/Widget/combinazione.html', dir + '/widgets/combinazione.html');
+        fs.copyFileSync(resDir + '/Widget/image.html', dir + '/widgets/image.html');
+        fs.copyFileSync(resDir + '/Widget/text.html', dir + '/widgets/text.html');
+        fs.copyFileSync(resDir + '/Widget/lever.html', dir + '/widgets/lever.html');
+        fs.copyFileSync(resDir + '/Widget/number.html', dir + '/widgets/number.html');
+        fs.copyFileSync(resDir + '/Widget/sendImage.html', dir + '/widgets/sendImage.html');
+        fs.copyFileSync(resDir + '/Widget/templateWidget.html', dir + '/widgets/templateWidget.html');
+        fs.copyFileSync(resDir + '/Widget/csstemplate.css', dir + '/css/csstemplate.css');
       }
       chmodr(dir, 0o775, (err) => {
         if (err) {
