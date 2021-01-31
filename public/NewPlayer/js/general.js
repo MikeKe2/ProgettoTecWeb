@@ -289,13 +289,14 @@ $(() => {
     });
 
     // Whenever the server emits 'login', log the login message
-    socket.on("login", (data) => {
+    socket.on("login", () => {
         connected = true;
         id = socket.id;
     });
 
     socket.on("assignGroup", (data) => {
         avventura.gruppo = data.groupN;
+        sessionStorage.setItem('Gruppo', avventura.gruppo);
     });
 
     // Whenever the server emits 'new message', update the chat body
@@ -327,7 +328,7 @@ $(() => {
     socket.on("reconnect", () => {
         log("you have been reconnected");
         if (username) {
-            socket.emit("add user", username, (avventura.storia.nome));
+            socket.emit("add user", username, (avventura.storia.nome), avventura.gruppo);
             socket.emit("scene", username, avventura.storia.nome, (avventura.nowOn));
         }
         id = socket.id;
