@@ -82,7 +82,13 @@ function changeData(i, numRoom) {
   if (numRoom > 0) {
     for (y in storia.scene[numRoom].risposte) {
       let currentAnswer = Object.values(storia.scene[numRoom].risposte[y]);
-      let answer = $("#answers").html().replaceAll("$y", y).replaceAll("$CA0", currentAnswer[0]).replace("$CA1", currentAnswer[1][ArrayofUsers.users[i].userGroup]).replace("$CA3", currentAnswer[3]).replace("$CA4", currentAnswer[4]);
+      let proxSceneIndex = currentAnswer[1][ArrayofUsers.users[i].userGroup];
+      let answer = $("#answers").html()
+      .replaceAll("$y", y)
+      .replaceAll("$CA0", currentAnswer[0])
+      .replace("$CA1", proxSceneIndex+" - "+storia.scene[proxSceneIndex].nome)
+      .replace("$CA3", currentAnswer[3])
+      .replace("$CA4", parseInt(currentAnswer[4]) == 0 ? "Illimitato" : currentAnswer[4]);
       totalAnswer += answer;
     }
   }
