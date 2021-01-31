@@ -11,7 +11,8 @@ var ArrayofMessages = new Messages();
 var currentTargetUser = "";
 var currentTargetId = "";
 var typing = false;
-var socket = io.connect("https://site181993.tw.cs.unibo.it");
+//var socket = io.connect("https://site181993.tw.cs.unibo.it");
+var socket = io.connect("http://localhost:8000");
 var gruppo = 0;
 var lastTypingTime;
 var storia;
@@ -115,7 +116,7 @@ $(function () {
     let usersStored = JSON.parse(sessionStorage.getItem('Users'));
 
     for (let user in usersStored['users']) {
-      $('#userList').append(`<li class="list-group-item" id="${usersStored['users'][user].userUsername.replace(/[^a-zA-Z0-9]/g, "")}">${usersStored['users'][user].userUsername}</li>`);
+      $('#userList').append(`<li class="list-group-item" id="${usersStored['users'][user].userId.replace(/[^a-zA-Z0-9]/g, "")}">${usersStored['users'][user].userUsername}</li>`);
       ArrayofUsers.newStoria(usersStored['users'][user].userId, usersStored['users'][user].userUsername, usersStored['users'][user].userRoom, usersStored['users'][user].userTimer, usersStored['users'][user].userScore, usersStored['users'][user].userGroup, usersStored['users'][user].currentQuestion, usersStored['users'][user].possibleAnswer);
       if (usersStored['users'][user].possibleAnswer != undefined)
         $('#' + usersStored['users'][user].userUsername).addClass('list-group-item-warning');
@@ -166,9 +167,9 @@ $(function () {
 
     changeScene($dataPage, $usersPage);
 
-    currentTargetUser = e.currentTarget.id;
-
-    let i = ArrayofUsers.findElement(currentTargetUser);
+    currentTargetId = e.currentTarget.id;
+    let i = ArrayofUsers.findElement(currentTargetId);
+    currentTargetUser =  ArrayofUsers.users[i].userUsername;
 
     $(".navbar-brand").text(currentTargetUser);
     $("#exportFile").hide();
@@ -187,13 +188,13 @@ $(function () {
   $('.btn-group').on("click", ".btn", (e) => {
     e.preventDefault();
 
-    let i = ArrayofUsers.findElement(currentTargetUser);
+    let i = ArrayofUsers.findElement(currentTargetId);
 
-    $("#" + currentTargetUser).removeClass("list-group-item-warning");
+    $("#" + currentTargetId).removeClass("list-group-item-warning");
 
     if (ArrayofUsers.users[i].currentQuestion.nome == "Fine") {
       ArrayofUsers.users[i].userScore += ArrayofUsers.users[i].currentQuestion.risposte[e.currentTarget.id].points;
-      $('#' + data.username).addClass('list-group-item-info');
+      $('#' + currentTargetId).addClass('list-group-item-info');
       $(".progress-bar").css({
         'width': 100 + '%'
       });
@@ -209,7 +210,7 @@ $(function () {
   $('#sceneAnswers').on("click", ".btn", (e) => {
     e.preventDefault();
 
-    let i = ArrayofUsers.findElement(currentTargetUser);
+    let i = ArrayofUsers.findElement(currentTargetId);
     socket.emit("changeRoom", currentTargetId, e.currentTarget.id);
 
     if (ArrayofUsers.users[i].possibleAnswer != undefined)

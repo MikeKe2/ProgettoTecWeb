@@ -122,12 +122,13 @@ const getTypingMessages = (data) => {
 
 
 socket.on('score', (data) => {
-  let i = ArrayofUsers.findElement(data.username);
+
+  let i = ArrayofUsers.findElement(data.id);
   ArrayofUsers.users[i].userScore += data.score;
 
   if (storia.scene[ArrayofUsers.users[i].userRoom].nome == "Fine") {
     $('#' + data.username).html(`${data.username} ha finito la storia con: ${ArrayofUsers.users[i].userScore} punti`);
-    $('#' + data.username).addClass('list-group-item-info');
+    $('#' + data.id).addClass('list-group-item-info');
     $(".progress-bar").css({
       'width': 100 + '%'
     });
@@ -136,17 +137,17 @@ socket.on('score', (data) => {
 
 //when a user ask for help we identify that user by highlighting its div
 socket.on('help', (data) => {
-  $('#' + data.username).addClass('list-group-item-danger');
+  $('#' + data.id).addClass('list-group-item-danger');
   setTimeout(showToast(8, data), 2000);
 });
 
 //Whenever the server emits 'scene', log the change and change the information regarding that room
 socket.on("scene", (data) => {
 
-  let i = ArrayofUsers.findElement(data.username);
+  let i = ArrayofUsers.findElement(data.id);
   if (i >= 0) {
     ArrayofUsers.users[i].userRoom = data.room;
-    if ($dataPage.is(":visible") && currentTargetUser == data.username)
+    if ($dataPage.is(":visible") && currentTargetId == data.id)
       changeData(i, ArrayofUsers.users[i].userRoom);
     sessionStorage.setItem('Users', JSON.stringify(ArrayofUsers));
   }
@@ -154,15 +155,16 @@ socket.on("scene", (data) => {
 
 //the user need to have an answer evalued, so we show the form for assignin scores
 socket.on("answerToEvaluator", (data) => {
-  let i = ArrayofUsers.findElement(data.username);
+
+  let i = ArrayofUsers.findElement(data.id);
 
   ArrayofUsers.users[i].currentQuestion = storia.scene[ArrayofUsers.users[i].userRoom];
   ArrayofUsers.users[i].possibleAnswer = data.message;
 
   sessionStorage.setItem('Users', JSON.stringify(ArrayofUsers));
 
-  $('#' + data.username).addClass('list-group-item-warning');
-  if (currentTargetUser == data.username && $dataPage.is(":visible")) {
+  $('#' + data.id).addClass('list-group-item-warning');
+  if (currentTargetId == data.id && $dataPage.is(":visible")) {
     populatePossibleRisp(ArrayofUsers, i);
     $('#evaluatedAnswer').show();
   }
@@ -185,12 +187,12 @@ socket.on("new message", (data) => {
 
 // Whenever the server emits 'user joined', log it in the chat body
 socket.on("user joined", (data) => {
-  if (ArrayofUsers.findElement(data.username) == -1) {
+  if (ArrayofUsers.findElement(data.id) == -1) {
 
-    var $newUser = $("#newUsr").html().replace("$ID", data.username.replace(/[^a-zA-Z0-9]/g, "")).replace("$VAL", data.username);
+    var $newUser = $("#newUsr").html().replace("$ID", data.id.replace(/[^a-zA-Z0-9]/g, "")).replace("$VAL", data.username);
     $('#userList').append($newUser);
     showToast(0, data);
-    
+
     socket.emit("assignGroup", {
       id: data.id,
       groupN: gruppo,
@@ -198,7 +200,7 @@ socket.on("user joined", (data) => {
 
     ArrayofUsers.newStoria(data.id, data.username, 0, 0, 0, gruppo, null, null);
     sessionStorage.setItem('Users', JSON.stringify(ArrayofUsers));
-    
+
     if (parseInt(storia.ngruppi) > 1) {
       gruppo++;
       if (gruppo >= parseInt(storia.ngruppi))
@@ -210,10 +212,10 @@ socket.on("user joined", (data) => {
 // Whenever the server emits 'user left', log it in the chat body
 socket.on("user left", (data) => {
   let i;
-  if ((i = ArrayofUsers.findElement(data.username)) >= 0) {
+  if ((i = ArrayofUsers.findElement(data.id)) >= 0) {
     showToast(1, data);
 
-    $("#" + data.username.replace(/[^a-zA-Z0-9]/g, "")).remove();
+    $("#" + data.id.replace(/[^a-zA-Z0-9]/g, "")).remove();
 
     ArrayofUsers.users.splice(i, 1);
     removeChatTyping(data);
@@ -260,6 +262,16 @@ socket.on("reconnect", () => {
   showToast(5);
   if ("valutatore") {
     socket.emit("add eval", "valutatore");
+  }
+  if (sessionStorage.getItem('Users')) {
+    let usersStored = JSON.parse(sessionStorage.getItem('Users'));
+
+    for (let user in usersStored['users']) {
+      $('#userList').append(`<li class="list-group-item" id="${usersStored['users'][user].userUsername.replace(/[^a-zA-Z0-9]/g, "")}">${usersStored['users'][user].userUsername}</li>`);
+      ArrayofUsers.newStoria(usersStored['users'][user].userId, usersStored['users'][user].userUsername, usersStored['users'][user].userRoom, usersStored['users'][user].userTimer, usersStored['users'][user].userScore, usersStored['users'][user].userGroup, usersStored['users'][user].currentQuestion, usersStored['users'][user].possibleAnswer);
+      if (usersStored['users'][user].possibleAnswer != undefined)
+        $('#' + usersStored['users'][user].userUsername).addClass('list-group-item-warning');
+    }
   }
 });
 
