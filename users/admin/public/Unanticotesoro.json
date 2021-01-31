@@ -96,7 +96,7 @@
         "nome": "Un mondo antico",
         "descrizione": "Aprendo il baule vi trovate dinanzi a voi antichità di ogni epoca, ma 3 cose vi colpiscono particolarmente:\n1) Uno strano cappello con una piuma nera\n2) Una vecchia fotografia\n3) Un coltello arruginito.\nCosa decidete di osservare?",
         "widget": "lever.html",
-        "tracciaAudio": "World War 1 Sounds.mp3",
+        "tracciaAudio": "",
         "valutatore": "false",
         "timemax": "Un mondo antico",
         "x": "764.0835000000001",

@@ -20,7 +20,7 @@ var FADE_TIME = 150; // ms
 var TYPING_TIMER_LENGTH = 400; // ms
 
 
-function HowLong(nowOn, gruppo) {
+function distances(gruppo) {
   let nodes = Array(storia.scene.length).fill(0);
   let changes;
   nodes[1] = 1;
@@ -45,7 +45,7 @@ function HowLong(nowOn, gruppo) {
       }
     }
   } while (changes > 0)
-  return nodes[nowOn] - 1;
+  return nodes.map(i=>i-1);
 }
 
 function changeScene(input, output) {
@@ -71,9 +71,9 @@ function changeData(i, numRoom) {
   if (storia.scene[numRoom] == "image.html")
     insertImage(numRoom);
 
-  
-  let k = HowLong(numRoom, ArrayofUsers.users[i].userGroup);
-  let statusProgressbar = 100 - ((100 * (k)) / HowLong(0, ArrayofUsers.users[i].userGroup));
+  let distance = distances(ArrayofUsers.users[i].userGroup);
+  let k = distance[numRoom];
+  let statusProgressbar = 100 - ((100 * (k)) / Math.max(...distance));
   $(".progress-bar").css({
     'width': statusProgressbar + '%'
   });
