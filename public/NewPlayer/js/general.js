@@ -72,6 +72,7 @@ $(() => {
         } else {
             /*music[0].load();
             music[0].oncanplaythrough = music[0].play();*/
+            
             $("#MuteMusic").html($("#volumeUP").html());
         }
     });
@@ -112,8 +113,6 @@ $(() => {
 
     $('input').on('keypress', function (event) {
         if ($("#login").is(":visible")) {
-            if(event.which === 13)
-                $("#loginForm").submit();
             var regex = new RegExp("^[a-zA-Z0-9]+$");
             var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
             if (!regex.test(key)) {

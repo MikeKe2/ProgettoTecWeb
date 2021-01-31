@@ -29,11 +29,19 @@ let avventura = new Vue({
 					$("#login").off("click");
 					$("#avventura").show();
 					$("nav").show();
+
 					username = sessionStorage.getItem('Username');
 					socket.emit("add user", username, (avventura.storia.nome));
 
 					avventura.nowOn = parseInt(sessionStorage.getItem("Scene"));
 					avventura.punti = parseInt(sessionStorage.getItem("Points"));
+					/*$("#track").attr("src", sessionStorage.getItem("Music"));
+					music = $("#music")[0];
+					music.pause();
+					music.load();
+					music.muted = !music.muted;
+					$("#MuteMusic").html($("#volumeMute").html());*/
+
 					socket.emit("scene", username, avventura.storia.nome, avventura.nowOn);
 					avventura.Load(avventura.scene[avventura.nowOn]);
 				}
@@ -48,6 +56,7 @@ let avventura = new Vue({
 				if (avventura.storia.scene[this.nowOn].tracciaAudio != "") {
 					// ho provato con vue ma non sono riuscita a farlo andare :c però funziona
 					$("#track").attr("src", `/media/${avventura.storia.creatore}/audios/${avventura.storia.scene[this.nowOn].tracciaAudio}`);
+					//sessionStorage['Music'] = `/media/${avventura.storia.creatore}/audios/${avventura.storia.scene[this.nowOn].tracciaAudio}`;
 					music = $("#music")[0];
 					music.pause();
 					music.load();

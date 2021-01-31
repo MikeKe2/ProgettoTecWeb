@@ -122,7 +122,14 @@ class Utenti {
         return m;
     }
 
-    findElement(userUsername) {
+    findElement(userId) {
+        for (var i = 0; i < this.users.length; i++)
+            if (this.users[i].userId == userId)
+                return i;
+        return -1;
+    }
+
+    findUsername(userUsername) {
         for (var i = 0; i < this.users.length; i++)
             if (this.users[i].userUsername == userUsername)
                 return i;

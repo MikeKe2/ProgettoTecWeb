@@ -514,6 +514,7 @@ io.on("connection", (socket) => {
     try {
       socket.to(evaluators[storia]).emit('scene', {
         username: username,
+        id: socket.id,
         room: num,
       });
     } catch (error) {}
@@ -529,6 +530,7 @@ io.on("connection", (socket) => {
     try {
       socket.to(evaluators[storia]).emit('score', {
         username: username,
+        id: socket.id,
         score: data,
       });
     } catch (error) {}
@@ -538,6 +540,7 @@ io.on("connection", (socket) => {
     try {
       socket.to(evaluators[storia]).emit('answerToEvaluator', {
         username: username,
+        id: socket.id,
         message: data,
       });
     } catch (error) {
@@ -554,6 +557,7 @@ io.on("connection", (socket) => {
   socket.on('help', (storia, data) => {
     socket.to(evaluators[storia]).emit('help', {
       username: socket.username,
+      id: socket.id,
       message: data
     });
   });
@@ -561,7 +565,7 @@ io.on("connection", (socket) => {
   socket.on('helpIncoming', (targetId, data) => {
     socket.to(targetId).emit('helpIncoming', {
       username: evaluator,
-      message: data
+      message: data,
     });
   });
 
@@ -571,7 +575,7 @@ io.on("connection", (socket) => {
     socket.to(evaluators[storia]).emit('new message', {
       username: socket.username,
       id: socket.id,
-      message: data
+      message: data,
     });
   });
 
@@ -602,7 +606,7 @@ io.on("connection", (socket) => {
         id: socket.id,
       });
     } catch (error) {
-
+      console.log("why");
     }
     // echo to the Evaluator that a person has connected
 
@@ -619,6 +623,7 @@ io.on("connection", (socket) => {
   socket.on("typing", (storia) => {
     socket.to(evaluators[storia]).emit("typing", {
       username: socket.username,
+      id: socket.id,
     });
   });
 
@@ -626,6 +631,7 @@ io.on("connection", (socket) => {
   socket.on("stop typing", (storia) => {
     socket.to(evaluators[storia]).emit("stop typing", {
       username: socket.username,
+      id: socket.id,
     });
   });
 
@@ -636,6 +642,7 @@ io.on("connection", (socket) => {
       // echo globally that this client has left
       socket.broadcast.emit("user left", {
         username: socket.username,
+        id: socket.id
       });
     }
   });
