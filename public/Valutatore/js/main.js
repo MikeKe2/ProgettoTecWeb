@@ -18,42 +18,34 @@ var storia;
 var FADE_TIME = 150; // ms
 var TYPING_TIMER_LENGTH = 400; // ms
 
-/*
+
 function HowLong(nowOn, gruppo) {
   let nodes = Array(storia.scene.length).fill(0);
   let changes;
   nodes[1] = 1;
-  //WILLIAM
-  //finché vengono contrassegnati dei nodi
   do {
     changes = 0;
 
     for (let j = 0; j < storia.scene.length; j++) {
-      let any = false;
-      //imposta a true un nodo se collegato alla fine o ad una scena che porta alla fine
-      if (!nodes[j] && storia.scene[j].risposte) {
-        for (let k = 0; k < storia.scene[j].risposte.length; k++) {
-          //controlla il valore che dovrebbe avere il nodo
-          any = any || nodes[storia.scene[j].risposte[k].to[i] * 1];
-        }
-        //se any = nodo allora non è cambiato
-        if (any != nodes[j]) {
-          nodes[j] = any;
-          changes++;
-        }
+      if(storia.scene[j].risposte.length==0)
+        continue;
+
+      let min = nodes[storia.scene[j].risposte[0].to[i]];
+      
+      for (let k = 0; k < storia.scene[j].risposte.length; k++) {
+        let num = nodes[storia.scene[j].risposte[k].to[gruppo] * 1];
+        min = num && num<min ? num : min;
+      }
+      
+      if (min != nodes[j]) {
+        nodes[j] = any;
+        changes++;
       }
     }
   } while (changes > 0)
 
-  //se una scena è contrassegnata come false non può raggiungere la fine
-  if (!nodes.reduce((and, value) => and && value)) {
-    if (!confirm("Il gruppo numero " + (i + 1) + " ha un percorso che non raggiunge la fine, vuoi continuare?")) {
-      return false;
-    }
-  };
-
-  return true;
-}*/
+  return nodes[nowOn]-1;
+}
 
 function changeScene(input, output) {
 
