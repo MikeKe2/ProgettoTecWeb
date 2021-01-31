@@ -14,6 +14,14 @@ html, body{
         overflow-y: scroll;
     }
 }
+.scenebody{
+    max-height: 80vh;
+    overflow-y: scroll;
+}
+.show{
+    max-height: 30vh;
+    overflow: auto;
+}
 
 .scene{
     position: absolute;

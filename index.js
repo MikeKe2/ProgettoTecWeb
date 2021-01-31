@@ -431,6 +431,7 @@ app.post('/stories', require('connect-ensure-login').ensureLoggedIn(), (req, res
     ngruppi: 1,
     background: "",
     css: "",
+    password:"password",
     autore: req.user.username,
     creatore: req.user.username,
     scene: [{
@@ -603,7 +604,7 @@ io.on("connection", (socket) => {
     try {
       socket.to(evaluators[storia]).emit("user joined", {
         username: username,
-        id: socket.id,
+        id: socket.id
       });
     } catch (error) {
       console.log("why");

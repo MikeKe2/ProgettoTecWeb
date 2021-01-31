@@ -58,7 +58,10 @@
 	<div id="login">
 		<div class="form">
 			<h3 class="title">Qual'è il tuo nickname?</h3>
-			<input class="usernameInput" aria-label="inserisci nome utente" type="text" maxlength="14" />
+			<p>
+				<input id="username" class="usernameInput" aria-label="inserisci nome utente" type="text" maxlength="14" /> 
+				<button id="InvioNickname" class = "invBtn"><image class = "invBtn" src = "/public/NewPlayer/css/invio.webp"></image></button>
+			</p>
 			<h4 class="lead valutatore">Sei il valutatore?</h4>
 		</div>
 	</div>
@@ -156,7 +159,7 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="submit" class="btn btn-outline-success"><i
+						<button id="valutatoreSubmit" type="submit" class="btn btn-outline-success"><i
 								class="bi bi-person-check-fill"></i></button>
 					</div>
 				</form>

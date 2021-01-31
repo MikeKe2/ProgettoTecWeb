@@ -285,7 +285,12 @@ body {
     -webkit-animation: fadeIn 1s;
     animation: fadeIn 1s;
   }
-  
+.invBtn{
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: transparent;
+}
   /* Add animation (fade in the popup) */
   @-webkit-keyframes fadeIn {
     from {opacity: 0;} 

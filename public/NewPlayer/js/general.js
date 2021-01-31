@@ -27,7 +27,6 @@ async function waitEvaluator() {
     });
 };
 
-
 $(() => {
     $('#nextBtn').blur(() => {
         $("#myPopup").removeClass("show")
@@ -129,11 +128,14 @@ $(() => {
                 sendMessage();
                 socket.emit("stop typing");
                 typing = false;
-            } else if (!username)
+            } else if (!username && e.target.id == "username"){
                 setUsername();
+            } else if (e.target.id == "valutatorePassword"){
+                $("#valutatoreSubmit").click();
+            }
         }
     });
-
+    $("#InvioNickname").click(function(){setUsername()});
     // Sets the client's username
     function setUsername() {
         username = cleanInput($usernameInput.val().trim());

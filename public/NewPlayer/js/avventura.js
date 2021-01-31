@@ -24,20 +24,24 @@ let avventura = new Vue({
 			})
 			.done(() => {
 				if (sessionStorage.getItem('Username') && sessionStorage.getItem('Scene')) {
-					$("#login").fadeOut();
-					$("#login").off("click");
-					$("#avventura").show();
-					$("nav").show();
+					
+					if ((sessionStorage.getItem('Title') != undefined && sessionStorage.getItem('Title') != "") && sessionStorage.getItem('Title') == avventura.storia.nome){
+						$("#login").fadeOut();
+						$("#login").off("click");
+						$("#avventura").show();
+						$("nav").show();
+						username = sessionStorage.getItem('Username');
+						socket.emit("add user", username, (avventura.storia.nome));
 
-					username = sessionStorage.getItem('Username');
-					socket.emit("add user", username, (avventura.storia.nome));
+						avventura.nowOn = parseInt(sessionStorage.getItem("Scene"));
+						avventura.punti = parseInt(sessionStorage.getItem("Points"));
 
-					avventura.nowOn = parseInt(sessionStorage.getItem("Scene"));
-					avventura.punti = parseInt(sessionStorage.getItem("Points"));
-
-					let musica = sessionStorage.getItem("Music");
-					socket.emit("scene", username, avventura.storia.nome, avventura.nowOn);
-					avventura.RenderScene(musica);
+						let musica = sessionStorage.getItem("Music");
+						avventura.RenderScene(musica);
+						socket.emit("scene", username, avventura.storia.nome, avventura.nowOn);
+					} else {
+						sessionStorage.setItem('Title', avventura.storia.nome);
+					}
 				}
 			});
 	},
