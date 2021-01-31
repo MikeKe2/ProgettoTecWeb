@@ -267,10 +267,12 @@ socket.on("reconnect", () => {
     let usersStored = JSON.parse(sessionStorage.getItem('Users'));
 
     for (let user in usersStored['users']) {
-      $('#userList').append(`<li class="list-group-item" id="${usersStored['users'][user].userId}">${usersStored['users'][user].userUsername}</li>`);
-      ArrayofUsers.newStoria(usersStored['users'][user].userId, usersStored['users'][user].userUsername, usersStored['users'][user].userRoom, usersStored['users'][user].userTimer, usersStored['users'][user].userScore, usersStored['users'][user].userGroup, usersStored['users'][user].currentQuestion, usersStored['users'][user].possibleAnswer);
-      if (usersStored['users'][user].possibleAnswer != undefined)
-        $('#' + usersStored['users'][user].userUsername).addClass('list-group-item-warning');
+      if (ArrayofUsers.findElement(usersStored['users'][user].userId) == -1) {
+        ArrayofUsers.newStoria(usersStored['users'][user].userId, usersStored['users'][user].userUsername, usersStored['users'][user].userRoom, usersStored['users'][user].userTimer, usersStored['users'][user].userScore, usersStored['users'][user].userGroup, usersStored['users'][user].currentQuestion, usersStored['users'][user].possibleAnswer);
+        $('#userList').append(`<li class="list-group-item" id="${usersStored['users'][user].userId}">${usersStored['users'][user].userUsername}</li>`);
+        if (usersStored['users'][user].possibleAnswer != undefined)
+          $('#' + usersStored['users'][user].userUsername).addClass('list-group-item-warning');
+      }
     }
   }
 });

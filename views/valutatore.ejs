@@ -51,8 +51,8 @@
               class="bi bi-box-arrow-left"></i></button>
           <button type="button" id="helpButton" class="btn btn-danger mb-2"><i
               class="bi bi-info-square-fill"></i></button>
-          <button type="button" id="chatButton" class="btn btn-info mb-2" data-bs-toggle="modal" data-bs-target=".modal"><i
-              class="bi bi-chat-left-text ml-1"></i></button>
+          <button type="button" id="chatButton" class="btn btn-info mb-2" data-bs-toggle="modal"
+            data-bs-target=".modal"><i class="bi bi-chat-left-text ml-1"></i></button>
         </form>
       </div>
     </div>
@@ -117,7 +117,7 @@
         <label for="inputEmail3" class="col-sm-2 col-form-label">Domanda da rispondere:</label>
         <div class="col-sm-10">
           <input type="text" class="form-control" id="domandaNome" readonly>
-          <input type="text" class="form-control" id="domandaDesc" readonly>
+          <textarea class="form-control" id="domandaDesc" readonly></textarea>
         </div>
       </div>
       <div class="row mb-3">
@@ -141,7 +141,7 @@
     </div>
   </div>
   <template id="imgRisposta">
-    <img style="width:100%" src=$IMG>
+    <img style="width:100%" src=$IMG alt="Non ha girato nessuna immagine">
   </template>
   <template id="textRisposta">
     <input type="text" class="form-control" value=$VAL readonly></input>
@@ -163,9 +163,10 @@
       <div id="flush-collapse$y" class="accordion-collapse collapse" aria-labelledby="flush-heading$CA0"
         data-bs-parent="#sceneAnswers">
         <div class="accordion-body">
-        <p>Tempo Massimo: $CA4</p>
-        <p>Punti: $CA3</p>
-        <p>Conduce alla stanza n°  <input type="button" class="btn btn-outline-secondary changeRoom" value="$CA1" id="$y"></input></p>
+          <p>Tempo Massimo: $CA4</p>
+          <p>Punti: $CA3</p>
+          <p>Conduce alla stanza n° <input type="button" class="btn btn-outline-secondary changeRoom" value="$CA1"
+              id="$y"></input></p>
         </div>
       </div>
     </div>
