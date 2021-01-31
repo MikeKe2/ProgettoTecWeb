@@ -23,7 +23,7 @@ class graphicalScene{
 			board.context.fillRect(x - 2,y - 2,width + 4,height + 4);
 			board.context.fillStyle = this.color;
 			board.context.fillRect(x,y,width,height);
-			board.context.font = 20*board.scale+"px Arial";
+			board.context.font = Math.min(20, 300/this.core.nome.length)*board.scale+"px Arial";
 			board.context.fillStyle = "#000000";
 			board.context.fillText(this.core.nome, this.core.x*board.scale-board.startX, this.core.y*board.scale-board.startY+20*board.scale);
 
@@ -56,21 +56,17 @@ class graphicalScene{
 		let id = this.id;
 		if(!$("#scena"+id)[0]){
 			let s_id = "#scena"+id;
-			let html = $("#scena").html();
-			for(let i = 0; i<17; i++){
-				html = html.replace("$ID",id);
-			}
-			html = html.replace("$NAME", this.core.nome).replace("$NAME", this.core.nome);
-			html = html.replace("$DESCRIPTION", this.core.descrizione).replace("$DESCRIPTION", this.core.descrizione);
-			html = html.replace("$IMMAGINE", this.core.img).replace("$IMMAGINE", this.core.img);
-			html = html.replace("$DESCIMM", this.core.imgdescription).replace("$DESCIMM", this.core.imgdescription);
-			//selezionare widget giusto
-			html = html.replace("$WIDGET", this.core.widget);
-			//select con l'audio
-			html = html.replace("$AUDIO", this.core.tracciaAudio!= null? this.core.tracciaAudio : "nessun audio inserito");
 			if(this.core.valutatore=="false")
     			this.core.valutatore = false;
-			html = html.replace("$VALUTATORE", this.core.valutatore?"ON":"OFF");
+			let html = $("#scena").html()
+			.replaceAll("$ID",id)
+			.replaceAll("$NAME", this.core.nome)
+			.replaceAll("$DESCRIPTION", this.core.descrizione)
+			.replaceAll("$IMMAGINE", this.core.img)
+			.replaceAll("$DESCIMM", this.core.imgdescription)
+			.replace("$WIDGET", this.core.widget)
+			.replace("$AUDIO", this.core.tracciaAudio != null ? this.core.tracciaAudio : "nessun audio inserito")
+			.replace("$VALUTATORE", this.core.valutatore?"ON":"OFF");
 			
 			$(".container").append(html);
 			$("#editValutatore"+id).prop( "checked", this.core.valutatore);
@@ -103,22 +99,21 @@ class graphicalScene{
 		let html="";
 		let rispID=0;
 		this.core.risposte.forEach(risposta => {
-			html = $("#risposta").html();
-			for(let i=0; i < 8; i++){
-				html = html.replace("$ID", this.id);
-				html = html.replace("$RISP", rispID);
-			}
-			html = html.replace("$VALORE", risposta.valore).replace("$VALORE", risposta.valore);
-			html = html.replace("$LINK", risposta.to[board.activegroup] != -1 ? storia.scene[risposta.to[board.activegroup]].nome: "non ancora inserito");
-			html = html.replace("$TEMPO", risposta.maxTime>0 ? risposta.maxTime : "illimitato").replace("$TEMPO", risposta.maxTime);
-			html = html.replace("$POINTS", risposta.points).replace("$POINTS", risposta.points);
+			html = $("#risposta").html()
+			.replaceAll("$ID", this.id)
+			.replaceAll("$RISP", rispID)
+			.replaceAll("$VALORE", risposta.valore)
+			.replace("$LINK", risposta.to[board.activegroup] != -1 ? storia.scene[risposta.to[board.activegroup]].nome: "non ancora inserito")
+			.replace("$TEMPO", risposta.maxTime >0 ? risposta.maxTime : "illimitato")
+			.replace("$TEMPO", risposta.maxTime)
+			.replaceAll("$POINTS", risposta.points);
 
 			$("#scena"+this.id+" ol").append(html);
 			$("#collapser"+this.id+"_"+rispID).click(collapsehandler);
 
 			$("#elimina"+this.id+"_"+rispID).click(delRisp);
-			if(rispID == this.core.risposte.length-1)
-				$("#editMaxTime"+this.id+"_"+rispID).val(0);
+			// if(rispID == this.core.risposte.length-1)
+			// 	$("#editMaxTime"+this.id+"_"+rispID).val(0);
 			rispID++;
 		});
 		$("#scena"+this.id+" .rispostaCollapse").hide();

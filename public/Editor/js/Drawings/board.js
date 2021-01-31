@@ -222,8 +222,9 @@ var board = {
 		let j = 0;
 		if (board.scenes.length > 2) {
 			for (let i = 2; i < board.scenes.length; i++) {
+				//scorre tutte le scene e controlla se rispetta i vincoli del filtro
 				let scena = board.scenes[i];
-				if (all || (loaded && scena.core.x && scena.core.y) || (!loaded && (!scena.core.x || !scena.core.y))) { //scorre tutte le scene e controlla se rispetta i vincoli del filtro
+				if (all || (loaded && scena.core.x && scena.core.y) || (!loaded && (!scena.core.x || !scena.core.y))) { 
 					$("#menulist").append($("#menuScena").html().replace("$ID", scena.id).replace("$NOME", scena.core.nome));
 					$("#menuScena" + scena.id).click(function () {
 						scena.open()
@@ -235,7 +236,9 @@ var board = {
 			}
 		}
 	},
-	eraseArrow: function (from, to) { //funzione per eliminare la freccia, le scorre tutte ed elimina la prima che corrisponde ai criteri, ce ne può essere più d'una ma basta eliminare la prima dato che è un indicatore puramente grafico
+	//funzione per eliminare la freccia, le scorre tutte ed elimina la prima che corrisponde ai criteri, 
+	//ce ne può essere più d'una ma basta eliminare la prima dato che è un indicatore puramente grafico
+	eraseArrow: function (from, to) { 
 		for (let i = 0; i < board.arrows.length; i++) {
 			if (board.arrows[i].from == from && board.arrows[i].to == board.scenes[to].core && board.arrows[i].ngroup == board.activegroup) {
 				board.arrows.splice(i, 1);

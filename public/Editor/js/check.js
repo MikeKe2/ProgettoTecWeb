@@ -36,7 +36,7 @@ function checkAnswer(){
         for(let j = 0; j < storia.scene[i].risposte.length; j++){
             for(let k = 0; k < gruppi; k++){
                 if(storia.scene[i].risposte[j].to[k] *1 == -1 && storia.scene[i].x && storia.scene[i].y)
-                    if(!confirm("Attenzione, la scena " + storia.scene[i].nome + " nel gruppo " + (k+1) + " alla risposta " + j + " non è stata compilata, continuare?")){return false;}
+                    if(!confirm("Attenzione, la scena " + storia.scene[i].nome + " nel gruppo " + (k+1) + " alla risposta " + (j+1) + " non è stata compilata, continuare?")){return false;}
             }
         }
         if(i == 0)
@@ -51,13 +51,13 @@ function checkPath(){
     let changes;
     let gruppi = storia.categoria == "Singolo" ? 1: storia.ngruppi;
     for(let i=0; i < gruppi; i++){
+        //si escluono le scene create ma non inserite
         for(let j = 0; j < nodes.length; j++){
             nodes[j] = !(storia.scene[j].x && storia.scene[j].y);
         }
         nodes[1]=true;
-        changes = 1;
         //finché vengono contrassegnati dei nodi
-        while(changes > 0){
+        do{
             changes=0;
             for(let j = 0; j < storia.scene.length; j++){
                 let any = false;
@@ -75,6 +75,7 @@ function checkPath(){
                 }
             }
         }
+        while(changes > 0)
         //se una scena è contrassegnata come false non può raggiungere la fine
         if(!nodes.reduce((and, value)=> and&&value)){
             if(!confirm("Il gruppo numero "+(i+1)+" ha un percorso che non raggiunge la fine, vuoi continuare?")){return false;}
