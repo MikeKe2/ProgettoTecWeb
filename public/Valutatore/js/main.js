@@ -27,24 +27,24 @@ function HowLong(nowOn, gruppo) {
     changes = 0;
 
     for (let j = 0; j < storia.scene.length; j++) {
-      if(storia.scene[j].risposte.length==0)
-        continue;
+      if (!(!storia.scene[j].risposte || storia.scene[j].risposte.length == 0)) {
 
-      let min = nodes[storia.scene[j].risposte[0].to[i]];
-      
-      for (let k = 0; k < storia.scene[j].risposte.length; k++) {
-        let num = nodes[storia.scene[j].risposte[k].to[gruppo] * 1];
-        min = num && num<min ? num : min;
-      }
-      
-      if (min != nodes[j]) {
-        nodes[j] = any;
-        changes++;
+        let min = storia.scene.length + 1;
+
+        for (let k = 0; k < storia.scene[j].risposte.length; k++) {
+          let num = nodes[storia.scene[j].risposte[k].to[gruppo] * 1];
+          min = num != 0 && num < min ? num : min;
+        }
+        if (min != 0)
+          min++;
+        if (min != nodes[j]) {
+          nodes[j] = min;
+          changes++;
+        }
       }
     }
   } while (changes > 0)
-
-  return nodes[nowOn]-1;
+  return nodes[nowOn] - 1;
 }
 
 function changeScene(input, output) {
@@ -70,7 +70,9 @@ function changeData(i, numRoom) {
   if (storia.scene[numRoom] == "image.html")
     insertImage(numRoom);
 
-  let statusProgressbar = (100 * (numRoom)) / HowLong(numRoom, ArrayofUsers.users[i].userGroup);
+  
+  let k = HowLong(numRoom, ArrayofUsers.users[i].userGroup);
+  let statusProgressbar = 100 - ((100 * (k)) / HowLong(0, ArrayofUsers.users[i].userGroup));
   $(".progress-bar").css({
     'width': statusProgressbar + '%'
   });
