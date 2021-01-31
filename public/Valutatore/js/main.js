@@ -65,7 +65,7 @@ function changeData(i, numRoom) {
   $('.btn-group').html("");
 
   //We show the current info on the selected user, such as Room number, name and description
-  $("#userStatus").html("Si trova nella stanza: " + numRoom);
+  $("#userStatus").html("Si trova nella stanza: " + numRoom + " - " + storia.scene[numRoom].nome);
   storia.scene[numRoom].nome ? $("#SceneName").html(storia.scene[numRoom].nome) : $("#SceneName").html("non inserito");
   storia.scene[numRoom].descrizione ? $("#SceneDescrizione").html(storia.scene[numRoom].descrizione) : $("#SceneDescrizione").html("non inserito");
   if (storia.scene[numRoom] == "image.html")

@@ -131,8 +131,6 @@ $(() => {
                 typing = false;
             } else if (!username)
                 setUsername();
-            else
-                avventura.Evaluate();
         }
     });
 

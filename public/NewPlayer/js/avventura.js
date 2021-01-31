@@ -8,8 +8,7 @@ let avventura = new Vue({
 		gruppo: 0,
 		punti: 0,
 		widget: null,
-		risposta_data: null,
-		musica: ""
+		risposta_data: null
 	},
 	mounted: async function () {
 		$.getJSON(urlStoria, function (data) {
@@ -35,49 +34,42 @@ let avventura = new Vue({
 
 					avventura.nowOn = parseInt(sessionStorage.getItem("Scene"));
 					avventura.punti = parseInt(sessionStorage.getItem("Points"));
-					/*$("#track").attr("src", sessionStorage.getItem("Music"));
-					music = $("#music")[0];
-					music.pause();
-					music.load();
-					music.muted = !music.muted;
-					$("#MuteMusic").html($("#volumeMute").html());*/
 
+					let musica = sessionStorage.getItem("Music");
 					socket.emit("scene", username, avventura.storia.nome, avventura.nowOn);
-					avventura.Load(avventura.scene[avventura.nowOn]);
+					avventura.RenderScene(musica);
 				}
 			});
 	},
 	methods: {
-		Next: function (to) {
-			if (to) {
-				$("#description").focus()
-				this.nowOn = parseInt(to.to[parseInt(this.gruppo)]);
-				this.punti += parseInt(to.points) || 0;
-				if (avventura.storia.scene[this.nowOn].tracciaAudio != "") {
-					// ho provato con vue ma non sono riuscita a farlo andare :c però funziona
-					$("#track").attr("src", `/media/${avventura.storia.creatore}/audios/${avventura.storia.scene[this.nowOn].tracciaAudio}`);
-					//sessionStorage['Music'] = `/media/${avventura.storia.creatore}/audios/${avventura.storia.scene[this.nowOn].tracciaAudio}`;
-					music = $("#music")[0];
-					music.pause();
-					music.load();
-					music.oncanplaythrough = music.play();
-				}
-				this.widget = null;
-				if (this.scene[this.nowOn].widget != undefined)
-					this.Load(this.scene[this.nowOn]);
-				this.time = start();
-
-				sessionStorage.setItem("Scene", this.nowOn);
-				sessionStorage.setItem("Points", this.punti);
-				//Inviamo al valutatore i dati sul giocatore
-				socket.emit("scene", username, this.storia.nome, this.nowOn);
-				socket.emit('score', username, this.storia.nome, (this.punti));
-
-			} else {
-				$("#myPopup").addClass("show");
-				$('#nextBtn').attr("aria-label", $("#myPopup").html());
-				$('#nextBtn').focus();
+		RenderScene: function (musica) {
+			$("#description").focus()
+			if (this.storia.scene[this.nowOn].tracciaAudio != "") {
+				// ho provato con vue ma non sono riuscita a farlo andare :c però funziona
+				$("#track").attr("src", `/media/${avventura.storia.creatore}/audios/${avventura.storia.scene[this.nowOn].tracciaAudio}`);
+				sessionStorage['Music'] = `/media/${avventura.storia.creatore}/audios/${avventura.storia.scene[this.nowOn].tracciaAudio}`;
+				let music = $("#music")[0];
+				music.pause();
+				music.load();
+				music.oncanplaythrough = music.play();
+			}else if(musica){
+				$("#track").attr("src", musica);
+				//sessionStorage['Music'] = `/media/${avventura.storia.creatore}/audios/${avventura.storia.scene[this.nowOn].tracciaAudio}`;
+				let music = $("#music")[0];
+				music.pause();
+				music.load();
+				music.oncanplaythrough = music.play();
 			}
+			this.widget = null;
+			if (this.scene[this.nowOn].widget != undefined)
+				this.Load(this.scene[this.nowOn]);
+			this.time = start();
+
+			sessionStorage.setItem("Scene", this.nowOn);
+			sessionStorage.setItem("Points", this.punti);
+			//Inviamo al valutatore i dati sul giocatore
+			socket.emit("scene", username, this.storia.nome, this.nowOn);
+			socket.emit('score', username, this.storia.nome, (this.punti));
 		},
 
 		Load: function (scena) {
@@ -121,7 +113,7 @@ let avventura = new Vue({
 				return;
 			} else {
 				if (!this.widget || this.scene[this.nowOn].widget == "image.html") {
-					this.Next(this.scene[this.nowOn].risposte[0]);
+					this.updateAttributes(this.scene[this.nowOn].risposte[0]);
 					return;
 				}
 				this.risposta_data = risultato();
@@ -134,7 +126,7 @@ let avventura = new Vue({
 				}
 
 				if (risposta) {
-					this.Next(risposta);
+					this.updateAttributes(risposta);
 					return;
 				}
 
@@ -144,7 +136,18 @@ let avventura = new Vue({
 							risposta = this.scene[this.nowOn].risposte[i];
 					}
 				}
-				this.Next(risposta);
+				this.updateAttributes(risposta);
+			}
+		}, 
+		updateAttributes: function (risposta){
+			if (risposta) {
+				this.nowOn = parseInt(risposta.to[parseInt(this.gruppo)]);
+				this.punti += parseInt(risposta.points) || 0;
+				this.RenderScene();
+			}else {
+				$("#myPopup").addClass("show");
+				$('#nextBtn').attr("aria-label", $("#myPopup").html());
+				$('#nextBtn').focus();
 			}
 		}
 	}
