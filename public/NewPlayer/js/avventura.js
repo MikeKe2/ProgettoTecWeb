@@ -15,6 +15,7 @@ let avventura = new Vue({
 			avventura.scene = data.scene;
 			avventura.nowOn = 0;
 			avventura.storia = data;
+			$('head').append('<link rel="stylesheet" href="'+'/media/' + this.storia.creatore + '/css/' + avventura.css+'" type="text/css" />');
 			$("#storyName").html(avventura.storia.nome);
 			avventura.Background(avventura.storia.creatore, avventura.storia.background);
 			sessionStorage.setItem('Title', avventura.storia.nome);
