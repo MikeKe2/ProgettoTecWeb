@@ -12,7 +12,7 @@
 
 <script type="text/javascript">
   var risposta;
-  let arr = "";
+  var arr = "";
   for (let i = 0; i < avventura.storia.scene[avventura.nowOn].risposte.length; i++) {
     arr += $("#bottone-multiplo").html().replaceAll("$VAL", avventura.storia.scene[avventura.nowOn].risposte[i].valore);
   }
