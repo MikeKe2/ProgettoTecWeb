@@ -32,7 +32,7 @@ let avventura = new Vue({
 						$("#avventura").show();
 						$("nav").show();
 						username = sessionStorage.getItem('Username');
-						avventura.gruppo = sessionStorage.getItem('Gruppo');
+						avventura.gruppo = sessionStorage.getItem('Gruppo') || 0;
 						socket.emit("add user", username, (avventura.storia.nome), avventura.gruppo);
 						avventura.nowOn = parseInt(sessionStorage.getItem("Scene"));
 						avventura.punti = parseInt(sessionStorage.getItem("Points"));
