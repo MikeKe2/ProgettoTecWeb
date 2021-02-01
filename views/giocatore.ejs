@@ -112,7 +112,7 @@
 		<div class="d-flex flex-column justify-content-between h-100">
 			<div v-if="storia != null" class="d-flex flex-column justify-content-around h-100">
 				<div id="inizio" v-if="nowOn == 0" class="storyblock text-justify " aria-live="polite" tabindex="0">
-					<p>Bevenuto nella storia {{storia.nome}}</p>
+					<p>Benvenuto nella storia {{storia.nome}}</p>
 					<p>Categoria: {{storia.categoria.replaceAll("_"," ")}}</p>
 					<p>Anni: {{storia.target}}</p>
 					<p>Questa storia <span v-if="storia.accessibile=='false'">non </span>è accessibile!</p>
