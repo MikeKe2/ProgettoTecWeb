@@ -153,3 +153,11 @@ div.player:before {
   padding-right: 15px;
   text-align: right;
 }
+
+#myCanvas{
+  width: auto;
+  height: auto;
+  max-width: 80vw;
+  max-height: 80vh;
+  margin-left: auto;
+}

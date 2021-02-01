@@ -285,6 +285,7 @@ $(function () {
       }
     }
   })
+  $(".CanvasModalClose").click(function(){$("#CanvasModal").hide();})
 });
 
 function populatePossibleRisp(ArrayofUsers, i) {

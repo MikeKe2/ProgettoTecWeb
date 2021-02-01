@@ -47,6 +47,9 @@
           <button type="button" id="exportFile" class="btn btn-success mb-2">
             <i class="bi bi-download"></i>
           </button>
+          <button type="button" class="btn btn-primary" data-toggle="modal" onclick="mappa.init()">
+            Launch demo modal
+          </button>
           <button type="button" id="dataToList" class="btn btn-secondary mb-2"><i
               class="bi bi-box-arrow-left"></i></button>
           <button type="button" id="helpButton" class="btn btn-danger mb-2"><i
@@ -91,6 +94,26 @@
       </div>
     </div>
   </div>
+
+  <div id="CanvasModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Modal title</h5>
+          <button type="button" class="close CanvasModalClose" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <canvas id="myCanvas" width="800" height="600"></canvas>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary CanvasModalClose">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!--DATA PAGE, with all information regarding the status of a selected user-->
   <div class="data container-fluid">
     <!-- Progress Bar -->
@@ -173,6 +196,7 @@
   <script type="text/javascript" src="/public/Valutatore/js/userClasses.js"></script>
   <script type="text/javascript" src="/public/Valutatore/js/main.js"></script>
   <script type="text/javascript" src="/public/Valutatore/js/chat.js"></script>
+  <script type="text/javascript" src="/public/Valutatore/js/canvas.js"></script>
   <script type="text/javascript">
     var urlStoria = "<%= urlStoria %>"
   </script>
