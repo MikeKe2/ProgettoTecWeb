@@ -5,7 +5,7 @@
     "target": "7-10",
     "ngruppi": "1",
     "background": "",
-    "css": "csstemplate.css",
+    "css": "default.css",
     "autore": "admin",
     "creatore": "admin",
     "scene": [{

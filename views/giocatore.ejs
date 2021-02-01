@@ -111,7 +111,7 @@
 		</div>
 		<div class="d-flex flex-column justify-content-between h-100">
 			<div v-if="storia != null" class="d-flex flex-column justify-content-around h-100">
-				<div id="beginning" v-if="nowOn == 0" class="storyblock text-justify " aria-live="polite" tabindex="0">
+				<div id="inizio" v-if="nowOn == 0" class="storyblock text-justify " aria-live="polite" tabindex="0">
 					<p>Bevenuto nella storia {{storia.nome}}</p>
 					<p>Categoria: {{storia.categoria.replaceAll("_"," ")}}</p>
 					<p>Anni: {{storia.target}}</p>
@@ -124,7 +124,7 @@
 					<p class="lead">Hai totalizzato {{punti}} punti!</p>
 					<p class="lead">Premi avanti per ri-niziare la storia</p>
 				</div>
-				<div tabindex="0" id="description" v-if="nowOn > 1" class="text-justify" aria-live="polite">
+				<div tabindex="0" id="descrizione" v-if="nowOn > 1" class="text-justify" aria-live="polite">
 					{{scene[nowOn].descrizione}}
 				</div>
 				<div id="widget" v-if="scene[nowOn].widget && scene[nowOn].widget!=''"

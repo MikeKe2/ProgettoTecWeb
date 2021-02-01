@@ -19,26 +19,49 @@ opacity = 0 significa che lo sfondo è completamente trasparente mentre opacity 
 Ricordate di cancellare gli attributi contenuti nelle parentesi che non vengono utilizzati.
 */
 
-#scena{
-    border: ;
-    background-color: ;
-    border-radius: ;
+/*Storia*/
+#avventura {
+    border-radius: 15px;
+    padding: 2em;
 }
 
-#text-holder{
-    border: ;
-    background-color: ;
-    border-radius: ;
+#finale,
+#inizio,
+#descrizione {
+    max-height: 40vh;
+    overflow-y: auto;
+    background-color: rgba(100, 100, 100, 0.7);
+    border-radius: 6px;
+    color: #f3f3f3;
+    padding: 2em;
+    text-align: justify;
 }
 
-#widget-holder{
-    border: ;
-    background-color: ;
-    border-radius: ;
+#widget {
+    height: 45vh;
+    overflow: hidden;
+    background-color: rgba(170, 170, 170, 0.7);
+    border-radius: 6px;
 }
 
-#testo{
-    font-family: ;
-    font-style: ;
-    color: ;
+
+#avventura {
+    height: 90vh;
+}
+
+/* Smartphone */
+@media only screen and (max-width: 800px) {
+    #avventura {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #descrizione {
+        padding: 1em;
+
+    }
+
+    #widget {
+        overflow: auto;
+    }
 }
