@@ -56,13 +56,9 @@ let mappa = {
         mappa.min_y = minY(mappa.scene);
         $("#MappaData").html("Clicchi su una scena per sapere chi è lì");
         $("#CanvasModal").modal("show");
-        if(!mobileCheck()){
-            mappa.canvas.width = 1000;
-            mappa.canvas.height =  600;
-        }else{
-            mappa.canvas.width = 280;
-            mappa.canvas.height =  1000;
-        }
+        mappa.canvas.width = window.innerWidth / 2;
+        mappa.canvas.height =  window.innerHeight / 2;
+        
         mappa.canvasX = mappa.canvas.width,
         mappa.canvasY = mappa.canvas.height;
         mappa.orientation = mappa.canvasX > mappa.canvasY;
