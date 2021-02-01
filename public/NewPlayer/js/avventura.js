@@ -12,40 +12,41 @@ let avventura = new Vue({
 	},
 	mounted: async function () {
 		$.getJSON(urlStoria, function (data) {
-			avventura.scene = data.scene;
-			avventura.nowOn = 0;
-			avventura.storia = data;
-			$("#storyName").html(avventura.storia.nome);
-			avventura.Background(avventura.storia.creatore, avventura.storia.background);
-			sessionStorage.setItem('Title', avventura.storia.nome);
-		})
-		.fail(() => {
-			alert("Mi dispiace ma la storia che hai richiesto non è stata trovata, ora verrai reindirizzato alla pagina con tutte le storie disponibili");
-			window.location.href = "https://site181993.tw.cs.unibo.it/avventure";
-		})
-		.done(() => {
-			if (sessionStorage.getItem('Username') && sessionStorage.getItem('Scene')) {
-				if ((sessionStorage.getItem('Title') != undefined && sessionStorage.getItem('Title') != "") && sessionStorage.getItem('Title') == avventura.storia.nome) {
-					$("#login").fadeOut();
-					$("#login").off("click");
-					$("#avventura").show();
-					$("nav").show();
-					username = sessionStorage.getItem('Username');
-					avventura.gruppo = sessionStorage.getItem('Gruppo');
-					socket.emit("add user", username, (avventura.storia.nome), avventura.gruppo);
-					avventura.nowOn = parseInt(sessionStorage.getItem("Scene"));
-					avventura.punti = parseInt(sessionStorage.getItem("Points"));
+				avventura.scene = data.scene;
+				avventura.nowOn = 0;
+				avventura.storia = data;
+				$('head').append('<link rel="stylesheet" href="' + '/media/' + avventura.storia.creatore + '/css/' + avventura.storia.css + '" type="text/css" />');
+				$("#storyName").html(avventura.storia.nome);
+				avventura.Background(avventura.storia.creatore, avventura.storia.background);
+				sessionStorage.setItem('Title', avventura.storia.nome);
+			})
+			.fail(() => {
+				alert("Mi dispiace ma la storia che hai richiesto non è stata trovata, ora verrai reindirizzato alla pagina con tutte le storie disponibili");
+				window.location.href = "https://site181993.tw.cs.unibo.it/avventure";
+			})
+			.done(() => {
+				if (sessionStorage.getItem('Username') && sessionStorage.getItem('Scene')) {
+					if ((sessionStorage.getItem('Title') != undefined && sessionStorage.getItem('Title') != "") && sessionStorage.getItem('Title') == avventura.storia.nome) {
+						$("#login").fadeOut();
+						$("#login").off("click");
+						$("#avventura").show();
+						$("nav").show();
+						username = sessionStorage.getItem('Username');
+						avventura.gruppo = sessionStorage.getItem('Gruppo');
+						socket.emit("add user", username, (avventura.storia.nome), avventura.gruppo);
+						avventura.nowOn = parseInt(sessionStorage.getItem("Scene"));
+						avventura.punti = parseInt(sessionStorage.getItem("Points"));
 
-					let musica = sessionStorage.getItem("Music");
-					avventura.RenderScene(musica);
-					socket.emit("scene", username, avventura.storia.nome, avventura.nowOn);
+						let musica = sessionStorage.getItem("Music");
+						avventura.RenderScene(musica);
+						socket.emit("scene", username, avventura.storia.nome, avventura.nowOn);
+					}
 				}
-			}
-		});
+			});
 	},
 	methods: {
 		RenderScene: function (musica) {
-			$("#description").focus()
+			$("#descrizione").focus()
 			if (this.storia.scene[this.nowOn].tracciaAudio != "") {
 				// ho provato con vue ma non sono riuscita a farlo andare :c però funziona
 				$("#track").attr("src", `/media/${avventura.storia.creatore}/audios/${avventura.storia.scene[this.nowOn].tracciaAudio}`);
@@ -54,7 +55,7 @@ let avventura = new Vue({
 				music.pause();
 				music.load();
 				music.oncanplaythrough = music.play();
-			}else if(musica){
+			} else if (musica) {
 				$("#track").attr("src", musica);
 				//sessionStorage['Music'] = `/media/${avventura.storia.creatore}/audios/${avventura.storia.scene[this.nowOn].tracciaAudio}`;
 				let music = $("#music")[0];
@@ -75,7 +76,7 @@ let avventura = new Vue({
 		},
 
 		Load: function (scena) {
-			if(scena.widget == "")
+			if (scena.widget == "")
 				return;
 			$.ajax({
 				url: '/media/' + this.storia.creatore + '/widgets/' + scena.widget,
@@ -141,12 +142,12 @@ let avventura = new Vue({
 				this.updateAttributes(risposta);
 			}
 		},
-		updateAttributes: function (risposta){
+		updateAttributes: function (risposta) {
 			if (risposta) {
 				this.nowOn = parseInt(risposta.to[parseInt(this.gruppo)]);
 				this.punti += parseInt(risposta.points) || 0;
 				this.RenderScene();
-			}else {
+			} else {
 				$("#myPopup").addClass("show");
 				$('#nextBtn').attr("aria-label", $("#myPopup").html());
 				$('#nextBtn').focus();

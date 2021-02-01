@@ -170,7 +170,7 @@ app.post("/newUser", function (req, res) {
         fs.copyFileSync(resDir + '/Widget/number.html', dir + '/widgets/number.html');
         fs.copyFileSync(resDir + '/Widget/sendImage.html', dir + '/widgets/sendImage.html');
         fs.copyFileSync(resDir + '/Widget/templateWidget.html', dir + '/widgets/templateWidget.html');
-        fs.copyFileSync(resDir + '/Widget/csstemplate.css', dir + '/css/csstemplate.css');
+        fs.copyFileSync(resDir + '/Widget/default.css', dir + '/css/default.css');
       }
       chmodr(dir, 0o775, (err) => {
         if (err) {
