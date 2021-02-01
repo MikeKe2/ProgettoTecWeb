@@ -11,8 +11,8 @@ var ArrayofMessages = new Messages();
 var currentTargetUser = "";
 var currentTargetId = "";
 var typing = false;
-//var socket = io.connect("https://site181993.tw.cs.unibo.it");
-var socket = io.connect("http://localhost:8000");
+var socket = io.connect("https://site181993.tw.cs.unibo.it");
+//var socket = io.connect("http://localhost:8000");
 var gruppo = 0;
 var lastTypingTime;
 var storia;
@@ -45,7 +45,7 @@ function distances(gruppo) {
       }
     }
   } while (changes > 0)
-  return nodes.map(i=>i-1);
+  return nodes.map(i => i - 1);
 }
 
 function changeScene(input, output) {
@@ -85,11 +85,11 @@ function changeData(i, numRoom) {
       let currentAnswer = Object.values(storia.scene[numRoom].risposte[y]);
       let proxSceneIndex = currentAnswer[1][ArrayofUsers.users[i].userGroup];
       let answer = $("#answers").html()
-      .replaceAll("$y", y)
-      .replaceAll("$CA0", currentAnswer[0])
-      .replace("$CA1", proxSceneIndex+" - "+storia.scene[proxSceneIndex].nome)
-      .replace("$CA3", currentAnswer[3])
-      .replace("$CA4", parseInt(currentAnswer[4]) == 0 ? "Illimitato" : currentAnswer[4]);
+        .replaceAll("$y", y)
+        .replaceAll("$CA0", currentAnswer[0])
+        .replace("$CA1", proxSceneIndex + " - " + storia.scene[proxSceneIndex].nome)
+        .replace("$CA3", currentAnswer[3])
+        .replace("$CA4", parseInt(currentAnswer[4]) == 0 ? "Illimitato" : currentAnswer[4]);
       totalAnswer += answer;
     }
   }
@@ -122,10 +122,10 @@ $(function () {
     let usersStored = JSON.parse(sessionStorage.getItem('Users'));
 
     for (let user in usersStored['users']) {
-      $('#userList').append(`<li class="list-group-item" id="${usersStored['users'][user].userId}">${usersStored['users'][user].userUsername}</li>`);
-      ArrayofUsers.newStoria(usersStored['users'][user].userId, usersStored['users'][user].userUsername, usersStored['users'][user].userRoom, usersStored['users'][user].userTimer, usersStored['users'][user].userScore, usersStored['users'][user].userGroup, usersStored['users'][user].currentQuestion, usersStored['users'][user].possibleAnswer);
-      if (usersStored['users'][user].possibleAnswer != undefined)
-        $('#' + usersStored['users'][user].userUsername).addClass('list-group-item-warning');
+      if (ArrayofUsers.findElement(usersStored['users'][user].userId) == -1) {
+        $('#userList').append(`<li class="list-group-item" id="${usersStored['users'][user].userId}">${usersStored['users'][user].userUsername}</li>`);
+        ArrayofUsers.newStoria(usersStored['users'][user].userId, usersStored['users'][user].userUsername, usersStored['users'][user].userRoom, usersStored['users'][user].userTimer, usersStored['users'][user].userScore, usersStored['users'][user].userGroup, usersStored['users'][user].currentQuestion, usersStored['users'][user].possibleAnswer);
+      }
     }
   }
 
@@ -175,7 +175,7 @@ $(function () {
 
     currentTargetId = e.currentTarget.id;
     let i = ArrayofUsers.findElement(currentTargetId);
-    currentTargetUser =  ArrayofUsers.users[i].userUsername;
+    currentTargetUser = ArrayofUsers.users[i].userUsername;
 
     $(".navbar-brand").text(currentTargetUser);
     $("#exportFile").hide();
@@ -251,7 +251,7 @@ $(function () {
 
     if (helpingComment != null) {
       socket.emit('helpIncoming', currentTargetId, (helpingComment));
-      $("#" + currentTargetUser).removeClass("list-group-item-danger");
+      $("#" + currentTargetId).removeClass("list-group-item-danger");
     }
 
   });

@@ -12,38 +12,36 @@ let avventura = new Vue({
 	},
 	mounted: async function () {
 		$.getJSON(urlStoria, function (data) {
-				avventura.scene = data.scene;
-				avventura.nowOn = 0;
-				avventura.storia = data;
-				$("#storyName").html(avventura.storia.nome);
-				avventura.Background(avventura.storia.creatore, avventura.storia.background);
-			})
-			.fail(() => {
-				alert("Mi dispiace ma la storia che hai richiesto non è stata trovata, ora verrai reindirizzato alla pagina con tutte le storie disponibili");
-				window.location.href = "https://site181993.tw.cs.unibo.it/avventure";
-			})
-			.done(() => {
-				if (sessionStorage.getItem('Username') && sessionStorage.getItem('Scene')) {
-					
-					if ((sessionStorage.getItem('Title') != undefined && sessionStorage.getItem('Title') != "") && sessionStorage.getItem('Title') == avventura.storia.nome){
-						$("#login").fadeOut();
-						$("#login").off("click");
-						$("#avventura").show();
-						$("nav").show();
-						username = sessionStorage.getItem('Username');
-						socket.emit("add user", username, (avventura.storia.nome));
+			avventura.scene = data.scene;
+			avventura.nowOn = 0;
+			avventura.storia = data;
+			$("#storyName").html(avventura.storia.nome);
+			avventura.Background(avventura.storia.creatore, avventura.storia.background);
+			sessionStorage.setItem('Title', avventura.storia.nome);
+		})
+		.fail(() => {
+			alert("Mi dispiace ma la storia che hai richiesto non è stata trovata, ora verrai reindirizzato alla pagina con tutte le storie disponibili");
+			window.location.href = "https://site181993.tw.cs.unibo.it/avventure";
+		})
+		.done(() => {
+			if (sessionStorage.getItem('Username') && sessionStorage.getItem('Scene')) {
+				if ((sessionStorage.getItem('Title') != undefined && sessionStorage.getItem('Title') != "") && sessionStorage.getItem('Title') == avventura.storia.nome) {
+					$("#login").fadeOut();
+					$("#login").off("click");
+					$("#avventura").show();
+					$("nav").show();
+					username = sessionStorage.getItem('Username');
+					avventura.gruppo = sessionStorage.getItem('Gruppo');
+					socket.emit("add user", username, (avventura.storia.nome), avventura.gruppo);
+					avventura.nowOn = parseInt(sessionStorage.getItem("Scene"));
+					avventura.punti = parseInt(sessionStorage.getItem("Points"));
 
-						avventura.nowOn = parseInt(sessionStorage.getItem("Scene"));
-						avventura.punti = parseInt(sessionStorage.getItem("Points"));
-
-						let musica = sessionStorage.getItem("Music");
-						avventura.RenderScene(musica);
-						socket.emit("scene", username, avventura.storia.nome, avventura.nowOn);
-					} else {
-						sessionStorage.setItem('Title', avventura.storia.nome);
-					}
+					let musica = sessionStorage.getItem("Music");
+					avventura.RenderScene(musica);
+					socket.emit("scene", username, avventura.storia.nome, avventura.nowOn);
 				}
-			});
+			}
+		});
 	},
 	methods: {
 		RenderScene: function (musica) {
@@ -103,7 +101,7 @@ let avventura = new Vue({
 		},
 
 		Evaluate: function () {
-			
+
 			if (this.nowOn == 1) { //Scena Finale
 				sessionStorage.clear();
 				location.reload();
@@ -142,7 +140,7 @@ let avventura = new Vue({
 				}
 				this.updateAttributes(risposta);
 			}
-		}, 
+		},
 		updateAttributes: function (risposta){
 			if (risposta) {
 				this.nowOn = parseInt(risposta.to[parseInt(this.gruppo)]);
