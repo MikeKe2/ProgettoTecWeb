@@ -285,7 +285,7 @@ $(function () {
       }
     }
   })
-  $(".CanvasModalClose").click(function(){$("#CanvasModal").hide();})
+  $(".CanvasModalClose").click(function(){$("#CanvasModal").modal("hide");;})
 });
 
 function populatePossibleRisp(ArrayofUsers, i) {

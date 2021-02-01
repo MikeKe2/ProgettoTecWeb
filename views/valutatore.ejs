@@ -47,8 +47,8 @@
           <button type="button" id="exportFile" class="btn btn-success mb-2">
             <i class="bi bi-download"></i>
           </button>
-          <button type="button" class="btn btn-primary" data-toggle="modal" onclick="mappa.init()">
-            Launch demo modal
+          <button type="button" class="btn btn-warning mb-2" data-toggle="modal" onclick="mappa.init()">
+            <i class="bi bi-map"></i>
           </button>
           <button type="button" id="dataToList" class="btn btn-secondary mb-2"><i
               class="bi bi-box-arrow-left"></i></button>
@@ -95,17 +95,17 @@
     </div>
   </div>
 
-  <div id="CanvasModal" class="modal" tabindex="-1" role="dialog">
+  <div id="CanvasModal" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Modal title</h5>
-          <button type="button" class="close CanvasModalClose" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
+          <h5 class="modal-title">Mappa</h5>
+          <button type="button" class="btn-close CanvasModalClose" aria-label="Close">
           </button>
         </div>
-        <div class="modal-body">
-          <canvas id="myCanvas" width="800" height="600"></canvas>
+        <div id ="ModalMappaBody" class="modal-body">
+          <p id="MappaData"></p>
+          <canvas id="myCanvas"></canvas>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary CanvasModalClose">Close</button>
