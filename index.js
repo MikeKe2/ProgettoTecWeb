@@ -170,7 +170,7 @@ app.post("/newUser", function (req, res) {
         fs.copyFileSync(resDir + '/Widget/number.html', dir + '/widgets/number.html');
         fs.copyFileSync(resDir + '/Widget/sendImage.html', dir + '/widgets/sendImage.html');
         fs.copyFileSync(resDir + '/Widget/templateWidget.html', dir + '/widgets/templateWidget.html');
-        fs.copyFileSync(resDir + '/Widget/csstemplate.css', dir + '/css/csstemplate.css');
+        fs.copyFileSync(resDir + '/Widget/default.css', dir + '/css/default.css');
       }
       chmodr(dir, 0o775, (err) => {
         if (err) {
@@ -431,7 +431,7 @@ app.post('/stories', require('connect-ensure-login').ensureLoggedIn(), (req, res
     ngruppi: 1,
     background: "",
     css: "",
-    password:"password",
+    password: "password",
     autore: req.user.username,
     creatore: req.user.username,
     scene: [{
@@ -595,7 +595,7 @@ io.on("connection", (socket) => {
   });
 
   // when the client emits 'add user', this listens and executes
-  socket.on("add user", (username, storia) => {
+  socket.on("add user", (username, storia, gruppo) => {
     if (addedUser) return;
     // we store the username in the socket session for this client
     socket.username = username;
@@ -604,7 +604,8 @@ io.on("connection", (socket) => {
     try {
       socket.to(evaluators[storia]).emit("user joined", {
         username: username,
-        id: socket.id
+        id: socket.id,
+        gruppo: gruppo,
       });
     } catch (error) {
       console.log("why");

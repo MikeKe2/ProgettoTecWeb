@@ -199,32 +199,6 @@ div.eval:before {
     left: -16px;
     top: 0px;
 }
-
-/*Storia*/
-#avventura {
-    border-radius: 15px;
-    padding: 2em;
-}
-
-#finale,
-#beginning,
-#description {
-    max-height: 40vh;
-    overflow-y: auto;
-    background-color: rgba(100, 100, 100, 0.7);
-    border-radius: 6px;
-    color: #f3f3f3;
-    padding: 2em;
-    text-align: justify;
-}
-
-#widget {
-    height: 45vh;
-    overflow: hidden;
-    background-color: rgba(170, 170, 170, 0.7);
-    border-radius: 6px;
-}
-
 #mypopup{
     -webkit-user-select: none;         
     -moz-user-select: none; 
@@ -236,11 +210,6 @@ body {
     overflow-y: hidden;
 }
 
-#avventura {
-    height: 90vh;
-}
-
-/* Popup container - can be anything you want */
 .popup {
     position: relative;
     display: inline-block;
@@ -249,10 +218,9 @@ body {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-  }
-  
-  /* The actual popup */
-  .popup .popuptext {
+}
+
+.popup .popuptext {
     visibility: hidden;
     width: 160px;
     background-color: #555;
@@ -265,10 +233,9 @@ body {
     bottom: 125%;
     left: 50%;
     margin-left: -80px;
-  }
-  
-  /* Popup arrow */
-  .popup .popuptext::after {
+}
+
+.popup .popuptext::after {
     content: "";
     position: absolute;
     top: 100%;
@@ -277,30 +244,30 @@ body {
     border-width: 5px;
     border-style: solid;
     border-color: #555 transparent transparent transparent;
-  }
+}
   
-  /* Toggle this class - hide and show the popup */
-  .popup .show {
+/* Toggle this class - hide and show the popup */
+.popup .show {
     visibility: visible;
     -webkit-animation: fadeIn 1s;
     animation: fadeIn 1s;
-  }
+}
 .invBtn{
     width: 30px;
     height: 30px;
     border: none;
     background: transparent;
 }
-  /* Add animation (fade in the popup) */
-  @-webkit-keyframes fadeIn {
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
     from {opacity: 0;} 
     to {opacity: 1;}
-  }
+}
   
-  @keyframes fadeIn {
+@keyframes fadeIn {
     from {opacity: 0;}
     to {opacity:1 ;}
-  }
+}
 
 @media only screen and (max-width: 800px) {
     body {
@@ -312,7 +279,7 @@ body {
         -webkit-overflow-scrolling: touch;
     }
 
-    #description {
+    #descrizione {
         padding: 1em;
 
     }

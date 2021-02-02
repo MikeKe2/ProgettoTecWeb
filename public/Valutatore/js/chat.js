@@ -161,8 +161,6 @@ socket.on("answerToEvaluator", (data) => {
   ArrayofUsers.users[i].currentQuestion = storia.scene[ArrayofUsers.users[i].userRoom];
   ArrayofUsers.users[i].possibleAnswer = data.message;
 
-  sessionStorage.setItem('Users', JSON.stringify(ArrayofUsers));
-
   $('#' + data.id).addClass('list-group-item-warning');
   if (currentTargetId == data.id && $dataPage.is(":visible")) {
     populatePossibleRisp(ArrayofUsers, i);
@@ -193,19 +191,20 @@ socket.on("user joined", (data) => {
     $('#userList').append($newUser);
     showToast(0, data);
 
-    socket.emit("assignGroup", {
-      id: data.id,
-      groupN: gruppo,
-    });
+    if (!data.gruppo) {
+      socket.emit("assignGroup", {
+        id: data.id,
+        groupN: gruppo,
+      });
+      
+      ArrayofUsers.newStoria(data.id, data.username, 0, 0, 0, gruppo, null, null);
+      if (parseInt(storia.ngruppi) > 1) {
+        gruppo = (gruppo + 1) % parseInt(storia.ngruppi);
+      }
+    } else
+      ArrayofUsers.newStoria(data.id, data.username, 0, 0, 0, data.gruppo, null, null);
 
-    ArrayofUsers.newStoria(data.id, data.username, 0, 0, 0, gruppo, null, null);
     sessionStorage.setItem('Users', JSON.stringify(ArrayofUsers));
-
-    if (parseInt(storia.ngruppi) > 1) {
-      gruppo++;
-      if (gruppo >= parseInt(storia.ngruppi))
-        gruppo = 0;
-    }
   }
 });
 
@@ -270,8 +269,6 @@ socket.on("reconnect", () => {
       if (ArrayofUsers.findElement(usersStored['users'][user].userId) == -1) {
         ArrayofUsers.newStoria(usersStored['users'][user].userId, usersStored['users'][user].userUsername, usersStored['users'][user].userRoom, usersStored['users'][user].userTimer, usersStored['users'][user].userScore, usersStored['users'][user].userGroup, usersStored['users'][user].currentQuestion, usersStored['users'][user].possibleAnswer);
         $('#userList').append(`<li class="list-group-item" id="${usersStored['users'][user].userId}">${usersStored['users'][user].userUsername}</li>`);
-        if (usersStored['users'][user].possibleAnswer != undefined)
-          $('#' + usersStored['users'][user].userUsername).addClass('list-group-item-warning');
       }
     }
   }

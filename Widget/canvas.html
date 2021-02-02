@@ -42,8 +42,7 @@
         <button type="button" onclick="changeColour(this.value)" value="#FF0000" class="btn btn-danger">Rosso</button>
         <button type="button" onclick="changeColour(this.value)" value="#0800FF" class="btn btn-primary">Blu</button>
         <button type="button" onclick="changeColour(this.value)" value="#26FF00" class="btn btn-success">Verde</button>
-        <button type="button" onclick="changeColour(this.value)" value="#F6FF00"
-            class="btn btn-warning">Giallo</button>
+        <button type="button" onclick="changeColour(this.value)" value="#F6FF00" class="btn btn-warning">Giallo</button>
         <button type="button" onclick="changeColour(this.value)" value="#FFFFFF" class="btn btn-light">Bianco</button>
         <button type="button" onclick="changeColour(this.value)" value="#000000" class="btn btn-dark">Nero</button>
     </div>
@@ -167,5 +166,9 @@
 
     function clearCanvas(canvas, ctx) {
         canvas.width = canvas.width;
+    }
+
+    function risultato() {
+        return canvas.toDataURL();
     }
 </script>

@@ -1,25 +1,30 @@
 <style type="text/css">
-  .bottone-multiplo{
+  .bottone-multiplo {
     height: min-content;
   }
-  </style>
-  <div id="multipleChoice" class="btn-group" role="group" aria-label="Scelta multipla">
-  </div>
-  <template id="bottone-multiplo">
-    <button type="button" class="btn btn-secondary bottone-multiplo" onclick="setRisp('$VAL')">$VAL</button>
-  </template>
-  <script type="text/javascript">
-    var risposta;
-    var arr = "";
-    for(let i = 0; i < avventura.storia.scene[avventura.nowOn].risposte.length; i++){
+</style>
+<div id="multipleChoice" class="btn-group" role="group" aria-label="Scelta multipla">
+</div>
+<template id="bottone-multiplo">
+  <button type="button" class="btn btn-secondary bottone-multiplo" onclick="setRisp('$VAL')">$VAL</button>
+</template>
+<script type="text/javascript">
+  var risposta;
+  var arr = "";
+  var prev = Array(avventura.storia.scene[avventura.nowOn].risposte.length);
+  for (let i = 0; i < avventura.storia.scene[avventura.nowOn].risposte.length; i++) {
+    if(!prev.includes(avventura.storia.scene[avventura.nowOn].risposte[i].valore)){
+      prev[i] = avventura.storia.scene[avventura.nowOn].risposte[i].valore;
       arr += $("#bottone-multiplo").html().replaceAll("$VAL", avventura.storia.scene[avventura.nowOn].risposte[i].valore);
     }
-    $("#multipleChoice").html(arr);
-    function setRisp(val){
-      risposta = val;
-    }
-    function risultato(){
-      return risposta;
-    }
-  </script>
-  
+  }
+  $("#multipleChoice").html(arr);
+
+  function setRisp(val) {
+    risposta = val;
+  }
+
+  function risultato() {
+    return risposta;
+  }
+</script>
