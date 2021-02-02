@@ -138,7 +138,7 @@ class graphicalScene {
 			})
 		});
 		for (let i = 0; i < this.core.risposte.length; i++) {
-			this.core.risposte[i].to = Array(storia.ngruppi).fill(-1);
+			this.core.risposte[i].to = Array(parseInt(storia.ngruppi)).fill(-1);
 		}
 		board.PopulateMenu($(".miniNav .attivato").attr("id"));
 	}

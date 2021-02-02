@@ -38,15 +38,12 @@ function checkAnswer() {
         nodi[index] = Array(storia.scene.length).fill(true);
         pathFromStart(nodi[index], 0, index);
     };
-    console.log(nodi);
-    let gruppi = storia.categoria == "Singolo" ? 1 : storia.ngruppi;
-    for (let i = 0; i < storia.scene.length; i++) {
-        for (let j = 0; j < storia.scene[i].risposte.length; j++) {
-            for (let k = 0; k < gruppi; k++) {
-                if (!nodi[k][i] && storia.scene[i].risposte[j].to[k] * 1 == -1 && storia.scene[i].x && storia.scene[i].y)
-                    if (!confirm("Attenzione, la scena " + storia.scene[i].nome + " nel gruppo " + (k + 1) + " alla risposta " + (j + 1) + " non è stata compilata, continuare?")) {
-                        return false;
-                    }
+    let gruppi = storia.categoria == "Singolo" ? 1: parseInt(storia.ngruppi);
+    for(let i = 0; i < storia.scene.length; i++){
+        for(let j = 0; j < storia.scene[i].risposte.length; j++){
+            for(let k = 0; k < gruppi; k++){
+                if(!nodi[k][i] && storia.scene[i].risposte[j].to[k] *1 == -1 && storia.scene[i].x && storia.scene[i].y)
+                    if(!confirm("Attenzione, la scena " + storia.scene[i].nome + " nel gruppo " + (k+1) + " alla risposta " + (j+1) + " non è stata compilata, continuare?")){return false;}
             }
         }
         if (i == 0)
@@ -58,8 +55,8 @@ function checkAnswer() {
 //controlla percorso dalla fine all'inizio
 function checkPath() {
     let changes;
-    let gruppi = storia.categoria == "Singolo" ? 1 : storia.ngruppi;
-    for (let i = 0; i < gruppi; i++) {
+    let gruppi = storia.categoria == "Singolo" ? 1: parseInt(storia.ngruppi);
+    for(let i=0; i < gruppi; i++){
         let nodes = Array(storia.scene.length).fill(true);
 
         pathFromStart(nodes, 0, i);
