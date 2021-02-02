@@ -11,8 +11,12 @@
 <script type="text/javascript">
   var risposta;
   var arr = "";
+  var prev = Array(avventura.storia.scene[avventura.nowOn].risposte.length);
   for (let i = 0; i < avventura.storia.scene[avventura.nowOn].risposte.length; i++) {
-    arr += $("#bottone-multiplo").html().replaceAll("$VAL", avventura.storia.scene[avventura.nowOn].risposte[i].valore);
+    if(!prev.includes(avventura.storia.scene[avventura.nowOn].risposte[i].valore)){
+      prev[i] = avventura.storia.scene[avventura.nowOn].risposte[i].valore;
+      arr += $("#bottone-multiplo").html().replaceAll("$VAL", avventura.storia.scene[avventura.nowOn].risposte[i].valore);
+    }
   }
   $("#multipleChoice").html(arr);
 
