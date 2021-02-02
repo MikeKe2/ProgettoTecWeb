@@ -34,7 +34,7 @@ function addGroup(){
 }
 
 function removeGroup(){
-	if(storia.ngruppi > 1){
+	if(parseInt(storia.ngruppi) > 1){
 		storia.ngruppi--;
 		//rimuove l'ultimo gruppo da tutte le risposte
 		for(let i = 0; i < storia.scene.length; i++){
@@ -45,7 +45,7 @@ function removeGroup(){
 			}
 		}
 		$("#listGruppi .listItem").last().remove()
-		if(board.activegroup>=storia.ngruppi)
+		if(board.activegroup>=parseInt(storia.ngruppi))
 			$("#listGruppi .listItem").last().click();
 		groups.pop();
 	}
@@ -61,7 +61,7 @@ function addGroupButton(){
 
 function initGroups(){
 	//inizializza i colori e i bottoni dei gruppi
-	for(let i = 0; i < storia.ngruppi; i++){
+	for(let i = 0; i < parseInt(storia.ngruppi); i++){
 		addGroup();
 	}	
 	$("#Gruppo1").addClass("attivato");

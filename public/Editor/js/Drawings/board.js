@@ -57,7 +57,7 @@ $(window).on("load", function () {
 			$.post("/stories/" + $("#user").html() + "/" + $("#visibility").html() + "/" + $("#name").html(), {
 				data: storia
 			}, () => {
-				alert("Salvataggio Completato")
+				alert("Salvataggio Completato");
 			});
 	});
 	$("#helpImage").click(function () {
@@ -127,7 +127,7 @@ var board = {
 						for (let j = 0; j < scena.risposte.length; j++) {
 							let risposta = scena.risposte[j];
 							if (risposta.to) {
-								for (let k = 0; k < storia.ngruppi; k++) {
+								for (let k = 0; k < parseInt(storia.ngruppi); k++) {
 									let to = risposta.to * 1 != -1 ? storia.scene[risposta.to[k]] : null;
 									if (to) {
 										board.arrows.push(new freccia(scena, to, k))

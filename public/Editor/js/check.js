@@ -31,7 +31,7 @@ function checkTime(){
 //controlla non ci siano to = -1
 function checkAnswer(){
     //controlla ogni scena, ogni risposta, ogni gruppo
-    let gruppi = storia.categoria == "Singolo" ? 1: storia.ngruppi;
+    let gruppi = storia.categoria == "Singolo" ? 1: parseInt(storia.ngruppi);
     for(let i = 0; i < storia.scene.length; i++){
         for(let j = 0; j < storia.scene[i].risposte.length; j++){
             for(let k = 0; k < gruppi; k++){
@@ -49,7 +49,7 @@ function checkAnswer(){
 function checkPath(){
     let nodes = Array(storia.scene.length);
     let changes;
-    let gruppi = storia.categoria == "Singolo" ? 1: storia.ngruppi;
+    let gruppi = storia.categoria == "Singolo" ? 1: parseInt(storia.ngruppi);
     for(let i=0; i < gruppi; i++){
         //si escluono le scene create ma non inserite
         for(let j = 0; j < nodes.length; j++){

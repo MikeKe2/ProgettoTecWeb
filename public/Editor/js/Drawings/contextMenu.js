@@ -50,7 +50,7 @@ var contextMenu = {
             $("#contextMenu ol li").last().click(function(){
                 let risp = {
                     valore: 0, 
-                    to:Array(storia.ngruppi).fill(-1),
+                    to:Array(parseInt(storia.ngruppi)).fill(-1),
                     maxTime: 0,
                     points: 0
                 };
