@@ -47,7 +47,7 @@ let avventura = new Vue({
 	methods: {
 		RenderScene: function (musica) {
 			$("#descrizione").focus()
-			if (this.storia.scene[this.nowOn].tracciaAudio != "") {
+			if (this.storia.scene[this.nowOn].tracciaAudio && this.storia.scene[this.nowOn].tracciaAudio != "") {
 				// ho provato con vue ma non sono riuscita a farlo andare :c però funziona
 				$("#track").attr("src", `/media/${avventura.storia.creatore}/audios/${avventura.storia.scene[this.nowOn].tracciaAudio}`);
 				sessionStorage['Music'] = `/media/${avventura.storia.creatore}/audios/${avventura.storia.scene[this.nowOn].tracciaAudio}`;
