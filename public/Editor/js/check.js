@@ -31,11 +31,17 @@ function checkTime(){
 //controlla non ci siano to = -1
 function checkAnswer(){
     //controlla ogni scena, ogni risposta, ogni gruppo
+    let nodi = Array(parseInt(storia.ngruppi));
+    for(let index = 0; index<storia.ngruppi; index++){
+        nodi[index] = Array(storia.scene.length).fill(true);
+        pathFromStart(nodi[index], 0, index);
+    };
+    console.log(nodi);
     let gruppi = storia.categoria == "Singolo" ? 1: storia.ngruppi;
     for(let i = 0; i < storia.scene.length; i++){
         for(let j = 0; j < storia.scene[i].risposte.length; j++){
             for(let k = 0; k < gruppi; k++){
-                if(storia.scene[i].risposte[j].to[k] *1 == -1 && storia.scene[i].x && storia.scene[i].y)
+                if(!nodi[k][i] && storia.scene[i].risposte[j].to[k] *1 == -1 && storia.scene[i].x && storia.scene[i].y)
                     if(!confirm("Attenzione, la scena " + storia.scene[i].nome + " nel gruppo " + (k+1) + " alla risposta " + (j+1) + " non è stata compilata, continuare?")){return false;}
             }
         }
@@ -47,15 +53,19 @@ function checkAnswer(){
 
 //controlla percorso da inizio a fine
 function checkPath(){
-    let nodes = Array(storia.scene.length);
     let changes;
     let gruppi = storia.categoria == "Singolo" ? 1: storia.ngruppi;
     for(let i=0; i < gruppi; i++){
-        //si escluono le scene create ma non inserite
-        for(let j = 0; j < nodes.length; j++){
-            nodes[j] = !(storia.scene[j].x && storia.scene[j].y);
-        }
+        let nodes = Array(storia.scene.length).fill(true);
+
+        pathFromStart(nodes, 0, i);
         nodes[1]=true;
+
+        console.log("GRUPPO "+i)
+        for(let mimmo = 0; mimmo <nodes.length; mimmo++){
+            if(nodes[mimmo])
+                console.log(storia.scene[mimmo].nome);
+        }
         //finché vengono contrassegnati dei nodi
         do{
             changes=0;
@@ -83,4 +93,17 @@ function checkPath(){
     }
 
     return true;
+}
+
+function pathFromStart(lista, indice, gruppo){
+    lista[indice] = false;
+
+    if(!storia.scene[indice].risposte || !storia.scene[indice].risposte.length)
+        return;
+
+    for(let i = 0; i < storia.scene[indice].risposte.length; i++){
+        if( lista[storia.scene[indice].risposte[i].to[gruppo]]){
+            pathFromStart(lista, storia.scene[indice].risposte[i].to[gruppo], gruppo)
+        }
+    }
 }
