@@ -89,7 +89,7 @@ function changeData(i, numRoom) {
         .replaceAll("$CA0", currentAnswer[0])
         .replace("$CA1", proxSceneIndex + " - " + storia.scene[proxSceneIndex].nome)
         .replace("$CA3", currentAnswer[3])
-        .replace("$CA4", parseInt(currentAnswer[4]) == 0 ? "Illimitato" : currentAnswer[4]);
+        .replace("$CA4", parseInt(currentAnswer[2]) == 0 ? "Illimitato" : currentAnswer[2] + " Secondi");
       totalAnswer += answer;
     }
   }

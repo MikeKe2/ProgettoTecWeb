@@ -45,11 +45,13 @@ $(() => {
         $("#loginModal").modal("show");
 
         //handle the form's "submit" event
-        $("#loginForm").submit(() => {
+        $("#loginForm").submit((e) => {
             if ($("#valutatorePassword").val() == avventura.storia.password) {
                 alert("Access Granted!");
-            } else
+            } else{
                 alert("Password is incorrect.");
+                e.preventDefault();
+            }
         });
     });
 

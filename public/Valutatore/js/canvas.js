@@ -1,3 +1,4 @@
+
 function maxX(array){
     let max = array[0].x;
     for(let i = 1; i < array.length; i ++){
