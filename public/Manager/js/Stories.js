@@ -1,5 +1,3 @@
-// {name: "", visibility:""
-
 var Stories = new Vue({
     el: "#Stories",
     data: {

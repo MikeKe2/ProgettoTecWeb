@@ -78,7 +78,7 @@ var board = {
 	startY: 0,
 	scale: 1, //scale della board, gestisce lo zoom 
 	arrows: [], //array delle freccie
-	scenes: [], //array delle scene 
+	scenes: [], //array delle scene
 	cestinoImg: null, //immagine del cestino
 	frecciaContext: null, //freccia che segue il mouse quando l'utente vuole creare un nuovo collegamento tra scene 
 	toDelete: function () { //controlla che l'utente voglia eliminare la scena dalla board verificando che sia stata trascinata nella zona del cestino
@@ -224,7 +224,7 @@ var board = {
 			for (let i = 2; i < board.scenes.length; i++) {
 				//scorre tutte le scene e controlla se rispetta i vincoli del filtro
 				let scena = board.scenes[i];
-				if (all || (loaded && scena.core.x && scena.core.y) || (!loaded && (!scena.core.x || !scena.core.y))) { 
+				if (all || (loaded && scena.core.x && scena.core.y) || (!loaded && (!scena.core.x || !scena.core.y))) {
 					$("#menulist").append($("#menuScena").html().replace("$ID", scena.id).replace("$NOME", scena.core.nome));
 					$("#menuScena" + scena.id).click(function () {
 						scena.open()
@@ -238,7 +238,7 @@ var board = {
 	},
 	//funzione per eliminare la freccia, le scorre tutte ed elimina la prima che corrisponde ai criteri, 
 	//ce ne può essere più d'una ma basta eliminare la prima dato che è un indicatore puramente grafico
-	eraseArrow: function (from, to) { 
+	eraseArrow: function (from, to) {
 		for (let i = 0; i < board.arrows.length; i++) {
 			if (board.arrows[i].from == from && board.arrows[i].to == board.scenes[to].core && board.arrows[i].ngroup == board.activegroup) {
 				board.arrows.splice(i, 1);

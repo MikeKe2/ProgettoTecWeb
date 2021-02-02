@@ -1,0 +1,35 @@
+#avventura {
+    border-radius: 15px;
+    padding: 2em;
+}
+
+#finale,
+#inizio,
+#descrizione {
+    max-height: 40vh;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    overflow-y: auto;
+    background-color: hsla(118, 100%, 74%, 0.719);
+    border-color: #000000;
+    border-width: 5px;
+    border-style: solid;
+    color: #000000;
+    padding: 2em;
+    text-align: justify;
+}
+
+#widget {
+    max-height: 40vh;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    overflow: hidden;
+    background-color: hsla(118, 100%, 74%, 0.719);
+    border-color: #000000;
+    border-width: 5px;
+    border-style: solid;
+}
+
+#avventura {
+    height: 90vh;
+}

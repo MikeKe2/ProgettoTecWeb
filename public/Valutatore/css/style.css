@@ -33,11 +33,11 @@ ul {
   word-wrap: break-word;
 }
 
-#inputMessage{
+#inputMessage {
   font-size: 1.2rem;
 }
 
-.bi{
+.bi {
   font-size: 1.2rem;
   text-align: center;
   vertical-align: middle;
@@ -55,13 +55,12 @@ ul {
   display: none;
 }
 
-
 #evaluatedAnswer,
 #currentUser,
 #userStatus,
 #dataToList,
 #helpButton,
-#chatButton{
+#chatButton {
   display: none;
 }
 
@@ -73,7 +72,6 @@ ul {
 }
 
 /* Messages */
-
 
 .chatArea {
   height: 100%;
@@ -96,7 +94,7 @@ ul {
   word-break: break-word;
 }
 
-.message.evaluator{
+.message.evaluator {
   justify-content: flex-end;
 }
 

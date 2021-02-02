@@ -24,6 +24,7 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.json({
   limit: '50mb'
 }));
+
 app.use(bodyParser.urlencoded({
   limit: '50mb',
   extended: true,
@@ -171,6 +172,10 @@ app.post("/newUser", function (req, res) {
         fs.copyFileSync(resDir + '/Widget/sendImage.html', dir + '/widgets/sendImage.html');
         fs.copyFileSync(resDir + '/Widget/templateWidget.html', dir + '/widgets/templateWidget.html');
         fs.copyFileSync(resDir + '/Widget/default.css', dir + '/css/default.css');
+        fs.copyFileSync(resDir + '/Widget/robot.css', dir + '/css/robot.css');
+        fs.copyFileSync(resDir + '/Widget/retro.css', dir + '/css/retro.css');
+        fs.copyFileSync(resDir + '/Widget/pergamena.css', dir + '/css/pergamena.css');
+        fs.copyFileSync(resDir + '/Widget/greenboard.css', dir + '/css/greenboard.css');
       }
       chmodr(dir, 0o775, (err) => {
         if (err) {

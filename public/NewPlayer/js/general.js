@@ -48,7 +48,7 @@ $(() => {
         $("#loginForm").submit((e) => {
             if ($("#valutatorePassword").val() == avventura.storia.password) {
                 alert("Access Granted!");
-            } else{
+            } else {
                 alert("Password is incorrect.");
                 e.preventDefault();
             }
@@ -73,20 +73,13 @@ $(() => {
         } else {
             /*music[0].load();
             music[0].oncanplaythrough = music[0].play();*/
-            
+
             $("#MuteMusic").html($("#volumeUP").html());
         }
     });
 
     $('#loginModal').on('shown.bs.modal', () => {
         $("#modalpass").focus();
-    });
-
-    /*TODO: FIX THIS MESS*/
-    $('#modalChat').on('shown.bs.modal', () => {
-        $('#modalChat').animate({
-            scrollTop: $('#modalChat .messages').height()
-        }, 500);
     });
 
     //gestione chat
@@ -130,18 +123,22 @@ $(() => {
                 sendMessage();
                 socket.emit("stop typing");
                 typing = false;
-            } else if (!username && e.target.id == "username"){
+            } else if (!username && e.target.id == "username") {
                 setUsername();
-            } else if (e.target.id == "valutatorePassword"){
+            } else if (e.target.id == "valutatorePassword") {
                 $("#valutatoreSubmit").click();
             }
         }
     });
-    $("#InvioNickname").click(function(){setUsername()});
+
+    $("#InvioNickname").click(function () {
+        setUsername()
+    });
+
     // Sets the client's username
     function setUsername() {
-        username = cleanInput($usernameInput.val().trim());
 
+        username = cleanInput($usernameInput.val().trim());
         // If the username is valid
         if (username) {
             $("#login").fadeOut();
@@ -313,22 +310,12 @@ $(() => {
         }
     });
 
-    // Whenever the server emits 'typing', show the typing message
-    socket.on("typing", (data) => {
-        addChatTyping(data);
-    });
-
-    // Whenever the server emits 'stop typing', kill the typing message
-    socket.on("stop typing", (data) => {
-        removeChatTyping(data);
-    });
-
     socket.on("disconnect", () => {
-        log("you have been disconnected");
+        log("Sei stato disconnesso");
     });
 
     socket.on("reconnect", () => {
-        log("you have been reconnected");
+        log("Sei stato riconnesso");
         if (username) {
             socket.emit("add user", username, (avventura.storia.nome), avventura.gruppo);
             socket.emit("scene", username, avventura.storia.nome, (avventura.nowOn));
@@ -337,6 +324,6 @@ $(() => {
     });
 
     socket.on("reconnect_error", () => {
-        log("attempt to reconnect has failed");
+        log("oh no :(");
     });
 });

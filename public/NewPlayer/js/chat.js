@@ -39,7 +39,6 @@ var $chatPage = $("#chat"); // The chatroom page
 
 
 var socket = io.connect("https://site181993.tw.cs.unibo.it");
-//var socket = io.connect("http://localhost:8000");
 
 // Prompt for setting a username
 var username;

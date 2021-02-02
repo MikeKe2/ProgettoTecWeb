@@ -48,7 +48,6 @@ let avventura = new Vue({
 		RenderScene: function (musica) {
 			$("#descrizione").focus()
 			if (this.storia.scene[this.nowOn].tracciaAudio && this.storia.scene[this.nowOn].tracciaAudio != "") {
-				// ho provato con vue ma non sono riuscita a farlo andare :c però funziona
 				$("#track").attr("src", `/media/${avventura.storia.creatore}/audios/${avventura.storia.scene[this.nowOn].tracciaAudio}`);
 				sessionStorage['Music'] = `/media/${avventura.storia.creatore}/audios/${avventura.storia.scene[this.nowOn].tracciaAudio}`;
 				let music = $("#music")[0];
@@ -57,7 +56,6 @@ let avventura = new Vue({
 				music.oncanplaythrough = music.play();
 			} else if (musica) {
 				$("#track").attr("src", musica);
-				//sessionStorage['Music'] = `/media/${avventura.storia.creatore}/audios/${avventura.storia.scene[this.nowOn].tracciaAudio}`;
 				let music = $("#music")[0];
 				music.pause();
 				music.load();

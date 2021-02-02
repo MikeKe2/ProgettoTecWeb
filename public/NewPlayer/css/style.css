@@ -49,9 +49,6 @@ ul {
 
 .visibility {
     display: none;
-    /*position: absolute !important;
-   top: -9999px !important;
-   left: -9999px !important;*/
 }
 
 /* Login Page */
@@ -199,10 +196,11 @@ div.eval:before {
     left: -16px;
     top: 0px;
 }
-#mypopup{
-    -webkit-user-select: none;         
-    -moz-user-select: none; 
-    -ms-user-select: none; 
+
+#mypopup {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
     user-select: none;
 }
 
@@ -245,28 +243,40 @@ body {
     border-style: solid;
     border-color: #555 transparent transparent transparent;
 }
-  
+
 /* Toggle this class - hide and show the popup */
 .popup .show {
     visibility: visible;
     -webkit-animation: fadeIn 1s;
     animation: fadeIn 1s;
 }
-.invBtn{
+
+.invBtn {
     width: 30px;
     height: 30px;
     border: none;
     background: transparent;
 }
+
 /* Add animation (fade in the popup) */
 @-webkit-keyframes fadeIn {
-    from {opacity: 0;} 
-    to {opacity: 1;}
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
-  
+
 @keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity:1 ;}
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 @media only screen and (max-width: 800px) {

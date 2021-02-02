@@ -12,7 +12,6 @@ var currentTargetUser = "";
 var currentTargetId = "";
 var typing = false;
 var socket = io.connect("https://site181993.tw.cs.unibo.it");
-//var socket = io.connect("http://localhost:8000");
 var gruppo = 0;
 var lastTypingTime;
 var storia;
@@ -96,6 +95,7 @@ function changeData(i, numRoom) {
 
   $('#sceneAnswers').html(totalAnswer);
   $('.btn-group').html("");
+
   //if the current user has some question to be evalued, we show the module for it
   if (ArrayofUsers.users[i].possibleAnswer != null) {
     $('#evaluatedAnswer').show();
@@ -130,10 +130,10 @@ $(function () {
   }
 
   /*Otteniamo la storia e segniamo al server che ora c'è un Valutatore*/
-  $.getJSON(urlStoria, function (data) {
-    storia = data;
-    socket.emit("add eval", storia.nome);
-  });
+  $.getJSON(urlStoria, (data) => {
+      storia = data;
+      socket.emit("add eval", storia.nome);
+    });
 
   /*Chat Section*/
 
@@ -147,7 +147,6 @@ $(function () {
       if (currentTargetUser == ArrayofMessages.messages[i].username || currentTargetUser == ArrayofMessages.messages[i].dstUsername)
         addChatMessage(ArrayofMessages.messages[i]);
   });
-
 
   $("#button-addon2").click((e) => {
     e.preventDefault();
@@ -285,7 +284,9 @@ $(function () {
       }
     }
   })
-  $(".CanvasModalClose").click(function(){$("#CanvasModal").modal("hide");;})
+  $(".CanvasModalClose").click(function () {
+    $("#CanvasModal").modal("hide");;
+  })
 });
 
 function populatePossibleRisp(ArrayofUsers, i) {

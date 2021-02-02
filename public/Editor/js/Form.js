@@ -78,7 +78,7 @@ function invia(id) {
   scena.widget = $("#editWidget" + ID).val();
   scena.tracciaAudio = $("#editAudio" + ID).val();
   scena.valutatore = $("#editValutatore" + ID).prop("checked");
-  if((scena.widget == null || scena.widget == "" || scena.widget == "image.html") && scena.valutatore){
+  if ((scena.widget == null || scena.widget == "" || scena.widget == "image.html") && scena.valutatore) {
     alert("il campo 'valutatore' serve far controllare al valutatore la risposta al widget quando viene inserita. Non è possibile abilitarlo se non cè un widget o il widget è un'immagine");
     scena.valutatore = false;
   }
@@ -214,9 +214,9 @@ function settingsToggle() {
     settings = settings.replace("$IMMAGINE", storia.background != "" ? storia.background : "Non ancora inserito");
     settings = settings.replace("$AUTORE", storia.autore != "" ? storia.autore : "Non ancora inserito").replace("$AUTORE", storia.autore);
     settings = settings.replace("$CSS", storia.css != "" ? storia.css : "Non ancora inserito").replace("$CSSCONTENT", getMedia("css"));
-    settings = settings.replace("$PASSWORD", storia.password).replace("$PASSWORD", storia.password); 
+    settings = settings.replace("$PASSWORD", storia.password).replace("$PASSWORD", storia.password);
     $("body").append(settings);
-    if(storia.accessibile=="false")
+    if (storia.accessibile == "false")
       storia.accessibile = false;
     $("#settingsAccessibilita").prop("checked", storia.accessibile);
     $("#settingsCategoria").val(storia.categoria);
@@ -234,7 +234,7 @@ function settingsToggle() {
   }
 }
 
-//elmina definitivamente una scena
+//elmina definitivamente una risposta
 function delRisp() {
   let id = this.id.replace("elimina", "").split("_");
   for (let i = 0; i < board.scenes[id[0]].core.risposte[id[1]].to.length; i++) {
@@ -261,5 +261,4 @@ function getMedia(media, id) {
       $(id).html(str);
     }
   });
-
 }

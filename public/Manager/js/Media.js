@@ -24,7 +24,6 @@ var Media = new Vue({
 					newName: newname
 				}, () => {
 					Media.$set(Media.list, index, newname);
-
 				});
 			}
 		},
@@ -59,10 +58,10 @@ var Media = new Vue({
 							});
 						}, false);
 						xhr.upload.addEventListener("load", function () {
-								$(".progress-bar").css({
-									'width': '0'
-								});
-							}, false);
+							$(".progress-bar").css({
+								'width': '0'
+							});
+						}, false);
 						return xhr;
 					},
 					success: function (result) {

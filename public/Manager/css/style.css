@@ -1,78 +1,38 @@
-/* #feedback {
-	font-size: 1.4em;
-}
-
-#selectablepublic .ui-selecting {
-	background: #FECA40;
-}
-
-#selectablepublic .ui-selected {
-	background: #F39814;
-	color: white;
-}
-
-#selectablepublic {
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-	width: auto;
-}
-
-#selectablepublic li {
-	margin: 3px;
-	padding: 0.4em;
-	font-size: 1.4em;
-	height: 18px;
-}
-
-#selectableprivate .ui-selecting {
-	background: #FECA40;
-}
-
-#selectableprivate .ui-selected {
-	background: #F39814;
-	color: white;
-}
-
-#selectableprivate {
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-	width: auto;
-}
-
-#selectableprivate li {
-	margin: 3px;
-	padding: 0.4em;
-	font-size: 1.4em;
-	height: 18px;
-} */
-
 .ui-button {
 	height: 2em;
 	width: 80%;
 }
 
 .nonselectable {
-	-webkit-touch-callout: none; /* iOS Safari */
-	-webkit-user-select: none; /* Safari */
-	-khtml-user-select: none; /* Konqueror HTML */
-	-moz-user-select: none; /* Old versions of Firefox */
-	-ms-user-select: none; /* Internet Explorer/Edge */
-	user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+	-webkit-touch-callout: none;
+	/* iOS Safari */
+	-webkit-user-select: none;
+	/* Safari */
+	-khtml-user-select: none;
+	/* Konqueror HTML */
+	-moz-user-select: none;
+	/* Old versions of Firefox */
+	-ms-user-select: none;
+	/* Internet Explorer/Edge */
+	user-select: none;
+	/* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }
-.clickable {	
-	cursor:pointer;
+
+.clickable {
+	cursor: pointer;
 }
-.card-body div{	
+
+.card-body div {
 	padding: 0.4em;
 }
 
-.item-container img, .list-group-item img{
-	width:20px; 
-	height:20px; 
-	margin:2px;
+.item-container img,
+.list-group-item img {
+	width: 20px;
+	height: 20px;
+	margin: 2px;
 }
+
 .container-fluid .row {
 	border: none;
 	border-top: 0.1vw solid #000;
