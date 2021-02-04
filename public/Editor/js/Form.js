@@ -207,14 +207,14 @@ function settingsToggle() {
     let settings = $("#settings").html();
 
     //compila
-    settings = settings.replace("$NOME", storia.nome).replace("$NOME", storia.nome != null ? storia.nome : "Non ancora inserito");
+    settings = settings.replaceAll("$NOME", storia.nome != null ? storia.nome : "Non ancora inserito");
     settings = settings.replace("$CATEGORIA", storia.categoria != "" ? storia.categoria.replace("_", " ") : "Non ancora inserito");
     settings = settings.replace("$TARGET", storia.target != "" ? storia.target : "Non ancora inserito");
     settings = settings.replace("$ACCESSIBILITA", storia.accessibile);
     settings = settings.replace("$IMMAGINE", storia.background != "" ? storia.background : "Non ancora inserito");
-    settings = settings.replace("$AUTORE", storia.autore != "" ? storia.autore : "Non ancora inserito").replace("$AUTORE", storia.autore);
+    settings = settings.replaceAll("$AUTORE", storia.autore != "" ? storia.autore : "Non ancora inserito");
     settings = settings.replace("$CSS", storia.css != "" ? storia.css : "Non ancora inserito").replace("$CSSCONTENT", getMedia("css"));
-    settings = settings.replace("$PASSWORD", storia.password).replace("$PASSWORD", storia.password);
+    settings = settings.replaceAll("$PASSWORD", storia.password);
     $("body").append(settings);
     if (storia.accessibile == "false")
       storia.accessibile = false;
