@@ -62,11 +62,6 @@ function checkPath() {
         pathFromStart(nodes, 0, i);
         nodes[1] = true;
 
-        console.log("GRUPPO " + i)
-        for (let mimmo = 0; mimmo < nodes.length; mimmo++) {
-            if (nodes[mimmo])
-                console.log(storia.scene[mimmo].nome);
-        }
         //finché vengono contrassegnati dei nodi
         do {
             changes = 0;
